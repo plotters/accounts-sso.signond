@@ -1,0 +1,30 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="com.nokia.singlesignon.SignonAuthSession">
+    <signal name="stateChanged">
+      <arg name="state" type="i" direction="out"/>
+      <arg name="message" type="s" direction="out"/>
+    </signal>
+    <method name="queryAvailableMechanisms">
+      <arg type="as" direction="out"/>
+      <arg name="wantedMechanisms" type="as" direction="in"/>
+    </method>
+    <method name="process">
+      <arg type="a{sv}" direction="out"/>
+      <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QVariantMap"/>
+      <arg name="sessionDataVa" type="a{sv}" direction="in"/>
+      <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QVariantMap"/>
+      <arg name="mechanism" type="s" direction="in"/>
+    </method>
+    <method name="cancel">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+    </method>
+    <method name="setId">
+      <arg name="id" type="u" direction="in"/>
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+    </method>
+    <method name="objectUnref">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+    </method>
+  </interface>
+</node>

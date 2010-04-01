@@ -1,0 +1,119 @@
+/*
+ * This file is part of signon
+ *
+ * Copyright (C) 2009-2010 Nokia Corporation.
+ *
+ * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA
+ */
+
+#ifndef PLUGINPROXY_H
+#define PLUGINPROXY_H
+
+#include <QDBusConnection>
+#include <QDBusMessage>
+#include <QtCore>
+
+#include "signond-common.h"
+#include "SignOn/authpluginif.h"
+#include "SignOn/signonplugin.h"
+#include "SignOn/sessiondata.h"
+
+using namespace SignOn;
+
+namespace SignonDaemonNS {
+
+    /*!
+     * @class PluginProcess
+     * Process to run authentication.
+     * @todo description.
+     */
+    class PluginProcess: public QProcess
+    {
+        Q_OBJECT
+        friend class PluginProxy;
+
+        PluginProcess(QObject* parent = NULL);
+        ~PluginProcess();
+
+        virtual void setupChildProcess();
+    };
+
+    /*!
+     * @class PluginProxy
+     * Plugin proxy.
+     * @todo description.
+     */
+    class PluginProxy : public QObject
+    {
+        Q_OBJECT
+
+        friend class SignonIdentity;
+        friend class TestAuthSession;
+
+    public:
+        static PluginProxy *createNewPluginProxy(const QString &type);
+        virtual ~PluginProxy();
+
+        bool restartIfRequired();
+        bool isProcessing();
+
+    public Q_SLOTS:
+        QString type() const { return m_type; }
+        QStringList mechanisms() const { return m_mechanisms; }
+        bool process(const QString &cancelKey, const QVariantMap &inData, const QString &mechanism);
+        bool processUi(const QString &cancelKey, const QVariantMap &inData);
+        bool processRefresh(const QString &cancelKey, const QVariantMap &inData);
+        void cancel();
+        void stop();
+
+    Q_SIGNALS:
+        void processResultReply(const QString &cancelKey, const QVariantMap &data);
+        void processUiRequest(const QString &cancelKey, const QVariantMap &data);
+        void processRefreshRequest(const QString &cancelKey, const QVariantMap &data);
+        void processError(const QString &cancelKey, int error, const QString &message);
+        void stateChanged(const QString &cancelKey, int state, const QString &message);
+
+    private:
+        QString queryType();
+        QStringList queryMechanisms();
+
+        bool waitForStarted(int timeout);
+        bool waitForFinished(int timeout);
+
+        bool readOnReady(QByteArray &buffer, int timeout);
+
+    private Q_SLOTS:
+        void onReadStandardOutput();
+        void onReadStandardError();
+        void onExit(int exitCode, QProcess::ExitStatus exitStatus);
+        void onError(QProcess::ProcessError err);
+
+    private:
+        PluginProxy(QString type, QObject *parent = NULL);
+
+
+        bool m_isProcessing;
+        QString m_type;
+        QString m_cancelKey;
+        QStringList m_mechanisms;
+        int m_uiPolicy;
+
+        PluginProcess *m_process;
+    };
+} //namespace SignonDaemonNS
+
+#endif /* PLUGINPROXY_H */

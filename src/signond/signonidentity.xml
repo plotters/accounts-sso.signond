@@ -1,0 +1,40 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="com.nokia.singlesignon.SignonIdentity">
+    <signal name="infoUpdated">
+      <arg type="i" direction="out"/>
+    </signal>
+    <method name="requestCredentialsUpdate">
+      <arg type="u" direction="out"/>
+      <arg name="message" type="s" direction="in"/>
+    </method>
+    <method name="queryInfo">
+      <arg type="av" direction="out"/>
+    </method>
+    <method name="verifyUser">
+      <arg type="b" direction="out"/>
+      <arg name="message" type="s" direction="in"/>
+    </method>
+    <method name="verifySecret">
+      <arg type="b" direction="out"/>
+      <arg name="secret" type="s" direction="in"/>
+    </method>
+    <method name="remove">
+    </method>
+    <method name="signOut">
+      <arg type="b" direction="out"/>
+    </method>
+    <method name="storeCredentials">
+      <arg type="u" direction="out"/>
+      <arg name="id" type="u" direction="in"/>
+      <arg name="userName" type="s" direction="in"/>
+      <arg name="secret" type="s" direction="in"/>
+      <arg name="storeSecret" type="b" direction="in"/>
+      <arg name="methods" type="a{sv}" direction="in"/>
+      <annotation name="com.trolltech.QtDBus.QtTypeName.In4" value="QVariantMap"/>
+      <arg name="caption" type="s" direction="in"/>
+      <arg name="realms" type="as" direction="in"/>
+      <arg name="accessControlList" type="as" direction="in"/>
+    </method>
+  </interface>
+</node>

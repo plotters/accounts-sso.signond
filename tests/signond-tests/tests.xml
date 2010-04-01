@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<testdefinition version="0.1">
+    <suite name="signond" domain="Accounts and SSO">
+    <set description="signond:signond-tests" name="./signond-tests" feature="SSO CORE">
+        <case description="signond:signond-tests:runPluginProxyTests"
+	name="signond-tests-runPluginProxyTests">
+            <step>/usr/bin/signond-tests runPluginProxyTests</step>
+        </case>
+        <case description="signond:signond-tests:runCAMTests"
+	name="signond-tests-runCAMTests">
+            <step>/usr/bin/signond-tests runCAMTests</step>
+        </case>
+        <environments>
+        <scratchbox>true</scratchbox>
+        <hardware>true</hardware>
+        </environments>
+    </set>
+    </suite>
+</testdefinition>

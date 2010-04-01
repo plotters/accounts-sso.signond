@@ -1,0 +1,47 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="com.nokia.singlesignon.SignonDaemon">
+    <method name="registerNewIdentity">
+      <arg name="objectPath" type="o" direction="out"/>
+    </method>
+    <method name="registerStoredIdentity">
+      <arg name="id" type="u" direction="in"/>
+      <arg type="o" direction="out"/>
+      <arg name="identityData" type="av" direction="out"/>
+    </method>
+    <method name="queryMethods">
+      <arg type="as" direction="out"/>
+    </method>
+    <method name="queryMechanisms">
+      <arg type="as" direction="out"/>
+      <arg name="method" type="s" direction="in"/>
+    </method>
+    <method name="queryIdentities">
+      <arg type="av" direction="out"/>
+      <arg name="filter" type="a{sv}" direction="in"/>
+      <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QVariantMap"/>
+    </method>
+    <method name="clear">
+      <arg type="b" direction="out"/>
+    </method>
+    <method name="getAuthSessionObjectPath">
+      <arg type="s" direction="out"/>
+      <arg name="id" type="u" direction="in"/>
+      <arg name="type" type="s" direction="in"/>
+    </method>
+    <method name="setDeviceLockCode">
+      <arg type="b" direction="out"/>
+      <arg name="oldLockCode" type="ay" direction="in"/>
+      <arg name="newLockCode" type="ay" direction="in"/>
+    </method>
+    <method name="setSim">
+      <arg type="b" direction="out"/>
+      <arg name="simData" type="ay" direction="in"/>
+      <arg name="checkData" type="ay" direction="in"/>
+    </method>
+    <method name="remoteLock">
+      <arg type="b" direction="out"/>
+      <arg name="lockCode" type="ay" direction="in"/>
+    </method>
+  </interface>
+</node>
