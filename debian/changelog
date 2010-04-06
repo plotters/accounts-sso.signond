@@ -1,0 +1,172 @@
+signon (0.1.9.1) unstable; urgency=low
+
+  * Removed proprietary plugins
+  * Implemented: SWP#ASSOH-438
+  * Implemented LUKS based secure credentials storage.
+	
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Mon, 15 Mar 2010 8:51:58 +0200
+
+signon (0.1.8.1) unstable; urgency=low
+
+  * Implemented: SWP#ASSOH-302 
+  * Few changes in DBus API of SignonAuthSession
+  * Fixes: NB#159841 - Signon-ui browser dialog is not loading content on
+  Hardware
+  * Fixes: NB#158680 - Can not authenticate without secret in auth session
+  * Fixes: NB#159800 - Signon fails to build with cs2009q3 (gcc 4.4.1) toolchain
+  * Fixes: NB#158250 - Not retrieving identity
+  
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Thu, 11 Mar 2010 10:51:58 +0200
+
+signon (0.1.7.1) unstable; urgency=low
+
+  * Bit of adoption to "Save password" signon-ui functionality 
+  * Fixed: NB#156854 - error signal not recieved from signon on authentication problem
+  * Improved libsignon-qt
+  * Added password plugin for plain text password
+  * Renamed sasl plugin packages
+
+ -- Alexander Akimov  <ext-alexander.akimov@nokia.com>  Thu, 18 Feb 2010 15:30:11 +0200
+ 
+signon (0.1.6.1) unstable; urgency=low
+
+  * Removing the '-' from version number. As only upstream packages are allowed to have that
+  * Fixed: NB#156041 -  Connectivity error when Google signon fails
+  because of invalid date/time
+  * Fixed: NB#156782 -  Successful verification of wrong credentials
+
+ -- Aurel Popirtac  <ext-aurel.popirtac@nokia.com>  Wed, 10 Feb 2010 15:30:11 +0200
+
+signon (0.1.6-1) unstable; urgency=low
+
+  * Updated framework to support Aegis Access Control.
+  * Fixed: NB#155861 - SignOn Daemon does not return proper errors for
+    incorrect credentials
+
+ -- Aurel Popirtac  <ext-aurel.popirtac@nokia.com>  Fri, 05 Feb 2010 12:00:00 +0300
+
+signon (0.1.5-1) unstable; urgency=low
+
+  * libsignon-qt tests extended for Ui related tests
+  * file structure is cleaned up
+
+ -- Alexander Akimov <ext-alexander.akimov@nokia.com>  Mon, 08 Feb 2010 15:27:12 +0200
+
+signon (0.1.5-1) unstable; urgency=low
+
+  * New authentication API implementation
+
+ -- Tomi Suviola <ext-tomi.suviola@nokia.com>  Thu, 28 Jan 2010 15:27:12 +0200
+
+signon (0.1.4-2) unstable; urgency=low
+
+  * Fixed: NB#153439 - signon-plugins package depends on
+  signon-plugins-tests
+  * Added g_type_init to naaiplugin
+
+ -- Tomi Suviola <ext-tomi.suviola@nokia.com>  Fri, 22 Jan 2010 15:27:12 +0200
+
+signon (0.1.4-1) unstable; urgency=low
+
+  * Fixed: NB#153766 - Configured accounts are not shown in keychain view
+    after restarting the device.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Fri, 22 Jan 2010 11:47:12 +0200
+
+signon (0.1.3-2) unstable; urgency=low
+
+  * Fixed parallel compilation problems.
+	
+ -- Tomi Suviola  <ext-tomi.suviola@nokia.com>  Tue, 19 Jan 2010 10:30:07 +0300
+
+signon (0.1.3-1) unstable; urgency=low
+
+  * Fix of problem when SessionData was not updated in between of Ui interactions.
+  * Fix google plugin response parsing
+	
+ -- Alexander Akimov  <ext-alexander.akimov@nokia.com>  Thu, 07 Jan 2010 10:30:07 +0300
+
+signon (0.1.2-5) unstable; urgency=low
+
+  * Add improved versions of libsignon-qt and signon daemon.
+  * Add API maemo access control support.
+  * Fixes: NB#149536 - with sessiondata the setProxy is not working for getting internet connection
+  * Add Sign On plugins meta package. 
+  * Fixes: NB#151005 - signond and libsignon-qt.so.1.0.0 not stripped eating precious space in PR configuration
+	
+ -- Aurel Popirtac  <ext-aurel.popirtac@nokia.com>  Thu, 17 Dec 2009 10:30:07 +0300
+
+signon (0.1.1-2) unstable; urgency=low
+
+  * CI unit tests for libsignon-qt and signond
+
+ -- Tomi Suviola <ext-tomi.suviola@nokia.com>  Fri, 04 Dec 2009 15:23:07 +0300
+
+signon (0.1.0-4) unstable; urgency=low
+
+  * New APIs
+  * Google plugin
+
+ -- Tomi Suviola <ext-tomi.suviola@nokia.com>  Thu, 19 Nov 2009 11:54:00 +0300
+
+signon (0.0.9-1) unstable; urgency=low
+
+  * Add implementation of remote plugin process.
+  * Add set of stress tests .
+  * Fixes: NB#141819 - signon package fails to build on maemo-sdk because of packaging errors
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Wed, 14 Oct 2009 16:19:12 +0300
+
+
+signon (0.0.8-1) unstable; urgency=low
+
+  * Add documentation to plugin interface.
+  * Fixed include path in pkg-config file.
+  * Added client example into dev package.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Wed, 23 Sep 2009 16:19:12 +0300
+
+signon (0.0.7-1) unstable; urgency=low
+
+  * Remove reference to missing directory (fixes build).
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Fri, 18 Sep 2009 16:27:09 +0300
+
+signon (0.0.6-1) unstable; urgency=low
+
+  * Added plugins dev package
+  * Added stub version of signonuid that can launch browser
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Fri, 18 Sep 2009 15:03:09 +0300
+
+signon (0.0.5-1) unstable; urgency=low
+
+  * Added saslplugin
+  * Implemented: SWP#ASSOH-123, SWP#ASSOH-143, SWP#ASSOH-144 
+
+ -- Tomi Suviola <ext-tomi.suviola@nokia.com>  Wed,  9 Sep 2009 10:23:07 +0200
+
+signon (0.0.4-1) unstable; urgency=low
+
+  * Change the default location of plugins from "usr/lib" to /usr/lib/signon" 
+
+ -- Tomi Suviola <ext-tomi.suviola@nokia.com>  Fri,  4 Sep 2009 15:23:07 +0200
+
+signon (0.0.3-1) unstable; urgency=low
+
+  * Implemented: SWP#ASSOH-113, SWP#ASSOH-112, SWP#ASSOH-111, SWP#ASSOH-119, SWP#ASSOH-125, SWP#ASSOH-133, SWP#ASSOH-129, SWP#ASSOH-127 
+
+ -- Tomi Suviola <ext-tomi.suviola@nokia.com>  Tue,  2 Sep 2009 15:23:07 +0200
+ 
+ signon (0.0.2-1) unstable; urgency=low
+
+  * Fix integration problems.
+
+ -- Tomi Suviola <ext-tomi.suviola@nokia.com>  Tue,  15 Jun 2009 15:23:07 +0200
+
+signon (0.0.1-1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Tomi Suviola <ext-tomi.suviola@nokia.com>  Tue,  28 Apr 2009 11:23:07 +0200
+

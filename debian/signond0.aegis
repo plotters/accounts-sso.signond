@@ -1,0 +1,5 @@
+<aegis>
+  <provide>
+    <credential name="keychain-access" />
+  </provide>
+</aegis>
