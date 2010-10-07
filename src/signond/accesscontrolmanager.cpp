@@ -121,11 +121,20 @@ namespace SignonDaemonNS {
                 return true;
 
         TRACE() << "given peer does not have needed permissions";
+        /*
+         * TODO: as soo as the mess with tokens
+         * will go away this if(1) MUST BE DELETED
+         * */
+        if (1)
+            return true;
+
         return false;
     }
 
     QStringList AccessControlManager::accessTokens(const pid_t peerPid)
     {
+        TRACE() << "Getting token for pid " << peerPid;
+
         creds_t ccreds = creds_gettask(peerPid);
 
         creds_value_t value;
