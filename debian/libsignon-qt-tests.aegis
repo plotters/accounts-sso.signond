@@ -1,7 +1,13 @@
 <aegis>
+  <provide>
+    <credential name="sso-encryption-token" />
+    <credential name="libsignon-qt-tests" />
+  </provide>
   <request>
+    <credential name="sso-encryption-token" />
     <credential name="signond::libsignon-qt-tests" />
     <credential name="signond::keychain-access" />
-    <for path="/usr/bin/libsignon-qt-tests" id="libsignon-qt-tests-id" />
+    <for path="/usr/bin/libsignon-qt-tests" id="libsignon-qt-tests-id" /> />
+    <for path="signond::/usr/bin/signond" />
   </request>
 </aegis>
