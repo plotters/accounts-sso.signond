@@ -41,6 +41,12 @@
 
 #include "signonauthsession.h"
 
+//TODO -  remove this constant after the fixing of NB#196033
+const char accessControlTmpWarningMessage[] =
+        "Access control failed. Temporarily allowing the further "
+        "execution of this method.\nThis workaround will be removed "
+        "after the fixing of NB#196033, from that moment on causing "
+        "your application to receive a `PermissionDenied` ERROR.";
 
 namespace SignonDaemonNS {
 
@@ -121,6 +127,19 @@ namespace SignonDaemonNS {
         */
         static QString idTokenOfPeer(const QDBusContext &peerContext);
 
+        /*!
+            Looks up for the Aegis identifier token of a specific client process.
+            @param pid, the process id of service owaner.
+            @returns the Aegis identifier token of the process, or an empty string if none found.
+        */
+        static QString idTokenOfPid(pid_t pid);
+
+        /*!
+            @param peerContext, the context, which process id we want to know
+            @returns process id of service client.
+        */
+        static pid_t pidOfPeer(const QDBusContext &peerContext);
+
     private:
         /*!
             Checks if a specific peer has a set of Aegis Access Control tokens.
@@ -159,7 +178,7 @@ namespace SignonDaemonNS {
         static QStringList accessTokens(const QDBusContext &peerContext);
 
         static void listCredentials(QIODevice *device, creds_t creds, const QString &ownerInfo = 0);
-        static pid_t pidOfPeer(const QDBusContext &peerContext);
+
     };
 
 } // namespace SignonDaemonNS
