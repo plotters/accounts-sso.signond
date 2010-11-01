@@ -1,3 +1,9 @@
+signon (4.2-1) unstable; urgency=low
+
+  * Fixing SingOn secure storage on the device. Added adaptation for the scratchbox environment.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Mon, 01 Nov 2010 17:00:00 +0300
+
 signon (4.2) unstable; urgency=low
 
   * DBus message encryption for libsignon-qt clients.
