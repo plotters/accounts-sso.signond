@@ -1,8 +1,9 @@
-signon (4.3-1) unstable; urgency=low
+signon (4.3-2) unstable; urgency=low
 
-  * Increment version number.
+  * Updated fix for device/scratchbox signond configuration.
+  * Added dynamic HOME path detection to signond configuration.
 
- -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Mon, 02 Nov 2010 13:20:00 +0300
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Mon, 02 Nov 2010 17:23:00 +0300
 
 signon (4.2-1) unstable; urgency=low
 
