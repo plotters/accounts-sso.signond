@@ -1,3 +1,9 @@
+signon (4.3-1) unstable; urgency=low
+
+  * Increment version number.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Mon, 02 Nov 2010 13:20:00 +0300
+
 signon (4.2-1) unstable; urgency=low
 
   * Fixing SingOn secure storage on the device. Added adaptation for the scratchbox environment.
