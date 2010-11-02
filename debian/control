@@ -61,6 +61,15 @@ Conflicts: libsignon-glib1 (< 0.15), libsignon-qt0 (<= 2.9)
 Description: Single Sign On framework
  Framework to provide credential storage and authentication service.
 
+Package: signond-sb
+Architecture: any
+Priority: optional
+Depends: signond, ${shlibs:Depends}, ${misc:Depends}
+Replaces: signond
+Recommends: signon-ui, signon-plugins, libsignon-qt0, devicelock, devicelock-lockui
+Description: Single Sign On framework - Scratchbox configuration
+ Framework to provide credential storage and authentication service.
+
 Package: signond-dev
 Architecture: any
 Priority: extra
