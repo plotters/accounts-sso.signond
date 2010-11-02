@@ -21,8 +21,7 @@ set -e
 
 if [ -f "/targets/links/scratchbox.config" ]; then 
 	echo "Scratchbox environment detected; adapting signond configuration file."
-	sed -e 's/^UseSecureStorage=.*$/UseSecureStorage=no/' /etc/signond.conf > /etc/signond.conf.tmp
- 	mv /etc/signond.conf.tmp /etc/signond.conf
+	sed -i 's/^UseSecureStorage=.*$/UseSecureStorage=no/' /etc/signond.conf
 fi;
 
 exit 0
