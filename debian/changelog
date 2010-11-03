@@ -1,9 +1,11 @@
-signon (4.3-2) unstable; urgency=low
+signon (4.3-3) unstable; urgency=low
 
   * Updated fix for device/scratchbox signond configuration.
   * Added dynamic HOME path detection to signond configuration.
+  * Fixes: NB#201267 - Account creation fails after re-flashing without EMMC.
+  * Fixes: MB#200809 - Device lock code query dialog is shown after inserting previously used SIM card .
 
- -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Mon, 02 Nov 2010 17:23:00 +0300
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Mon, 03 Nov 2010 11:16:00 +0300
 
 signon (4.2-1) unstable; urgency=low
 
