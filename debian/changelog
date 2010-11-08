@@ -1,3 +1,9 @@
+signon (4.4-1) unstable; urgency=low
+
+  * Version update.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Mon, 08 Nov 2010 13:58:00 +0300
+
 signon (4.3-4) unstable; urgency=low
 
   * Updated fix for device/scratchbox signond configuration.
