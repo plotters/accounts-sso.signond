@@ -1,3 +1,15 @@
+signon (4.6-1) unstable; urgency=low
+
+  * Fixes: NB#203290 - Unable to sign-in in any account.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Wed, 10 Nov 2010 15:06:00 +0300
+
+signon (4.5-1) unstable; urgency=low
+
+  * Disabled secure storage.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Wed, 10 Nov 2010 12:29:00 +0300
+
 signon (4.4-1) unstable; urgency=low
 
   * Version update.
