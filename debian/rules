@@ -129,7 +129,6 @@ binary-arch: build install
 
 #fix some permissions
 	chmod a+x debian/signond/etc/osso-cud-scripts/signon-cud.sh
-	chmod u+s debian/signond/usr/bin/signond
 
 	dh_builddeb
 
