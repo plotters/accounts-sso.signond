@@ -3,3 +3,13 @@ usr/include/signond/signoncommon.h
 usr/share/dbus-1/interfaces/com.nokia.SingleSignOn.AuthService.xml
 usr/share/dbus-1/interfaces/com.nokia.SingleSignOn.Identity.xml
 usr/share/dbus-1/interfaces/com.nokia.SingleSignOn.AuthSession.xml
+
+# extensions
+usr/include/signon-extension/SignOn/*
+usr/include/signond/extensions/sim-dlc.h
+usr/lib/libsignon-extension.so
+usr/lib/pkgconfig/SignOnExtension.pc
+usr/lib/pkgconfig/sim-dlc.pc
+usr/share/dbus-1/interfaces/com.nokia.SingleSignOn.DeviceLock.xml
+
+
