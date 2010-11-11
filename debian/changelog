@@ -1,3 +1,10 @@
+signon (4.7-1) unstable; urgency=low
+
+  * Enabled secure storage - Round II.
+  * Fixes: NB#203284 - After removing SIM card,Security code is asked many times even after entering the correct code.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Thu, 11 Nov 2010 09:07:00 +0300
+
 signon (4.6-1) unstable; urgency=low
 
   * Fixes: NB#203290 - Unable to sign-in in any account.
