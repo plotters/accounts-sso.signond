@@ -1,3 +1,9 @@
+signon (4.8-1) unstable; urgency=low
+
+  * Implemented: SWP#ASSOH-530
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Thu, 11 Nov 2010 15:30:00 +0300
+
 signon (4.7-1) unstable; urgency=low
 
   * Enabled secure storage - Round II.
