@@ -1,3 +1,9 @@
+signon (5.0-1) unstable; urgency=low
+
+  * Disabled secure storage.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Fri, 19 Nov 2010 11:48:00 +0300
+
 signon (4.9-1) unstable; urgency=low
 
   * Fixes: NB#204914 - Online sync with ovi.com remains in initializing state forever.
