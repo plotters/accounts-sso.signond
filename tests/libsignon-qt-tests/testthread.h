@@ -1,3 +1,4 @@
+/* -*- Mode: C++; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of signon
  *
@@ -21,8 +22,18 @@
  * 02110-1301 USA
  */
 
-#ifndef SSO_TESTS_RUNNING_AS_UNTRUSTED
-    #define SSO_TESTS_RUNNING_AS_UNTRUSTED
-#endif
 
-#include "ssotestclient.cpp"
+#include <QThread>
+
+const int g_testThreadTimeout = 10000;
+
+class TestThread : public QThread
+{
+    Q_OBJECT
+
+public:
+    void run();
+
+Q_SIGNALS:
+    void testCompleted();
+};

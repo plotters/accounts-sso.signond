@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
  *
+ * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -20,40 +21,26 @@
  * 02110-1301 USA
  */
 
-#ifndef SSOCLIENTTHREAD_H
-#define SSOCLIENTTHREAD_H
+#include <QDBusConnection>
 
-#include <QThread>
+namespace SignOn {
 
-#include "ssotestclient.h"
+    /* This is a workaround for QDBusConnection::SessionBus as it is not thread safe
+       - it can create dangling dbus connection refs.
+       Use this class as an alternative to QDBusConnection to get a thread private
+       dbus connection.
+    */
+    class DBusConnection
+    {
+    public:
+        // static function to retrieve a dbus connection to sessionBus
+        static QDBusConnection sessionBus();
 
-#define NUMBER_OF_TEST_CLIENTS 5
+        // static function to retrieve a dbus connection to systemBus
+        static QDBusConnection systemBus();
 
-class SsoClientThread : public QThread
-{
-    Q_OBJECT
-
-public:
-    SsoClientThread(SsoTestClient::TestType type);
-    ~SsoClientThread();
-
-    bool isPrimary();
-    void run();
-
-private Q_SLOTS:
-    void startTests();
-    void stopAllExceptPrimary();
-
-Q_SIGNALS:
-    void reallyStarted();
-    void runTests();
-    void done();
-
-private:
-    SsoTestClient *m_pTestClient;
-    SsoTestClient::TestType m_testType;
-
-    int m_id;
-};
-
-#endif // SSOCLIENTTHREAD_H
+    private:
+        DBusConnection() {}
+        ~DBusConnection() {}
+    };
+}

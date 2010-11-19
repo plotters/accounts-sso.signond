@@ -1,3 +1,4 @@
+/* -*- Mode: C++; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of signon
  *
@@ -21,8 +22,35 @@
  * 02110-1301 USA
  */
 
-#ifndef SSO_TESTS_RUNNING_AS_UNTRUSTED
-    #define SSO_TESTS_RUNNING_AS_UNTRUSTED
-#endif
+#include "testthread.h"
 
-#include "ssotestclient.cpp"
+#include <SignOn/authservice.h>
+
+#include <QTimer>
+#include <QEventLoop>
+
+using namespace SignOn;
+
+void TestThread::run()
+{
+    /*
+       Just call any method on the SignOn API so that the session bus
+       connection is created in this thread, a different one from the
+       main thread.
+    */
+    AuthService service;
+    QEventLoop loop;
+
+    connect(&service,
+            SIGNAL(methodsAvailable(const QStringList &)),
+            SIGNAL(testCompleted()));
+    connect(&service, SIGNAL(error(const SignOn::Error &)),
+            SIGNAL(testCompleted()));
+
+    connect(this, SIGNAL(testCompleted()), &loop, SLOT(quit()));
+
+    service.queryMethods();
+
+    QTimer::singleShot(g_testThreadTimeout, &loop, SLOT(quit()));
+    loop.exec();
+}
