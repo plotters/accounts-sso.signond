@@ -1,3 +1,10 @@
+signon (4.9-1) unstable; urgency=low
+
+  * Fixes: NB#204914 - Online sync with ovi.com remains in initializing state forever.
+  * Improved libsignon-qt-tests directory tree.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Fri, 19 Nov 2010 11:34:00 +0300
+
 signon (4.8-1) unstable; urgency=low
 
   * Implemented: SWP#ASSOH-530
