@@ -1,3 +1,9 @@
+signon (5.1-1) unstable; urgency=low
+
+  * Fixes: NB#202974 - COREWEB: /usr/bin/signond 'SignOn::SignonTrace::~SignonTrace ~SignonTrace ~SignonTrace ~SignonTrace ~SignonTrace'
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Mon, 22 Nov 2010 10:00:00 +0300
+
 signon (5.0-2) unstable; urgency=low
 
   * Disabled secure storage.
