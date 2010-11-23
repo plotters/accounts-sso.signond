@@ -1,3 +1,10 @@
+signon (5.3-1) unstable; urgency=low
+
+  * Move the SIM and DLC code into a plugin.
+  * Split the DB into a metadata DB and a secrets DB.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Tue, 23 Nov 2010 14:39:11 +0200
+
 signon (5.2-1) unstable; urgency=low
 
   * Enabled access control.
