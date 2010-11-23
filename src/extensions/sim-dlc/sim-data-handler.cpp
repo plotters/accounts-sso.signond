@@ -22,14 +22,10 @@
  * 02110-1301 USA
  */
 
-#include "simdatahandler.h"
-#include "signond-common.h"
+#include "sim-data-handler.h"
+#include "debug.h"
 
 #include <QDBusError>
-
-using namespace SignonDaemonNS;
-
-#ifdef SIGNON_USES_CELLULAR_QT
 
 #include <openssl/sha.h>
 
@@ -73,6 +69,7 @@ QString simStatusAsStr(const SIMStatus::Status status)
 SimDataHandler::SimDataHandler(QObject *parent)
     : QObject(parent),
       m_dataBuffer(QByteArray()),
+      simData(QByteArray()),
       m_simChallengeComplete(true),
       m_randCounter(0),
       m_lastSimStatus(SIMStatus::UnknownStatus),
@@ -127,6 +124,7 @@ void SimDataHandler::authComplete(QByteArray res,
             QByteArray sha256DigestBa = sha256Digest(m_dataBuffer);
             m_dataBuffer.clear();
             TRACE() << sha256DigestBa.toHex();
+            simData = sha256DigestBa;
             emit simAvailable(sha256DigestBa);
             refreshSimIdentity();
         }
@@ -151,7 +149,9 @@ void SimDataHandler::simStatusChanged(SIMStatus::Status status)
 
     if ((m_lastSimStatus == SIMStatus::Ok) && (status != SIMStatus::Ok)) {
         TRACE() << "SIM removed.";
-        emit simRemoved();
+        QByteArray simDataTmp = simData;
+        simData.clear();
+        emit simRemoved(simDataTmp);
     }
 
     m_lastSimStatus = status;
@@ -177,8 +177,18 @@ bool SimDataHandler::isSimPresent()
     return (m_lastSimStatus == SIMStatus::Ok);
 }
 
+bool SimDataHandler::isSimActive()
+{
+    return isSimPresent() && !simData.isEmpty();
+}
+
 void SimDataHandler::querySim()
 {
+    if (!simData.isEmpty()) {
+        emit simAvailable(simData);
+        return;
+    }
+
     m_simChallengeComplete = false;
 
     QByteArray ba(SIM_RAND_BASE_SIZE, '0');
@@ -192,31 +202,3 @@ void SimDataHandler::querySim()
     }
 }
 
-#else
-
-SimDataHandler::SimDataHandler(QObject *parent)
-    : QObject(parent),
-      m_dataBuffer(QByteArray())
-{
-}
-
-SimDataHandler::~SimDataHandler()
-{
-}
-
-bool SimDataHandler::isValid()
-{
-    return false;
-}
-
-bool SimDataHandler::isSimPresent()
-{
-    return false;
-}
-
-void SimDataHandler::querySim()
-{
-    return;
-}
-
-#endif

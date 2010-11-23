@@ -1,9 +1,8 @@
 /*
  * This file is part of signon
  *
- * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2010 Nokia Corporation.
  *
- * Contact: Aurel Popirtac <ext-Aurel.Popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -20,14 +19,18 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
+#ifndef SIGNON_DEBUG_H
+#define SIGNON_DEBUG_H
 
-#ifndef _EXTERNAL_INCLUDED_
-#define _EXTERNAL_INCLUDED_
+#include <QDebug>
 
-#include "credentialsaccessmanager.cpp"
-#include "credentialsdb.cpp"
-#include "cryptohandlers.cpp"
-#include "cryptomanager.cpp"
-#include "signonidentityinfo.cpp"
+#ifndef TRACE
+#define TRACE() qDebug() << __FILE__ << __LINE__ << __func__ << ":\t"
+#endif
 
-#endif //_EXTERNAL_INCLUDED_
+#ifndef BLAME
+#define BLAME() qCritical() << __FILE__ << __LINE__ << __func__ << ":\t"
+#endif
+
+#endif // SIGNON_DEBUG_H
+

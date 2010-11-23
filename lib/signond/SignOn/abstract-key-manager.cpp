@@ -1,9 +1,8 @@
 /*
  * This file is part of signon
  *
- * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2010 Nokia Corporation.
  *
- * Contact: Aurel Popirtac <ext-Aurel.Popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -21,13 +20,33 @@
  * 02110-1301 USA
  */
 
-#ifndef _EXTERNAL_INCLUDED_
-#define _EXTERNAL_INCLUDED_
+#include "abstract-key-manager.h"
 
-#include "credentialsaccessmanager.cpp"
-#include "credentialsdb.cpp"
-#include "cryptohandlers.cpp"
-#include "cryptomanager.cpp"
-#include "signonidentityinfo.cpp"
+using namespace SignOn;
 
-#endif //_EXTERNAL_INCLUDED_
+AbstractKeyManager::AbstractKeyManager(QObject *parent):
+    QObject(parent)
+{
+}
+
+AbstractKeyManager::~AbstractKeyManager()
+{
+}
+
+void AbstractKeyManager::authorizeKey(const Key &key, const QString &message)
+{
+    Q_UNUSED(message);
+    emit keyAuthorized(key, false);
+}
+
+void AbstractKeyManager::queryKeys()
+{
+    emit keyInserted(QByteArray());
+}
+
+QString AbstractKeyManager::describeKey(const Key &key)
+{
+    Q_UNUSED(key);
+    return QString();
+}
+
