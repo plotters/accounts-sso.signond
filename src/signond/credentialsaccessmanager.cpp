@@ -246,7 +246,8 @@ bool CredentialsAccessManager::openMetaDataDB()
     QDir storageDir = fInfo.dir();
     if (!storageDir.exists()) {
         if (!storageDir.mkpath(storageDir.path())) {
-            BLAME() << "Could not create storage directory!!!";
+            BLAME() << "Could not create storage directory:" <<
+                storageDir.path();
             m_error = CredentialsDbSetupFailed;
             return false;
         }
@@ -295,6 +296,9 @@ bool CredentialsAccessManager::openCredentialsSystem()
 bool CredentialsAccessManager::closeCredentialsSystem()
 {
     RETURN_IF_NOT_INITIALIZED(false);
+
+    if (!credentialsSystemOpened())
+        return true;
 
     if (!closeSecretsDB())
         return false;
