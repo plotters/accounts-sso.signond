@@ -1,3 +1,9 @@
+signon (5.5-1) unstable; urgency=low
+
+  * Fixes: NB#203868 - signond-tests fail during execution.
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Fri, 26 Nov 2010 11:00:00 +0300
+
 signon (5.3-1) unstable; urgency=low
 
   * Move the SIM and DLC code into a plugin.
