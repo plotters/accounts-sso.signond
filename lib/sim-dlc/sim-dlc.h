@@ -1,9 +1,9 @@
+/* -*- Mode: C++; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of signon
  *
- * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2010 Nokia Corporation.
  *
- * Contact: Aurel Popirtac <ext-Aurel.Popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -21,13 +21,21 @@
  * 02110-1301 USA
  */
 
-#ifndef _EXTERNAL_INCLUDED_
-#define _EXTERNAL_INCLUDED_
+#ifndef SIMDLC_H
+#define SIMDLC_H
 
-#include "credentialsaccessmanager.cpp"
-#include "credentialsdb.cpp"
-#include "cryptohandlers.cpp"
-#include "cryptomanager.cpp"
-#include "signonidentityinfo.cpp"
+#define SIMDLC_SERVICE "com.nokia.SingleSignOn.DeviceLock"
+#define SIMDLC_PATH "/com/nokia/SingleSignOn/DeviceLock"
+#define SIMDLC_INTERFACE SIMDLC_SERVICE
 
-#endif //_EXTERNAL_INCLUDED_
+#ifdef __cplusplus
+    #include <QLatin1String>
+    #define SIMDLC_STRING(s) QLatin1String(s)
+
+    #define SIMDLC_SERVICE_S QLatin1String(SIMDLC_SERVICE)
+    #define SIMDLC_PATH_S QLatin1String(SIMDLC_PATH)
+    #define SIMDLC_INTERFACE_S QLatin1String(SIMDLC_INTERFACE)
+#endif
+
+#endif // SIMDLC_H
+

@@ -1,3 +1,16 @@
+signon (5.3-1) unstable; urgency=low
+
+  * Move the SIM and DLC code into a plugin.
+  * Split the DB into a metadata DB and a secrets DB.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Tue, 23 Nov 2010 14:39:11 +0200
+
+signon (5.2-1) unstable; urgency=low
+
+  * Enabled access control.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Mon, 22 Nov 2010 11:08:00 +0300
+
 signon (5.1-1) unstable; urgency=low
 
   * Fixes: NB#202974 - COREWEB: /usr/bin/signond 'SignOn::SignonTrace::~SignonTrace ~SignonTrace ~SignonTrace ~SignonTrace ~SignonTrace'

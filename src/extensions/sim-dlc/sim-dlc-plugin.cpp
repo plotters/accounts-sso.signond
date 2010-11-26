@@ -1,9 +1,10 @@
+/* -*- Mode: C++; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of signon
  *
- * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2010 Nokia Corporation.
  *
- * Contact: Aurel Popirtac <ext-Aurel.Popirtac@nokia.com>
+ * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -21,13 +22,18 @@
  * 02110-1301 USA
  */
 
-#ifndef _EXTERNAL_INCLUDED_
-#define _EXTERNAL_INCLUDED_
+#include "sim-dlc-plugin.h"
+#include "key-manager.h"
 
-#include "credentialsaccessmanager.cpp"
-#include "credentialsdb.cpp"
-#include "cryptohandlers.cpp"
-#include "cryptomanager.cpp"
-#include "signonidentityinfo.cpp"
+#include <QDebug>
 
-#endif //_EXTERNAL_INCLUDED_
+using namespace SignOn;
+
+AbstractKeyManager *SimDlcPlugin::keyManager(QObject *parent) const
+{
+    qDebug() << Q_FUNC_INFO;
+    return new KeyManager(parent);
+}
+
+Q_EXPORT_PLUGIN2(sim-dlc, SimDlcPlugin);
+
