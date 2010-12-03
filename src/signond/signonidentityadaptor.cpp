@@ -45,12 +45,16 @@ namespace SignonDaemonNS {
                              << "Method:"
                              << failedMethodName;
 
-        QDBusMessage errReply =
-                    parentDBusContext().message().createErrorReply(
-                                            SIGNOND_PERMISSION_DENIED_ERR_NAME,
-                                            errMsg);
-        SIGNOND_BUS.send(errReply);
+        errorReply(SIGNOND_PERMISSION_DENIED_ERR_NAME, errMsg);
         TRACE() << "\nMethod FAILED Access Control check:\n" << failedMethodName;
+    }
+
+    void SignonIdentityAdaptor::errorReply(const QString &name,
+                                           const QString &message)
+    {
+        QDBusMessage errReply =
+            parentDBusContext().message().createErrorReply(name, message);
+        SIGNOND_BUS.send(errReply);
     }
 
     quint32 SignonIdentityAdaptor::requestCredentialsUpdate(const QString &msg)
@@ -82,28 +86,36 @@ namespace SignonDaemonNS {
         return m_parent->queryInfo();
     }
 
-    quint32 SignonIdentityAdaptor::addReference(const QString &reference)
+    void SignonIdentityAdaptor::addReference(const QString &reference)
     {
         /* Access Control */
         if (!AccessControlManager::isPeerAllowedToUseIdentity(
                                         parentDBusContext(), m_parent->id())) {
             securityErrorReply(__func__);
-            return 0;
+            return;
         }
 
-        return m_parent->addReference(reference) ? 1 : 0;
+        if (!m_parent->addReference(reference)) {
+            /* TODO: add a lastError() method to SignonIdentity */
+            errorReply(SIGNOND_OPERATION_FAILED_ERR_NAME,
+                       SIGNOND_OPERATION_FAILED_ERR_STR);
+        }
     }
 
-    quint32 SignonIdentityAdaptor::removeReference(const QString &reference)
+    void SignonIdentityAdaptor::removeReference(const QString &reference)
     {
         /* Access Control */
         if (!AccessControlManager::isPeerAllowedToUseIdentity(
                                         parentDBusContext(), m_parent->id())) {
             securityErrorReply(__func__);
-            return 0;
+            return;
         }
 
-        return m_parent->addReference(reference) ? 1 : 0;
+        if (!m_parent->removeReference(reference)) {
+            /* TODO: add a lastError() method to SignonIdentity */
+            errorReply(SIGNOND_OPERATION_FAILED_ERR_NAME,
+                       SIGNOND_OPERATION_FAILED_ERR_STR);
+        }
     }
 
 
