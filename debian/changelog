@@ -1,3 +1,10 @@
+signon (5.7-1) unstable; urgency=low
+
+  * Fixed DB versioning and credentials update issues.
+  * Improved internal Identity reference counting system.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Fri, 3 Dec 2010 14:00:00 +0300
+
 signon (5.5-1) unstable; urgency=low
 
   * Fixes: NB#203868 - signond-tests fail during execution.
