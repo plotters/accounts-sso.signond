@@ -1,3 +1,11 @@
+signon (6.0-1) unstable; urgency=low
+
+  * Fixes: NB#205808 - license_question.
+  * Fixes: NB#210802 - Signond is printing debug data.
+  * Fixes: NB#209899 - [Maemo] : Run time error when using SignOn::Identity::signOut.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Mon, 13 Dec 2010 16:00:00 +0300
+
 signon (5.7-1) unstable; urgency=low
 
   * Fixed DB versioning and credentials update issues.
