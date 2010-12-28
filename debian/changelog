@@ -1,3 +1,9 @@
+signon (6.1-1) unstable; urgency=low
+
+  * Fixes: NB#208252 - Identity::userVerified() signal and verifyUser(), requestCredentialsUpdate() API's are not working as per the documentation.
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Tue, 28 Dec 2010 11:00:00 +0300
+
 signon (6.0-1) unstable; urgency=low
 
   * Fixes: NB#205808 - license_question.
