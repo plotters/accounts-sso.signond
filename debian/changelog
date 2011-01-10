@@ -1,3 +1,9 @@
+signon (6.1-2) unstable; urgency=low
+
+  * Fixes: NB#210071 - Password entered in login dialog are not stored in signon
+
+ -- Devanjan Syam Choudhury <devanjan.choudhury@nokia.com>  Mon, 10 Jan 2011 15:30:40 +0530
+
 signon (6.1-1) unstable; urgency=low
 
   * Fixes: NB#208252 - Identity::userVerified() signal and verifyUser(), requestCredentialsUpdate() API's are not working as per the documentation.
