@@ -373,6 +373,7 @@ void SignonSessionCore::startProcess()
         parameters.remove(SSO_KEY_PASSWORD);
     }
     TRACE() << "all params: " << parameters;
+
     if (!m_plugin->process(data.m_cancelKey, parameters, data.m_mechanism)) {
         QDBusMessage errReply = data.m_msg.createErrorReply(SIGNOND_RUNTIME_ERR_NAME,
                                                             SIGNOND_RUNTIME_ERR_STR);
@@ -514,12 +515,12 @@ void SignonSessionCore::processResultReply(const QString &cancelKey, const QVari
                 if (!info.validated()
                         && data2.contains(SSO_KEY_USERNAME)
                         && !data2[SSO_KEY_USERNAME].toString().isEmpty())
-                    info.userName() = data2[SSO_KEY_USERNAME].toString();
+                    info.setUserName(data2[SSO_KEY_USERNAME].toString());
                 if (!m_passwordUpdate.isEmpty())
-                    info.password() = m_passwordUpdate;
+                    info.setPassword(m_passwordUpdate);
                 if (data2.contains(SSO_KEY_PASSWORD)
                         && !data2[SSO_KEY_PASSWORD].toString().isEmpty())
-                    info.password() = data2[SSO_KEY_PASSWORD].toString();
+                    info.setPassword(data2[SSO_KEY_PASSWORD].toString());
                 info.setValidated(true);
                 if (!(db->updateCredentials(info)))
                     BLAME() << "Error occured while updating credentials.";
