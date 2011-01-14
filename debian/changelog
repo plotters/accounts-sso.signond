@@ -1,6 +1,13 @@
+signon (6.3-1) unstable; urgency=low
+
+  * Added support for "Forgot my password" use case.
+  * Example application updated.
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Fri, 14 Jan 2011 09:11:00 +0300
+
 signon (6.2-1) unstable; urgency=low
 
-  * Fixes: NB#217201 - [Maemo] Empty Mechanism is recieved when 250 or 350K of data is sent from an application to ovi authplugin via signon demon
+  * Fixes: NB#217201 - [Maemo] Empty Mechanism is recieved when 250 or 350K of data is sent from an application to ovi authplugin via signon demon.
 
  -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Thu, 13 Jan 2011 13:50:40 +0300
 
