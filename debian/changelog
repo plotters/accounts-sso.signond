@@ -1,3 +1,12 @@
+signon (6.5-1) unstable; urgency=low
+
+  * Just legal issues:
+  * Fixes: NB#199366 - Copyright tag not defined in signon
+  * Fixes: NB#203438 - mismatch in license in debian/copyright and COPYRIGHT
+    for signon
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Tue, 18 Jan 2011 14:35:52 +0200
+
 signon (6.4-1) unstable; urgency=low
 
   * SASL plugin:
