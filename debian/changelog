@@ -1,3 +1,12 @@
+signon (6.4-1) unstable; urgency=low
+
+  * SASL plugin:
+    - use username for authname, if latter is not given
+    - use realm for FQDN, if latter is not given.
+  * Fixes: NB#218635 - Generates invalid DIGEST-MD5 responses for XMPP
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Tue, 18 Jan 2011 11:06:37 +0200
+
 signon (6.3-1) unstable; urgency=low
 
   * Added support for "Forgot my password" use case.
