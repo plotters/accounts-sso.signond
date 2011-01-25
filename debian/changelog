@@ -1,3 +1,9 @@
+signon (6.6-1) unstable; urgency=low
+
+  * Fixes: 219180 - verifyUser() dialog is not sticky to application 
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Tue, 25 Jan 2011 13:41:00 +0300
+
 signon (6.5-1) unstable; urgency=low
 
   * Just legal issues:
