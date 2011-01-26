@@ -1,6 +1,9 @@
 usr/bin/signond
 usr/bin/signonpluginprocess
 
+# Plugins common
+usr/lib/libsignon-plugins-common.so*
+
 # Extensions
 usr/lib/libsignon-extension.so.*
 usr/lib/signon/extensions/libsim-dlc.so
