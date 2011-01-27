@@ -1,4 +1,4 @@
-signon (6.7-2) unstable; urgency=low
+signon (6.7-3) unstable; urgency=low
 
   * Fixes: NB#217201 - [Maemo] Empty Mechanism is recieved when 250 or 350K of data is sent from an application to authplugin via signon demon.
 
