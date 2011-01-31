@@ -1,3 +1,9 @@
+signon (6.9-1) unstable; urgency=low
+
+  * Fixes: NB#222764 - Uploading image through flickr fails with SSO error.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Mon, 31 Jan 2011 12:42:00 +0300
+
 signon (6.8-1) unstable; urgency=low
 
   * Fixes: NB#208223 - SessionData::getAccessControlTokens() API is not working as per the documentation.
