@@ -1,3 +1,9 @@
+signon (6.8-1) unstable; urgency=low
+
+  * Fixes: NB#208223 - SessionData::getAccessControlTokens() API is not working as per the documentation.
+
+ -- Lucian Horga <ext-lucian.horga@nokia.com>  Thu, 31 Jan 2011 11:24:00 +0300
+
 signon (6.7-3) unstable; urgency=low
 
   * Fixes: NB#217201 - [Maemo] Empty Mechanism is recieved when 250 or 350K of data is sent from an application to authplugin via signon demon.
