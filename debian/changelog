@@ -1,3 +1,9 @@
+signon (7.0-2) unstable; urgency=low
+
+  * Fix dependencies for signond-dev
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Wed, 02 Feb 2011 11:09:09 +0200
+
 signon (7.0-1) unstable; urgency=low
 
   * Fixes: NB#222989 - If we call identity's remove API twice, second time removed signal is not emitted
