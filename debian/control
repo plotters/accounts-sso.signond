@@ -74,7 +74,7 @@ Package: signond-dev
 Architecture: any
 Priority: extra
 Section: libdevel
-Recommends: signond (= ${binary:Version}), libqt4-dev (>= 4.5), libsignoncrypto-qt-dev
+Depends: signond (= ${binary:Version}), libqt4-dev (>= 4.5), libsignoncrypto-qt-dev
 Description: Development files for Signon client library development
  Common headers and DBUS interfaces definition files for the Signon Framework. 
 
