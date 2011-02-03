@@ -6,8 +6,6 @@ usr/lib/libsignon-plugins-common.so*
 
 # Extensions
 usr/lib/libsignon-extension.so.*
-usr/lib/signon/extensions/libsim-dlc.so
-usr/share/dbus-1/services/com.nokia.SingleSignOn.DeviceLock.service
 
 usr/share/dbus-1/services/com.nokia.SingleSignOn.service
 usr/share/dbus-1/services/com.nokia.SingleSignOn.Backup.service

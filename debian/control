@@ -2,7 +2,7 @@ Source: signon
 Section: devel
 Priority: optional
 Maintainer: Alberto Mardegan <alberto.mardegan@nokia.com>
-Build-Depends: debhelper (>= 5), cdbs, doxygen, pkg-config, libqt4-dev (>= 4.6), libcreds2-dev, aegis-builder (>= 1.4), libsasl2-dev, libcryptsetup0-dev (>= 1.0.7-9), libcellular-qt-dev (>= 0.7.1), libgq-gconf-dev, devicelock-dev, libssl-dev, libcellular-qt-dev, libsignoncrypto-qt-dev
+Build-Depends: debhelper (>= 5), cdbs, doxygen, pkg-config, libqt4-dev (>= 4.6), libcreds2-dev, aegis-builder (>= 1.4), libsasl2-dev, libcryptsetup0-dev (>= 1.0.7-9), libgq-gconf-dev, libssl-dev, libsignoncrypto-qt-dev
 Standards-Version: 3.7.2
 
 Package: signon-doc
@@ -53,7 +53,7 @@ Description: Documentation for libsignon-qt
 Package: signond
 Architecture: any
 Priority: optional
-Depends: libcreds2, libqt4-sql-sqlite, libcryptsetup0 (>= 1.0.7), libcellular-qt1, libssl0.9.8, e2fsprogs, libsignoncrypto-qt, ${shlibs:Depends}, ${misc:Depends}
+Depends: e2fsprogs, signon-sim-dlc-extension, ${shlibs:Depends}, ${misc:Depends}
 Provides: signond0
 Replaces: signond0
 Recommends: signon-ui, signon-plugins, libsignon-qt0, devicelock, devicelock-lockui
@@ -179,9 +179,3 @@ Depends: libsignoncrypto-qt, ${shlibs:Depends}, ${misc:Depends}
 Description: Single Sign On example client
  Single Sign On example client.
 
-Package: signon-utils
-Architecture: any
-Priority: optional
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: Single Sign On command line utility 
- Single Sign On command line utility.
