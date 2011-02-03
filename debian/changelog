@@ -1,3 +1,11 @@
+signon (7.1-1) unstable; urgency=low
+
+  * UNRELEASED
+  * Fixes: NB#218330 - Circular dependency in signon component
+    Move the SIM-DLC extension to a separate package
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Thu, 03 Feb 2011 15:55:03 +0200
+
 signon (7.0-2) unstable; urgency=low
 
   * Fix dependencies for signond-dev
