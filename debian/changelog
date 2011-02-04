@@ -1,3 +1,10 @@
+signon (7.2-1) unstable; urgency=low
+
+  * Fixes: NB#219268 - singlesignon reported error during backup/restore
+    operation.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Fri, 04 Feb 2011 12:36:33 +0200
+
 signon (7.1-1) unstable; urgency=low
 
   * Fixes: NB#221444 - Credential tag not defined in signon 
