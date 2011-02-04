@@ -1,10 +1,12 @@
 signon (7.1-1) unstable; urgency=low
 
-  * UNRELEASED
+  * Fixes: NB#221444 - Credential tag not defined in signon 
+  * Fixes: NB#220713 - COREWEB: /usr/bin/facebook-meego 'deref operator= QList::clear clearOperationsQueue SignOn::AuthSessionImpl::authenticationSlot'
+  * Fixes: NB#222151 - 'libsignon-qt-tests' requests rsource token from wrong package
   * Fixes: NB#218330 - Circular dependency in signon component
     Move the SIM-DLC extension to a separate package
 
- -- Alberto Mardegan <alberto.mardegan@nokia.com>  Thu, 03 Feb 2011 15:55:03 +0200
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Fri, 04 Feb 2011 07:55:03 +0200
 
 signon (7.0-2) unstable; urgency=low
 
