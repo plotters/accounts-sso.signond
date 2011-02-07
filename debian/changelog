@@ -1,3 +1,10 @@
+signon (7.3-1) unstable; urgency=low
+
+  * Fixes: NB#212629 - SignOn::Error Class Enums (enum SignOn::Error::ErrorType) documentation.
+  * Fixes: NB#217201 - [Maemo] Empty Mechanism is recieved when 250 or 350K of data is sent from an application to ovi authplugin via signon demon.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Mon, 07 Feb 2011 12:06:33 +0300
+
 signon (7.2-1) unstable; urgency=low
 
   * Fixes: NB#219268 - singlesignon reported error during backup/restore
