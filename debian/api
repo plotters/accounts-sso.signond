@@ -5,3 +5,21 @@ state: stable
 libs-pkg: libsignon-qt0
 dev-pkg: libsignon-qt-dev
 headers: /usr/include/signon-qt/SignOn/*
+
+interface: signon-saslplugin
+dev-pkg: signon-saslplugin-dev
+domain: Accounts and SSO
+headers:
+ /usr/include/signon-plugins/sasldata.h
+scope: Nokia MeeGo
+state: stable
+type: library
+
+interface: signon-plugins
+dev-pkg: signon-plugins-dev
+domain: Accounts and SSO
+headers:
+ /usr/include/signon-plugins/SignOn/*
+scope: Nokia MeeGo
+state: stable
+type: library
