@@ -1,3 +1,9 @@
+signon (7.4-1) unstable; urgency=low
+
+  * Added a boolean property RenewToken to SignOn:SessionData as part of fixing NB#216230.
+
+ -- Abhijit Bera <abhijit.bera@nokia.com>  Wed, 09 Feb 2011 16:33:20 +0530
+
 signon (7.3-1) unstable; urgency=low
 
   * Fixes: NB#212629 - SignOn::Error Class Enums (enum SignOn::Error::ErrorType) documentation.
