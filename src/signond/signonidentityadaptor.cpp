@@ -52,8 +52,9 @@ namespace SignonDaemonNS {
     void SignonIdentityAdaptor::errorReply(const QString &name,
                                            const QString &message)
     {
-        QDBusMessage errReply =
-            parentDBusContext().message().createErrorReply(name, message);
+        QDBusMessage msg = parentDBusContext().message();
+        msg.setDelayedReply(true);
+        QDBusMessage errReply = msg.createErrorReply(name, message);
         SIGNOND_BUS.send(errReply);
     }
 
@@ -65,11 +66,6 @@ namespace SignonDaemonNS {
             securityErrorReply(__func__);
             return 0;
         }
-
-        QDBusMessage m_message = parentDBusContext().message();
-        m_message.setDelayedReply(true);
-        QDBusMessage delayReply = m_message.createReply();
-        SIGNOND_BUS.send(delayReply);
 
         return m_parent->requestCredentialsUpdate(msg);
     }
@@ -127,11 +123,6 @@ namespace SignonDaemonNS {
             securityErrorReply(__func__);
             return false;
         }
-
-        QDBusMessage m_message = parentDBusContext().message();
-        m_message.setDelayedReply(true);
-        QDBusMessage delayReply = m_message.createReply();
-        SIGNOND_BUS.send(delayReply);
 
         return m_parent->verifyUser(params);
     }
