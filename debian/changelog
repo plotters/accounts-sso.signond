@@ -1,3 +1,10 @@
+signon (7.6-1) unstable; urgency=low
+
+  * Fixes: NB#219268 - singlesignon reported error during Backup/restore
+    operation with empty DB.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Thu, 17 Feb 2011 15:35:31 +0200
+
 signon (7.5-1) unstable; urgency=low
 
   * Fixes: NB#226291 - verifyUser() API fails with error
