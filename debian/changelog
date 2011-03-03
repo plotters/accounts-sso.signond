@@ -1,3 +1,9 @@
+signon (7.7-1) unstable; urgency=low
+
+  * Fixes: NB#227997 - <coverity> defects from signon-ui/0.40.2_0m6 and signon/7.3-1_0m6
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Thu, 03 Mar 2011 07:35:31 +0200
+
 signon (7.6-1) unstable; urgency=low
 
   * Fixes: NB#219268 - singlesignon reported error during Backup/restore
