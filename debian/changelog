@@ -1,3 +1,9 @@
+signon (7.8-1) unstable; urgency=low
+
+  * Fixes: NB#200134 - No error is returned when requesting an auth session with a non existing method
+
+ -- Dominic Velikakath <dominic.velikakath@nokia.com>  Fri, 04 Mar 2011 11:34:57 +0530
+
 signon (7.7-1) unstable; urgency=low
 
   * Fixes: NB#227997 - <coverity> defects from signon-ui/0.40.2_0m6 and signon/7.3-1_0m6
