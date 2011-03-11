@@ -1,3 +1,9 @@
+signon (7.9-1) unstable; urgency=low
+
+  * Fixes: NB#234949 - signond writes usernames and passwords to syslog
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Fri, 11 Mar 2011 15:50:31 +0200
+
 signon (7.8-1) unstable; urgency=low
 
   * Fixes: NB#200134 - No error is returned when requesting an auth session with a non existing method
