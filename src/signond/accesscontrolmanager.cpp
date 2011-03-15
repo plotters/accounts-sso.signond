@@ -90,7 +90,7 @@ namespace SignonDaemonNS {
         if (db->errorOccurred())
             return ApplicationIsNotOwner;
 
-        if (!ownerToken.isNull())
+        if (ownerToken.isNull())
             return IdentityDoesNotHaveOwner;
 
         QStringList acl = accessTokens(peerContext);
@@ -206,12 +206,6 @@ namespace SignonDaemonNS {
 
         TRACE() << "Process ACCESS:" << (hasAccess ? "TRUE" : "FALSE");
         creds_free(ccreds);
-
-        /*
-         * TODO: remove this later, as soon as NB#196033 will be resolved
-         * */
-        if (1)
-            return true;
 
         return hasAccess;
     }
