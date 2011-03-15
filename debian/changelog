@@ -1,3 +1,9 @@
+signon (8.0-1) unstable; urgency=low
+
+  * Fixes: NB#183791 - libsignon-qt test fail
+
+ -- Devanjan Choudhury <devanjan.choudhury@nokia.com>  Tue, 15 Mar 2011 19:16:53 +0530
+
 signon (7.9-1) unstable; urgency=low
 
   * Fixes: NB#234949 - signond writes usernames and passwords to syslog
