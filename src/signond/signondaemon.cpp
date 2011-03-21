@@ -389,8 +389,10 @@ void SignonDaemon::init()
 
     initExtensions();
 
-    if (!initSecureStorage(QByteArray()))
-        qFatal("Signond: Cannot initialize credentials secure storage.");
+    if (!initStorage())
+        BLAME() << "Signond: Cannot initialize credentials storage.";
+
+    Q_UNUSED(AuthCoreCache::instance(this));
 
     TRACE() << "Signond SUCCESSFULLY initialized.";
 }
@@ -438,12 +440,10 @@ void SignonDaemon::initExtension(const QString &filePath)
     }
 }
 
-bool SignonDaemon::initSecureStorage(const QByteArray &lockCode)
+bool SignonDaemon::initStorage()
 {
     if (!m_pCAMManager->credentialsSystemOpened()) {
         m_pCAMManager->finalize();
-
-        m_configuration->setEncryptionPassphrase(lockCode);
 
         if (!m_pCAMManager->init(m_configuration->camConfiguration())) {
             qCritical("Signond: Cannot set proper configuration of CAM");
@@ -673,27 +673,6 @@ QString SignonDaemon::getAuthSessionObjectPath(const quint32 id, const QString t
         return QString();
     }
     return objectPath;
-}
-
-bool SignonDaemon::setDeviceLockCode(const QByteArray &lockCode,
-                                     const QByteArray &oldLockCode)
-{
-    /* TODO: remove this: it is just a temporary solution. The whole method
-     * should disappear once the harmattan System-ui starts using the new
-     * interface in the sim-dlc library.
-     */
-    BLAME() << "This method is deprecated";
-    Q_UNUSED(lockCode);
-    Q_UNUSED(oldLockCode);
-    return true;
-}
-
-bool SignonDaemon::remoteLock(const QByteArray &lockCode)
-{
-    Q_UNUSED(lockCode)
-    // TODO - implement this, research how to.
-    TRACE() << "remoteDrop:   lockCode = " << lockCode;
-    return false;
 }
 
 void SignonDaemon::eraseBackupDir() const
