@@ -1,3 +1,10 @@
+signon (8.1-1) unstable; urgency=low
+
+  * Enabling the Signon secure storage.
+  * Fixes: NB#216708 - Restoring to a different device is not working - Signon DB is not restored.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Mon, 21 Mar 2011 21:16:58 +0200
+
 signon (8.0-1) unstable; urgency=low
 
   * Fixes: NB#183791 - libsignon-qt test fail
