@@ -1,3 +1,9 @@
+signon (8.2-1) unstable; urgency=low
+
+  * Minor secure storage related code improvements.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Tue, 22 Mar 2011 08:42:29 +0200
+
 signon (8.1-1) unstable; urgency=low
 
   * Enabling the Signon secure storage.
