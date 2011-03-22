@@ -1,3 +1,9 @@
+signon (8.0-2) unstable; urgency=low
+
+  * cita test cases fix
+
+ -- Devanjan Choudhury <devanjan.choudhury@nokia.com>  Tue, 22 Mar 2011 17:50:41 +0530
+
 signon (8.0-1) unstable; urgency=low
 
   * Fixes: NB#183791 - libsignon-qt test fail
