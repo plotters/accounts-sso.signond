@@ -1,3 +1,10 @@
+signon (8.6-1) unstable; urgency=low
+
+  * Fixes: NB#208268 - AuthService:: enum IdentityFilterCriteria cannot be complied and verified.
+  * Added test for querying identities with filtering.
+
+ -- Lucian Horga <ext-lucian.horga@nokia.com>  Wed, 23 Mar 2011 19:53:00 +0200
+
 signon (8.5-1) unstable; urgency=low
 
   * Provide SecureStorageUI header file in signond-dev.
