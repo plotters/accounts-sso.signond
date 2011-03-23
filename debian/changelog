@@ -1,3 +1,9 @@
+signon (8.5-1) unstable; urgency=low
+
+  * Provide SecureStorageUI header file in signond-dev.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Wed, 23 Mar 2011 11:17:31 +0200
+
 signon (8.4-1) unstable; urgency=low
 
   * Add path for libsignon-extensions.
