@@ -1,3 +1,9 @@
+signon (8.7-1) unstable; urgency=low
+
+  * Fixes: NB#208976 - Signon::AuthService::IdentityRegExp::isValid() method returns FALSE always
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Thu, 24 Mar 2011 11:50:31 +0200
+
 signon (8.6-1) unstable; urgency=low
 
   * Fixes: NB#208268 - AuthService:: enum IdentityFilterCriteria cannot be complied and verified.
