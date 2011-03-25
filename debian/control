@@ -125,6 +125,13 @@ XB-Maemo-CI-Stage: staging, acceptance, validation
 Description: CI tests for signon-plugins
  CI tests for signon-plugins.
 
+Package: signon-plugins-doc
+Architecture: all
+Section: doc
+Priority: optional
+Description: Documentation files for Single Sign On plugins
+ Documentation for Single Sign On plugin development.
+
 Package: signon-test-plugins
 Architecture: any
 Priority: optional
@@ -155,6 +162,13 @@ XB-Maemo-CI-Packages: signon-saslplugin, libsasl2-2
 XB-Maemo-CI-Stage: fast, staging, acceptance, validation
 Description: CI tests for SASL authentication plugin
  CI tests for SASL authentication plugin.
+
+Package: signon-saslplugin-doc
+Architecture: all
+Section: doc
+Priority: optional
+Description: Documentation for SASL authentication plugin in Single Sign On
+ Documentation SASL authentication plugin in Single Sign On.
 
 Package: signon-passwordplugin
 Architecture: any
