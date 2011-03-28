@@ -30,6 +30,10 @@ else
     CFLAGS += -O2
 endif
 
+export NO_DOCS := no
+ifneq (,$(findstring nodocs,$(DEB_BUILD_OPTIONS)))
+    export NO_DOCS = yes
+endif
 
 #ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 #    INSTALL_PROGRAM += -s
