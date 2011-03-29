@@ -1,3 +1,9 @@
+signon (8.8-7) unstable; urgency=low
+
+  * Removal of signon-sim-dlc-extension dependency.
+
+ -- Subramanian Girish <ext-girish.1.subramanian@nokia.com>  Tue, 29 Mar 2011 19:14:55 +0300
+
 signon (8.8-6) unstable; urgency=low
 
   * Bump version number
