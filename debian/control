@@ -53,7 +53,7 @@ Description: Documentation for libsignon-qt
 Package: signond
 Architecture: any
 Priority: optional
-Depends: e2fsprogs, ${shlibs:Depends}, ${misc:Depends}
+Depends: e2fsprogs, ${shlibs:Depends}, ${misc:Depends}, signon-sim-dlc-extension
 Provides: signond0
 Replaces: signond0
 Recommends: signon-ui, signon-plugins, libsignon-qt0, signon-sim-dlc-extension, devicelock, devicelock-lockui
