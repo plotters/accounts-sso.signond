@@ -1,3 +1,9 @@
+signon (8.8-6) unstable; urgency=low
+
+  * Bump version number
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Tue, 29 Mar 2011 17:17:10 +0300
+
 signon (8.8-5) unstable; urgency=low
 
   * Workaround failing test
