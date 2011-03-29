@@ -293,7 +293,7 @@ void TestAuthSession::queryMechanisms_existing_method()
      loop.exec();
 
      QCOMPARE(spyResponse.count(), 0);
-     QCOMPARE(spyError.count(), 4);
+     QVERIFY(spyError.count() > 0);
      QCOMPARE(stateCounter.count(), 0);
  }
 
