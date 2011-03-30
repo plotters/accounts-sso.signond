@@ -1,3 +1,10 @@
+signon (8.8-8) unstable; urgency=low
+
+  * Version 8.0-2 bumped up over 8.8-7 (as 8.8-8) to fix the OVI account login issue.
+  * Fixes: NB#241553 - Unable to login into SSO.
+
+ -- Subramanian Girish <ext-girish.1.subramanian@nokia.com>  Wed, 30 Mar 2011 14:16:31 +0300
+
 signon (8.0-2) unstable; urgency=low
 
   * cita test cases fix
