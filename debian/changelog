@@ -1,3 +1,12 @@
+signon (8.9-1) unstable; urgency=low
+
+  * Clean up pollution from debugging macros. Enable logging from
+    authentication plugins.
+  * Fixes: NB#237756 - signond prints loads of useless information to syslog.
+  * Remove dependency to signon-sim-dlc-extension
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Thu, 31 Mar 2011 10:20:20 +0300
+
 signon (8.8-6) unstable; urgency=low
 
   * Bump version number
