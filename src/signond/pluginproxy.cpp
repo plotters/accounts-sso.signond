@@ -41,10 +41,16 @@
  */
 #include "SignOn/authpluginif.h"
 
+// signon-plugins-common
+#include "SignOn/blobiohandler.h"
+#include "SignOn/ipc.h"
+
 //TODO get this from config
 #define REMOTEPLUGIN_BIN_PATH QLatin1String("/usr/bin/signonpluginprocess")
 #define PLUGINPROCESS_START_TIMEOUT 5000
 #define PLUGINPROCESS_STOP_TIMEOUT 1000
+
+using namespace SignOn;
 
 namespace SignonDaemonNS {
 
@@ -96,6 +102,15 @@ namespace SignonDaemonNS {
         m_isResultObtained = false;
         m_currentResultOperation = -1;
         m_process = new PluginProcess(this);
+
+#ifdef SIGNOND_TRACE
+        if (criticalsEnabled()) {
+            const char *level = debugEnabled() ? "2" : "1";
+            QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+            env.insert(QLatin1String("SSO_DEBUG"), QLatin1String(level));
+            m_process->setProcessEnvironment(env);
+        }
+#endif
 
         connect(m_process, SIGNAL(readyReadStandardError()), this, SLOT(onReadStandardError()));
 

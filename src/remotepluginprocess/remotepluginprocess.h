@@ -39,7 +39,6 @@
 
 #include "SignOn/uisessiondata.h"
 #include "SignOn/authpluginif.h"
-#include "SignOn/signonplugincommon.h"
 
 extern "C" {
 #include <sys/types.h>
@@ -59,9 +58,11 @@ extern "C" {
     #define SIGNON_PLUGIN_SUFFIX "plugin.so"
 #endif
 
-#include "SignOn/blobiohandler.h"
-
 using namespace SignOn;
+
+namespace SignOn {
+    class BlobIOHandler;
+};
 
 namespace RemotePluginProcessNS {
 

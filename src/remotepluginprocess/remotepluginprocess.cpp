@@ -30,7 +30,12 @@
 #include <gq/GConfItem>
 #endif
 
+#include "debug.h"
 #include "remotepluginprocess.h"
+
+// signon-plugins-common
+#include "SignOn/blobiohandler.h"
+#include "SignOn/ipc.h"
 
 namespace RemotePluginProcessNS {
 

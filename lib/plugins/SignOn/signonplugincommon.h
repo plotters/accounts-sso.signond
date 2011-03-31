@@ -38,43 +38,21 @@
 #ifdef SIGNON_PLUGIN_TRACE
     #include <QDebug>
 
-    #ifdef TRACE
-        #undef TRACE
-    #endif
+    #ifdef DEBUG_ENABLED
+        #ifdef TRACE
+            #undef TRACE
+        #endif
 
-    #ifdef BLAME
-        #undef BLAME
-    #endif
+        #ifdef BLAME
+            #undef BLAME
+        #endif
 
-    #define TRACE() qDebug() << __FILE__ << __LINE__ << __func__
-    #define BLAME() qCritical() << __FILE__ << __LINE__ << __func__
-#else
-    #ifndef SIGNOND_TRACE
+        #define TRACE() qDebug() << __FILE__ << __LINE__ << __func__
+        #define BLAME() qCritical() << __FILE__ << __LINE__ << __func__
+    #else
         #define TRACE() while (0) qDebug()
         #define BLAME() while (0) qCritical()
     #endif
 #endif
-
-
-enum PluginOperation {
-    PLUGIN_OP_TYPE = 1,
-    PLUGIN_OP_MECHANISMS,
-    PLUGIN_OP_PROCESS,
-    PLUGIN_OP_PROCESS_UI,
-    PLUGIN_OP_REFRESH,
-    PLUGIN_OP_CANCEL,
-    PLUGIN_OP_STOP,
-    PLUGIN_OP_LAST
-};
-
-enum PluginResponse {
-    PLUGIN_RESPONSE_RESULT = 1,
-    PLUGIN_RESPONSE_STORE,
-    PLUGIN_RESPONSE_ERROR,
-    PLUGIN_RESPONSE_SIGNAL,
-    PLUGIN_RESPONSE_UI,
-    PLUGIN_RESPONSE_REFRESHED,
-    PLUGIN_RESPONSE_LAST
-};
 
 #endif // SIGNONPLUGIN_H
