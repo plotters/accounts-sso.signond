@@ -1,3 +1,9 @@
+signon (8.10-1) unstable; urgency=low
+
+  * Minor fixes to enable plugin building
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Fri, 01 Apr 2011 11:30:31 +0200
+
 signon (8.9-1) unstable; urgency=low
 
   * Clean up pollution from debugging macros. Enable logging from
