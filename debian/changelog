@@ -1,3 +1,9 @@
+signon (8.11-1) unstable; urgency=low
+
+  * Fixes: NB#216708 - Restoring to a different device is not working - Signon DB is not restored
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Tue, 05 Apr 2011 12:15:44 +0300
+
 signon (8.10-1) unstable; urgency=low
 
   * Minor fixes to enable plugin building
