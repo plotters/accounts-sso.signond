@@ -196,11 +196,14 @@ void SignonSecureStorageUiAdaptor::callFinished(QDBusPendingCallWatcher *call)
     }
 
     switch (replyType) {
+        case SignOn::NoKeyPresentAccepted:
+            emit noKeyPresentAccepted();
+            break;
         case SignOn::ClearPasswordsStorage:
             emit clearPasswordsStorage();
             break;
         case SignOn::UiRejected:
-            emit uiClosed();
+            emit uiRejected();
             break;
         default:
             emit error();
