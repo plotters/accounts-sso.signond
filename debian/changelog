@@ -1,3 +1,11 @@
+signon (8.12-1) unstable; urgency=low
+
+  * Fixes: NB#216708 - Restoring to a different device is not working - Signon DB is not restored.
+  * Fixes: NB#241363 - Login dialog with blank username is opening after doing restoring operation when some accounts are configured in device.
+  * Fixes: NB#241553 - Unable to login into SSO.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Mon, 11 Apr 2011 16:15:41 +0300
+
 signon (8.11-1) unstable; urgency=low
 
   * Fixes: NB#216708 - Restoring to a different device is not working - Signon DB is not restored
