@@ -1,3 +1,9 @@
+signon (8.13-1) unstable; urgency=low
+
+  * Fixes: NB#233912 - Nokia account configured from Cherry-ui is cannot be used as it gives permission denied error.
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Thu, 14 Apr 2011 11:30:31 +0200
+
 signon (8.12-1) unstable; urgency=low
 
   * Fixes: NB#216708 - Restoring to a different device is not working - Signon DB is not restored.
