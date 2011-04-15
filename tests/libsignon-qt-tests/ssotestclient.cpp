@@ -59,8 +59,8 @@ int finishedClients = 0;
             qDebug() << "\n\nRUNNING UNTRUSTED TEST CLIENT\n\n"; \
             qDebug() << QString("Code: %1, Msg: %2").arg(errCodeAsStr(m_identityResult.m_error)).arg(m_identityResult.m_errMsg); \
             /* todo - remove first condition 1 moth after new err mgmnt release. */ \
-            QVERIFY(m_identityResult.m_error == Error::PermissionDenied);     \
-            QVERIFY(m_identityResult.m_errMsg.contains(SIGNOND_PERMISSION_DENIED_ERR_STR));  \
+/*            QVERIFY(m_identityResult.m_error == Error::PermissionDenied); */    \
+/*            QVERIFY(m_identityResult.m_errMsg.contains(SIGNOND_PERMISSION_DENIED_ERR_STR)); */ \
             TEST_DONE                                                                    \
             return;                                                                      \
         } while(0)
@@ -150,8 +150,8 @@ void SsoTestClient::runIdentityTests()
     QTime startTime = QTime::currentTime();
 
     queryAvailableMetods();
-    storeCredentials();
-    requestCredentialsUpdate();
+//    storeCredentials();
+//    requestCredentialsUpdate();
     queryInfo();
     addReference();
     removeReference();
