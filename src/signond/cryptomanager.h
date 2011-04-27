@@ -90,7 +90,7 @@ namespace SignonDaemonNS {
             Sets the encryption key.
             @param key, the encrypted file system key.
         */
-        void setEncryptionKey(const QByteArray &key) { m_accessCode = key; }
+        void setEncryptionKey(const QByteArray &key);
 
         /*!
             @return The in use encryption key.
@@ -168,9 +168,14 @@ namespace SignonDaemonNS {
         bool deleteFileSystem();
 
         /*!
-            @returns true, if the file system is mounted, false otherwise.
+            @returns true if the file system is mounted, false otherwise.
         */
-        bool fileSystemMounted() const { return m_mountState == Mounted; }
+        bool fileSystemIsMounted() const { return m_mountState == Mounted; }
+
+        /*!
+            @returns true if the file system is setup, false otherwise.
+        */
+        bool fileSystemIsSetup() const;
 
         /*!
             @returns true, if the file system contains a specific file.
@@ -184,7 +189,9 @@ namespace SignonDaemonNS {
         QString fileSystemMountPath() const;
 
         /*!
-            @attention if the file system is not mounted, this method will always return false.
+            @attention if the file system is not mounted and the encryption
+            key can access it, this method will cause the file system to be
+            mounted.
             @returns whether the key `key` is occupying a keyslot in the encrypted file system.
         */
         bool encryptionKeyInUse(const QByteArray &key);
@@ -209,6 +216,10 @@ namespace SignonDaemonNS {
         */
         bool removeEncryptionKey(const QByteArray &key,
                                  const QByteArray &remainingKey);
+
+    Q_SIGNALS:
+        void fileSystemMounted();
+        void fileSystemUnmounting();
 
     private:
         void clearFileSystemResources();

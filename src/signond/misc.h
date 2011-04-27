@@ -1,9 +1,8 @@
 /*
  * This file is part of signon
  *
- * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2011 Nokia Corporation.
  *
- * Contact: Aurel Popirtac <ext-Aurel.Popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -21,14 +20,25 @@
  * 02110-1301 USA
  */
 
-#ifndef _EXTERNAL_INCLUDED_
-#define _EXTERNAL_INCLUDED_
+#ifndef MISC_H
+#define MISC_H
 
-#include "credentialsaccessmanager.cpp"
-#include "credentialsdb.cpp"
-#include "cryptohandlers.cpp"
-#include "cryptomanager.cpp"
-#include "signonidentityinfo.cpp"
-#include "signonui_interface.cpp"
+#include <QFile>
 
-#endif //_EXTERNAL_INCLUDED_
+namespace SignonDaemonNS {
+
+/* Desired permissions for the files created by signond */
+const QFile::Permissions signonFilePermissions =
+    QFile::WriteUser | QFile::ReadUser
+    | QFile::WriteGroup | QFile::ReadGroup
+    | QFile::WriteOther | QFile::ReadOther;
+
+/* Sets user UID and GID for a file. */
+bool setUserOwnership(const QString &filePath);
+
+bool setFilePermissions(const QString &filePath,
+                        const QFile::Permissions permissions,
+                        bool keepExisting = true);
+}
+
+#endif //MISC_H

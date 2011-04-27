@@ -26,6 +26,7 @@
 #include "cryptomanager.h"
 #include "cryptohandlers.h"
 #include "signond-common.h"
+#include "misc.h"
 
 #include <QFile>
 #include <QDir>
@@ -97,6 +98,16 @@ namespace SignonDaemonNS {
         }
         m_fileSystemSize = size;
         return true;
+    }
+
+    void CryptoManager::setEncryptionKey(const QByteArray &key)
+    {
+        if (fileSystemIsMounted()) {
+            BLAME() << "File system already mounted";
+            return;
+        }
+
+        m_accessCode = key;
     }
 
     bool CryptoManager::setFileSystemType(const QString &type)
@@ -284,6 +295,7 @@ namespace SignonDaemonNS {
             return true;
         }
 
+        emit fileSystemUnmounting();
         bool isOk = true;
 
         if ((m_mountState >= Mounted)
@@ -325,10 +337,15 @@ namespace SignonDaemonNS {
         return false;
     }
 
+    bool CryptoManager::fileSystemIsSetup() const
+    {
+        return QFile::exists(fileSystemPath());
+    }
+
     //TODO - debug this method. Current test scenarios do no cover this one
     bool CryptoManager::fileSystemContainsFile(const QString &filePath)
     {
-        if (!fileSystemMounted()) {
+        if (!fileSystemIsMounted()) {
             TRACE() << "Ecrypyted file system not mounted.";
             return false;
         }
@@ -345,7 +362,11 @@ namespace SignonDaemonNS {
     void CryptoManager::updateMountState(const FileSystemMountState state)
     {
         TRACE() << "Updating mount state:" << state;
+        if (state == m_mountState) return;
+
         m_mountState = state;
+        if (state == Mounted)
+            emit fileSystemMounted();
     }
 
     bool CryptoManager::mountMappedDevice()
@@ -353,7 +374,14 @@ namespace SignonDaemonNS {
         //create mnt dir if not existant
         if (!QFile::exists(m_fileSystemMountPath)) {
             QDir dir;
-            dir.mkdir(m_fileSystemMountPath);
+            if (!dir.mkpath(m_fileSystemMountPath)) {
+                BLAME() << "Could not create target mount dir path.";
+                return false;
+            }
+
+            if (!setUserOwnership(m_fileSystemMountPath))
+                TRACE() << "Failed to set User ownership for "
+                           "the secure storage mount target.";
         }
 
         MountHandler::mount(m_fileSystemMapPath, m_fileSystemMountPath);
@@ -394,10 +422,10 @@ namespace SignonDaemonNS {
 
     bool CryptoManager::encryptionKeyInUse(const QByteArray &key)
     {
-        if (fileSystemMounted() && (m_accessCode == key))
+        if (fileSystemIsMounted() && (m_accessCode == key))
             return true;
 
-        if(!fileSystemMounted()) {
+        if(!fileSystemIsMounted()) {
            setEncryptionKey(key);
            return mountFileSystem();
         }
