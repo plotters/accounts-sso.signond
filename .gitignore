@@ -7,6 +7,9 @@ moc_*
 *.so.*
 *.a
 *~
+*.core
+*.swp
+*.tags
 builddir
 core
 *.moc
@@ -31,8 +34,6 @@ debian/signon-plugins
 
 doc/html
 doc/qch
-doc/signon.tags
 
 lib/SignOn/doc/html
 lib/SignOn/doc/qch
-lib/SignOn/doc/SignOn.tags

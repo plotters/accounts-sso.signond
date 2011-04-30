@@ -323,6 +323,16 @@ namespace SignonDaemonNS {
     {
         SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
 
+        pid_t pidOfPeer = AccessControlManager::pidOfPeer(static_cast<QDBusContext>(*this));
+        QString decodedSecret(m_encryptor->decodeString(secret, pidOfPeer));
+
+        if (m_encryptor->status() != Encryptor::Ok) {
+            QDBusMessage errReply = message().createErrorReply(SIGNOND_ENCRYPTION_FAILED_ERR_NAME,
+                                                               SIGNOND_ENCRYPTION_FAILED_ERR_STR);
+            SIGNOND_BUS.send(errReply);
+            return false;
+        }
+
         bool ok;
         queryInfo(ok);
         if (!ok) {
@@ -334,7 +344,7 @@ namespace SignonDaemonNS {
         }
 
         CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
-        bool ret = db->checkPassword(m_pInfo->id(), m_pInfo->userName(), secret);
+        bool ret = db->checkPassword(m_pInfo->id(), m_pInfo->userName(), decodedSecret);
 
         keepInUse();
         return ret;
@@ -417,12 +427,12 @@ namespace SignonDaemonNS {
 //            accessControlListLocal.prepend(aegisIdToken);
 
         if (m_pInfo == 0) {
-            m_pInfo = new SignonIdentityInfo(id, userName, secret, storeSecret,
+            m_pInfo = new SignonIdentityInfo(id, userName, decodedSecret, storeSecret,
                                              methods, caption, realms,
                                              accessControlListLocal, type);
         } else {
             m_pInfo->setUserName(userName);
-            m_pInfo->setPassword(secret);
+            m_pInfo->setPassword(decodedSecret);
             m_pInfo->setMethods(SignonIdentityInfo::mapVariantToMapList(methods));
             m_pInfo->setCaption(caption);
             m_pInfo->setRealms(realms);
