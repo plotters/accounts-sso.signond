@@ -1,3 +1,13 @@
+signon (8.15-1) unstable; urgency=low
+
+  * Merge security fixes by Rauli Ikonen.
+    Fixes: NB#245310 - [TASK] Address problems identified in MeeGo security
+    review.
+  * Some fixes to unit tests. Now they can also be run individually.
+  * Fix logging from signon plugins.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Sat, 30 Apr 2011 14:40:05 +0300
+
 signon (8.13-2) unstable; urgency=low
 
   * Failing tests commented out.
