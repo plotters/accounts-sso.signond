@@ -6,7 +6,7 @@
   <request>
     <credential name="signond::keychain-access" />
     <credential name="libsignon-qt-tests::libsignon-qt-tests" />
-    <for path="/usr/bin/libsignon-qt-tests" id="libsignon-qt-tests-id" /> />
+    <for path="/usr/bin/libsignon-qt-tests" id="libsignon-qt-tests-id" />
   </request>
   <request>
     <credential name="libsignon-qt-tests::sso-encryption-token" />
