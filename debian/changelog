@@ -1,3 +1,10 @@
+signon (8.17-1) unstable; urgency=low
+
+  * Tests: add retries on failed initialization.
+    Fixes unit tests startup when SIM is inserted.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Wed, 04 May 2011 13:54:54 +0300
+
 signon (8.16-2) unstable; urgency=low
 
   * Fix syntax error in tests aegis file.
