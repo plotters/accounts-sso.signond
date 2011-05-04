@@ -1,3 +1,9 @@
+signon (8.16-2) unstable; urgency=low
+
+  * Fix syntax error in tests aegis file.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Wed, 04 May 2011 09:54:09 +0300
+
 signon (8.16-1) unstable; urgency=low
 
   * Fixes: NB#249311 - Password verification dialog contents are not as specified
