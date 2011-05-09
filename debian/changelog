@@ -1,3 +1,10 @@
+signon (8.19-1) unstable; urgency=low
+
+  * Fixes: - NB#250431 - sign up into ovi account always fails at first.
+  * Removed authentication plugins' IPC encryption.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Mon, 09 May 2011 16:01:15 +0300
+
 signon (8.17-1) unstable; urgency=low
 
   * Tests: add retries on failed initialization.
