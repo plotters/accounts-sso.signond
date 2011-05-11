@@ -1,3 +1,10 @@
+signon (8.20-1) unstable; urgency=low
+
+  * Signond is able to own encrypted data in the Aegis secure storage
+  * Removed unused and unnecessary tests.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Wed, 11 May 2011 13:35:32 +0300
+
 signon (8.19-1) unstable; urgency=low
 
   * Fixes: - NB#250431 - sign up into ovi account always fails at first.
