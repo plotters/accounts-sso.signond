@@ -19,6 +19,6 @@
     <credential name="CAP::sys_admin" />
     <credential name="CAP::mknod" />
     <credential name="CAP::ipc_lock" />
-    <for path="/usr/bin/signond" />
+    <for path="/usr/bin/signond" id="signond-id" />
   </request>
 </aegis>
