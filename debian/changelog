@@ -1,3 +1,9 @@
+signon (8.21-1) unstable; urgency=low
+
+  * Fixes: NB#248284 - Is this your SIM? dialog keeps on showing after pressing No when many accounts are configured in the device. 
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Sun, 15 May 2011 19:48:12 +0300
+
 signon (8.20-1) unstable; urgency=low
 
   * Signond is able to own encrypted data in the Aegis secure storage
