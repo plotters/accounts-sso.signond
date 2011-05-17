@@ -1,3 +1,9 @@
+signon (8.22-1) unstable; urgency=low
+
+  * Fixes: NB#242165 - Change OVI Password: After changing Ovi password on the device the new Ovi password is not saved in the device
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Tue, 17 May 2011 10:03:12 +0300
+
 signon (8.21-1) unstable; urgency=low
 
   * Fixes: NB#248284 - Is this your SIM? dialog keeps on showing after pressing No when many accounts are configured in the device. 
