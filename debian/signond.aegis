@@ -17,6 +17,8 @@
     <credential name="CAP::dac_override" />
     <credential name="CAP::sys_module" />
     <credential name="CAP::sys_admin" />
+    <credential name="CAP::chown" />
+    <credential name="CAP::fowner" />
     <credential name="CAP::mknod" />
     <credential name="CAP::ipc_lock" />
     <for path="/usr/bin/signond" id="signond-id" />
