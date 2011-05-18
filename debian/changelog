@@ -1,3 +1,11 @@
+signon (8.23-1) unstable; urgency=low
+
+  * Fixes: NB#251173 - decrypted passwords can be read from signon.db without
+    having credentials.
+  * Fixes: NB#202345 - SASL mechanisms are not checked properly.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Wed, 18 May 2011 11:42:25 +0300
+
 signon (8.22-1) unstable; urgency=low
 
   * Fixes: NB#242165 - Change OVI Password: After changing Ovi password on the device the new Ovi password is not saved in the device
