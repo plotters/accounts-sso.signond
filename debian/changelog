@@ -1,3 +1,9 @@
+signon (8.24-1) unstable; urgency=low
+
+  * Fixes: NB#255674 - UI freeze (for ~10 seconds) caused by the signond.
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Thu, 19 May 2011 14:14:41 +0300
+
 signon (8.23-1) unstable; urgency=low
 
   * Fixes: NB#251173 - decrypted passwords can be read from signon.db without
