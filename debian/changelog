@@ -1,3 +1,13 @@
+signon (8.25-1) unstable; urgency=low
+
+  * Move the UiKeyAuthorizer class out of the signon source tree; instead,
+    provide a default authorizer which always grants the authorization.
+    Plugins can override this behaviour.
+    Fixes: NB#257476 - Secure storage dialogs are shown after restoring the
+    backup on clean device.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Fri, 20 May 2011 11:23:27 +0300
+
 signon (8.24-1) unstable; urgency=low
 
   * Fixes: NB#255674 - UI freeze (for ~10 seconds) caused by the signond.
