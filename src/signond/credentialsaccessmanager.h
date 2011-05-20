@@ -31,17 +31,17 @@
 #ifndef CREDENTIALS_ACCESS_MANAGER_H
 #define CREDENTIALS_ACCESS_MANAGER_H
 
-#include "abstract-key-authorizer.h"
 #include "credentialsdb.h"
-#include "cryptomanager.h"
-#include "key-handler.h"
 #include "signonui_interface.h"
 
 #include <QObject>
 #include <QPointer>
 #include <QFlags>
 
+#include "SignOn/AbstractKeyAuthorizer"
 #include "SignOn/AbstractKeyManager"
+#include "SignOn/KeyHandler"
+#include "SignOn/crypto-manager.h"
 
 /*! @def SIGNON_SECURE_STORAGE_NOT_AVAILABLE
     Use this event type to signal the CAM when the secure storage is
@@ -250,6 +250,14 @@ public:
     void addKeyManager(SignOn::AbstractKeyManager *keyManager);
 
     /*!
+     * Initializes know objects from an extension plugin.
+     * @param extension A signon extension plugin.
+     *
+     * @returns True if the extension provides objects that the CAM is using.
+     */
+    bool initExtension(QObject *object);
+
+    /*!
         Opens the credentials system, creates the CreadentialsDB object;
         if encryption is configured this will also mount the encrypted file system, based on
         the AccessControlHandler obtained keys.
@@ -358,9 +366,9 @@ private:
     QList<SignOn::AbstractKeyManager *> keyManagers;
 
     CredentialsDB *m_pCredentialsDB;
-    CryptoManager *m_pCryptoFileSystemManager;
-    KeyHandler *m_keyHandler;
-    AbstractKeyAuthorizer *m_keyAuthorizer;
+    SignOn::CryptoManager *m_pCryptoFileSystemManager;
+    SignOn::KeyHandler *m_keyHandler;
+    SignOn::AbstractKeyAuthorizer *m_keyAuthorizer;
     CAMConfiguration m_CAMConfiguration;
 
     /* List of all the senders of a SecureStorageEvent. */

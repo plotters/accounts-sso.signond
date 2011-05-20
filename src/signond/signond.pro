@@ -14,13 +14,10 @@ system(qdbusxml2cpp -c BackupIfAdaptor -a backupifadaptor.h:backupifadaptor.cpp 
     ../../lib/signond/com.nokia.SingleSignOn.Backup.xml)
 
 HEADERS += \
-    abstract-key-authorizer.h \
     accesscontrolmanager.h \
     credentialsaccessmanager.h \
     credentialsdb.h \
-    cryptomanager.h \
-    cryptohandlers.h \
-    key-handler.h \
+    default-key-authorizer.h \
     signonsessioncore.h \
     signonauthsessionadaptor.h \
     signonauthsession.h \
@@ -35,17 +32,12 @@ HEADERS += \
     signonui_interface.h \
     signonidentityadaptor.h \
     backupifadaptor.h \
-    signonsessioncoretools.h \
-    ui-key-authorizer.h \
-    misc.h
+    signonsessioncoretools.h
 SOURCES += \
-    abstract-key-authorizer.cpp \
     accesscontrolmanager.cpp \
     credentialsaccessmanager.cpp \
     credentialsdb.cpp \
-    cryptomanager.cpp \
-    cryptohandlers.cpp \
-    key-handler.cpp \
+    default-key-authorizer.cpp \
     signonsessioncore.cpp \
     signonauthsessionadaptor.cpp \
     signonauthsession.cpp \
@@ -59,9 +51,7 @@ SOURCES += \
     signonidentityinfo.cpp \
     signonidentityadaptor.cpp \
     backupifadaptor.cpp \
-    signonsessioncoretools.cpp \
-    ui-key-authorizer.cpp \
-    misc.cpp
+    signonsessioncoretools.cpp
 INCLUDEPATH += . \
     $${TOP_SRC_DIR}/lib/plugins \
     $${TOP_SRC_DIR}/lib/plugins/signon-plugins-common \

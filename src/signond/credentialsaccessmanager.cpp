@@ -22,12 +22,14 @@
  * 02110-1301 USA
  */
 
-
+#define SIGNON_ENABLE_UNSTABLE_APIS
 #include "credentialsaccessmanager.h"
 
+#include "default-key-authorizer.h"
 #include "signond-common.h"
-#include "ui-key-authorizer.h"
-#include "misc.h"
+
+#include "SignOn/ExtensionInterface"
+#include "SignOn/misc.h"
 
 #include <QFile>
 #include <QBuffer>
@@ -43,6 +45,7 @@
     } while (0)
 
 using namespace SignonDaemonNS;
+using namespace SignOn;
 
 /* ---------------------- CAMConfiguration ---------------------- */
 
@@ -107,6 +110,7 @@ CredentialsAccessManager::CredentialsAccessManager(QObject *parent)
           m_keyAuthorizer(NULL),
           m_CAMConfiguration(CAMConfiguration())
 {
+    m_keyHandler = new SignOn::KeyHandler(this);
 }
 
 CredentialsAccessManager::~CredentialsAccessManager()
@@ -161,7 +165,7 @@ bool CredentialsAccessManager::init(const CAMConfiguration &camConfiguration)
 
     if (m_CAMConfiguration.m_useEncryption) {
         //Initialize CryptoManager
-        m_pCryptoFileSystemManager = new CryptoManager(this);
+        m_pCryptoFileSystemManager = new SignOn::CryptoManager(this);
         QObject::connect(m_pCryptoFileSystemManager, SIGNAL(fileSystemMounted()),
                          this, SLOT(onEncryptedFSMounted()));
         QObject::connect(m_pCryptoFileSystemManager, SIGNAL(fileSystemUnmounting()),
@@ -170,9 +174,10 @@ bool CredentialsAccessManager::init(const CAMConfiguration &camConfiguration)
         m_pCryptoFileSystemManager->setFileSystemSize(m_CAMConfiguration.m_fileSystemSize);
         m_pCryptoFileSystemManager->setFileSystemType(m_CAMConfiguration.m_fileSystemType);
 
-        m_keyHandler = new KeyHandler(this);
-
-        m_keyAuthorizer = new UiKeyAuthorizer(m_keyHandler, this);
+        if (m_keyAuthorizer == 0) {
+            TRACE() << "No key authorizer set, using default";
+            m_keyAuthorizer = new DefaultKeyAuthorizer(m_keyHandler, this);
+        }
         QObject::connect(m_keyAuthorizer,
                          SIGNAL(keyAuthorizationQueried(const SignOn::Key,int)),
                          this,
@@ -206,6 +211,48 @@ void CredentialsAccessManager::addKeyManager(
     SignOn::AbstractKeyManager *keyManager)
 {
     keyManagers.append(keyManager);
+}
+
+bool CredentialsAccessManager::initExtension(QObject *plugin)
+{
+    bool extensionInUse = false;
+
+    SignOn::ExtensionInterface *extension;
+    SignOn::ExtensionInterface2 *extension2;
+
+    extension2 = qobject_cast<SignOn::ExtensionInterface2 *>(plugin);
+    if (extension2 != 0)
+        extension = extension2;
+    else
+        extension = qobject_cast<SignOn::ExtensionInterface *>(plugin);
+
+    if (extension == 0) {
+        qWarning() << "Plugin instance is not an ExtensionInterface";
+        return false;
+    }
+
+    SignOn::AbstractKeyManager *keyManager = extension->keyManager(this);
+    if (keyManager) {
+        addKeyManager(keyManager);
+        extensionInUse = true;
+    }
+
+    /* Check if the extension implements the new interface and provides a key
+     * authorizer. */
+    if (extension2 != 0) {
+        SignOn::AbstractKeyAuthorizer *keyAuthorizer =
+            extension2->keyAuthorizer(m_keyHandler, this);
+        if (keyAuthorizer != 0) {
+            if (m_keyAuthorizer == 0) {
+                m_keyAuthorizer = keyAuthorizer;
+                extensionInUse = true;
+            } else {
+                TRACE() << "Key authorizer already set";
+            }
+        }
+    }
+
+    return extensionInUse;
 }
 
 bool CredentialsAccessManager::openSecretsDB()

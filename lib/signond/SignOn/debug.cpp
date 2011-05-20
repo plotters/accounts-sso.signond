@@ -20,23 +20,14 @@
  * 02110-1301 USA
  */
 
-#ifndef MISC_H
-#define MISC_H
+#include "debug.h"
 
-#include <QFile>
+using namespace SignOn;
 
-namespace SignonDaemonNS {
+SIGNON_EXPORT int signonLoggingLevel = 1; // criticals
 
-/* Desired permissions for the files created by signond */
-const QFile::Permissions signonFilePermissions =
-    QFile::WriteUser | QFile::ReadUser;
-
-/* Sets user UID and GID for a file. */
-bool setUserOwnership(const QString &filePath);
-
-bool setFilePermissions(const QString &filePath,
-                        const QFile::Permissions permissions,
-                        bool keepExisting = true);
+SIGNON_EXPORT void setLoggingLevel(int level)
+{
+    signonLoggingLevel = level;
 }
 
-#endif //MISC_H
