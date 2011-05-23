@@ -1,3 +1,9 @@
+signon (8.27-1) unstable; urgency=low
+
+  * Adrresses: NB#220787 - Twitter: 'Unknown error' is displayed while configuring Twitter account when incorrect/default date and time is set on the device
+
+ -- Smita Srivastava <smita.srivastava@teleca.com>  Mon, 23 May 2011 14:46:37 +0300
+
 signon (8.26-2) unstable; urgency=low
 
   * Moderate debugging from external modules.
