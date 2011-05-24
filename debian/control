@@ -88,6 +88,8 @@ Description: Debug symbols for signond
 Package: signond-tests
 Architecture: any
 Priority: extra
+Replaces: signon-plugins-tests
+Breaks: signon-plugins-tests
 Depends: ci-testing, signond, signon-plugins, signon-test-plugins
 XB-Maemo-CI-Packages: signond, libcryptsetup0, libdevicemapper0
 XB-Maemo-CI-Stage: fast, staging, acceptance, validation
