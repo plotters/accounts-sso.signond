@@ -118,6 +118,13 @@ Depends: libsignon-qt-dev
 Description: Development files for Single Sign On plugins
  Headers and static libraries for Single Sign On plugin development.
 
+Package: signon-plugins-tests
+Architecture: any
+Priority: extra
+Depends: ci-testing, signond, signon-plugins
+Description: CI tests for signon-plugins
+ CI tests for signon-plugins.
+
 Package: signon-plugins-doc
 Architecture: all
 Section: doc

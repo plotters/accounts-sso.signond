@@ -1,3 +1,9 @@
+signon (8.25-5) unstable; urgency=low
+
+  * Remove only the staging gate for signon-plugins-tests.
+
+ -- Subramanian Girish <ext-girish.1.subramanian@nokia.com>  Tue, 24 May 2011 17:34:02 +0300
+
 signon (8.25-4) unstable; urgency=low
 
   * Removed unneccesary tests
