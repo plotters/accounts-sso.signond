@@ -1,3 +1,12 @@
+signon (8.28-1) unstable; urgency=low
+
+  * Fixes: NB#258802 - Signon DB is not shown under signonfs-mnt directory
+    after taking the backup.
+  * Reformat password storage when it cannot be mounted.
+  * libsignon: do not make D-Bus introspection blocking calls.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Wed, 25 May 2011 09:47:57 +0300
+
 signon (8.27-1) unstable; urgency=low
 
   * Adrresses: NB#220787 - Twitter: 'Unknown error' is displayed while configuring Twitter account when incorrect/default date and time is set on the device
