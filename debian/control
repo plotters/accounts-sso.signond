@@ -120,8 +120,6 @@ Package: signon-plugins-tests
 Architecture: any
 Priority: extra
 Depends: ci-testing, signond, signon-plugins
-XB-Maemo-CI-Packages: signon-plugins
-XB-Maemo-CI-Stage: staging, acceptance, validation
 Description: CI tests for signon-plugins
  CI tests for signon-plugins.
 
