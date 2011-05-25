@@ -20,28 +20,28 @@
  * 02110-1301 USA
  */
 
-#include "default-key-authorizer.h"
+#ifndef SIGNON_DBUSINTERFACE_H
+#define SIGNON_DBUSINTERFACE_H
 
-using namespace SignonDaemonNS;
+#include <QDBusAbstractInterface>
 
-DefaultKeyAuthorizer::DefaultKeyAuthorizer(SignOn::KeyHandler *keyHandler,
-                                           QObject *parent):
-    AbstractKeyAuthorizer(keyHandler, parent)
+namespace SignOn {
+
+/* This is a version of QDBusInterface which doesn't do the blocking
+ * introspection.
+ */
+class DBusInterface: public QDBusAbstractInterface
 {
+public:
+    DBusInterface(const QString &service,
+                  const QString &path,
+                  const char *interface,
+                  const QDBusConnection &connection,
+                  QObject *parent = 0);
+    virtual ~DBusInterface();
+};
+
 }
 
-DefaultKeyAuthorizer::~DefaultKeyAuthorizer()
-{
-}
-
-void DefaultKeyAuthorizer::queryKeyAuthorization(const SignOn::Key &key,
-                                                 Reason reason)
-{
-    Q_UNUSED(reason);
-
-    int result = keyHandler()->canAddKeyAuthorization() ?
-        Approved : Exclusive;
-
-    emit keyAuthorizationQueried(key, result);
-}
+#endif // SIGNON_DBUSINTERFACE_H
 

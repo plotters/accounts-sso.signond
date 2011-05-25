@@ -20,28 +20,21 @@
  * 02110-1301 USA
  */
 
-#include "default-key-authorizer.h"
+#include "dbusinterface.h"
 
-using namespace SignonDaemonNS;
+using namespace SignOn;
 
-DefaultKeyAuthorizer::DefaultKeyAuthorizer(SignOn::KeyHandler *keyHandler,
-                                           QObject *parent):
-    AbstractKeyAuthorizer(keyHandler, parent)
+DBusInterface::DBusInterface(const QString &service,
+                             const QString &path,
+                             const char *interface,
+                             const QDBusConnection &connection,
+                             QObject *parent):
+    QDBusAbstractInterface(service, path, interface, connection,
+                           parent)
 {
 }
 
-DefaultKeyAuthorizer::~DefaultKeyAuthorizer()
+DBusInterface::~DBusInterface()
 {
-}
-
-void DefaultKeyAuthorizer::queryKeyAuthorization(const SignOn::Key &key,
-                                                 Reason reason)
-{
-    Q_UNUSED(reason);
-
-    int result = keyHandler()->canAddKeyAuthorization() ?
-        Approved : Exclusive;
-
-    emit keyAuthorizationQueried(key, result);
 }
 
