@@ -1,3 +1,10 @@
+signon (8.27-2) unstable; urgency=low
+
+  * Fix SASL plugin.
+  * Do not execute plugin tests.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Wed, 25 May 2011 12:25:49 +0300
+
 signon (8.27-1) unstable; urgency=low
 
   * Adrresses: NB#220787 - Twitter: 'Unknown error' is displayed while configuring Twitter account when incorrect/default date and time is set on the device
