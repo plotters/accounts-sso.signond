@@ -1,3 +1,9 @@
+signon (8.29-2) unstable; urgency=low
+
+  * Remove unnecessary (signon-plugins-tests) tests.
+
+ -- Subramanian Girish <ext-girish.1.subramanian@nokia.com>  Fri, 27 May 2011 10:39:15 +0300
+
 signon (8.29-1) unstable; urgency=low
 
   * libsignon-qt: restore D-Bus signals (fix a regression introduced in
