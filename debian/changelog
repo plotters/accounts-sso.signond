@@ -1,3 +1,9 @@
+signon (8.30-1) unstable; urgency=low
+
+  * Add parameters to uisessiondata.
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Fri, 27 May 2011 14:43:12 +0300
+
 signon (8.29-1) unstable; urgency=low
 
   * libsignon-qt: restore D-Bus signals (fix a regression introduced in
