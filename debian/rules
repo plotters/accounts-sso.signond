@@ -138,6 +138,7 @@ binary-arch: build install
 
 	aegis-deb-add -control debian/$(SIGNOND_PACKAGE)/DEBIAN/control .. debian/$(SIGNOND_PACKAGE).aegis=_aegis
 	aegis-deb-add -control debian/libsignon-qt-tests/DEBIAN/control .. debian/libsignon-qt-tests.aegis=_aegis
+	aegis-deb-add -control debian/signon-example/DEBIAN/control .. debian/signon-example.aegis=_aegis
 
 #$(PACKAGE_TARGETS)::
 #	[ ! -f debian/$(notdir $@).aegis ] || aegis-deb-add -control debian/$(notdir $@)/DEBIAN/control .. debian/$(notdir $@).aegis=_aegis

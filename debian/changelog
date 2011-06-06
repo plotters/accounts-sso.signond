@@ -1,3 +1,9 @@
+signon (8.32-1) unstable; urgency=low
+
+  * Added setOwner functionality 
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Mon, 06 Jun 2011 12:33:12 +0300
+
 signon (8.31-1) unstable; urgency=low
 
   * Add FinalUrl parameter to UiSessionData.
