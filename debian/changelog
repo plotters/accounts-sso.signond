@@ -1,3 +1,15 @@
+signon (8.31-1) unstable; urgency=low
+
+  * Add FinalUrl parameter to UiSessionData.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Wed, 01 Jun 2011 11:59:35 +0300
+
+signon (8.30-2) unstable; urgency=low
+
+  * Removing signon-plugins-tests.
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Tue, 31 May 2011 11:33:12 +0300
+
 signon (8.30-1) unstable; urgency=low
 
   * Add parameters to uisessiondata.
