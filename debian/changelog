@@ -1,3 +1,10 @@
+signon (8.34-1) unstable; urgency=low
+
+  * Fixes: NB#263230 - login dialog is shown after configuring facebook account.
+  * Added counter functionality into verifyUser.
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Tue, 31 May 2011 11:33:12 +0300
+
 signon (8.32-1) unstable; urgency=low
 
   * Added setOwner functionality 
