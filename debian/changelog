@@ -1,6 +1,12 @@
+signon (8.35-2) unstable; urgency=low
+
+  * Version bump up. Replacing fixes to addresses for bug 249545.
+
+ -- Subramanian Girish <ext-girish.1.subramanian@nokia.com>  Tue, 14 Jun 2011 16:46:07 +0300
+
 signon (8.35-1) unstable; urgency=low
 
-  * Fixes: NB#249545 - Verify username feature is broken.
+  * Addresses: NB#249545 - Verify username feature is broken.
 
  -- Tomi Suviola <tomi.suviola@nokia.com>  Mon, 13 Jun 2011 15:13:12 +0300
 
