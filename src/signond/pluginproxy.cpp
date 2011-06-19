@@ -176,7 +176,14 @@ namespace SignonDaemonNS {
             return NULL;
         }
 
-        pp->m_type = pp->queryType();
+        if (debugEnabled()) {
+            QString pluginType = pp->queryType();
+            if (pluginType != pp->m_type) {
+                BLAME() << QString::fromLatin1("Plugin returned type '%1', "
+                                               "expected '%2'").
+                    arg(pluginType).arg(pp->m_type);
+            }
+        }
         pp->m_mechanisms = pp->queryMechanisms();
 
         connect(pp->m_process, SIGNAL(readyRead()), pp, SLOT(onReadStandardOutput()));
@@ -487,13 +494,16 @@ namespace SignonDaemonNS {
         QDataStream ds(m_process);
         ds << (quint32)PLUGIN_OP_TYPE;
 
-        QByteArray typeBa, buffer;
+        QByteArray buffer;
         bool result;
 
         if (!(result = readOnReady(buffer, PLUGINPROCESS_START_TIMEOUT)))
             qCritical("PluginProxy returned NULL result");
 
-        return QString::fromLatin1(buffer);
+        QString type;
+        QDataStream out(buffer);
+        out >> type;
+        return type;
     }
 
     QStringList PluginProxy::queryMechanisms()
