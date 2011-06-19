@@ -1,3 +1,10 @@
+signon (8.36-1) unstable; urgency=low
+
+  * Remove per-thread D-Bus connection from libsignon-qt.
+    Fixes: NB#266831 - FD leak in libsignon-qt.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Sun, 19 Jun 2011 11:11:04 +0300
+
 signon (8.35-2) unstable; urgency=low
 
   * Version bump up. Replacing fixes to addresses for bug 249545.
