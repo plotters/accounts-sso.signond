@@ -1,3 +1,10 @@
+signon (8.36-2) unstable; urgency=low
+
+  * signond: avoid losing the plugin type information.
+    Fixes: NB#266928 - Signond cannot start any authentication plugins.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Sun, 19 Jun 2011 11:19:58 +0300
+
 signon (8.36-1) unstable; urgency=low
 
   * Remove per-thread D-Bus connection from libsignon-qt.
