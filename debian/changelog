@@ -1,3 +1,9 @@
+signon (8.36-4) unstable; urgency=low
+
+  * Fix tests build (pick library from the local build tree).
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Sun, 19 Jun 2011 12:29:49 +0300
+
 signon (8.36-3) unstable; urgency=low
 
   * Fix tests build.
