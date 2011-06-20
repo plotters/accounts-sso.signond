@@ -1,3 +1,9 @@
+signon (8.36-5.debug) unstable; urgency=low
+
+  * Enable debugging.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Mon, 20 Jun 2011 09:08:31 +0300
+
 signon (8.36-4) unstable; urgency=low
 
   * Fix tests build (pick library from the local build tree).
