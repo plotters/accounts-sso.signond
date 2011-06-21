@@ -1,3 +1,10 @@
+signon (8.37-1) unstable; urgency=low
+
+  * Fixes: NB#267340 - Signond processes are not killed when session dbus is
+    stopped.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Tue, 21 Jun 2011 09:58:29 +0300
+
 signon (8.36-4) unstable; urgency=low
 
   * Fix tests build (pick library from the local build tree).
