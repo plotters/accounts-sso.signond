@@ -1,3 +1,10 @@
+signon (8.38-2) unstable; urgency=low
+
+  * Remove qDebug() from UNIX signal handler.
+    Fixes: NB#266828 - Double free() warning when killing signond.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Tue, 21 Jun 2011 14:20:09 +0300
+
 signon (8.38-1) unstable; urgency=low
 
   * Fixes: NB#267340 - Signond processes are not killed when session dbus is
