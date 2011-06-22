@@ -1,3 +1,9 @@
+signon (8.38-3) unstable; urgency=low
+
+  * Fixes: NB#238548 - signond CUD script needs to be updated
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Wed, 22 Jun 2011 11:30:09 +0300
+
 signon (8.38-2) unstable; urgency=low
 
   * Remove qDebug() from UNIX signal handler.
