@@ -1,3 +1,9 @@
+signon (8.38-4) unstable; urgency=low
+
+  * Fixes: NB#268115 - Memory leak in AuthServiceImpl produces random crashes.
+
+ -- Alberto Mardegan <alberto.mardegan@nokia.com>  Thu, 23 Jun 2011 13:07:43 +0300
+
 signon (8.38-3) unstable; urgency=low
 
   * Fixes: NB#238548 - signond CUD script needs to be updated
