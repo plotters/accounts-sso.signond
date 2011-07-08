@@ -1,3 +1,9 @@
+signon (8.38-5) unstable; urgency=low
+
+  * Fixes: NB#271519 - Ovi Authentication plugin is getting restarted unnecessarily.. which results in losing data
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Fri, 08 Jun 2011 16:02:09 +0300
+
 signon (8.38-4) unstable; urgency=low
 
   * Fixes: NB#268115 - Memory leak in AuthServiceImpl produces random crashes.
