@@ -223,6 +223,14 @@ public:
      */
     SIGNON_SESSION_DECLARE_PROPERTY(bool, RenewToken)
 
+    /*!
+     * Declares the property KeepAlive setter and getter.
+     * Sets the automatic timeout timer for session operations.
+     * To be used when a session object can be deleted after timeout.
+     * Default is to keep session alive.
+     */
+    SIGNON_SESSION_DECLARE_PROPERTY(bool, KeepAlive)
+
 protected:
     QVariantMap m_data;
 };

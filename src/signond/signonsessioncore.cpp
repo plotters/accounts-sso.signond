@@ -41,6 +41,7 @@
 #define SSO_KEY_USERNAME QLatin1String("UserName")
 #define SSO_KEY_PASSWORD QLatin1String("Secret")
 #define SSO_KEY_CAPTION QLatin1String("Caption")
+#define SSO_KEY_KEEPALIVE QLatin1String("KeepAlive")
 
 using namespace SignonDaemonNS;
 using namespace SignOnCrypto;
@@ -84,7 +85,8 @@ SignonSessionCore::SignonSessionCore(quint32 id,
       m_id(id),
       m_method(method),
       m_passwordUpdate(QString()),
-      m_queryCredsUiDisplayed(false)
+      m_queryCredsUiDisplayed(false),
+      m_refCount(0)
 {
     m_signonui = NULL;
     m_watcher = NULL;
@@ -97,10 +99,12 @@ SignonSessionCore::SignonSessionCore(quint32 id,
                                     SIGNON_UI_DAEMON_OBJECTPATH,
                                     QDBusConnection::sessionBus());
 
-
     connect(CredentialsAccessManager::instance(),
             SIGNAL(credentialsSystemReady()),
             SLOT(credentialsSystemReady()));
+
+    setAutoDestruct(false);
+
 }
 
 SignonSessionCore::~SignonSessionCore()
@@ -425,6 +429,10 @@ void SignonSessionCore::startProcess()
      * this data will be effectively cached */
     m_tmpUsername = parameters[SSO_KEY_USERNAME].toString();
     m_tmpPassword = parameters[SSO_KEY_PASSWORD].toString();
+
+    if (parameters.contains(SSO_KEY_KEEPALIVE)) {
+        setAutoDestruct(!parameters[SSO_KEY_KEEPALIVE].toBool());
+    }
 
     if (!m_plugin->process(data.m_cancelKey, parameters, data.m_mechanism)) {
         QDBusMessage errReply = data.m_msg.createErrorReply(SIGNOND_RUNTIME_ERR_NAME,
@@ -1004,6 +1012,24 @@ void SignonSessionCore::destroy()
 
     emit destroyed();
     deleteLater();
+}
+
+void SignonSessionCore::addRef()
+{
+    TRACE();
+    m_refCount++;
+    setAutoDestruct(false);
+}
+
+void SignonSessionCore::removeRef()
+{
+    TRACE();
+    Q_ASSERT(m_refCount <= 0);
+    m_refCount--;
+    if (m_refCount == 0) {
+        TRACE();
+        setAutoDestruct(true);
+    }
 }
 
 void SignonSessionCore::credentialsSystemReady()

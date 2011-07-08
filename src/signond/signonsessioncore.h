@@ -66,6 +66,8 @@ class SignonDaemon;
         static QStringList loadedPluginMethods(const QString &method);
 
         void destroy();
+        void addRef();
+        void removeRef();
 
     public Q_SLOTS:
         QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms);
@@ -139,6 +141,7 @@ class SignonDaemon;
          * session processing was not preceded by a signon UI query credentials
          * interaction, when this flag is set to true. */
         bool m_queryCredsUiDisplayed;
+        quint32 m_refCount;
 
         Q_DISABLE_COPY(SignonSessionCore)
 }; //class SignonDaemon
