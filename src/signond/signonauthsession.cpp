@@ -47,6 +47,8 @@ SignonAuthSession::~SignonAuthSession()
 {
     TRACE();
 
+    parent()->removeRef();
+
     if (m_registered)
     {
         emit unregistered();
@@ -90,6 +92,7 @@ QString SignonAuthSession::getAuthSessionObjectPath(const quint32 id,
 
     sas->objectRegistered();
     sas->setParent(core);
+    core->addRef();
 
     connect(core, SIGNAL(stateChanged(const QString&, int, const QString&)),
             sas, SLOT(stateChangedSlot(const QString&, int, const QString&)));
