@@ -1,3 +1,9 @@
+signon (8.38-6) unstable; urgency=low
+
+  * Change tests importance.
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Mon, 11 Jun 2011 11:02:09 +0300
+
 signon (8.38-5) unstable; urgency=low
 
   * Fixes: NB#271519 - Ovi Authentication plugin is getting restarted unnecessarily.. which results in losing data
