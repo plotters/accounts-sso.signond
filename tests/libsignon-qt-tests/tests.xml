@@ -99,11 +99,11 @@
         <description>libsignon-qt-tests-process_with_existing_identity</description>
         <step>/usr/bin/libsignon-qt-tests process_with_existing_identity</step>
       </case>
-      <case name="libsignon-qt-tests-process_with_nonexisting_type" type="Functional" level="Component">
+      <case name="libsignon-qt-tests-process_with_nonexisting_type" type="Functional" level="Component" insignificant="true">
         <description>libsignon-qt-tests-process_with_nonexisting_type</description>
         <step>/usr/bin/libsignon-qt-tests process_with_nonexisting_type</step>
       </case>
-      <case name="libsignon-qt-tests-process_with_nonexisting_method" type="Functional" level="Component">
+      <case name="libsignon-qt-tests-process_with_nonexisting_method" type="Functional" level="Component" insignificant="true">
         <description>libsignon-qt-tests-process_with_nonexisting_method</description>
         <step>/usr/bin/libsignon-qt-tests process_with_nonexisting_method</step>
       </case>
@@ -241,11 +241,11 @@
         <description>libsignon-qt-tests-process_with_existing_identity</description>
         <step>/usr/bin/libsignon-qt-untrusted-tests process_with_existing_identity</step>
       </case>
-      <case name="libsignon-qt-tests-process_with_nonexisting_type" type="Security" level="Component">
+      <case name="libsignon-qt-tests-process_with_nonexisting_type" type="Security" level="Component" insignificant="true">
         <description>libsignon-qt-tests-process_with_nonexisting_type</description>
         <step>/usr/bin/libsignon-qt-untrusted-tests process_with_nonexisting_type</step>
       </case>
-      <case name="libsignon-qt-tests-process_with_nonexisting_method" type="Security" level="Component">
+      <case name="libsignon-qt-tests-process_with_nonexisting_method" type="Security" level="Component" insignificant="true">
         <description>libsignon-qt-tests-process_with_nonexisting_method</description>
         <step>/usr/bin/libsignon-qt-untrusted-tests process_with_nonexisting_method</step>
       </case>
