@@ -1,3 +1,10 @@
+signon (8.38-8) unstable; urgency=low
+
+  * UNRELEASED
+  * Fixes: NB#243668 - signon has incomplete doxygen config in debian/api
+
+ -- Smita Srivastava <smita.srivastava@teleca.com>  Mon, 25 Jul 2011 12:17:36 +0300
+
 signon (8.38-7) unstable; urgency=low
 
   * Fixes: NB#272116 - Auth dialog not shown after cancelling an auth session
