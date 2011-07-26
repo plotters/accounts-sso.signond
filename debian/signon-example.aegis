@@ -5,14 +5,4 @@
   <request>
     <credential name="signon-example::access" />
     <for path="/usr/bin/signonclient"/>
-  </request>
-  <request>
-    <credential name="signon-example::access" />
-    <for path="accounts-ui::/usr/bin/accounts-ui"/>
-    <for path="applauncherd-launcher::/usr/bin/applauncherd.bin" />
-    <for path="account-plugin-ovi::/usr/lib/AccountSetup/bin/oviplugin"/>
-    <for path="ovi-startup::/usr/bin/cherry" />
-    <for path="ovi-startup::/usr/bin//usr/bin/ovi-startup" />
-  </request>
-
 </aegis>
