@@ -447,6 +447,7 @@ namespace SignOn {
     {
         QVariantMap params;
         params.insert(QLatin1String("QueryMessage"), message);
+        params.insert(QLatin1String("Confirm"), true);
         verifyUser(params);
     }
 
