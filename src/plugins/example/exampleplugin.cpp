@@ -110,8 +110,9 @@ namespace ExamplePluginNS {
 
         if (input.Params() == QLatin1String("ui")) {
             SignOn::UiSessionData data;
+            data.setUserName(input.UserName());
             data.setQueryPassword(true);
-            data.setQueryUserName(true);
+//            data.setQueryUserName(true);
             emit userActionRequired(data);
 
             return;
