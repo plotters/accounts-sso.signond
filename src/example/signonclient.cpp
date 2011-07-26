@@ -139,7 +139,7 @@ void SignonClient::on_store_clicked()
 
     QStringList acl = QStringList() << QString::fromLatin1("AID::12345678")
                       << QString::fromLatin1("AID::87654321")
-                      << QString::fromLatin1("signon::example");
+                      << QString::fromLatin1("signon-example::access");
     m_info->setAccessControlList(acl);
 
     int randomType = qrand() % 4;
@@ -254,14 +254,17 @@ void SignonClient::on_verify_clicked()
     //see uisessiondata.h for details
     QVariantMap params;
     QString link("<a href=\"http://www.google.com\"> "
-                    "Click for Google"
-                 "! </a>"
-                    " or maybe you can try "
+                    "Forgot password"
+                 "</a>"
+/*                    " or maybe you can try "
                  "<a href=\"http::/error\"> "
                     "Invalid link"
                  "! </a> "
-                 );
+*/                 );
     params.insert(QLatin1String("ForgotPassword"), link);
+    params.insert(QLatin1String("Confirm"), true);
+    params.insert(QLatin1String("ConfirmCount"), 3);
+//    params.insert(QLatin1String("Icon"), QLatin1String("icon-m-service-google"));
 
     //params.insert(QLatin1String("ForgotPasswordUrl"), QLatin1String("http:://www.google.com"));
 
