@@ -1,8 +1,14 @@
+signon (9.0-2) unstable; urgency=low
+
+  * Addresses pr1.2 bugfix 243668 from changelog.
+
+ -- Subramanian Girish <ext-girish.1.subramanian@nokia.com>  Wed, 10 Aug 2011 13:34:57 +0300
+
 signon (9.0-1) unstable; urgency=low
 
   * Fixes: NB#235544 - [TASK] UI of verify usename should have service provider information
   * Fixes: NB#254822 - signon-doc package contains no documentation
-  * Fixes: NB#243668 - signon has incomplete doxygen config in debian/api
+  * Addresses: NB#243668 - signon has incomplete doxygen config in debian/api
 
  -- Smita Srivastava <smita.srivastava@teleca.com>  Mon, 25 Jul 2011 12:17:36 +0300
 
