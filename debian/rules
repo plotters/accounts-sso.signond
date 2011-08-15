@@ -121,7 +121,8 @@ binary-arch: build install
 #	dh_installinfo
 #	dh_installman
 	dh_link
-	dh_strip --dbg-package=libsignon-qt-dbg
+	dh_strip -p libsignon-qt --dbg-package="libsignon-qt-dbg"
+	dh_strip -p signond --dbg-package="signond-dbg"
 	dh_compress --exclude=doc/signon/  # don't compress our documentation
 	dh_fixperms
 #	dh_perl
