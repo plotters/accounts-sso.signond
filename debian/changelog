@@ -1,3 +1,9 @@
+signon (9.1-1) unstable; urgency=low
+
+  * Fixes: NB#275874 - signond is cpu hog during the boot (on idle system it uses lot of CPU for nearly 20s).
+
+ -- Aurel Popirtac <ext-aurel.popirtac@nokia.com>  Tue, 16 Aug 2011 15:09:02 +0300
+
 signon (9.0-2) unstable; urgency=low
 
   * Addresses pr1.2 bugfix 243668 from changelog.
