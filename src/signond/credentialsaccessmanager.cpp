@@ -275,6 +275,16 @@ bool CredentialsAccessManager::openSecretsDB()
         dbPath = m_CAMConfiguration.metadataDBPath() + QLatin1String(".creds");
     }
 
+// Ugly hack - just a Proof of concept
+#ifdef SIGNON_AEGISFS
+	const char *ppath = "/home/user/.sso-aegisfs";
+	QString qppath = QString::fromAscii(ppath, -1);
+
+	dbPath = qppath
+		+ QDir::separator()
+		+ m_CAMConfiguration.m_dbName;
+#endif
+
     TRACE() << "Database name: [" << dbPath << "]";
 
     if (!m_pCredentialsDB->openSecretsDB(dbPath))
