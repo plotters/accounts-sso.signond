@@ -170,7 +170,19 @@ bool CredentialsAccessManager::init(const CAMConfiguration &camConfiguration)
                          this, SLOT(onEncryptedFSMounted()));
         QObject::connect(m_pCryptoFileSystemManager, SIGNAL(fileSystemUnmounting()),
                          this, SLOT(onEncryptedFSUnmounting()));
-        m_pCryptoFileSystemManager->setFileSystemPath(m_CAMConfiguration.encryptedFSPath());
+
+#ifdef SIGNON_AEGISFS
+		const char *ppath = "/home/user/.sso-aegisfs";
+		QString qppath = QString::fromAscii(ppath, -1);
+
+		m_pCryptoFileSystemManager->setFileSystemPath(qppath
+													  + QDir::separator()
+				 	 	 	 	 	 	 	 	 	  + m_CAMConfiguration.encryptedFSPath());
+#else
+		m_pCryptoFileSystemManager->setFileSystemPath(m_CAMConfiguration.encryptedFSPath());
+#endif
+
+
         m_pCryptoFileSystemManager->setFileSystemSize(m_CAMConfiguration.m_fileSystemSize);
         m_pCryptoFileSystemManager->setFileSystemType(m_CAMConfiguration.m_fileSystemType);
 
@@ -274,16 +286,6 @@ bool CredentialsAccessManager::openSecretsDB()
     } else {
         dbPath = m_CAMConfiguration.metadataDBPath() + QLatin1String(".creds");
     }
-
-// Ugly hack - just a Proof of concept
-#ifdef SIGNON_AEGISFS
-	const char *ppath = "/home/user/.sso-aegisfs";
-	QString qppath = QString::fromAscii(ppath, -1);
-
-	dbPath = qppath
-		+ QDir::separator()
-		+ m_CAMConfiguration.m_dbName;
-#endif
 
     TRACE() << "Database name: [" << dbPath << "]";
 
