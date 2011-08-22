@@ -8,7 +8,7 @@ SUBDIRS   = lib src server tests
 include( common-installs-config.pri )
 include( doc/doc.pri )
 
-system(pkg-config --exists aegisfs) {
+exists(/etc/aegisfs.conf) {
     
     PKGCONFIG += aegisfs
     DEFINES += SIGNON_AEGISFS
