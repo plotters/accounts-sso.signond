@@ -1,6 +1,8 @@
 <aegis>
   <provide>
     <credential name="keychain-access" />
+    <credential name="ssoProtectedWriteAccess" />
+	<credential name="ssoProtectedReadAccess" />
   </provide>
   <account>
     <user name="signon" group="signon"/>
@@ -21,6 +23,11 @@
     <credential name="CAP::fowner" />
     <credential name="CAP::mknod" />
     <credential name="CAP::ipc_lock" />
+    <credential name="ssoProtectedWriteAccess" />
+    <credential name="ssoProtectedReadAccess" />
     <for path="/usr/bin/signond" id="signond-id" />
+  </request>
+  <request context="INSTALL">
+    <credential name="aegisfs::AegisFSMountAdd" />
   </request>
 </aegis>

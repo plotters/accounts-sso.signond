@@ -1,0 +1,2 @@
+#!/bin/sh
+aegisfs --install /etc/aegisfs.d/user-sso.conf
