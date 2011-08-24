@@ -829,8 +829,26 @@ bool SignonDaemon::createStorageFileTree(const QStringList &backupFiles) const
 uchar SignonDaemon::backupStarts()
 {
     TRACE() << "backup";
+    const CAMConfiguration config = m_configuration->camConfiguration();
+
+	QString luksDBName = QString::fromAscii(signonDefaultStoragePath)
+						  + QDir::separator()
+	 	 	 	 	 	  + config.m_dbName;
+
     if (!m_backup && m_pCAMManager->credentialsSystemOpened())
     {
+
+    	if (m_configuration->useSecureStorage()) {
+#ifdef SIGNON_AEGISFS
+
+    		QString aegisDBName = QString::fromAscii(signonDefaultAegisFSStoragePath)
+    						      + QDir::separator()
+    						      + config.m_dbName;
+
+    		QFile::copy(aegisDBName, luksDBName);
+#endif
+    	}
+
         m_pCAMManager->closeCredentialsSystem();
         if (m_pCAMManager->credentialsSystemOpened())
         {
@@ -839,11 +857,10 @@ uchar SignonDaemon::backupStarts()
         }
     }
 
-    const CAMConfiguration config = m_configuration->camConfiguration();
-
     /* do backup copy: prepare the list of files to be backed up */
     QStringList backupFiles;
     backupFiles << config.m_dbName;
+
     if (m_configuration->useSecureStorage())
         backupFiles << QLatin1String(signonDefaultFileSystemName);
 
@@ -869,7 +886,12 @@ uchar SignonDaemon::backupStarts()
         //mount file system back
         if (!m_pCAMManager->openCredentialsSystem()) {
             qCritical() << "Cannot reopen database";
+            return 0;
         }
+
+#ifdef SIGNON_AEGISFS
+        QFile::remove(luksDBName);
+#endif
     }
     return 0;
 }
@@ -935,6 +957,18 @@ uchar SignonDaemon::restoreFinished()
         //mount file system back
          if (!m_pCAMManager->openCredentialsSystem())
              return 2;
+#ifdef SIGNON_AEGISFS
+     	QString luksDBName = QString::fromAscii(signonDefaultStoragePath)
+     						  + QDir::separator()
+     	 	 	 	 	 	  + config.m_dbName;
+
+		QString aegisDBName = QString::fromAscii(signonDefaultAegisFSStoragePath)
+						      + QDir::separator()
+						      + config.m_dbName;
+
+		QFile::copy(luksDBName, aegisDBName);
+		QFile::remove(luksDBName);
+#endif
     }
 
     return 0;

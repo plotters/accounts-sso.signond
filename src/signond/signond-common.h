@@ -62,6 +62,7 @@
  * Signon Daemon default configuration values
  */
 const char signonDefaultDbName[] = "signon.db";
+const char signonDefaultAegisFSStoragePath[] = "/home/user/.signond/private";
 const char signonDefaultStoragePath[] = "/home/user/.signon";
 const char signonDefaultFileSystemName[] = "signonfs";
 const char signonDefaultFileSystemType[] = "ext2";
