@@ -163,6 +163,7 @@ bool CredentialsAccessManager::init(const CAMConfiguration &camConfiguration)
         return false;
     }
 
+
     if (m_CAMConfiguration.m_useEncryption) {
         //Initialize CryptoManager
         m_pCryptoFileSystemManager = new SignOn::CryptoManager(this);
@@ -171,20 +172,14 @@ bool CredentialsAccessManager::init(const CAMConfiguration &camConfiguration)
         QObject::connect(m_pCryptoFileSystemManager, SIGNAL(fileSystemUnmounting()),
                          this, SLOT(onEncryptedFSUnmounting()));
 
-#ifdef SIGNON_AEGISFS
-		const char *ppath = "/home/user/.sso-aegisfs";
-		QString qppath = QString::fromAscii(ppath, -1);
-
-		m_pCryptoFileSystemManager->setFileSystemPath(qppath
-													  + QDir::separator()
-				 	 	 	 	 	 	 	 	 	  + m_CAMConfiguration.encryptedFSPath());
-#else
 		m_pCryptoFileSystemManager->setFileSystemPath(m_CAMConfiguration.encryptedFSPath());
-#endif
-
 
         m_pCryptoFileSystemManager->setFileSystemSize(m_CAMConfiguration.m_fileSystemSize);
         m_pCryptoFileSystemManager->setFileSystemType(m_CAMConfiguration.m_fileSystemType);
+
+#ifdef SIGNON_AEGISFS
+        m_pCryptoFileSystemManager->setAegisFSFileSystemPath(QString::fromAscii(signonDefaultAegisFSStoragePath));
+#endif
 
         if (m_keyAuthorizer == 0) {
             TRACE() << "No key authorizer set, using default";
@@ -269,20 +264,27 @@ bool CredentialsAccessManager::initExtension(QObject *plugin)
 
 bool CredentialsAccessManager::openSecretsDB()
 {
-    //todo remove this variable after LUKS implementation becomes stable.
-    QString dbPath;
+	QString dbPath;
 
     if (m_CAMConfiguration.m_useEncryption) {
-        dbPath = m_pCryptoFileSystemManager->fileSystemMountPath()
-            + QDir::separator()
-            + m_CAMConfiguration.m_dbName;
-
         if (!m_pCryptoFileSystemManager->fileSystemIsMounted()) {
             /* Do not attempt to mount the FS; we know that it will be mounted
              * automatically, as soon as some encryption keys are provided */
             m_error = CredentialsDbNotMounted;
             return false;
         }
+
+#ifdef SIGNON_AEGISFS
+
+        QString qppath(QString::fromAscii(signonDefaultAegisFSStoragePath));
+        dbPath = qppath
+                + QDir::separator()
+                + m_CAMConfiguration.m_dbName;
+#else
+        dbPath = m_pCryptoFileSystemManager->fileSystemMountPath()
+            + QDir::separator()
+            + m_CAMConfiguration.m_dbName;
+#endif
     } else {
         dbPath = m_CAMConfiguration.metadataDBPath() + QLatin1String(".creds");
     }

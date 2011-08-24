@@ -8,16 +8,14 @@ SUBDIRS   = lib src server tests
 include( common-installs-config.pri )
 include( doc/doc.pri )
 
-exists(/etc/aegisfs.conf) {
-    
-    PKGCONFIG += aegisfs
-    DEFINES += SIGNON_AEGISFS
+
+#contains(DEFINES, SIGNON_AEGISFS) {
     
 # Install AEGIS_fond file
-	aegisfs_config.files = user-sso.conf
-	aegisfs_config.path = /etc/aegisfs.d
+aegisfs_config.files = user-sso.conf
+aegisfs_config.path = /etc/aegisfs.d
 
-	INSTALLS += aegisfs_config
-}
+INSTALLS += aegisfs_config
+#}
 
 # End of File

@@ -137,6 +137,13 @@ namespace SignOn {
         */
         void setFileSystemPath(const QString &path);
 
+
+        /*!
+            Sets the aegisfs file system's path.
+            @param path The path of the file system's file/source.
+        */
+        void setAegisFSFileSystemPath(const QString &path);
+
         /*!
             @returns the path of the file system.
         */
@@ -249,6 +256,7 @@ namespace SignOn {
         QString m_fileSystemMapPath;
         QString m_fileSystemName;
         QString m_fileSystemMountPath;
+        QString m_aegisFSFileSystemPath;
         QString m_loopDeviceName;
 
         FileSystemMountState m_mountState;

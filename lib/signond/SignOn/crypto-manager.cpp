@@ -42,7 +42,11 @@ namespace SignOn {
 
     const QString CryptoManager::keychainFilePath() const
     {
-        return m_fileSystemMountPath + QDir::separator() + QLatin1String("keychain");
+#ifdef SIGNON_AEGISFS
+	  return m_aegisFSFileSystemPath + QDir::separator() + QLatin1String("keychain");
+#else
+	  return m_fileSystemMountPath + QDir::separator() + QLatin1String("keychain");
+#endif
     }
 
     void CryptoManager::addKeyToKeychain(const QByteArray &key) const
@@ -84,6 +88,7 @@ namespace SignOn {
               m_fileSystemMapPath(QString()),
               m_fileSystemName(QString()),
               m_fileSystemMountPath(QString()),
+              m_aegisFSFileSystemPath(QString()),
               m_loopDeviceName(QString()),
               m_fileSystemType(Ext2),
               m_fileSystemSize(4)
@@ -123,6 +128,11 @@ namespace SignOn {
         m_fileSystemName = fsFileInfo.fileName();
         m_fileSystemMapPath = QLatin1String(DEVICE_MAPPER_DIR) + m_fileSystemName;
         m_fileSystemMountPath = path + QLatin1String("-mnt");
+    }
+
+    void CryptoManager::setAegisFSFileSystemPath(const QString &path)
+    {
+    	m_aegisFSFileSystemPath = path;
     }
 
     bool CryptoManager::setFileSystemSize(const quint32 size)
