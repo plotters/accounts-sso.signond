@@ -56,7 +56,7 @@ Priority: optional
 Depends: e2fsprogs, ${shlibs:Depends}, ${misc:Depends}
 Provides: signond0
 Replaces: signond0
-Recommends: signon-ui, signon-plugins, libsignon-qt0, signon-sim-dlc-extension, devicelock, devicelock-lockui
+Recommends: signon-ui, signon-plugins, libsignon-qt0, signon-sim-dlc-extension, devicelock, devicelock-lockui, aegisfs
 Conflicts: libsignon-glib1 (< 0.15), libsignon-qt0 (<= 2.9)
 Description: Single Sign On framework
  Framework to provide credential storage and authentication service.
