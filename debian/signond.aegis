@@ -2,7 +2,7 @@
   <provide>
     <credential name="keychain-access" />
     <credential name="ssoProtectedWriteAccess" />
-	<credential name="ssoProtectedReadAccess" />
+    <credential name="ssoProtectedReadAccess" />
   </provide>
   <account>
     <user name="signon" group="signon"/>
@@ -23,8 +23,8 @@
     <credential name="CAP::fowner" />
     <credential name="CAP::mknod" />
     <credential name="CAP::ipc_lock" />
-    <credential name="ssoProtectedWriteAccess" />
-    <credential name="ssoProtectedReadAccess" />
+    <credential name="signond::ssoProtectedWriteAccess" />
+    <credential name="signond::ssoProtectedReadAccess" />
     <for path="/usr/bin/signond" id="signond-id" />
   </request>
   <request context="INSTALL">

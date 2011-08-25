@@ -91,6 +91,9 @@ SignonDaemonConfiguration::~SignonDaemonConfiguration()
     Size=8
     FileSystemType=ext2
 
+    [AegisFS]
+    AegisPath=~/.signon/private
+
     [ObjectTimeouts]
     IdentityTimeout=300
     AuthSessionTimeout=300
@@ -142,6 +145,17 @@ void SignonDaemonConfiguration::load()
 
             settings.endGroup();
         }
+
+        //AegisFS
+        settings.beginGroup(QLatin1String("AegisFS"));
+
+        QString aegisPath =
+            QDir(settings.value(QLatin1String("AegisPath")).toString()).path();
+        if (aegisPath.startsWith(QLatin1Char('~')))
+            aegisPath.replace(0, 1, QDir::homePath());
+        m_camConfiguration.m_aegisPath = aegisPath;
+
+        settings.endGroup();
 
         //Timeouts
         settings.beginGroup(QLatin1String("ObjectTimeouts"));
@@ -226,6 +240,8 @@ SignonDaemon::~SignonDaemon()
     }
 
     delete m_configuration;
+
+    BLAME() << "signond stopped.";
 }
 
 void SignonDaemon::setupSignalHandlers()
@@ -312,6 +328,10 @@ void SignonDaemon::init()
     m_configuration->load();
 
     SIGNOND_INITIALIZE_TRACE()
+    BLAME() << "signond started.";
+#ifdef SIGNON_AEGISFS
+    TRACE() << "aegisfs enabled.";
+#endif
 
     if (getuid() != 0) {
         BLAME() << "Failed to SUID root. Secure storage will not be available.";
@@ -831,23 +851,23 @@ uchar SignonDaemon::backupStarts()
     TRACE() << "backup";
     const CAMConfiguration config = m_configuration->camConfiguration();
 
-	QString luksDBName = QString::fromAscii(signonDefaultStoragePath)
-						  + QDir::separator()
-	 	 	 	 	 	  + config.m_dbName;
+    QString luksDBName = config.m_storagePath
+                          + QDir::separator()
+                          + config.m_dbName;
 
     if (!m_backup && m_pCAMManager->credentialsSystemOpened())
     {
 
-    	if (m_configuration->useSecureStorage()) {
+        if (m_configuration->useSecureStorage()) {
 #ifdef SIGNON_AEGISFS
 
-    		QString aegisDBName = QString::fromAscii(signonDefaultAegisFSStoragePath)
-    						      + QDir::separator()
-    						      + config.m_dbName;
+            QString aegisDBName = config.m_aegisPath
+                                  + QDir::separator()
+                                  + config.m_dbName;
 
-    		QFile::copy(aegisDBName, luksDBName);
+            QFile::copy(aegisDBName, luksDBName);
 #endif
-    	}
+        }
 
         m_pCAMManager->closeCredentialsSystem();
         if (m_pCAMManager->credentialsSystemOpened())
@@ -889,9 +909,6 @@ uchar SignonDaemon::backupStarts()
             return 0;
         }
 
-#ifdef SIGNON_AEGISFS
-        QFile::remove(luksDBName);
-#endif
     }
     return 0;
 }
@@ -901,6 +918,14 @@ uchar SignonDaemon::backupFinished()
     TRACE() << "close";
 
     eraseBackupDir();
+
+#ifdef SIGNON_AEGISFS
+    const CAMConfiguration config = m_configuration->camConfiguration();
+    QString luksDBName = config.m_storagePath
+                          + QDir::separator()
+                          + config.m_dbName;
+    QFile::remove(luksDBName);
+#endif
 
     if (m_backup)
     {
@@ -958,16 +983,16 @@ uchar SignonDaemon::restoreFinished()
          if (!m_pCAMManager->openCredentialsSystem())
              return 2;
 #ifdef SIGNON_AEGISFS
-     	QString luksDBName = QString::fromAscii(signonDefaultStoragePath)
-     						  + QDir::separator()
-     	 	 	 	 	 	  + config.m_dbName;
+        QString luksDBName = config.m_storagePath
+                              + QDir::separator()
+                              + config.m_dbName;
 
-		QString aegisDBName = QString::fromAscii(signonDefaultAegisFSStoragePath)
-						      + QDir::separator()
-						      + config.m_dbName;
+        QString aegisDBName = config.m_aegisPath
+                              + QDir::separator()
+                              + config.m_dbName;
 
-		QFile::copy(luksDBName, aegisDBName);
-		QFile::remove(luksDBName);
+        QFile::copy(luksDBName, aegisDBName);
+        QFile::remove(luksDBName);
 #endif
     }
 

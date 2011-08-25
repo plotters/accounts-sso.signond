@@ -28,7 +28,6 @@ DEFINES += NO_SIGNON_USER
 # Default directory for signond extensions
 DEFINES += SIGNON_EXTENSIONS_DIR=\\\"/usr/lib/signon/extensions\\\"
 
-
 # Bringing aegisFS into use
 DEFINES += SIGNON_AEGISFS
 # End of File
