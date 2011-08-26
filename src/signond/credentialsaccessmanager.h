@@ -127,6 +127,7 @@ struct CAMConfiguration
     QString m_fileSystemType;   /*!< The encrypted file system type (ext2, ext3, ext4). */
     quint32 m_fileSystemSize;   /*!< The encrypted file system size. */
     QByteArray m_encryptionPassphrase; /*!< Passphrase used for opening encrypted FS. */
+    QString m_encryptedStoragePath; /*!< The directory for encrypted storage. */
     QString m_aegisPath;        /*!< The base directory for aegisfs. */
 };
 

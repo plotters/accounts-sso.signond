@@ -170,9 +170,16 @@ void SignonDaemonConfiguration::load()
             m_authSessionTimeout = aux;
 
         settings.endGroup();
+
     } else {
         TRACE() << "/etc/signond.conf not found. Using default daemon configuration.";
     }
+
+    m_camConfiguration.m_encryptedStoragePath = m_camConfiguration.m_storagePath
+                                                + QDir::separator()
+                                                + QLatin1String(signonDefaultFileSystemName)
+                                                + QLatin1String("-mnt")
+                                                + QDir::separator();
 
     //Environment variables
 
@@ -851,7 +858,7 @@ uchar SignonDaemon::backupStarts()
     TRACE() << "backup";
     const CAMConfiguration config = m_configuration->camConfiguration();
 
-    QString luksDBName = config.m_storagePath
+    QString luksDBName = config.m_encryptedStoragePath
                           + QDir::separator()
                           + config.m_dbName;
 
@@ -921,7 +928,7 @@ uchar SignonDaemon::backupFinished()
 
 #ifdef SIGNON_AEGISFS
     const CAMConfiguration config = m_configuration->camConfiguration();
-    QString luksDBName = config.m_storagePath
+    QString luksDBName = config.m_encryptedStoragePath
                           + QDir::separator()
                           + config.m_dbName;
     QFile::remove(luksDBName);
@@ -983,7 +990,7 @@ uchar SignonDaemon::restoreFinished()
          if (!m_pCAMManager->openCredentialsSystem())
              return 2;
 #ifdef SIGNON_AEGISFS
-        QString luksDBName = config.m_storagePath
+        QString luksDBName = config.m_encryptedStoragePath
                               + QDir::separator()
                               + config.m_dbName;
 
