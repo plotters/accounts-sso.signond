@@ -1,3 +1,9 @@
+signon (9.1-2) unstable; urgency=low
+
+  * Fixes: NB#251173 - decrypted passwords can be read from signon.db without having credentials
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Fri, 26 Aug 2011 11:49:02 +0300
+
 signon (9.1-1) unstable; urgency=low
 
   * Fixes: NB#275874 - signond is cpu hog during the boot (on idle system it uses lot of CPU for nearly 20s).
