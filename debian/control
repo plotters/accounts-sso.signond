@@ -138,6 +138,13 @@ Priority: optional
 Depends: ${shlibs:Depends}, ${misc:Depends}, signond, libsasl2-2, libsasl2-modules
 Description: SASL authentication plugin for Single Sign On
  SASL authentication plugin for Single Sign On.
+ 
+Package: signon-saslplugin-dbg
+Architecture: any
+Priority: optional
+Depends: signon-saslplugin (= ${binary:Version})
+Description: Debug symbols for SASL authentication plugin for Single Sign On
+ Debug symbols for SASL authentication plugin for Single Sign On.
 
 Package: signon-saslplugin-dev
 Architecture: any
@@ -169,6 +176,13 @@ Priority: optional
 Depends: ${shlibs:Depends}, ${misc:Depends}, signond
 Description: Plain Password plugin for Single Sign On
  Password plugin for Single Sign On.
+
+Package: signon-passwordplugin-dbg
+Architecture: any
+Priority: optional
+Depends: signon-passwordplugin (= ${binary:Version})
+Description: Debug symbols for Plain Password plugin for Single Sign On
+ Debug symbols for Password plugin for Single Sign On.
 
 Package: signon-passwordplugin-tests
 Architecture: any
