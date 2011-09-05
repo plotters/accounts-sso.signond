@@ -346,7 +346,7 @@ namespace SignonDaemonNS {
             && m_currentResultOperation != PLUGIN_RESPONSE_ERROR) {
 
             connect(m_blobIOHandler, SIGNAL(error()),
-                    this, SLOT(blobIOError()));
+                    this, SLOT(blobIOError()), Qt::UniqueConnection);
 
             int expectedDataSize = 0;
             reader >> expectedDataSize;
@@ -553,7 +553,7 @@ namespace SignonDaemonNS {
         connect(m_blobIOHandler,
                 SIGNAL(dataReceived(const QVariantMap &)),
                 this,
-                SLOT(sessionDataReceived(const QVariantMap &)));
+                SLOT(sessionDataReceived(const QVariantMap &)), Qt::UniqueConnection);
 
         QSocketNotifier *readNotifier =
             new QSocketNotifier(STDIN_FILENO, QSocketNotifier::Read, this);
