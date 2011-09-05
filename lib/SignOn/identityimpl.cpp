@@ -136,7 +136,9 @@ namespace SignOn {
     {
         session->blockSignals(true);
         m_authSessions.removeOne(session);
-        session->deleteLater();
+
+        session->disconnect();
+        delete session;
     }
 
     void IdentityImpl::queryAvailableMethods()
