@@ -568,7 +568,8 @@ namespace RemotePluginProcessNS {
         if (opcode != PLUGIN_OP_CANCEL)
             qCritical() << "wrong operation code: breakage of remotepluginprocess threads synchronization: " << opcode;
 
-        m_plugin->cancel();
+        QMetaObject::invokeMethod(m_plugin, "cancel",
+                                     Qt::QueuedConnection);
     }
 } //namespace RemotePluginProcessNS
 
