@@ -185,6 +185,7 @@ bool CredentialsAccessManager::init(const CAMConfiguration &camConfiguration)
             TRACE() << "No key authorizer set, using default";
             m_keyAuthorizer = new DefaultKeyAuthorizer(m_keyHandler, this);
         }
+
         QObject::connect(m_keyAuthorizer,
                          SIGNAL(keyAuthorizationQueried(const SignOn::Key,int)),
                          this,
@@ -267,20 +268,56 @@ bool CredentialsAccessManager::openSecretsDB()
     QString dbPath;
 
     if (m_CAMConfiguration.m_useEncryption) {
+
+#ifndef SIGNON_AEGISFS
         if (!m_pCryptoFileSystemManager->fileSystemIsMounted()) {
             /* Do not attempt to mount the FS; we know that it will be mounted
              * automatically, as soon as some encryption keys are provided */
             m_error = CredentialsDbNotMounted;
             return false;
         }
-        dbPath = m_pCryptoFileSystemManager->fileSystemMountPath()
-            + QDir::separator()
-            + m_CAMConfiguration.m_dbName;
+#endif
+       QString luksDBPath = m_pCryptoFileSystemManager->fileSystemMountPath()
+                            + QDir::separator()
+                            + m_CAMConfiguration.m_dbName;
+
+       dbPath = luksDBPath;
 
 #ifdef SIGNON_AEGISFS
-        dbPath = m_CAMConfiguration.m_aegisPath
-                + QDir::separator()
-                + m_CAMConfiguration.m_dbName;
+        QString luksKeychainName = m_CAMConfiguration.m_encryptedStoragePath
+                                   + QDir::separator()
+                                   + QLatin1String("keychain");
+
+        QString aegisDBName = m_CAMConfiguration.m_aegisPath
+                              + QDir::separator()
+                              + m_CAMConfiguration.m_dbName;
+
+        QString aegisKeychainName = m_CAMConfiguration.m_aegisPath
+                                    + QDir::separator()
+                                    + QLatin1String("keychain");
+
+        QFile restoreFile(restoreFilePath());
+        if (restoreFile.exists() == true)
+        {
+            TRACE() << "RestoreFile found: copying database from " << dbPath << " to " << aegisDBName;
+            QFile::remove(aegisDBName);
+            bool copyRes = QFile::copy(luksDBPath, aegisDBName);
+            TRACE() << "Copy of database completed with result :" << copyRes;
+
+            QFile::remove(aegisKeychainName);
+            copyRes = QFile::copy(luksKeychainName, aegisKeychainName);
+            TRACE() << "Copy of keychain completed with result :" << copyRes;
+
+            QFile::remove(luksDBPath);
+            QFile::remove(luksKeychainName);
+
+            //TODO: the default key should be updated in keychain
+            deleteDefaultKeyStorage();
+            QFile::remove(restoreFilePath());
+        } else
+            TRACE() << "No restoreFile found";
+
+        dbPath = aegisDBName;
 #endif
     } else {
         dbPath = m_CAMConfiguration.metadataDBPath() + QLatin1String(".creds");
@@ -295,7 +332,7 @@ bool CredentialsAccessManager::openSecretsDB()
     return true;
 }
 
-bool CredentialsAccessManager::isSecretsDBOpen()
+bool CredentialsAccessManager::isSecretsDBOpen() const
 {
     return m_pCredentialsDB->isSecretsDBOpen();
 }
@@ -434,7 +471,11 @@ CredentialsDB *CredentialsAccessManager::credentialsDB() const
 
 bool CredentialsAccessManager::isCredentialsSystemReady() const
 {
+#ifdef SIGNON_AEGISFS
+    return isSecretsDBOpen();
+#else
     return (m_keyHandler != 0) ? m_keyHandler->isReady() : true;
+#endif
 }
 
 void CredentialsAccessManager::onKeyInserted(const SignOn::Key key)
@@ -448,11 +489,17 @@ void CredentialsAccessManager::onKeyInserted(const SignOn::Key key)
 
 void CredentialsAccessManager::onLastAuthorizedKeyRemoved(const SignOn::Key key)
 {
+    //Would everything be ok for now
+    //this event would never be handled
+    //as we always have the default key
+
     Q_UNUSED(key);
     TRACE() << "All keys disabled. Closing secure storage.";
+#ifndef SIGNON_AEGISFS
     if (isSecretsDBOpen() || m_pCryptoFileSystemManager->fileSystemIsMounted())
         if (!closeSecretsDB())
             BLAME() << "Error occurred while closing secure storage.";
+#endif
 }
 
 void CredentialsAccessManager::onKeyRemoved(const SignOn::Key key)
@@ -574,8 +621,24 @@ void CredentialsAccessManager::onEncryptedFSUnmounting()
     TRACE();
     if (!credentialsSystemOpened()) return;
 
+#ifndef SIGNON_AEGISFS
+    //We do not need to unmount anything here if we're using aegisfs
     if (isSecretsDBOpen()) {
         m_pCredentialsDB->closeSecretsDB();
     }
+#endif
 }
 
+const QString CredentialsAccessManager::restoreFilePath() const
+{
+    return QLatin1String(signonDefaultStoragePath)
+           + QDir::separator()
+           + QLatin1String(signonRestoreFileName);
+}
+
+void CredentialsAccessManager::deleteDefaultKeyStorage() const {
+    //TODO: remove this ugly hack later
+    QString defaultCodePath(QLatin1String("/var/lib/aegis/ps/Pe/signon_aegis_default_key_storage"));
+    TRACE() << "Removing old default code: " << defaultCodePath;
+    QFile::remove(defaultCodePath);
+}
