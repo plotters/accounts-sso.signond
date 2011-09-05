@@ -1,3 +1,9 @@
+signon (9.2-1) unstable; urgency=low
+
+  * Fixes: NB#280116 - COREWEB: /usr/bin/signonpluginprocess 'QCoreApplication::postEvent FacebookPluginNS::FacebookPlugin::Private::~Private FacebookPluginNS::FacebookPlugin::~FacebookPlugin'
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Mon, 05 Sep 2011 10:49:02 +0300
+
 signon (9.1-6) unstable; urgency=low
 
   * Fixing the debian/control 
