@@ -125,6 +125,9 @@ void SignonClient::on_store_clicked()
     //example method to be able to use example plugin
     methods.insert(QLatin1String("example"), QStringList());
 
+    //password method to be able to use password plugin
+    methods.insert(QLatin1String("password"), QStringList() <<QString::fromLatin1("password") );
+
     int randomNumber = qrand() % 100;
     m_info = new IdentityInfo(QLatin1String("test_caption")
                               + QString().number(randomNumber),

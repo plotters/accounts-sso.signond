@@ -75,13 +75,15 @@ namespace PasswordPluginNS {
         }
 
         //we didn't receive password from signond, so ask from user
-        SignOn::UiSessionData data;
+        SignOn::UiSessionData data = inData.data<UiSessionData>();
         if (inData.UserName().isEmpty())
             data.setQueryUserName(true);
         else
             data.setUserName(inData.UserName());
 
         data.setQueryPassword(true);
+
+        TRACE() << data.propertyNames();
         emit userActionRequired(data);
 
         return;
