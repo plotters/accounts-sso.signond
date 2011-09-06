@@ -862,17 +862,32 @@ uchar SignonDaemon::backupStarts()
                           + QDir::separator()
                           + config.m_dbName;
 
+    QString luksKeychainName = config.m_encryptedStoragePath
+                               + QDir::separator()
+                               + QLatin1String("keychain");
+
     if (!m_backup && m_pCAMManager->credentialsSystemOpened())
     {
 
         if (m_configuration->useSecureStorage()) {
 #ifdef SIGNON_AEGISFS
-
             QString aegisDBName = config.m_aegisPath
                                   + QDir::separator()
                                   + config.m_dbName;
 
-            QFile::copy(aegisDBName, luksDBName);
+            QString aegisKeychainName = config.m_aegisPath
+                                  + QDir::separator()
+                                  + QLatin1String("keychain");
+
+            QFile::remove(luksDBName);
+            QFile::remove(luksKeychainName);
+
+            bool copyRes;
+            copyRes = QFile::copy(aegisDBName, luksDBName);
+            TRACE() << "Copy of agisDBName processed: " << copyRes;
+
+            copyRes = QFile::copy(aegisKeychainName, luksKeychainName);
+            TRACE() << "Copy of keychain processed: " << copyRes;
 #endif
         }
 
@@ -908,15 +923,19 @@ uchar SignonDaemon::backupStarts()
         return 2;
     }
 
-    if (!m_backup)
-    {
+    if (!m_backup) {
         //mount file system back
         if (!m_pCAMManager->openCredentialsSystem()) {
             qCritical() << "Cannot reopen database";
             return 0;
         }
-
     }
+
+#ifdef SIGNON_AEGISFS
+    QFile::remove(luksDBName);
+    QFile::remove(luksKeychainName);
+#endif
+
     return 0;
 }
 
@@ -926,16 +945,7 @@ uchar SignonDaemon::backupFinished()
 
     eraseBackupDir();
 
-#ifdef SIGNON_AEGISFS
-    const CAMConfiguration config = m_configuration->camConfiguration();
-    QString luksDBName = config.m_encryptedStoragePath
-                          + QDir::separator()
-                          + config.m_dbName;
-    QFile::remove(luksDBName);
-#endif
-
-    if (m_backup)
-    {
+    if (m_backup) {
         //close daemon
         TRACE() << "close daemon";
         this->deleteLater();
@@ -957,11 +967,9 @@ uchar SignonDaemon::restoreFinished()
 {
     TRACE() << "restore";
     //restore requested
-    if (m_pCAMManager->credentialsSystemOpened())
-    {
+    if (m_pCAMManager->credentialsSystemOpened()) {
         //umount file system
-        if (!m_pCAMManager->closeCredentialsSystem())
-        {
+        if (!m_pCAMManager->closeCredentialsSystem()) {
             qCritical() << "database cannot be closed";
             return 2;
         }
@@ -983,24 +991,23 @@ uchar SignonDaemon::restoreFinished()
 
     eraseBackupDir();
 
-    //TODO check database integrity
-    if (!m_backup)
-    {
-        //mount file system back
-         if (!m_pCAMManager->openCredentialsSystem())
-             return 2;
 #ifdef SIGNON_AEGISFS
-        QString luksDBName = config.m_encryptedStoragePath
-                              + QDir::separator()
-                              + config.m_dbName;
-
-        QString aegisDBName = config.m_aegisPath
-                              + QDir::separator()
-                              + config.m_dbName;
-
-        QFile::copy(luksDBName, aegisDBName);
-        QFile::remove(luksDBName);
+         QFile restoreFile(m_pCAMManager->restoreFilePath());
+         if (restoreFile.exists() == false) {
+             restoreFile.open(QIODevice::WriteOnly);
+             QTextStream stream(&restoreFile);
+             stream << "Restoration happened" << "\n";
+             restoreFile.close();
+             TRACE() << "restoreFile created";
+         }
 #endif
+
+    //TODO check database integrity
+    if (!m_backup) {
+        //mount file system back: as there is reboot
+        //after restoreFinished so we should not
+        //care about any errors happened here
+         m_pCAMManager->openCredentialsSystem();
     }
 
     return 0;

@@ -61,6 +61,8 @@
 /*
  * Signon Daemon default configuration values
  */
+
+const char signonRestoreFileName[] = "restore.file";
 const char signonDefaultDbName[] = "signon.db";
 const char signonDefaultAegisFSStoragePath[] = "/home/user/.signon/private";
 const char signonDefaultStoragePath[] = "/home/user/.signon";

@@ -47,7 +47,8 @@ SignonAuthSession::~SignonAuthSession()
 {
     TRACE();
 
-    parent()->removeRef();
+    if (parent() != NULL)
+        parent()->removeRef();
 
     if (m_registered)
     {

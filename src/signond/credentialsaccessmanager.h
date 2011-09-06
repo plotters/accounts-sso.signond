@@ -330,6 +330,11 @@ public:
     */
     bool keysAvailable() const;
 
+
+    const QString restoreFilePath() const;
+
+    void deleteDefaultKeyStorage() const;
+
 Q_SIGNALS:
     /*!
       Is emitted when the credentials system becomes ready.
@@ -350,7 +355,7 @@ protected:
 private:
     bool createStorageDir();
     bool openSecretsDB();
-    bool isSecretsDBOpen();
+    bool isSecretsDBOpen() const;
     bool closeSecretsDB();
     bool openMetaDataDB();
     void closeMetaDataDB();
