@@ -923,8 +923,7 @@ uchar SignonDaemon::backupStarts()
         return 2;
     }
 
-    if (!m_backup)
-    {
+    if (!m_backup) {
         //mount file system back
         if (!m_pCAMManager->openCredentialsSystem()) {
             qCritical() << "Cannot reopen database";
@@ -946,8 +945,7 @@ uchar SignonDaemon::backupFinished()
 
     eraseBackupDir();
 
-    if (m_backup)
-    {
+    if (m_backup) {
         //close daemon
         TRACE() << "close daemon";
         this->deleteLater();
@@ -969,11 +967,9 @@ uchar SignonDaemon::restoreFinished()
 {
     TRACE() << "restore";
     //restore requested
-    if (m_pCAMManager->credentialsSystemOpened())
-    {
+    if (m_pCAMManager->credentialsSystemOpened()) {
         //umount file system
-        if (!m_pCAMManager->closeCredentialsSystem())
-        {
+        if (!m_pCAMManager->closeCredentialsSystem()) {
             qCritical() << "database cannot be closed";
             return 2;
         }
@@ -997,8 +993,7 @@ uchar SignonDaemon::restoreFinished()
 
 #ifdef SIGNON_AEGISFS
          QFile restoreFile(m_pCAMManager->restoreFilePath());
-         if (restoreFile.exists() == false)
-         {
+         if (restoreFile.exists() == false) {
              restoreFile.open(QIODevice::WriteOnly);
              QTextStream stream(&restoreFile);
              stream << "Restoration happened" << "\n";
@@ -1008,8 +1003,7 @@ uchar SignonDaemon::restoreFinished()
 #endif
 
     //TODO check database integrity
-    if (!m_backup)
-    {
+    if (!m_backup) {
         //mount file system back: as there is reboot
         //after restoreFinished so we should not
         //care about any errors happened here
