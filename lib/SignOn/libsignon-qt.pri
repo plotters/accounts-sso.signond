@@ -49,8 +49,8 @@ CONFIG += qdbus \
     
 PKGCONFIG += libsignoncrypto-qt
 
-QMAKE_CXXFLAGS += -fno-exceptions \
-    -fno-rtti
+QMAKE_CXXFLAGS += -fno-exceptions
+QMAKE_CXXFLAGS -= -fno-rtti
 DEFINES += \
     QT_NO_CAST_TO_ASCII \
     QT_NO_CAST_FROM_ASCII \
