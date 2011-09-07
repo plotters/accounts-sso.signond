@@ -47,7 +47,8 @@ SignonAuthSession::~SignonAuthSession()
 {
     TRACE();
 
-    parent()->removeRef();
+    if (parent())
+        parent()->removeRef();
 
     if (m_registered)
     {
@@ -65,7 +66,17 @@ QString SignonAuthSession::getAuthSessionObjectPath(const quint32 id,
 {
     TRACE();
     supportsAuthMethod = true;
-    SignonAuthSession* sas = new SignonAuthSession(id, method, ownerPid);
+
+    SignonSessionCore *core = SignonSessionCore::sessionCore(id, method, parent);
+    if (!core) {
+        TRACE() << "Cannot retrieve proper tasks queue";
+        supportsAuthMethod = false;
+        return QString();
+    }
+
+    SignonAuthSession *sas = new SignonAuthSession(id, method, ownerPid);
+    sas->setParent(core);
+    core->addRef();
 
     QDBusConnection connection(SIGNOND_BUS);
     if (!connection.isConnected()) {
@@ -82,17 +93,7 @@ QString SignonAuthSession::getAuthSessionObjectPath(const quint32 id,
         return QString();
     }
 
-    SignonSessionCore *core = SignonSessionCore::sessionCore(id, method, parent);
-    if (!core) {
-        TRACE() << "Cannot retrieve proper tasks queue";
-        supportsAuthMethod = false;
-        delete sas;
-        return QString();
-    }
-
     sas->objectRegistered();
-    sas->setParent(core);
-    core->addRef();
 
     connect(core, SIGNAL(stateChanged(const QString&, int, const QString&)),
             sas, SLOT(stateChangedSlot(const QString&, int, const QString&)));
