@@ -334,7 +334,7 @@ namespace SignonDaemonNS {
         }
 
         bool ok;
-        queryInfo(ok);
+        SignonIdentityInfo info = queryInfo(ok);
         if (!ok) {
             TRACE();
             replyError(SIGNOND_CREDENTIALS_NOT_AVAILABLE_ERR_NAME,
@@ -344,7 +344,7 @@ namespace SignonDaemonNS {
         }
 
         CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
-        bool ret = db->checkPassword(m_pInfo->id(), m_pInfo->userName(), decodedSecret);
+        bool ret = db->checkPassword(info.id(), info.userName(), decodedSecret);
 
         keepInUse();
         return ret;
@@ -539,10 +539,6 @@ namespace SignonDaemonNS {
 
             TRACE() << "Error occurred while inserting/updating credentials.";
         } else {
-            if (m_pInfo) {
-                delete m_pInfo;
-                m_pInfo = NULL;
-            }
             m_pSignonDaemon->identityStored(this);
 
             //If secrets db is not available cache auth. data.
@@ -555,6 +551,12 @@ namespace SignonDaemonNS {
             }
             TRACE() << "FRESH, JUST STORED CREDENTIALS ID:" << m_id;
             emit infoUpdated((int)SignOn::IdentityDataUpdated);
+
+            if (m_pInfo) {
+                delete m_pInfo;
+                m_pInfo = NULL;
+            }
+
         }
         return m_id;
     }
