@@ -1,3 +1,9 @@
+signon (9.4-1) unstable; urgency=low
+
+  * Fixes: NB#280110 - COREWEB: /usr/bin/signond 'SignonDaemonNS::SignonSessionCore::removeRef SignonDaemonNS::SignonAuthSession::~SignonAuthSession'
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Wed, 07 Sep 2011 11:49:02 +0300
+
 signon (9.3-1) unstable; urgency=low
 
   * Bug 251173 - decrypted passwords can be read from signon.db without having credentials
