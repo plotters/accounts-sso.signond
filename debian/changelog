@@ -1,3 +1,10 @@
+signon (9.4-2) unstable; urgency=low
+
+  * Fixes: NB#280100 - COREWEB: /usr/bin/signond '__libc_message malloc_printerr __libc_free'
+  * Disables aegisfs
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Mon, 12 Sep 2011 12:49:02 +0300
+
 signon (9.4-1) unstable; urgency=low
 
   * Fixes: NB#280110 - COREWEB: /usr/bin/signond 'SignonDaemonNS::SignonSessionCore::removeRef SignonDaemonNS::SignonAuthSession::~SignonAuthSession'
