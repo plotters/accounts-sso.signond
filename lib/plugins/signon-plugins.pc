@@ -7,5 +7,5 @@ Name: signon-plugins
 Description: SignonPlugins
 Version: 0.0.2
 Requires: libsignon-qt
-Libs.private: -L/usr/lib  -lQtCore
+Libs.private: -L/usr/lib  -lQtCore -lsignon-plugins
 Cflags:  -I${includedir}/signon-plugins -I${includedir}/signon-plugins/SignOn

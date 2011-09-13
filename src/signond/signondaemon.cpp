@@ -459,7 +459,11 @@ void SignonDaemon::initExtension(const QString &filePath)
     /* Check whether the extension implements some useful objects; if not,
      * unload it. */
     bool extensionInUse = false;
+#ifndef SIGNON_AEGISFS
     if (m_pCAMManager->initExtension(plugin))
+#else
+    if (m_pCAMManager->initExtension(plugin, filePath.contains(QLatin1String("default-key"))))
+#endif
         extensionInUse = true;
 
     if (!extensionInUse) {
