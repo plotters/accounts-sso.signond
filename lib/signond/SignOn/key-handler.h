@@ -86,6 +86,12 @@ public:
     bool isReady() const;
 
     /*!
+     * True if given key manager have been initialized and have started
+     * reporting its inserted keys.
+     */
+    bool isKeyManagerActive(SignOn::AbstractKeyManager *keyManager) const;
+
+    /*!
      * @returns the currently inserted keys.
      */
     QSet<SignOn::Key> insertedKeys() const;

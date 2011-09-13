@@ -50,6 +50,12 @@ public:
         return m_readyKeyManagers.count() == m_keyManagers.count();
     }
 
+    bool isKeyManagerActive(SignOn::AbstractKeyManager *keyManager) const
+    {
+        return m_activeKeyManagers.contains(keyManager);
+    }
+
+
     QSet<SignOn::Key> authorizedInsertedKeys() const
     {
         QSet<SignOn::Key> temp = m_insertedKeys;
@@ -74,6 +80,7 @@ private:
     CryptoManager *m_cryptoManager;
     KeyManagersList m_keyManagers;
     KeyManagersList m_readyKeyManagers;
+    KeyManagersList m_activeKeyManagers;
     QSet<SignOn::Key> m_insertedKeys;
     QSet<SignOn::Key> m_authorizedKeys;
 };
@@ -82,6 +89,8 @@ private:
 void KeyHandlerPrivate::initialize(CryptoManager *cryptoManager,
                                    const KeyManagersList &keyManagers)
 {
+    TRACE();
+
     m_cryptoManager = cryptoManager;
     m_keyManagers = keyManagers;
 
@@ -92,13 +101,17 @@ void KeyHandlerPrivate::initialize(CryptoManager *cryptoManager,
     foreach (SignOn::AbstractKeyManager *keyManager, m_keyManagers) {
         connect(keyManager,
                 SIGNAL(keyInserted(const SignOn::Key)),
-                SLOT(onKeyInserted(const SignOn::Key)));
+                SLOT(onKeyInserted(const SignOn::Key)),
+                Qt::UniqueConnection);
         connect(keyManager,
                 SIGNAL(keyDisabled(const SignOn::Key)),
-                SLOT(onKeyDisabled(const SignOn::Key)));
+                SLOT(onKeyDisabled(const SignOn::Key)),
+                Qt::UniqueConnection);
         connect(keyManager,
                 SIGNAL(keyRemoved(const SignOn::Key)),
-                SLOT(onKeyRemoved(const SignOn::Key)));
+                SLOT(onKeyRemoved(const SignOn::Key)),
+                Qt::UniqueConnection);
+
         keyManager->setup();
     }
 }
@@ -189,9 +202,10 @@ void KeyHandlerPrivate::onKeyInserted(const SignOn::Key key)
 
     TRACE() << "Key inserted.";
 
+    SignOn::AbstractKeyManager *manager =
+        qobject_cast<SignOn::AbstractKeyManager *>(sender());
+
     if (!isReady()) {
-        SignOn::AbstractKeyManager *manager =
-            qobject_cast<SignOn::AbstractKeyManager *>(sender());
         if (!m_readyKeyManagers.contains(manager)) {
             m_readyKeyManagers.append(manager);
             if (isReady())
@@ -202,6 +216,7 @@ void KeyHandlerPrivate::onKeyInserted(const SignOn::Key key)
     if (key.isEmpty()) return;
 
     m_insertedKeys.insert(key);
+    m_activeKeyManagers.append(manager);
 
     if (m_cryptoManager->fileSystemIsSetup()) {
         /* The `key in use` check will attempt to mount using the new key if
@@ -275,6 +290,12 @@ bool KeyHandler::isReady() const
 {
     Q_D(const KeyHandler);
     return d->isReady();
+}
+
+bool KeyHandler::isKeyManagerActive(SignOn::AbstractKeyManager *keyManager) const
+{
+    Q_D(const KeyHandler);
+    return d->isKeyManagerActive(keyManager);
 }
 
 QSet<SignOn::Key> KeyHandler::insertedKeys() const
