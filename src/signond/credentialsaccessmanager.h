@@ -257,8 +257,11 @@ public:
      *
      * @returns True if the extension provides objects that the CAM is using.
      */
-    bool initExtension(QObject *object);
-
+#ifdef SIGNON_AEGISFS
+    bool initExtension(QObject *plugin, bool isDefaultKey = false);
+#else
+    bool initExtension(QObject *plugin);
+#endif
     /*!
         Opens the credentials system, creates the CreadentialsDB object;
         if encryption is configured this will also mount the encrypted file system, based on
@@ -342,6 +345,9 @@ Q_SIGNALS:
     void credentialsSystemReady();
 
 private Q_SLOTS:
+#ifdef SIGNON_AEGISFS
+    void onKeyHandlerReady();
+#endif
     void onKeyInserted(const SignOn::Key key);
     void onLastAuthorizedKeyRemoved(const SignOn::Key key);
     void onKeyRemoved(const SignOn::Key key);
@@ -371,6 +377,7 @@ private:
      * successfully reported all of the inserted keys. */
     mutable CredentialsAccessError m_error;
     QList<SignOn::AbstractKeyManager *> keyManagers;
+    QList<SignOn::ExtensionInterface *> keyManagerExtensions;
 
     CredentialsDB *m_pCredentialsDB;
     SignOn::CryptoManager *m_pCryptoFileSystemManager;

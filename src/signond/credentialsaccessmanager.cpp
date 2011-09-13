@@ -1,4 +1,3 @@
-/* -*- Mode: C++; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of signon
  *
@@ -168,9 +167,11 @@ bool CredentialsAccessManager::init(const CAMConfiguration &camConfiguration)
         //Initialize CryptoManager
         m_pCryptoFileSystemManager = new SignOn::CryptoManager(this);
         QObject::connect(m_pCryptoFileSystemManager, SIGNAL(fileSystemMounted()),
-                         this, SLOT(onEncryptedFSMounted()));
+                         this, SLOT(onEncryptedFSMounted()),
+                         Qt::UniqueConnection);
         QObject::connect(m_pCryptoFileSystemManager, SIGNAL(fileSystemUnmounting()),
-                         this, SLOT(onEncryptedFSUnmounting()));
+                         this, SLOT(onEncryptedFSUnmounting()),
+                         Qt::UniqueConnection);
 
         m_pCryptoFileSystemManager->setFileSystemPath(m_CAMConfiguration.encryptedFSPath());
 
@@ -189,22 +190,36 @@ bool CredentialsAccessManager::init(const CAMConfiguration &camConfiguration)
         QObject::connect(m_keyAuthorizer,
                          SIGNAL(keyAuthorizationQueried(const SignOn::Key,int)),
                          this,
-                         SLOT(onKeyAuthorizationQueried(const SignOn::Key,int)));
+                         SLOT(onKeyAuthorizationQueried(const SignOn::Key,int)),
+                         Qt::UniqueConnection);
 
         /* These signal connections should be done after instantiating the
          * KeyAuthorizer, so that the KeyAuthorizer's slot will be called
          * first (or we could connect to them in queued mode)
          */
+
+#ifndef SIGNON_AEGISFS
         QObject::connect(m_keyHandler, SIGNAL(ready()),
-                         this, SIGNAL(credentialsSystemReady()));
+                         this, SIGNAL(credentialsSystemReady()),
+                         Qt::UniqueConnection);
+#else
+        QObject::connect(m_keyHandler, SIGNAL(ready()),
+                         this, SLOT(onKeyHandlerReady()),
+                         Qt::UniqueConnection);
+#endif
+
         QObject::connect(m_keyHandler, SIGNAL(keyInserted(SignOn::Key)),
-                         this, SLOT(onKeyInserted(SignOn::Key)));
+                         this, SLOT(onKeyInserted(SignOn::Key)),
+                         Qt::UniqueConnection);
         QObject::connect(m_keyHandler,
                          SIGNAL(lastAuthorizedKeyRemoved(SignOn::Key)),
                          this,
-                         SLOT(onLastAuthorizedKeyRemoved(SignOn::Key)));
+                         SLOT(onLastAuthorizedKeyRemoved(SignOn::Key)),
+                         Qt::UniqueConnection);
         QObject::connect(m_keyHandler, SIGNAL(keyRemoved(SignOn::Key)),
-                         this, SLOT(onKeyRemoved(SignOn::Key)));
+                         this, SLOT(onKeyRemoved(SignOn::Key)),
+                         Qt::UniqueConnection);
+
         m_keyHandler->initialize(m_pCryptoFileSystemManager, keyManagers);
     }
 
@@ -218,12 +233,23 @@ bool CredentialsAccessManager::init(const CAMConfiguration &camConfiguration)
 void CredentialsAccessManager::addKeyManager(
     SignOn::AbstractKeyManager *keyManager)
 {
-    keyManagers.append(keyManager);
+    if (keyManager)
+        keyManagers.append(keyManager);
 }
 
-bool CredentialsAccessManager::initExtension(QObject *plugin)
+#ifdef SIGNON_AEGISFS
+    bool CredentialsAccessManager::initExtension(QObject *plugin, bool isDefaultKey)
+#else
+    bool CredentialsAccessManager::initExtension(QObject *plugin)
+#endif
 {
     bool extensionInUse = false;
+    bool defaultKeyExtension = false;
+
+#ifdef SIGNON_AEGISFS
+    defaultKeyExtension = isDefaultKey;
+    TRACE() << "default key " << isDefaultKey;
+#endif
 
     SignOn::ExtensionInterface *extension;
     SignOn::ExtensionInterface2 *extension2;
@@ -241,7 +267,14 @@ bool CredentialsAccessManager::initExtension(QObject *plugin)
 
     SignOn::AbstractKeyManager *keyManager = extension->keyManager(this);
     if (keyManager) {
-        addKeyManager(keyManager);
+        if (!defaultKeyExtension) {
+            keyManagerExtensions.append(extension);
+            keyManagers.append(keyManager);
+        } else {
+            keyManagerExtensions.prepend(extension);
+            keyManagers.prepend(keyManager);
+        }
+
         extensionInUse = true;
     }
 
@@ -280,40 +313,63 @@ bool CredentialsAccessManager::openSecretsDB()
        QString luksDBPath = m_pCryptoFileSystemManager->fileSystemMountPath()
                             + QDir::separator()
                             + m_CAMConfiguration.m_dbName;
-
        dbPath = luksDBPath;
 
 #ifdef SIGNON_AEGISFS
-        QString luksKeychainName = m_CAMConfiguration.m_encryptedStoragePath
-                                   + QDir::separator()
-                                   + QLatin1String("keychain");
-
         QString aegisDBName = m_CAMConfiguration.m_aegisPath
                               + QDir::separator()
                               + m_CAMConfiguration.m_dbName;
 
-        QString aegisKeychainName = m_CAMConfiguration.m_aegisPath
-                                    + QDir::separator()
-                                    + QLatin1String("keychain");
-
         QFile restoreFile(restoreFilePath());
         if (restoreFile.exists() == true)
         {
+            QString luksKeychainName = m_CAMConfiguration.m_encryptedStoragePath
+                                       + QDir::separator()
+                                       + QLatin1String("keychain");
+
+            QString aegisKeychainName = m_CAMConfiguration.m_aegisPath
+                                        + QDir::separator()
+                                        + QLatin1String("keychain");
+
             TRACE() << "RestoreFile found: copying database from " << dbPath << " to " << aegisDBName;
+            m_pCredentialsDB->closeSecretsDB();
+
             QFile::remove(aegisDBName);
-            bool copyRes = QFile::copy(luksDBPath, aegisDBName);
-            TRACE() << "Copy of database completed with result :" << copyRes;
-
             QFile::remove(aegisKeychainName);
-            copyRes = QFile::copy(luksKeychainName, aegisKeychainName);
-            TRACE() << "Copy of keychain completed with result :" << copyRes;
 
-            QFile::remove(luksDBPath);
-            QFile::remove(luksKeychainName);
+            if (!m_pCryptoFileSystemManager->fileSystemIsMounted()) {
+                TRACE() << "File system was not mounted: removing signonfs";
+                QFile::remove(m_CAMConfiguration.encryptedFSPath());
+            } else {
 
-            //TODO: the default key should be updated in keychain
-            deleteDefaultKeyStorage();
+                bool copyRes = QFile::copy(luksDBPath, aegisDBName);
+                TRACE() << "Copy of database completed with result :" << copyRes;
+
+                copyRes = QFile::copy(luksKeychainName, aegisKeychainName);
+                TRACE() << "Copy of keychain completed with result :" << copyRes;
+
+                QFile::remove(luksDBPath);
+                QFile::remove(luksKeychainName);
+            }
+
             QFile::remove(restoreFilePath());
+            SignOn::AbstractKeyManager *defaultKeyManager = keyManagers.first();
+
+            if (m_keyHandler->isKeyManagerActive(defaultKeyManager) == false) {
+
+                TRACE() << "Restarting default-key handling";
+
+                deleteDefaultKeyStorage();
+                defaultKeyManager->disconnect();
+                delete defaultKeyManager;
+
+                keyManagers.removeFirst();
+
+                keyManagers.prepend(keyManagerExtensions.first()->keyManager(this));
+                m_keyHandler->initialize(m_pCryptoFileSystemManager, keyManagers);
+
+                TRACE() << "Reinitialization of default key completed";
+            }
         } else
             TRACE() << "No restoreFile found";
 
@@ -325,8 +381,13 @@ bool CredentialsAccessManager::openSecretsDB()
 
     TRACE() << "Database name: [" << dbPath << "]";
 
+#ifndef SIGNON_AEGISFS
     if (!m_pCredentialsDB->openSecretsDB(dbPath))
         return false;
+#else
+    if (!isSecretsDBOpen() && !m_pCredentialsDB->openSecretsDB(dbPath))
+        return false;
+#endif
 
     m_error = NoError;
     return true;
@@ -404,13 +465,13 @@ bool CredentialsAccessManager::openCredentialsSystem()
 
     if (m_pCryptoFileSystemManager == 0 ||
         m_pCryptoFileSystemManager->fileSystemIsMounted()) {
-        if (!openSecretsDB()) {
+        if (!isSecretsDBOpen() && !openSecretsDB()) {
             BLAME() << "Failed to open secrets DB.";
             /* Even if the secrets DB couldn't be opened, signond is still
              * usable: that's why we return "true" anyways. */
         }
     } else {
-        /* The secrets DB will be opened as soon as the encrypted FS is
+        /* The secrets DB will be re-opened as soon as the encrypted FS is
          * mounted.
          */
         m_pCryptoFileSystemManager->mountFileSystem();
@@ -459,6 +520,19 @@ bool CredentialsAccessManager::deleteCredentialsSystem()
         }
     }
 
+#ifdef SIGNON_AEGISFS
+        QString aegisDBName = m_CAMConfiguration.m_aegisPath
+                              + QDir::separator()
+                              + m_CAMConfiguration.m_dbName;
+
+        QString aegisKeychainName = m_CAMConfiguration.m_aegisPath
+                                    + QDir::separator()
+                                    + QLatin1String("keychain");
+
+        QFile::remove(aegisDBName);
+        QFile::remove(aegisKeychainName);
+#endif
+
     return m_error == NoError;
 }
 
@@ -472,7 +546,7 @@ CredentialsDB *CredentialsAccessManager::credentialsDB() const
 bool CredentialsAccessManager::isCredentialsSystemReady() const
 {
 #ifdef SIGNON_AEGISFS
-    return isSecretsDBOpen();
+    return (m_keyHandler != 0) ? (m_keyHandler->isReady() || isSecretsDBOpen()) : true;
 #else
     return (m_keyHandler != 0) ? m_keyHandler->isReady() : true;
 #endif
@@ -486,6 +560,18 @@ void CredentialsAccessManager::onKeyInserted(const SignOn::Key key)
         m_keyAuthorizer->queryKeyAuthorization(
             key, AbstractKeyAuthorizer::KeyInserted);
 }
+
+#ifdef SIGNON_AEGISFS
+void CredentialsAccessManager::onKeyHandlerReady()
+{
+    TRACE();
+
+    if (!isSecretsDBOpen())
+        openSecretsDB();
+
+    emit credentialsSystemReady();
+}
+#endif
 
 void CredentialsAccessManager::onLastAuthorizedKeyRemoved(const SignOn::Key key)
 {
@@ -619,6 +705,7 @@ void CredentialsAccessManager::onEncryptedFSMounted()
 void CredentialsAccessManager::onEncryptedFSUnmounting()
 {
     TRACE();
+
     if (!credentialsSystemOpened()) return;
 
 #ifndef SIGNON_AEGISFS
