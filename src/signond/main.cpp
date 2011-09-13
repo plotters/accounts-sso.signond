@@ -46,5 +46,8 @@ int main(int argc, char *argv[])
     QMetaObject::invokeMethod(SignonDaemon::instance(),
                               "init",
                               Qt::QueuedConnection);
-    return app.exec();
+    int ret = app.exec();
+    //TODO workaround for bug 280100
+    _exit(ret);
+    return ret;
 }

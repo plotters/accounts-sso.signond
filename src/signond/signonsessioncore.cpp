@@ -109,6 +109,7 @@ SignonSessionCore::SignonSessionCore(quint32 id,
 
 SignonSessionCore::~SignonSessionCore()
 {
+    TRACE();
     AuthCoreCache::instance()->authSessionDestroyed(
         AuthCoreCache::CacheId(m_id, m_method));
 
