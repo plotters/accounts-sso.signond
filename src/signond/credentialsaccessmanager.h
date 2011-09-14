@@ -254,14 +254,11 @@ public:
     /*!
      * Initializes know objects from an extension plugin.
      * @param extension A signon extension plugin.
+     * @param isDefaultKey is it a default key extension
      *
      * @returns True if the extension provides objects that the CAM is using.
      */
-#ifdef SIGNON_AEGISFS
     bool initExtension(QObject *plugin, bool isDefaultKey = false);
-#else
-    bool initExtension(QObject *plugin);
-#endif
     /*!
         Opens the credentials system, creates the CreadentialsDB object;
         if encryption is configured this will also mount the encrypted file system, based on
