@@ -1,3 +1,9 @@
+signon (9.5-1) unstable; urgency=low
+
+  * Fixes: NB#251173 - decrypted passwords can be read from signon.db without having credentials
+
+ -- Alexander Akimov <ext-alexander.akimov@nokia.com>  Wed, 14 Sep 2011 10:38:17 +0300
+ 
 signon (9.4-3) unstable; urgency=low
 
   * Removing bugfix 251173 from changelog.
