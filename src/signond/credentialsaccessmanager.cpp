@@ -233,15 +233,12 @@ bool CredentialsAccessManager::init(const CAMConfiguration &camConfiguration)
 void CredentialsAccessManager::addKeyManager(
     SignOn::AbstractKeyManager *keyManager)
 {
-    if (keyManager)
+    if (keyManager) {
         keyManagers.append(keyManager);
+    }
 }
 
-#ifdef SIGNON_AEGISFS
-    bool CredentialsAccessManager::initExtension(QObject *plugin, bool isDefaultKey)
-#else
-    bool CredentialsAccessManager::initExtension(QObject *plugin)
-#endif
+bool CredentialsAccessManager::initExtension(QObject *plugin, bool isDefaultKey)
 {
     bool extensionInUse = false;
     bool defaultKeyExtension = false;
