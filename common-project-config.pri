@@ -29,6 +29,6 @@ DEFINES += NO_SIGNON_USER
 DEFINES += SIGNON_EXTENSIONS_DIR=\\\"/usr/lib/signon/extensions\\\"
 
 # Bringing aegisFS into use
-#DEFINES += SIGNON_AEGISFS
+DEFINES += SIGNON_AEGISFS
 # End of File
 
