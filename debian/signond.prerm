@@ -1,0 +1,3 @@
+#!/bin/sh
+
+aegisfs --uninstall /etc/aegisfs.d/signon-private.conf

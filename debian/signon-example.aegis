@@ -1,0 +1,9 @@
+<aegis>
+  <provide>
+    <credential name="access" />
+  </provide>
+  <request>
+    <credential name="signon-example::access" />
+    <for path="/usr/bin/signonclient"/>
+  </request>
+</aegis>
