@@ -313,6 +313,8 @@ bool CredentialsAccessManager::openSecretsDB()
        dbPath = luksDBPath;
 
 #ifdef SIGNON_AEGISFS
+       bool fisrtStartAfterUpdate = false;
+
         QString aegisDBName = m_CAMConfiguration.m_aegisPath
                               + QDir::separator()
                               + m_CAMConfiguration.m_dbName;
@@ -367,8 +369,21 @@ bool CredentialsAccessManager::openSecretsDB()
 
                 TRACE() << "Reinitialization of default key completed";
             }
-        } else
+        } else {
             TRACE() << "No restoreFile found";
+            QFile newDbFile(aegisDBName);
+
+            if (newDbFile.exists() == false) {
+                QFile oldDbFile(luksDBPath);
+
+                if (oldDbFile.exists() == true) {
+                    TRACE() << "first start after signon update: copying of old DB into new location";
+
+                    QFile::copy(luksDBPath, aegisDBName);
+                    QFile::remove(luksDBPath);
+                }
+            }
+        }
 
         dbPath = aegisDBName;
 #endif
