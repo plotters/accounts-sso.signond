@@ -1,6 +1,7 @@
 signon (9.5-2) unstable; urgency=low
 
-  * Fixing of SSU issue for NB#251173 - decrypted passwords can be read from signon.db without having credentials
+  * Fixing of SSU issue for bug below 
+  * Fixes: NB#251173 - decrypted passwords can be read from signon.db without having credentials
 
  -- Alexander Akimov <ext-alexander.akimov@nokia.com>  Thu, 15 Sep 2011 11:55:17 +0300
 
