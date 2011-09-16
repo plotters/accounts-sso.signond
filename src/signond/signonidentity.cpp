@@ -447,6 +447,8 @@ namespace SignonDaemonNS {
         } else {
             m_pInfo->setPassword(QString());
         }
+        if (decodedSecret.isEmpty()) storeSecret = false;
+
         m_id = storeCredentials(*m_pInfo, storeSecret);
 
         if (m_id == SIGNOND_NEW_IDENTITY) {
