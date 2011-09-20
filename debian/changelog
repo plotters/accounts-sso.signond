@@ -1,3 +1,9 @@
+signon (9.6-1) unstable; urgency=low
+
+  * Fixes: NB#280145 - Sign into Nokia account page is shown instead of Confirm password
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Tue, 20 Sep 2011 16:13:02 +0300
+
 signon (9.5-3) unstable; urgency=low
 
   * Fixes: NB#280145 - Sign into Nokia account page is shown instead of Confirm password
