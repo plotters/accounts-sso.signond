@@ -159,17 +159,18 @@ namespace SignonDaemonNS {
         ok = true;
 
         if (m_pInfo) {
-            return *m_pInfo;
-        } else {
-            CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
-            m_pInfo = new SignonIdentityInfo(db->credentials(m_id, queryPassword));
+            delete m_pInfo;
+            m_pInfo = NULL;
+        }
 
-            if (db->lastError().isValid()) {
-                ok = false;
-                delete m_pInfo;
-                m_pInfo = NULL;
-                return SignonIdentityInfo();
-            }
+        CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
+        m_pInfo = new SignonIdentityInfo(db->credentials(m_id, queryPassword));
+
+        if (db->lastError().isValid()) {
+            ok = false;
+            delete m_pInfo;
+            m_pInfo = NULL;
+            return SignonIdentityInfo();
         }
         return *m_pInfo;
     }
@@ -422,34 +423,14 @@ namespace SignonDaemonNS {
         if (!aegisIdToken.isNull())
             ownerList.append(aegisIdToken);
 
-        if (m_pInfo == 0) {
-            m_pInfo = new SignonIdentityInfo(info);
-            m_pInfo->setMethods(SignonIdentityInfo::mapVariantToMapList(methods));
-            m_pInfo->setOwnerList(ownerList);
-        } else {
-            QString userName = info.value(SIGNOND_IDENTITY_INFO_USERNAME).toString();
-            QString caption = info.value(SIGNOND_IDENTITY_INFO_CAPTION).toString();
-            QStringList realms = info.value(SIGNOND_IDENTITY_INFO_REALMS).toStringList();
-            QStringList accessControlList = info.value(SIGNOND_IDENTITY_INFO_ACL).toStringList();
-            int type = info.value(SIGNOND_IDENTITY_INFO_TYPE).toInt();
+        SignonIdentityInfo identityInfo(info);
+        identityInfo.setMethods(SignonIdentityInfo::mapVariantToMapList(methods));
+        identityInfo.setOwnerList(ownerList);
+        identityInfo.setPassword(decodedSecret);
 
-            m_pInfo->setUserName(userName);
-            m_pInfo->setCaption(caption);
-            m_pInfo->setMethods(SignonIdentityInfo::mapVariantToMapList(methods));
-            m_pInfo->setRealms(realms);
-            m_pInfo->setAccessControlList(accessControlList);
-            m_pInfo->setOwnerList(ownerList);
-            m_pInfo->setType(type);
-        }
-
-        if (storeSecret) {
-            m_pInfo->setPassword(decodedSecret);
-        } else {
-            m_pInfo->setPassword(QString());
-        }
         if (decodedSecret.isEmpty()) storeSecret = false;
 
-        m_id = storeCredentials(*m_pInfo, storeSecret);
+        m_id = storeCredentials(identityInfo, storeSecret);
 
         if (m_id == SIGNOND_NEW_IDENTITY) {
             replyError(SIGNOND_STORE_FAILED_ERR_NAME,
