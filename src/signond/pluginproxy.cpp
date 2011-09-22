@@ -260,6 +260,9 @@ namespace SignonDaemonNS {
    void PluginProxy::cancel()
    {
        TRACE();
+       //do not cancel if there is no request going on
+       if (!m_isProcessing) return;
+
        QDataStream in(m_process);
        in << (quint32)PLUGIN_OP_CANCEL;
     }
