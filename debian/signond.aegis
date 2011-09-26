@@ -13,6 +13,10 @@
     <for path="/usr/bin/signonpluginprocess" />
   </request>
   <request>
+    <credential name="signond::keychain-access" />
+    <for path="/etc/osso-cud-scripts/signon-cud.sh" />
+  </request>
+  <request>
     <credential name="UID::root" />
     <credential name="GID::root" />
     <credential name="CAP::setuid" />
