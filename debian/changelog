@@ -1,3 +1,9 @@
+signon (9.7-2) unstable; urgency=low
+
+  * Fixes: NB#284079 - No mail account can be configured after clearing device
+
+ -- Tomi Suviola <tomi.suviola@nokia.com>  Mon, 26 Sep 2011 15:23:02 +0300
+
 signon (9.7-1) unstable; urgency=low
 
   * Addresses: NB#282614 - Nokia-account Contacts sync fails with failed:wrong user name or password error
