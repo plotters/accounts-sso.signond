@@ -69,9 +69,12 @@ AccessControlManagerHelper::isPeerAllowedToUseIdentity(
 bool AccessControlManagerHelper::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
                                                             const quint32 identityId)
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> cleaning up
 =======
 >>>>>>> adding ac fixes
+=======
+>>>>>>> cleaning up
 {
     // TODO - improve this, the error handling and more precise behaviour
 
@@ -163,9 +166,12 @@ AccessControlManagerHelper::peerHasOneOfAccesses(const QDBusMessage &peerMessage
 bool AccessControlManagerHelper::peerHasOneOfAccesses(const QDBusMessage &peerMessage,
                                                       const QStringList secContexts)
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> cleaning up
 =======
 >>>>>>> adding ac fixes
+=======
+>>>>>>> cleaning up
 {
     foreach (QString securityContext, secContexts)
     {
@@ -173,6 +179,7 @@ bool AccessControlManagerHelper::peerHasOneOfAccesses(const QDBusMessage &peerMe
         if (m_acManager->isPeerAllowedToUseIdentity(peerMessage, securityContext))
             return true;
     }
+
     BLAME() << "given peer does not have needed permissions";
     return false;
 }
@@ -186,9 +193,12 @@ AccessControlManagerHelper::isPeerAllowedToAccess(
 bool AccessControlManagerHelper::isPeerAllowedToAccess(const QDBusMessage &peerMessage,
                                                        const QString securityContext)
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> cleaning up
 =======
 >>>>>>> adding ac fixes
+=======
+>>>>>>> cleaning up
 {
     TRACE() << securityContext;
     return m_acManager->isPeerAllowedToUseIdentity(peerMessage, securityContext);
@@ -207,7 +217,7 @@ bool AccessControlManagerHelper::isACLValid(const QDBusMessage &peerMessage,
     return m_acManager->isACLValid(peerMessage, aclList);
 =======
 bool AccessControlManagerHelper::isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                              const QStringList aclList)
+                                                       const QStringList aclList)
 {
     return m_acManager->isPeerAllowedToSetACL(peerMessage, aclList);
 >>>>>>> adding ac fixes

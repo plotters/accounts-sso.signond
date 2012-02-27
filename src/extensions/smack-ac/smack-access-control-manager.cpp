@@ -50,6 +50,7 @@ bool SmackAccessControlManager::isPeerAllowedToAccess(
 =======
 bool SmackAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> adding ac fixes
 =======
 bool SmackAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
@@ -62,6 +63,9 @@ bool SmackAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &p
 bool SmackAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
                                                            const QString &securityContext)
 >>>>>>> adding ac fixes
+=======
+                                                           const QString &securityContext)
+>>>>>>> cleaning up
 {
     QString appId =
         SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
@@ -80,21 +84,27 @@ bool SmackAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &p
 }
 
 bool SmackAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
-                                               const QString &securityContext)
+                                                      const QString &securityContext)
 {
     QString appId = SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
     TRACE() << appId << ":" << securityContext;
 
     if ((SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("r"))) &&
         (SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("w"))) ) {
+<<<<<<< HEAD
 >>>>>>> adding ac fixes
             TRACE() << "Process ACCESS:TRUE";
             return true;
+=======
+        TRACE() << "Process ACCESS:TRUE";
+        return true;
+>>>>>>> cleaning up
     } else {
-            TRACE() << "Process ACCESS:FALSE";
-            return false;
+        TRACE() << "Process ACCESS:FALSE";
+        return false;
     }
 }
+<<<<<<< HEAD
 
 bool SmackAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
                                                       const QString &securityContext)
@@ -117,6 +127,8 @@ bool SmackAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMe
 =======
 =======
 >>>>>>> adding ac fixes
+=======
+>>>>>>> cleaning up
   
 >>>>>>> cleaning up
 QString SmackAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
@@ -147,7 +159,7 @@ bool SmackAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
             if ( aclItem.indexOf(appId) == 0)
 =======
 bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                              const QStringList aclList)
+                           const QStringList aclList)
 {
     QString appId = SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
     QString appIdPrefixed = "";

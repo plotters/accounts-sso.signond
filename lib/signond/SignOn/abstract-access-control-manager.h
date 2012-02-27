@@ -63,6 +63,7 @@ public:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * Checks if a client process is allowed to access objects with a certain
      * security context.
      * The access type to be checked depends on the concrete implementation of
@@ -99,10 +100,16 @@ public:
      * The actual check depends on AC framework being used.   
      * @param peerMessage, the request message sent over DBUS by the process. Identifies the process  itself. 
 >>>>>>> adding ac fixes
+=======
+     * Checks if a client process is allowed to use specified identity.
+     * The actual check depends on AC framework being used.   
+     * @param peerMessage, the request message sent over DBUS by the process.
+>>>>>>> cleaning up
      * @param securityContext, the security context of identity to be checked against.
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
+<<<<<<< HEAD
 <<<<<<< HEAD
                                     const QString &securityContext);
     /*!
@@ -122,17 +129,24 @@ public:
 =======
 =======
                                        const QString &securityContext);
+=======
+                                    const QString &securityContext);
+>>>>>>> cleaning up
     /*!
      * Checks if a client process is owner of identify.
      * The actual check depends on AC framework being used.   
-     * @param peerMessage, the request message sent over DBUS by the process. Identifies the process  itself. 
+     * @param peerMessage, the request message sent over DBUS by the process.
      * @param securityContext, the security context of identity to be checked against.
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
+<<<<<<< HEAD
 >>>>>>> adding ac fixes
                                        const QString &securityContext);
 >>>>>>> arg alligment fix
+=======
+                               const QString &securityContext);
+>>>>>>> cleaning up
 
     /*!
      * Looks up for the application identifier of a specific client process.
@@ -177,7 +191,7 @@ public:
         @returns true, if the peer is allowed, false otherwise.
     */
     virtual bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                              const QStringList aclList);
+                                       const QStringList &aclList);
 
 
 >>>>>>> adding ac fixes

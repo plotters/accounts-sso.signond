@@ -178,10 +178,14 @@ public:
     /*!
         Checks if a client process is allowed to set the specified acl on data item.
 <<<<<<< HEAD
+<<<<<<< HEAD
         The restrictions depend on the AC framework being used and concrete function implementation.
 =======
         The restrcitions depend on the AC framework being used and concrete function implementation.
 >>>>>>> adding ac fixes
+=======
+        The restrictions depend on the AC framework being used and concrete function implementation.
+>>>>>>> cleaning up
         @param peerMessage, the request message sent over DBUS by the process.
         @param aclList, the acl list to be checked against
         @returns true, if the peer is allowed, false otherwise.
@@ -192,8 +196,12 @@ public:
                                const QStringList aclList);
 =======
     bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
+<<<<<<< HEAD
                               const QStringList aclList);
 >>>>>>> adding ac fixes
+=======
+                               const QStringList aclList);
+>>>>>>> cleaning up
 private:
 >>>>>>> adding ac fixes
 
