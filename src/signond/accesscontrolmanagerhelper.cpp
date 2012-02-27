@@ -60,10 +60,15 @@ AccessControlManagerHelper::~AccessControlManagerHelper()
 }
 
 
+<<<<<<< HEAD
 bool
 AccessControlManagerHelper::isPeerAllowedToUseIdentity(
                                                const QDBusMessage &peerMessage,
                                                const quint32 identityId)
+=======
+bool AccessControlManagerHelper::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
+                                                            const quint32 identityId)
+>>>>>>> cleaning up
 {
     // TODO - improve this, the error handling and more precise behaviour
 
@@ -135,24 +140,35 @@ QString AccessControlManagerHelper::appIdOfPeer(const QDBusMessage &peerMessage)
     return m_acManager->appIdOfPeer(peerMessage);
 }
 
+<<<<<<< HEAD
 bool
 AccessControlManagerHelper::peerHasOneOfAccesses(const QDBusMessage &peerMessage,
                                                  const QStringList secContexts)
+=======
+bool AccessControlManagerHelper::peerHasOneOfAccesses(const QDBusMessage &peerMessage,
+                                                      const QStringList secContexts)
+>>>>>>> cleaning up
 {
-    foreach(QString securityContext, secContexts)
+    foreach (QString securityContext, secContexts)
     {
         TRACE() << securityContext;
         if (m_acManager->isPeerAllowedToAccess(peerMessage, securityContext))
             return true;
     }
+
     BLAME() << "given peer does not have needed permissions";
     return false;
 }
 
+<<<<<<< HEAD
 bool
 AccessControlManagerHelper::isPeerAllowedToAccess(
                                                const QDBusMessage &peerMessage,
                                                const QString securityContext)
+=======
+bool AccessControlManagerHelper::isPeerAllowedToAccess(const QDBusMessage &peerMessage,
+                                                       const QString securityContext)
+>>>>>>> cleaning up
 {
     TRACE() << securityContext;
     return m_acManager->isPeerAllowedToUseIdentity(peerMessage, securityContext);
@@ -165,7 +181,7 @@ pid_t AccessControlManagerHelper::pidOfPeer(const QDBusContext &peerContext)
 }
 
 bool AccessControlManagerHelper::isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                              const QStringList aclList)
+                                                       const QStringList aclList)
 {
     return m_acManager->isPeerAllowedToSetACL(peerMessage, aclList);
 }

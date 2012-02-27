@@ -64,23 +64,25 @@ public:
      * @param securityContext, the securityContext to be checked against.
 =======
      * Checks if a client process is allowed to perform operations on specified identity
-     * The notion of access type doesn't exist in MSSF, so simple check on token possesion is done instead.  
-     * @param peerMessage, the request message sent over DBUS by the process. Identifies the process  itself. 
+     * The notion of access type doesn't exist in MSSF,
+     * so simple check on token possesion is done instead.  
+     * @param peerMessage, the request message sent over DBUS by the process.
      * @param securityContext, the security context of identity to be checked against.
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
-                                       const QString &securityContext);
+                                    const QString &securityContext);
     /*!
      * Checks if a client process is owner of identify.
-     * The notion of access type doesn't exist in MSSF, so simple check on token possesion is done instead.  
-     * @param peerMessage, the request message sent over DBUS by the process. Identifies the process  itself. 
+     * The notion of access type doesn't exist in MSSF, 
+     * so simple check on token possesion is done instead.  
+     * @param peerMessage, the request message sent over DBUS by the process. 
      * @param securityContext, the security context of identity to be checked against.
 >>>>>>> adding ac fixes
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
-                                       const QString &securityContext);
+                               const QString &securityContext);
 
     /*!
      * Looks up for the application identifier of a specific client process.
@@ -105,7 +107,7 @@ public:
      *  @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                              const QStringList aclList);
+                               const QStringList aclList);
 
 >>>>>>> adding ac fixes
 };

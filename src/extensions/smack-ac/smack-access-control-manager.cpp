@@ -47,8 +47,12 @@ bool SmackAccessControlManager::isPeerAllowedToAccess(
                                                const QDBusMessage &peerMessage,
 =======
 bool SmackAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
+<<<<<<< HEAD
 >>>>>>> adding ac fixes
                                                const QString &securityContext)
+=======
+                                                           const QString &securityContext)
+>>>>>>> cleaning up
 {
     QString appId =
         SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
@@ -64,21 +68,25 @@ bool SmackAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &p
 }
 
 bool SmackAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
-                                               const QString &securityContext)
+                                                      const QString &securityContext)
 {
     QString appId = SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
     TRACE() << appId << ":" << securityContext;
 
     if ((SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("r"))) &&
         (SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("w"))) ) {
-            TRACE() << "Process ACCESS:TRUE";
-            return true;
+        TRACE() << "Process ACCESS:TRUE";
+        return true;
     } else {
-            TRACE() << "Process ACCESS:FALSE";
-            return false;
+        TRACE() << "Process ACCESS:FALSE";
+        return false;
     }
 }
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> cleaning up
 QString SmackAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 {
     TRACE() << SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
@@ -86,7 +94,7 @@ QString SmackAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 }
 
 bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                              const QStringList aclList)
+                           const QStringList aclList)
 {
     QString appId = SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
     QString appIdPrefixed = "";

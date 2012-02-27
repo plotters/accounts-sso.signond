@@ -52,8 +52,12 @@ bool MSSFAccessControlManager::isPeerAllowedToAccess(
 difference between any access types */
 
 bool MSSFAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
+<<<<<<< HEAD
 >>>>>>> adding ac fixes
                                        const QString &securityContext)
+=======
+                                                          const QString &securityContext)
+>>>>>>> cleaning up
 {
     bool hasAccess = false;
     QStringList Credlist =
@@ -69,16 +73,21 @@ bool MSSFAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &pe
 }
 
 bool MSSFAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
-                                       const QString &securityContext)
+                                                     const QString &securityContext)
 {
     return isPeerAllowedToUseIdentity(peerMessage, securityContext);
 }
 
 QString MSSFAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 {
+<<<<<<< HEAD
     QStringList Credlist =
         MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
     foreach(QString cred, Credlist) {
+=======
+    QStringList Credlist = MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
+    foreach (QString cred, Credlist) {
+>>>>>>> cleaning up
         if (cred.startsWith(SSO_AEGIS_PACKAGE_ID_TOKEN_PREFIX))
             return cred;
     }
@@ -87,24 +96,17 @@ QString MSSFAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 }
 
 bool MSSFAccessControlManager::isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                              const QStringList aclList)
+                                                     const QStringList aclList)
 {
-    bool match = false;
-    QStringList Credlist = MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
+    QStringList CredList = MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
     if (!accessControlList.isEmpty()){
-        foreach(QString aclItem, aclList)
+        foreach (QString aclItem, aclList)
         {
-            foreach(QString cred, Credlist) {
-                if (cred.compare(aclItem) == 0) {
-                    match = true;
-                    break;
-                }
-            }	
-            if (match == false) {
-                TRACE() << "An attempt to setup an acl" << aclItem << "is denied because process doesn't posses such token";
+            if (!CredList.contains(aclItem)) {
+                TRACE() << "An attempt to setup an acl" << aclItem 
+                        << "is denied because process doesn't possess such token";
                 return false;
             }
-            match = false;
         }
     }
     return true;

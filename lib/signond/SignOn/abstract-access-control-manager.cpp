@@ -44,7 +44,7 @@ bool AbstractAccessControlManager::isPeerAllowedToAccess(
                                                const QDBusMessage &peerMessage,
 =======
 bool AbstractAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
-                                               const QString &securityContext)
+                                                              const QString &securityContext)
 {
     Q_UNUSED(peerMessage);
     Q_UNUSED(securityContext);
@@ -52,8 +52,12 @@ bool AbstractAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage
 }
 
 bool AbstractAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
+<<<<<<< HEAD
 >>>>>>> adding ac fixes
                                                const QString &securityContext)
+=======
+                                                         const QString &securityContext)
+>>>>>>> cleaning up
 {
     Q_UNUSED(peerMessage);
     Q_UNUSED(securityContext);
@@ -68,7 +72,7 @@ AbstractAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 }
 
 bool AbstractAccessControlManager::isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                              const QStringList aclList)
+                                                         const QStringList &aclList)
 {
     Q_UNUSED(peerMessage);
     Q_UNUSED(aclList);
