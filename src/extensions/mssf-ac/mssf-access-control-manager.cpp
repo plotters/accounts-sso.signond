@@ -44,8 +44,15 @@ QString MSSFAccessControlManager::keychainWidgetAppId()
     return QLatin1String(keychainAppId);
 }
 
+<<<<<<< HEAD
 bool MSSFAccessControlManager::isPeerAllowedToAccess(
                                        const QDBusMessage &peerMessage,
+=======
+/* for mssf case both functions below result in simple check of token presence. There is no 
+difference between any access types */
+
+bool MSSFAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
+>>>>>>> adding ac fixes
                                        const QString &securityContext)
 {
     bool hasAccess = false;
@@ -61,6 +68,12 @@ bool MSSFAccessControlManager::isPeerAllowedToAccess(
     return hasAccess;
 }
 
+bool MSSFAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
+                                       const QString &securityContext)
+{
+    return isPeerAllowedToUseIdentity(peerMessage, securityContext);
+}
+
 QString MSSFAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 {
     QStringList Credlist =
@@ -71,5 +84,29 @@ QString MSSFAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
     }
 
     return QString();
+}
+
+bool MSSFAccessControlManager::isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
+                              const QStringList aclList)
+{
+    bool match = false;
+    QStringList Credlist = MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
+    if (!accessControlList.isEmpty()){
+        foreach(QString aclItem, aclList)
+        {
+            foreach(QString cred, Credlist) {
+                if (cred.compare(aclItem) == 0) {
+                    match = true;
+                    break;
+                }
+            }	
+            if (match == false) {
+                TRACE() << "An attempt to setup an acl" << aclItem << "is denied because process doesn't posses such token";
+                return false;
+            }
+            match = false;
+        }
+    }
+    return true;
 }
 

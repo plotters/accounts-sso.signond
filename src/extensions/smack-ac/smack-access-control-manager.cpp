@@ -42,16 +42,35 @@ QString SmackAccessControlManager::keychainWidgetAppId()
     return QLatin1String(keychainAppId);
 }
 
+<<<<<<< HEAD
 bool SmackAccessControlManager::isPeerAllowedToAccess(
                                                const QDBusMessage &peerMessage,
+=======
+bool SmackAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
+>>>>>>> adding ac fixes
                                                const QString &securityContext)
 {
     QString appId =
         SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
     TRACE() << appId << ":" << securityContext;
 
-    if (SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("r")) ||
-        SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("x"))) {
+    if (SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("x")) {
+            TRACE() << "Process ACCESS:TRUE";
+            return true;
+    } else {
+            TRACE() << "Process ACCESS:FALSE";
+            return false;
+    }
+}
+
+bool SmackAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
+                                               const QString &securityContext)
+{
+    QString appId = SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
+    TRACE() << appId << ":" << securityContext;
+
+    if ((SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("r"))) &&
+        (SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("w"))) ) {
             TRACE() << "Process ACCESS:TRUE";
             return true;
     } else {
@@ -64,5 +83,31 @@ QString SmackAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 {
     TRACE() << SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
     return SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
+}
+
+bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
+                              const QStringList aclList)
+{
+    QString appId = SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
+    QString appIdPrefixed = "";
+    appIdPrefixed.append(appId);
+    appIdPrefixed.append("::");
+    TRACE() << appId << appIdPrefixed;
+    if (!accessControlList.isEmpty()){
+        foreach(QString aclItem, aclList)
+        {
+            TRACE() << aclItem;
+            /* if app sets an acl entry for its appid, then it is always allowed */
+            if (appId == aclItem))
+                continue;
+            /* if app sets an acl entry for the label of its subdomain, then it is allowed, too */
+            if ( aclItem.indexOf(appId)) == 0)
+                continue;
+            /* if none of above then this acl must be denied */
+            TRACE() << "An attempt to setup an acl" << aclItem << "for process domain" << appId << "is denied";
+            return false;
+        }
+    }
+    return true;
 }
 

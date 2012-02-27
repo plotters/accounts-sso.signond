@@ -39,8 +39,20 @@ QString AbstractAccessControlManager::keychainWidgetAppId()
     return QString();
 }
 
+<<<<<<< HEAD
 bool AbstractAccessControlManager::isPeerAllowedToAccess(
                                                const QDBusMessage &peerMessage,
+=======
+bool AbstractAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
+                                               const QString &securityContext)
+{
+    Q_UNUSED(peerMessage);
+    Q_UNUSED(securityContext);
+    return true;
+}
+
+bool AbstractAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
+>>>>>>> adding ac fixes
                                                const QString &securityContext)
 {
     Q_UNUSED(peerMessage);
@@ -53,4 +65,12 @@ AbstractAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 {
     Q_UNUSED(peerMessage);
     return QString();
+}
+
+bool AbstractAccessControlManager::isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
+                              const QStringList aclList)
+{
+    Q_UNUSED(peerMessage);
+    Q_UNUSED(aclList);
+    return true;
 }

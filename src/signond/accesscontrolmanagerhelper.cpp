@@ -84,7 +84,7 @@ AccessControlManagerHelper::isPeerAllowedToUseIdentity(
         return false;
 
     if (acl.isEmpty())
-        return true;
+        return false;
 
     return peerHasOneOfAccesses(peerMessage, acl);
 }
@@ -107,8 +107,18 @@ AccessControlManagerHelper::isPeerOwnerOfIdentity(
     if (ownerSecContexts.isEmpty())
         return IdentityDoesNotHaveOwner;
 
+<<<<<<< HEAD
     return peerHasOneOfAccesses(peerMessage, ownerSecContexts) ?
         ApplicationIsOwner : ApplicationIsNotOwner;
+=======
+    foreach(QString securityContext, ownerSecContexts)
+    {
+        TRACE() << securityContext;
+        if (m_acManager->isPeerOwnerOfIdentity(peerMessage, securityContext))
+            return ApplicationIsOwner;
+    }
+    return ApplicationIsNotOwner;
+>>>>>>> adding ac fixes
 }
 
 bool
@@ -135,7 +145,6 @@ AccessControlManagerHelper::peerHasOneOfAccesses(const QDBusMessage &peerMessage
         if (m_acManager->isPeerAllowedToAccess(peerMessage, securityContext))
             return true;
     }
-
     BLAME() << "given peer does not have needed permissions";
     return false;
 }
@@ -146,7 +155,7 @@ AccessControlManagerHelper::isPeerAllowedToAccess(
                                                const QString securityContext)
 {
     TRACE() << securityContext;
-    return m_acManager->isPeerAllowedToAccess(peerMessage, securityContext);
+    return m_acManager->isPeerAllowedToUseIdentity(peerMessage, securityContext);
 }
 
 pid_t AccessControlManagerHelper::pidOfPeer(const QDBusContext &peerContext)
@@ -155,3 +164,8 @@ pid_t AccessControlManagerHelper::pidOfPeer(const QDBusContext &peerContext)
     return peerContext.connection().interface()->servicePid(service).value();
 }
 
+bool AccessControlManagerHelper::isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
+                              const QStringList aclList)
+{
+    return m_acManager->isPeerAllowedToSetACL(peerMessage, aclList);
+}
