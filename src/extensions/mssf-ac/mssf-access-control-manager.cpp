@@ -46,9 +46,12 @@ QString MSSFAccessControlManager::keychainWidgetAppId()
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 bool MSSFAccessControlManager::isPeerAllowedToAccess(
                                        const QDBusMessage &peerMessage,
 =======
+=======
+>>>>>>> adding ac fixes
 =======
 >>>>>>> adding ac fixes
 /* for mssf case both functions below result in simple check of token presence. There is no 
@@ -57,6 +60,9 @@ difference between any access types */
 bool MSSFAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> adding ac fixes
+=======
 >>>>>>> adding ac fixes
                                        const QString &securityContext)
 =======
@@ -80,7 +86,11 @@ bool MSSFAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &pe
 }
 
 bool MSSFAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
+<<<<<<< HEAD
                                                      const QString &securityContext)
+=======
+                                       const QString &securityContext)
+>>>>>>> adding ac fixes
 {
     return isPeerAllowedToUseIdentity(peerMessage, securityContext);
 }
@@ -107,6 +117,7 @@ QString MSSFAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
     return QString();
 }
 
+<<<<<<< HEAD
 bool MSSFAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
                                           const QStringList &aclList)
 {
@@ -119,6 +130,27 @@ bool MSSFAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
                         << "is denied because process doesn't possess such token";
                 return false;
             }
+=======
+bool MSSFAccessControlManager::isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
+                              const QStringList aclList)
+{
+    bool match = false;
+    QStringList Credlist = MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
+    if (!accessControlList.isEmpty()){
+        foreach(QString aclItem, aclList)
+        {
+            foreach(QString cred, Credlist) {
+                if (cred.compare(aclItem) == 0) {
+                    match = true;
+                    break;
+                }
+            }	
+            if (match == false) {
+                TRACE() << "An attempt to setup an acl" << aclItem << "is denied because process doesn't posses such token";
+                return false;
+            }
+            match = false;
+>>>>>>> adding ac fixes
         }
     }
     return true;

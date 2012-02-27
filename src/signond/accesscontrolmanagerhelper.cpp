@@ -117,9 +117,12 @@ AccessControlManagerHelper::isPeerOwnerOfIdentity(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     return peerHasOneOfAccesses(peerMessage, ownerSecContexts) ?
         ApplicationIsOwner : ApplicationIsNotOwner;
 =======
+=======
+>>>>>>> adding ac fixes
 =======
 >>>>>>> adding ac fixes
     foreach(QString securityContext, ownerSecContexts)
@@ -130,6 +133,9 @@ AccessControlManagerHelper::isPeerOwnerOfIdentity(
     }
     return ApplicationIsNotOwner;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> adding ac fixes
+=======
 >>>>>>> adding ac fixes
 =======
 >>>>>>> adding ac fixes
@@ -167,7 +173,6 @@ bool AccessControlManagerHelper::peerHasOneOfAccesses(const QDBusMessage &peerMe
         if (m_acManager->isPeerAllowedToUseIdentity(peerMessage, securityContext))
             return true;
     }
-
     BLAME() << "given peer does not have needed permissions";
     return false;
 }
@@ -195,8 +200,15 @@ pid_t AccessControlManagerHelper::pidOfPeer(const QDBusContext &peerContext)
     return peerContext.connection().interface()->servicePid(service).value();
 }
 
+<<<<<<< HEAD
 bool AccessControlManagerHelper::isACLValid(const QDBusMessage &peerMessage,
                                             const QStringList aclList)
 {
     return m_acManager->isACLValid(peerMessage, aclList);
+=======
+bool AccessControlManagerHelper::isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
+                              const QStringList aclList)
+{
+    return m_acManager->isPeerAllowedToSetACL(peerMessage, aclList);
+>>>>>>> adding ac fixes
 }

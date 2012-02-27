@@ -59,6 +59,7 @@ public:
     /*!
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * Checks if a client process is allowed to access objects with a certain
      * security context.
      * The access type to be checked is read or execute.
@@ -86,6 +87,24 @@ public:
      */
     bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
 <<<<<<< HEAD
+=======
+     * Checks if a client process is allowed to perform operations on specified identity
+     * The access type to be checked is execute. 
+     * @param peerMessage, the request message sent over DBUS by the process. Identifies the process  itself. 
+     * @param securityContext, the security context of identity to be checked against.
+     * @returns true, if the peer is allowed, false otherwise.
+     */
+    bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
+                                       const QString &securityContext);
+    /*!
+     * Checks if a client process is owner of identify.
+     * The access type to be checked is read and write, since the owner can manipulate identity and its parameters fully. 
+     * @param peerMessage, the request message sent over DBUS by the process. Identifies the process  itself. 
+     * @param securityContext, the security context of identity to be checked against.
+     * @returns true, if the peer is allowed, false otherwise.
+     */
+    bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
+>>>>>>> adding ac fixes
                                        const QString &securityContext);
 >>>>>>> adding ac fixes
 =======
@@ -132,8 +151,13 @@ public:
      *  @param aclList, the acl list to be checked against
      *  @returns true, if the peer is allowed, false otherwise.
      */
+<<<<<<< HEAD
     bool isACLValid(const QDBusMessage &peerMessage,
                     const QStringList &aclList);
+=======
+    bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
+                              const QStringList aclList);
+>>>>>>> adding ac fixes
 
 };
 
