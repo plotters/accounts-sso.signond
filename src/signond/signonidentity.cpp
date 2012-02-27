@@ -409,6 +409,7 @@ quint32 SignonIdentity::store(const QVariantMap &info)
     MethodMap methods =
         qdbus_cast<MethodMap>(container.value<QDBusArgument>());
 
+<<<<<<< HEAD
     //Add creator to owner list if it has AID
     QStringList ownerList =
         info.value(SIGNOND_IDENTITY_INFO_OWNER).toStringList();
@@ -429,6 +430,41 @@ quint32 SignonIdentity::store(const QVariantMap &info)
         QStringList accessControlList =
             info.value(SIGNOND_IDENTITY_INFO_ACL).toStringList();
         int type = info.value(SIGNOND_IDENTITY_INFO_TYPE).toInt();
+=======
+        //Add creator to owner list if it has AID
+        QStringList ownerList = info.value(SIGNOND_IDENTITY_INFO_OWNER).toStringList();
+        if (appId.isEmpty() && ownerList.isEmpty()) {
+            //blame again and don't allow such thing to happen, because otherwise we may end up with empty owner
+        }
+        /* if owner list is empty, add the appId of application to it by default */
+        if (ownerList.isEmpty())
+            ownerList.append(appId);
+        else {
+            // check that application is allowed to set the list of owners in this way
+            // let's use the same function as for acl since rules are the same
+            bool allowed = AccessControlManagerHelper::instance()->isPeerAllowedToSetACL((static_cast<QDBusContext>(*this)).message(),ownerList);
+            if (!allowed) {
+                // blame and don't allow this to happen. 
+            }
+        }
+
+        if (m_pInfo == 0) {
+            m_pInfo = new SignonIdentityInfo(info);
+            m_pInfo->setMethods(SignonIdentityInfo::mapVariantToMapList(methods));
+            m_pInfo->setOwnerList(ownerList);
+        } else {
+            QString userName = info.value(SIGNOND_IDENTITY_INFO_USERNAME).toString();
+            QString caption = info.value(SIGNOND_IDENTITY_INFO_CAPTION).toString();
+            QStringList realms = info.value(SIGNOND_IDENTITY_INFO_REALMS).toStringList();
+            QStringList accessControlList = info.value(SIGNOND_IDENTITY_INFO_ACL).toStringList();
+            /* before setting this ACL value to the new identity, 
+               we need to make sure that it isn't unconrolled sharing attempt.*/
+            bool allowed = AccessControlManagerHelper::instance()->isPeerAllowedToSetACL((static_cast<QDBusContext>(*this)).message(),accessControlList);
+            if (!allowed) {
+                // blame and don't allow this to happen.
+            }
+            int type = info.value(SIGNOND_IDENTITY_INFO_TYPE).toInt();
+>>>>>>> signonidentity additional checks
 
         m_pInfo->setUserName(userName);
         m_pInfo->setCaption(caption);
