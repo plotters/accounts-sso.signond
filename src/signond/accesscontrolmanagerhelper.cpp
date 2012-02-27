@@ -83,7 +83,7 @@ bool AccessControlManagerHelper::isPeerAllowedToUseIdentity(const QDBusMessage &
         return false;
 
     if (acl.isEmpty())
-        return true;
+        return false;
 
     return peerHasOneOfAccesses(peerMessage, acl);
 }
@@ -105,7 +105,13 @@ AccessControlManagerHelper::IdentityOwnership AccessControlManagerHelper::isPeer
     if (ownerSecContexts.isEmpty())
         return IdentityDoesNotHaveOwner;
 
-    return peerHasOneOfAccesses(peerMessage, ownerSecContexts) ? ApplicationIsOwner : ApplicationIsNotOwner;
+    foreach(QString securityContext, ownerSecContexts)
+    {
+        TRACE() << securityContext;
+        if (m_acManager->isPeerOwnerOfIdentity(peerMessage, securityContext))
+            return ApplicationIsOwner;
+    }
+    return ApplicationIsNotOwner;
 }
 
 bool AccessControlManagerHelper::isPeerKeychainWidget(const QDBusMessage &peerMessage)
@@ -130,7 +136,6 @@ bool AccessControlManagerHelper::peerHasOneOfAccesses(const QDBusMessage &peerMe
         if (m_acManager->isPeerAllowedToAccess(peerMessage, securityContext))
             return true;
     }
-
     BLAME() << "given peer does not have needed permissions";
     return false;
 }
@@ -139,7 +144,7 @@ bool AccessControlManagerHelper::isPeerAllowedToAccess(const QDBusMessage &peerM
                                        const QString securityContext)
 {
     TRACE() << securityContext;
-    return m_acManager->isPeerAllowedToAccess(peerMessage, securityContext);
+    return m_acManager->isPeerAllowedToUseIdentity(peerMessage, securityContext);
 }
 
 pid_t AccessControlManagerHelper::pidOfPeer(const QDBusContext &peerContext)
@@ -148,3 +153,8 @@ pid_t AccessControlManagerHelper::pidOfPeer(const QDBusContext &peerContext)
     return peerContext.connection().interface()->servicePid(service).value();
 }
 
+bool AccessControlManagerHelper::isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
+                              const QStringList aclList)
+{
+    return m_acManager->isPeerAllowedToSetACL(peerMessage, aclList);
+}
