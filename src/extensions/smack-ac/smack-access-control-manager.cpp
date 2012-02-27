@@ -43,7 +43,7 @@ QString SmackAccessControlManager::keychainWidgetAppId()
 }
 
 bool SmackAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
-                                               const QString &securityContext)
+                                                           const QString &securityContext)
 {
     QString appId = SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
     TRACE() << appId << ":" << securityContext;
@@ -58,21 +58,20 @@ bool SmackAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &p
 }
 
 bool SmackAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
-                                               const QString &securityContext)
+                                                      const QString &securityContext)
 {
     QString appId = SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
     TRACE() << appId << ":" << securityContext;
 
     if ((SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("r"))) &&
         (SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("w"))) ) {
-            TRACE() << "Process ACCESS:TRUE";
-            return true;
+        TRACE() << "Process ACCESS:TRUE";
+        return true;
     } else {
-            TRACE() << "Process ACCESS:FALSE";
-            return false;
+        TRACE() << "Process ACCESS:FALSE";
+        return false;
     }
 }
-
   
 QString SmackAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 {
@@ -81,7 +80,7 @@ QString SmackAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 }
 
 bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                              const QStringList aclList)
+                           const QStringList aclList)
 {
     QString appId = SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
     QString appIdPrefixed = "";

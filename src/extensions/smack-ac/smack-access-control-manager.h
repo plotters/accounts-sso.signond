@@ -63,7 +63,7 @@ public:
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
-                                       const QString &securityContext);
+                                    const QString &securityContext);
     /*!
      * Checks if a client process is owner of identify.
      * The access type to be checked is read and write, since the owner can manipulate identity and its parameters fully. 
@@ -72,7 +72,7 @@ public:
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
-                                       const QString &securityContext);
+                               const QString &securityContext);
 
     /*!
      * Looks up for the application identifier of a specific client process.
@@ -95,7 +95,7 @@ public:
      *  @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                              const QStringList aclList);
+                               const QStringList aclList);
 
 };
 
