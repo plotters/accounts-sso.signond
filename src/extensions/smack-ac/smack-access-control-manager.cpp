@@ -43,6 +43,7 @@ QString SmackAccessControlManager::keychainWidgetAppId()
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 bool SmackAccessControlManager::isPeerAllowedToAccess(
                                                const QDBusMessage &peerMessage,
 =======
@@ -53,6 +54,10 @@ bool SmackAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &p
 =======
                                                            const QString &securityContext)
 >>>>>>> cleaning up
+=======
+bool SmackAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
+                                                           const QString &securityContext)
+>>>>>>> adding ac fixes
 {
     QString appId =
         SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
@@ -83,8 +88,11 @@ bool SmackAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMe
     }
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+=======
+>>>>>>> adding ac fixes
   
 >>>>>>> cleaning up
 QString SmackAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)

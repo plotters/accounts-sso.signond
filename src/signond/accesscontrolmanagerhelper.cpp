@@ -68,7 +68,10 @@ AccessControlManagerHelper::isPeerAllowedToUseIdentity(
 =======
 bool AccessControlManagerHelper::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
                                                             const quint32 identityId)
+<<<<<<< HEAD
 >>>>>>> cleaning up
+=======
+>>>>>>> adding ac fixes
 {
     // TODO - improve this, the error handling and more precise behaviour
 
@@ -113,9 +116,12 @@ AccessControlManagerHelper::isPeerOwnerOfIdentity(
         return IdentityDoesNotHaveOwner;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     return peerHasOneOfAccesses(peerMessage, ownerSecContexts) ?
         ApplicationIsOwner : ApplicationIsNotOwner;
 =======
+=======
+>>>>>>> adding ac fixes
     foreach(QString securityContext, ownerSecContexts)
     {
         TRACE() << securityContext;
@@ -123,6 +129,9 @@ AccessControlManagerHelper::isPeerOwnerOfIdentity(
             return ApplicationIsOwner;
     }
     return ApplicationIsNotOwner;
+<<<<<<< HEAD
+>>>>>>> adding ac fixes
+=======
 >>>>>>> adding ac fixes
 }
 
@@ -147,7 +156,10 @@ AccessControlManagerHelper::peerHasOneOfAccesses(const QDBusMessage &peerMessage
 =======
 bool AccessControlManagerHelper::peerHasOneOfAccesses(const QDBusMessage &peerMessage,
                                                       const QStringList secContexts)
+<<<<<<< HEAD
 >>>>>>> cleaning up
+=======
+>>>>>>> adding ac fixes
 {
     foreach (QString securityContext, secContexts)
     {
@@ -168,7 +180,10 @@ AccessControlManagerHelper::isPeerAllowedToAccess(
 =======
 bool AccessControlManagerHelper::isPeerAllowedToAccess(const QDBusMessage &peerMessage,
                                                        const QString securityContext)
+<<<<<<< HEAD
 >>>>>>> cleaning up
+=======
+>>>>>>> adding ac fixes
 {
     TRACE() << securityContext;
     return m_acManager->isPeerAllowedToUseIdentity(peerMessage, securityContext);

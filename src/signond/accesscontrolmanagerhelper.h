@@ -171,6 +171,18 @@ public:
         @param aclList, the acl list to be checked against
         @returns true, if the peer is allowed, false otherwise.
     */
+<<<<<<< HEAD
+=======
+    bool peerHasOneOfAccesses(const QDBusMessage &peerMessage,
+                              const QStringList secContexts);
+    /*!
+        Checks if a client process is allowed to set the specified acl on data item.
+        The restrictions depend on the AC framework being used and concrete function implementation.
+        @param peerMessage, the request message sent over DBUS by the process.
+        @param aclList, the acl list to be checked against
+        @returns true, if the peer is allowed, false otherwise.
+    */
+>>>>>>> adding ac fixes
     bool isACLValid(const QDBusMessage &peerMessage,
                                const QStringList aclList);
 private:

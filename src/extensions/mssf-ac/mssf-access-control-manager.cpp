@@ -45,19 +45,26 @@ QString MSSFAccessControlManager::keychainWidgetAppId()
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 bool MSSFAccessControlManager::isPeerAllowedToAccess(
                                        const QDBusMessage &peerMessage,
 =======
+=======
+>>>>>>> adding ac fixes
 /* for mssf case both functions below result in simple check of token presence. There is no 
 difference between any access types */
 
 bool MSSFAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> adding ac fixes
                                        const QString &securityContext)
 =======
                                                           const QString &securityContext)
 >>>>>>> cleaning up
+=======
+                                                          const QString &securityContext)
+>>>>>>> adding ac fixes
 {
     bool hasAccess = false;
     QStringList Credlist =
@@ -81,6 +88,7 @@ bool MSSFAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMes
 QString MSSFAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     QStringList Credlist =
         MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
     foreach(QString cred, Credlist) {
@@ -88,6 +96,10 @@ QString MSSFAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
     QStringList Credlist = MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
     foreach (QString cred, Credlist) {
 >>>>>>> cleaning up
+=======
+    QStringList Credlist = MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
+    foreach (QString cred, Credlist) {
+>>>>>>> adding ac fixes
         if (cred.startsWith(SSO_AEGIS_PACKAGE_ID_TOKEN_PREFIX))
             return cred;
     }

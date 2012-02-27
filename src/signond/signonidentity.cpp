@@ -417,6 +417,7 @@ quint32 SignonIdentity::store(const QVariantMap &info)
         ownerList.append(appId);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (m_pInfo == 0) {
         m_pInfo = new SignonIdentityInfo(info);
         m_pInfo->setMethods(methods);
@@ -435,6 +436,8 @@ quint32 SignonIdentity::store(const QVariantMap &info)
         //Add creator to owner list if it has AID
 =======
 >>>>>>> returning error codes when setting isn't allowed
+=======
+>>>>>>> adding ac fixes
         QStringList ownerList = info.value(SIGNOND_IDENTITY_INFO_OWNER).toStringList();
         if (appId.isEmpty() && ownerList.isEmpty()) {
             /* send an error reply, because otherwise we may end up with empty owner */
