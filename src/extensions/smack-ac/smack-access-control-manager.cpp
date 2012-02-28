@@ -48,7 +48,7 @@ bool SmackAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &p
     QString appId = SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
     TRACE() << appId << ":" << securityContext;
 
-    if (SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("x")) {
+    if (SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("x"))) {
             TRACE() << "Process ACCESS:TRUE";
             return true;
     } else {
@@ -80,22 +80,24 @@ QString SmackAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 }
 
 bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                           const QStringList aclList)
+                           const QStringList &aclList)
 {
     QString appId = SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
-    QString appIdPrefixed = "";
+    QString appIdPrefixed;
+    QString sep = QLatin1String("::");
     appIdPrefixed.append(appId);
-    appIdPrefixed.append("::");
+    appIdPrefixed.append(sep);
     TRACE() << appId << appIdPrefixed;
-    if (!accessControlList.isEmpty()){
-        foreach(QString aclItem, aclList)
+
+    if (!aclList.isEmpty()){
+        foreach (QString aclItem, aclList)
         {
             TRACE() << aclItem;
             /* if app sets an acl entry for its appid, then it is always allowed */
-            if (appId == aclItem))
+            if (appId == aclItem)
                 continue;
             /* if app sets an acl entry for the label of its subdomain, then it is allowed, too */
-            if ( aclItem.indexOf(appId)) == 0)
+            if ( aclItem.indexOf(appId) == 0)
                 continue;
             /* if none of above then this acl must be denied */
             TRACE() << "An attempt to setup an acl" << aclItem << "for process domain" << appId << "is denied";
