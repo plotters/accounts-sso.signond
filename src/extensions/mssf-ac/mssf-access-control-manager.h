@@ -183,7 +183,7 @@ public:
      *  @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                               const QStringList aclList);
+                               const QStringList &aclList);
 
 >>>>>>> adding ac fixes
 };

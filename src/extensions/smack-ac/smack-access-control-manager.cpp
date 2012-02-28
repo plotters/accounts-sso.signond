@@ -72,9 +72,13 @@ bool SmackAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &p
     TRACE() << appId << ":" << securityContext;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("x"))) {
 =======
     if (SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("x")) {
+=======
+    if (SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("x"))) {
+>>>>>>> various fixes
             TRACE() << "Process ACCESS:TRUE";
             return true;
     } else {
@@ -159,23 +163,29 @@ bool SmackAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
             if ( aclItem.indexOf(appId) == 0)
 =======
 bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                           const QStringList aclList)
+                           const QStringList &aclList)
 {
     QString appId = SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
-    QString appIdPrefixed = "";
+    QString appIdPrefixed;
+    QString sep = QLatin1String("::");
     appIdPrefixed.append(appId);
-    appIdPrefixed.append("::");
+    appIdPrefixed.append(sep);
     TRACE() << appId << appIdPrefixed;
-    if (!accessControlList.isEmpty()){
-        foreach(QString aclItem, aclList)
+
+    if (!aclList.isEmpty()){
+        foreach (QString aclItem, aclList)
         {
             TRACE() << aclItem;
             /* if app sets an acl entry for its appid, then it is always allowed */
-            if (appId == aclItem))
+            if (appId == aclItem)
                 continue;
             /* if app sets an acl entry for the label of its subdomain, then it is allowed, too */
+<<<<<<< HEAD
             if ( aclItem.indexOf(appId)) == 0)
 >>>>>>> adding ac fixes
+=======
+            if ( aclItem.indexOf(appId) == 0)
+>>>>>>> various fixes
                 continue;
             /* if none of above then this acl must be denied */
             TRACE() << "An attempt to setup an acl" << aclItem << "for process domain" << appId << "is denied";

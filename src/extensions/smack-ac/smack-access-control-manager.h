@@ -161,11 +161,15 @@ public:
 =======
     bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
 <<<<<<< HEAD
+<<<<<<< HEAD
                               const QStringList aclList);
 >>>>>>> adding ac fixes
 =======
                                const QStringList aclList);
 >>>>>>> cleaning up
+=======
+                               const QStringList &aclList);
+>>>>>>> various fixes
 
 };
 

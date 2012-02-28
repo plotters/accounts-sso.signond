@@ -145,10 +145,10 @@ bool MSSFAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
             }
 =======
 bool MSSFAccessControlManager::isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                                                     const QStringList aclList)
+                                                     const QStringList &aclList)
 {
     QStringList CredList = MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
-    if (!accessControlList.isEmpty()){
+    if (!aclList.isEmpty()){
         foreach (QString aclItem, aclList)
         {
             if (!CredList.contains(aclItem)) {
