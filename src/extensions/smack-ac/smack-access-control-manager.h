@@ -30,6 +30,7 @@
 #define SMACK_ACCESS_CONTROL_MANAGER_H
 
 #include <QDBusMessage>
+#include <QStringList>
 
 #include <SignOn/AbstractAccessControlManager>
 
@@ -112,7 +113,7 @@ public:
      *  @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                               const QStringList aclList);
+                               const QStringList &aclList);
 
 };
 

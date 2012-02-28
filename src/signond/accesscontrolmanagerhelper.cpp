@@ -152,7 +152,7 @@ bool AccessControlManagerHelper::peerHasOneOfAccesses(const QDBusMessage &peerMe
     foreach (QString securityContext, secContexts)
     {
         TRACE() << securityContext;
-        if (m_acManager->isPeerAllowedToAccess(peerMessage, securityContext))
+        if (m_acManager->isPeerAllowedToUseIdentity(peerMessage, securityContext))
             return true;
     }
 
