@@ -416,6 +416,7 @@ quint32 SignonIdentity::store(const QVariantMap &info)
     if (!appId.isNull())
         ownerList.append(appId);
 
+<<<<<<< HEAD
     if (m_pInfo == 0) {
         m_pInfo = new SignonIdentityInfo(info);
         m_pInfo->setMethods(methods);
@@ -432,19 +433,27 @@ quint32 SignonIdentity::store(const QVariantMap &info)
         int type = info.value(SIGNOND_IDENTITY_INFO_TYPE).toInt();
 =======
         //Add creator to owner list if it has AID
+=======
+>>>>>>> returning error codes when setting isn't allowed
         QStringList ownerList = info.value(SIGNOND_IDENTITY_INFO_OWNER).toStringList();
         if (appId.isEmpty() && ownerList.isEmpty()) {
-            //blame again and don't allow such thing to happen, because otherwise we may end up with empty owner
+            /* send an error reply, because otherwise we may end up with empty owner */
+            replyError(SIGNOND_INVALID_QUERY_ERR_NAME,
+                       SIGNOND_INVALID_QUERY_ERR_STR);
+            return 0;
         }
         /* if owner list is empty, add the appId of application to it by default */
         if (ownerList.isEmpty())
             ownerList.append(appId);
         else {
-            // check that application is allowed to set the list of owners in this way
-            // let's use the same function as for acl since rules are the same
-            bool allowed = AccessControlManagerHelper::instance()->isPeerAllowedToSetACL((static_cast<QDBusContext>(*this)).message(),ownerList);
+            /* check that application is allowed to set the specified list of owners */
+            bool allowed = AccessControlManagerHelper::instance()->isPeerAllowedToSetACL(
+                            (static_cast<QDBusContext>(*this)).message(),ownerList);
             if (!allowed) {
-                // blame and don't allow this to happen. 
+                /* send an error reply, because otherwise uncontrolled sharing might happen */
+                replyError(SIGNOND_PERMISSION_DENIED_ERR_NAME,
+                           SIGNOND_PERMISSION_DENIED_ERR_STR); 
+                return 0;
             }
         }
 
@@ -459,9 +468,13 @@ quint32 SignonIdentity::store(const QVariantMap &info)
             QStringList accessControlList = info.value(SIGNOND_IDENTITY_INFO_ACL).toStringList();
             /* before setting this ACL value to the new identity, 
                we need to make sure that it isn't unconrolled sharing attempt.*/
-            bool allowed = AccessControlManagerHelper::instance()->isPeerAllowedToSetACL((static_cast<QDBusContext>(*this)).message(),accessControlList);
+            bool allowed = AccessControlManagerHelper::instance()->isPeerAllowedToSetACL(
+                            (static_cast<QDBusContext>(*this)).message(),accessControlList);
             if (!allowed) {
-                // blame and don't allow this to happen.
+                /* send an error reply, because otherwise uncontrolled sharing might happen */
+                replyError(SIGNOND_PERMISSION_DENIED_ERR_NAME,
+                           SIGNOND_PERMISSION_DENIED_ERR_STR);
+                return 0;
             }
             int type = info.value(SIGNOND_IDENTITY_INFO_TYPE).toInt();
 >>>>>>> signonidentity additional checks
