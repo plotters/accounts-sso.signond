@@ -554,6 +554,7 @@ quint32 SignonIdentity::store(const QVariantMap &info)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (m_pInfo == 0) {
         m_pInfo = new SignonIdentityInfo(info);
         m_pInfo->setMethods(methods);
@@ -577,18 +578,26 @@ quint32 SignonIdentity::store(const QVariantMap &info)
         QStringList ownerList = info.value(SIGNOND_IDENTITY_INFO_OWNER).toStringList();
         if (appId.isEmpty() && ownerList.isEmpty()) {
 <<<<<<< HEAD
+=======
+        QStringList ownerList = info.value(SIGNOND_IDENTITY_INFO_OWNER).toStringList();
+        if (appId.isEmpty() && ownerList.isEmpty()) {
+>>>>>>> returning error codes when setting isn't allowed
             /* send an error reply, because otherwise we may end up with empty owner */
             replyError(SIGNOND_INVALID_QUERY_ERR_NAME,
                        SIGNOND_INVALID_QUERY_ERR_STR);
             return 0;
+<<<<<<< HEAD
 =======
             //blame again and don't allow such thing to happen, because otherwise we may end up with empty owner
 >>>>>>> signonidentity additional checks
+=======
+>>>>>>> returning error codes when setting isn't allowed
         }
         /* if owner list is empty, add the appId of application to it by default */
         if (ownerList.isEmpty())
             ownerList.append(appId);
         else {
+<<<<<<< HEAD
 <<<<<<< HEAD
             /* check that application is allowed to set the specified list of owners */
             bool allowed = AccessControlManagerHelper::instance()->isACLValid(
@@ -605,6 +614,16 @@ quint32 SignonIdentity::store(const QVariantMap &info)
             if (!allowed) {
                 // blame and don't allow this to happen. 
 >>>>>>> signonidentity additional checks
+=======
+            /* check that application is allowed to set the specified list of owners */
+            bool allowed = AccessControlManagerHelper::instance()->isPeerAllowedToSetACL(
+                            (static_cast<QDBusContext>(*this)).message(),ownerList);
+            if (!allowed) {
+                /* send an error reply, because otherwise uncontrolled sharing might happen */
+                replyError(SIGNOND_PERMISSION_DENIED_ERR_NAME,
+                           SIGNOND_PERMISSION_DENIED_ERR_STR); 
+                return 0;
+>>>>>>> returning error codes when setting isn't allowed
             }
         }
 
@@ -620,6 +639,7 @@ quint32 SignonIdentity::store(const QVariantMap &info)
             /* before setting this ACL value to the new identity, 
                we need to make sure that it isn't unconrolled sharing attempt.*/
 <<<<<<< HEAD
+<<<<<<< HEAD
             bool allowed = AccessControlManagerHelper::instance()->isACLValid(
                             (static_cast<QDBusContext>(*this)).message(),accessControlList);
             if (!allowed) {
@@ -632,6 +652,15 @@ quint32 SignonIdentity::store(const QVariantMap &info)
             if (!allowed) {
                 // blame and don't allow this to happen.
 >>>>>>> signonidentity additional checks
+=======
+            bool allowed = AccessControlManagerHelper::instance()->isPeerAllowedToSetACL(
+                            (static_cast<QDBusContext>(*this)).message(),accessControlList);
+            if (!allowed) {
+                /* send an error reply, because otherwise uncontrolled sharing might happen */
+                replyError(SIGNOND_PERMISSION_DENIED_ERR_NAME,
+                           SIGNOND_PERMISSION_DENIED_ERR_STR);
+                return 0;
+>>>>>>> returning error codes when setting isn't allowed
             }
             int type = info.value(SIGNOND_IDENTITY_INFO_TYPE).toInt();
 >>>>>>> signonidentity additional checks
