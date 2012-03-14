@@ -61,8 +61,8 @@ QString AbstractAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessag
     return QString();
 }
 
-bool AbstractAccessControlManager::isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                                                         const QStringList &aclList)
+bool AbstractAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
+                                              const QStringList &aclList)
 {
     Q_UNUSED(peerMessage);
     Q_UNUSED(aclList);
