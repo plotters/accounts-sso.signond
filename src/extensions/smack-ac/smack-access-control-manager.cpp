@@ -93,8 +93,8 @@ QString SmackAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
     return SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
 }
 
-bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                           const QStringList &aclList)
+bool SmackAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
+                                           const QStringList &aclList)
 {
     QString appId = SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
     QString appIdPrefixed;

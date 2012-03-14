@@ -95,8 +95,8 @@ QString MSSFAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
     return QString();
 }
 
-bool MSSFAccessControlManager::isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                                                     const QStringList &aclList)
+bool MSSFAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
+                                          const QStringList &aclList)
 {
     QStringList CredList = MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
     if (!aclList.isEmpty()){
