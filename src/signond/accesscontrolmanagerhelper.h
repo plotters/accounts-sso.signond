@@ -191,6 +191,7 @@ public:
         @returns true, if the peer is allowed, false otherwise.
     */
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> adding ac fixes
     bool isACLValid(const QDBusMessage &peerMessage,
                                const QStringList aclList);
@@ -200,6 +201,9 @@ public:
                               const QStringList aclList);
 >>>>>>> adding ac fixes
 =======
+=======
+    bool isACLValid(const QDBusMessage &peerMessage,
+>>>>>>> changing ACL function name
                                const QStringList aclList);
 >>>>>>> cleaning up
 private:

@@ -131,6 +131,7 @@ QString MSSFAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 bool MSSFAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
                                           const QStringList &aclList)
 {
@@ -146,6 +147,10 @@ bool MSSFAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
 =======
 bool MSSFAccessControlManager::isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
                                                      const QStringList &aclList)
+=======
+bool MSSFAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
+                                          const QStringList &aclList)
+>>>>>>> changing ACL function name
 {
     QStringList CredList = MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
     if (!aclList.isEmpty()){

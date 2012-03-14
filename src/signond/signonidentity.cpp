@@ -616,7 +616,7 @@ quint32 SignonIdentity::store(const QVariantMap &info)
 >>>>>>> signonidentity additional checks
 =======
             /* check that application is allowed to set the specified list of owners */
-            bool allowed = AccessControlManagerHelper::instance()->isPeerAllowedToSetACL(
+            bool allowed = AccessControlManagerHelper::instance()->isACLValid(
                             (static_cast<QDBusContext>(*this)).message(),ownerList);
             if (!allowed) {
                 /* send an error reply, because otherwise uncontrolled sharing might happen */
@@ -640,6 +640,7 @@ quint32 SignonIdentity::store(const QVariantMap &info)
                we need to make sure that it isn't unconrolled sharing attempt.*/
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             bool allowed = AccessControlManagerHelper::instance()->isACLValid(
                             (static_cast<QDBusContext>(*this)).message(),accessControlList);
             if (!allowed) {
@@ -654,6 +655,9 @@ quint32 SignonIdentity::store(const QVariantMap &info)
 >>>>>>> signonidentity additional checks
 =======
             bool allowed = AccessControlManagerHelper::instance()->isPeerAllowedToSetACL(
+=======
+            bool allowed = AccessControlManagerHelper::instance()->isACLValid(
+>>>>>>> changing ACL function name
                             (static_cast<QDBusContext>(*this)).message(),accessControlList);
             if (!allowed) {
                 /* send an error reply, because otherwise uncontrolled sharing might happen */

@@ -211,6 +211,7 @@ pid_t AccessControlManagerHelper::pidOfPeer(const QDBusContext &peerContext)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 bool AccessControlManagerHelper::isACLValid(const QDBusMessage &peerMessage,
                                             const QStringList aclList)
 {
@@ -221,4 +222,10 @@ bool AccessControlManagerHelper::isPeerAllowedToSetACL(const QDBusMessage &peerM
 {
     return m_acManager->isPeerAllowedToSetACL(peerMessage, aclList);
 >>>>>>> adding ac fixes
+=======
+bool AccessControlManagerHelper::isACLValid(const QDBusMessage &peerMessage,
+                                            const QStringList aclList)
+{
+    return m_acManager->isACLValid(peerMessage, aclList);
+>>>>>>> changing ACL function name
 }

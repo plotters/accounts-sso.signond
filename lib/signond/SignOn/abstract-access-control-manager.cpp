@@ -95,6 +95,7 @@ AbstractAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 bool AbstractAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
                                               const QStringList &aclList)
 =======
@@ -105,6 +106,10 @@ bool AbstractAccessControlManager::isPeerAllowedToSetACL(const QDBusMessage &pee
 =======
                                                          const QStringList &aclList)
 >>>>>>> cleaning up
+=======
+bool AbstractAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
+                                              const QStringList &aclList)
+>>>>>>> changing ACL function name
 {
     Q_UNUSED(peerMessage);
     Q_UNUSED(aclList);

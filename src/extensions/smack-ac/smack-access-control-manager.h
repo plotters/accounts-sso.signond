@@ -156,6 +156,7 @@ public:
      *  @returns true, if the peer is allowed, false otherwise.
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
     bool isACLValid(const QDBusMessage &peerMessage,
                     const QStringList &aclList);
 =======
@@ -170,6 +171,10 @@ public:
 =======
                                const QStringList &aclList);
 >>>>>>> various fixes
+=======
+    bool isACLValid(const QDBusMessage &peerMessage,
+                    const QStringList &aclList);
+>>>>>>> changing ACL function name
 
 };
 

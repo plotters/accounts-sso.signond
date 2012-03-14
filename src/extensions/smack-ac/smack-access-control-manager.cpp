@@ -142,6 +142,7 @@ QString SmackAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 bool SmackAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
                                            const QStringList &aclList)
 {
@@ -164,6 +165,10 @@ bool SmackAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
 =======
 bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
                            const QStringList &aclList)
+=======
+bool SmackAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
+                                           const QStringList &aclList)
+>>>>>>> changing ACL function name
 {
     QString appId = SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
     QString appIdPrefixed;
