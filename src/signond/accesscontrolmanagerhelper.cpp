@@ -154,8 +154,8 @@ pid_t AccessControlManagerHelper::pidOfPeer(const QDBusContext &peerContext)
     return peerContext.connection().interface()->servicePid(service).value();
 }
 
-bool AccessControlManagerHelper::isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                                                       const QStringList aclList)
+bool AccessControlManagerHelper::isACLValid(const QDBusMessage &peerMessage,
+                                            const QStringList aclList)
 {
-    return m_acManager->isPeerAllowedToSetACL(peerMessage, aclList);
+    return m_acManager->isACLValid(peerMessage, aclList);
 }

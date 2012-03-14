@@ -95,8 +95,8 @@ public:
      *  @param aclList, the acl list to be checked against
      *  @returns true, if the peer is allowed, false otherwise.
      */
-    bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                               const QStringList &aclList);
+    bool isACLValid(const QDBusMessage &peerMessage,
+                    const QStringList &aclList);
 
 };
 

@@ -394,7 +394,7 @@ namespace SignonDaemonNS {
             ownerList.append(appId);
         else {
             /* check that application is allowed to set the specified list of owners */
-            bool allowed = AccessControlManagerHelper::instance()->isPeerAllowedToSetACL(
+            bool allowed = AccessControlManagerHelper::instance()->isACLValid(
                             (static_cast<QDBusContext>(*this)).message(),ownerList);
             if (!allowed) {
                 /* send an error reply, because otherwise uncontrolled sharing might happen */
@@ -415,7 +415,7 @@ namespace SignonDaemonNS {
             QStringList accessControlList = info.value(SIGNOND_IDENTITY_INFO_ACL).toStringList();
             /* before setting this ACL value to the new identity, 
                we need to make sure that it isn't unconrolled sharing attempt.*/
-            bool allowed = AccessControlManagerHelper::instance()->isPeerAllowedToSetACL(
+            bool allowed = AccessControlManagerHelper::instance()->isACLValid(
                             (static_cast<QDBusContext>(*this)).message(),accessControlList);
             if (!allowed) {
                 /* send an error reply, because otherwise uncontrolled sharing might happen */
