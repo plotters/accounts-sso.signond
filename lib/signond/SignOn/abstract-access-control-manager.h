@@ -83,6 +83,7 @@ public:
      */
     virtual bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
                                             const QString &securityContext);
+<<<<<<< HEAD
     /*!
      * Checks if a client process is owner of identify.
      * The actual check depends on AC framework being used.   
@@ -116,6 +117,8 @@ public:
     virtual bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
 >>>>>>> fixing missing virtual specifiers
                                     const QString &securityContext);
+=======
+>>>>>>> arg alligment fix
     /*!
      * Checks if a client process is owner of identify.
      * The actual check depends on AC framework being used.   
@@ -132,6 +135,7 @@ public:
 >>>>>>> fixing missing virtual specifiers
 =======
     virtual bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
+<<<<<<< HEAD
 >>>>>>> fixing missing virtual specifiers
                                const QString &securityContext);
 =======
@@ -155,6 +159,9 @@ public:
 =======
                                const QString &securityContext);
 >>>>>>> cleaning up
+=======
+                                       const QString &securityContext);
+>>>>>>> arg alligment fix
 
     /*!
      * Looks up for the application identifier of a specific client process.
