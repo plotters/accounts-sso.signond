@@ -79,7 +79,7 @@ public:
 >>>>>>> adding ac fixes
      * @returns true, if the peer is allowed, false otherwise.
      */
-    bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
+    virtual bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
                                     const QString &securityContext);
     /*!
      * Checks if a client process is owner of identify.
@@ -88,6 +88,7 @@ public:
      * @param securityContext, the security context of identity to be checked against.
      * @returns true, if the peer is allowed, false otherwise.
      */
+<<<<<<< HEAD
 =======
      * Checks if a client process is allowed to use specified identity.
      * The actual check depends on AC framework being used.   
@@ -106,6 +107,9 @@ public:
      */
 >>>>>>> adding ac fixes
     bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
+=======
+    virtual bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
+>>>>>>> fixing missing virtual specifiers
                                const QString &securityContext);
 
     /*!
