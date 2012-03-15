@@ -67,7 +67,7 @@ public:
      * @returns true, if the peer is allowed, false otherwise.
      */
     virtual bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
-                                    const QString &securityContext);
+                                            const QString &securityContext);
     /*!
      * Checks if a client process is owner of identify.
      * The actual check depends on AC framework being used.   
@@ -76,7 +76,7 @@ public:
      * @returns true, if the peer is allowed, false otherwise.
      */
     virtual bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
-                               const QString &securityContext);
+                                       const QString &securityContext);
 
     /*!
      * Looks up for the application identifier of a specific client process.
