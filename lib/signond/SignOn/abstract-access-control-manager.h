@@ -66,7 +66,7 @@ public:
      * @param securityContext, the security context of identity to be checked against.
      * @returns true, if the peer is allowed, false otherwise.
      */
-    bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
+    virtual bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
                                     const QString &securityContext);
     /*!
      * Checks if a client process is owner of identify.
@@ -75,7 +75,7 @@ public:
      * @param securityContext, the security context of identity to be checked against.
      * @returns true, if the peer is allowed, false otherwise.
      */
-    bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
+    virtual bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
                                const QString &securityContext);
 
     /*!
