@@ -108,9 +108,13 @@ public:
      * @param securityContext, the security context of identity to be checked against.
      * @returns true, if the peer is allowed, false otherwise.
      */
+<<<<<<< HEAD
     bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+    virtual bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
+>>>>>>> fixing missing virtual specifiers
                                     const QString &securityContext);
     /*!
      * Checks if a client process is owner of identify.
@@ -119,11 +123,15 @@ public:
      * @param securityContext, the security context of identity to be checked against.
      * @returns true, if the peer is allowed, false otherwise.
      */
+<<<<<<< HEAD
 >>>>>>> adding ac fixes
     bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
 =======
     virtual bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
 <<<<<<< HEAD
+>>>>>>> fixing missing virtual specifiers
+=======
+    virtual bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
 >>>>>>> fixing missing virtual specifiers
                                const QString &securityContext);
 =======
