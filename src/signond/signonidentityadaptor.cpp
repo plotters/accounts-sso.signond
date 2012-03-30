@@ -2,7 +2,7 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
- * Copyright (C) 2011 Intel Corporation.
+ * Copyright (C) 2011-2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
@@ -60,7 +60,8 @@ namespace SignonDaemonNS {
         SIGNOND_BUS.send(errReply);
     }
 
-    quint32 SignonIdentityAdaptor::requestCredentialsUpdate(const QString &msg)
+    quint32 SignonIdentityAdaptor::requestCredentialsUpdate(const QString &msg,
+                                                            const QVariant &userdata)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -72,7 +73,7 @@ namespace SignonDaemonNS {
         return m_parent->requestCredentialsUpdate(msg);
     }
 
-    QVariantMap SignonIdentityAdaptor::getInfo()
+    QVariantMap SignonIdentityAdaptor::getInfo(const QVariant &applicationContext)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -84,7 +85,8 @@ namespace SignonDaemonNS {
         return m_parent->getInfo();
     }
 
-    void SignonIdentityAdaptor::addReference(const QString &reference)
+    void SignonIdentityAdaptor::addReference(const QString &reference,
+                                             const QVariant &userdata)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -100,7 +102,8 @@ namespace SignonDaemonNS {
         }
     }
 
-    void SignonIdentityAdaptor::removeReference(const QString &reference)
+    void SignonIdentityAdaptor::removeReference(const QString &reference,
+                                                const QVariant &userdata)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -117,7 +120,8 @@ namespace SignonDaemonNS {
     }
 
 
-    bool SignonIdentityAdaptor::verifyUser(const QVariantMap &params)
+    bool SignonIdentityAdaptor::verifyUser(const QVariantMap &params,
+                                           const QVariant &userdata)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -129,7 +133,8 @@ namespace SignonDaemonNS {
         return m_parent->verifyUser(params);
     }
 
-    bool SignonIdentityAdaptor::verifySecret(const QString &secret)
+    bool SignonIdentityAdaptor::verifySecret(const QString &secret,
+                                             const QVariant &userdata)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -141,7 +146,7 @@ namespace SignonDaemonNS {
         return m_parent->verifySecret(secret);
     }
 
-    void SignonIdentityAdaptor::remove()
+    void SignonIdentityAdaptor::remove(const QVariant &userdata)
     {
         /* Access Control */
         AccessControlManagerHelper::IdentityOwnership ownership =
@@ -161,7 +166,7 @@ namespace SignonDaemonNS {
         m_parent->remove();
     }
 
-    bool SignonIdentityAdaptor::signOut()
+    bool SignonIdentityAdaptor::signOut(const QVariant &userdata)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -173,7 +178,8 @@ namespace SignonDaemonNS {
         return m_parent->signOut();
     }
 
-    quint32 SignonIdentityAdaptor::store(const QVariantMap &info)
+    quint32 SignonIdentityAdaptor::store(const QVariantMap &info,
+                                         const QVariant &userdata)
     {
         quint32 id = info.value(QLatin1String("Id"), SIGNOND_NEW_IDENTITY).toInt();
         /* Access Control */

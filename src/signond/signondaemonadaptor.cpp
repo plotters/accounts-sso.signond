@@ -2,7 +2,7 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
- * Copyright (C) 2011 Intel Corporation.
+ * Copyright (C) 2011-2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
@@ -39,7 +39,8 @@ namespace SignonDaemonNS {
     SignonDaemonAdaptor::~SignonDaemonAdaptor()
     {}
 
-    void SignonDaemonAdaptor::registerNewIdentity(QDBusObjectPath &objectPath)
+    void SignonDaemonAdaptor::registerNewIdentity(QDBusObjectPath &objectPath,
+                                                  const QVariant &userdata)
     {
         m_parent->registerNewIdentity(objectPath);
 
@@ -64,7 +65,8 @@ namespace SignonDaemonNS {
 
     void SignonDaemonAdaptor::getIdentity(const quint32 id,
                                           QDBusObjectPath &objectPath,
-                                          QVariantMap &identityData)
+                                          QVariantMap &identityData,
+                                          const QVariant &userdata)
     {
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
                                         parentDBusContext().message(), id)) {
@@ -82,7 +84,9 @@ namespace SignonDaemonNS {
         return m_parent->queryMethods();
     }
 
-    QString SignonDaemonAdaptor::getAuthSessionObjectPath(const quint32 id, const QString &type)
+    QString SignonDaemonAdaptor::getAuthSessionObjectPath(const quint32 id,
+                                                          const QString &type,
+                                                          const QVariant &userdata)
     {
         SignonDisposable::destroyUnused();
 

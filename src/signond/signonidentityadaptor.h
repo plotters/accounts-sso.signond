@@ -3,9 +3,11 @@
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
  * Copyright (C) 2012 Canonical Ltd.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -46,16 +48,22 @@ namespace SignonDaemonNS {
             { return *static_cast<QDBusContext *>(m_parent); }
 
     public Q_SLOTS:
-        quint32 requestCredentialsUpdate(const QString &message);
-        QVariantMap getInfo();
-        void addReference(const QString &reference);
-        void removeReference(const QString &reference);
+        quint32 requestCredentialsUpdate(const QString &message,
+                                         const QVariant &applicationContext);
+        QVariantMap getInfo(const QVariant &applicationContext);
+        void addReference(const QString &reference,
+                          const QVariant &applicationContext);
+        void removeReference(const QString &reference,
+                             const QVariant &applicationContext);
 
-        bool verifyUser(const QVariantMap &params);
-        bool verifySecret(const QString &secret);
-        void remove();
-        bool signOut();
-        quint32 store(const QVariantMap &info);
+        bool verifyUser(const QVariantMap &params,
+                        const QVariant &userdata);
+        bool verifySecret(const QString &secret,
+                          const QVariant &userdata);
+        void remove(const QVariant &userdata);
+        bool signOut(const QVariant &userdata);
+        quint32 store(const QVariantMap &info,
+                      const QVariant &userdata);
 
     Q_SIGNALS:
         void unregistered();

@@ -3,16 +3,19 @@
   <interface name="com.google.code.AccountsSSO.SingleSignOn.AuthService">
     <method name="registerNewIdentity">
       <arg name="objectPath" type="o" direction="out"/>
+      <arg name="userdata" type="v" direction="in"/>
     </method>
     <method name="getIdentity">
       <arg name="id" type="u" direction="in"/>
       <arg name="objectPath" type="o" direction="out"/>
       <arg name="identityData" type="a{sv}" direction="out"/>
+      <arg name="userdata" type="v" direction="in"/>
     </method>
     <method name="getAuthSessionObjectPath">
       <arg type="s" direction="out"/>
       <arg name="id" type="u" direction="in"/>
       <arg name="type" type="s" direction="in"/>
+      <arg name="userdata" type="v" direction="in"/>
     </method>
     <method name="queryMethods">
       <arg type="as" direction="out"/>

@@ -9,36 +9,45 @@
     <method name="requestCredentialsUpdate">
       <arg type="u" direction="out"/>
       <arg name="message" type="s" direction="in"/>
+      <arg name="userdata" type="v" direction="in"/>
     </method>
     <method name="getInfo">
       <arg type="a{sv}" direction="out"/>
+      <arg name="userdata" type="v" direction="in"/>
     </method>
     <method name="verifyUser">
       <arg type="b" direction="out"/>
       <arg name="params" type="a{sv}" direction="in"/>
       <annotation name="com.trolltech.QtDBus.QtTypeName.In4" value="QVariantMap"/>
+      <arg name="userdata" type="v" direction="in"/>
     </method>
     <method name="verifySecret">
       <arg type="b" direction="out"/>
       <arg name="secret" type="s" direction="in"/>
+      <arg name="userdata" type="v" direction="in"/>
     </method>
     <method name="remove">
+        <arg name="userdata" type="v" direction="in"/>
     </method>
     <method name="signOut">
       <arg type="b" direction="out"/>
+      <arg name="userdata" type="v" direction="in"/>
     </method>
     <method name="store">
       <arg type="u" direction="out"/>
       <arg type="a{sv}" direction="in"/>
       <annotation name="com.trolltech.QtDBus.QtTypeName.In4" value="QVariantMap"/>
+      <arg name="userdata" type="v" direction="in"/>
     </method>
     <method name="addReference">
       <arg type="i" direction="out"/>
       <arg name="reference" type="s" direction="in"/>
+      <arg name="userdata" type="v" direction="in"/>
     </method>
     <method name="removeReference">
       <arg type="i" direction="out"/>
       <arg name="reference" type="s" direction="in"/>
+      <arg name="userdata" type="v" direction="in"/>
     </method>
   </interface>
 </node>
