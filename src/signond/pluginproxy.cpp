@@ -310,7 +310,12 @@ void PluginProxy::onReadStandardOutput()
     QDataStream reader(m_process);
     reader >> m_currentResultOperation;
 
+<<<<<<< HEAD
     TRACE() << "PROXY RESULT OPERATION:" << m_currentResultOperation;
+=======
+            //flushing the stdin channel
+            m_process->readAllStandardOutput();
+>>>>>>> Fix errors catched by icc
 
     if (!isResultOperationCodeValid(m_currentResultOperation)) {
         TRACE() << "Unknown operation code - skipping.";

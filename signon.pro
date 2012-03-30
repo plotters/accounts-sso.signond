@@ -1,3 +1,7 @@
+QMAKE_CC=icc
+QMAKE_CXX=icpc
+QMAKE_LINK=icpc
+
 include( common-vars.pri )
 include( common-project-config.pri )
 
@@ -18,4 +22,3 @@ EXCLUDES = \
 dist.commands = "tar -cvjf $${DISTNAME}.tar.bz2 $$EXCLUDES --transform='s,^,$$DISTNAME/,' *"
 dist.depends = distclean
 QMAKE_EXTRA_TARGETS += dist
-# End of File

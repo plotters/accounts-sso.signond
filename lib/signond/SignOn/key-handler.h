@@ -31,6 +31,7 @@
 
 #include <QObject>
 #include <QSet>
+#include <QFlags>
 
 namespace SignOn {
 
@@ -52,11 +53,11 @@ class SIGNON_EXPORT KeyHandler: public QObject
     Q_OBJECT
 
 public:
-    enum AuthorizeFlags {
+    enum AuthorizeFlags_e {
         None = 0,
         FormatStorage = 1 << 0, /*!< Formats the secure storage */
     };
-    Q_DECLARE_FLAGS(AuthorizeFlags, AuthorizeFlags);
+    Q_DECLARE_FLAGS(AuthorizeFlags, AuthorizeFlags_e);
 
     /*!
      * Constructor

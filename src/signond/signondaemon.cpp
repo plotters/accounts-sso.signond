@@ -437,7 +437,7 @@ void SignonDaemon::init()
     if (!initStorage())
         BLAME() << "Signond: Cannot initialize credentials storage.";
 
-    Q_UNUSED(AuthCoreCache::instance(this));
+    AuthCoreCache::instance(this);
 
     if (m_configuration->daemonTimeout() > 0) {
         SignonDisposable::invokeOnIdle(m_configuration->daemonTimeout(),
