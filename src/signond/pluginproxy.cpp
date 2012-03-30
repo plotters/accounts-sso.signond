@@ -315,6 +315,9 @@ void PluginProxy::onReadStandardOutput()
 =======
             //flushing the stdin channel
             m_process->readAllStandardOutput();
+<<<<<<< HEAD
+>>>>>>> Fix errors catched by icc
+=======
 >>>>>>> Fix errors catched by icc
 
     if (!isResultOperationCodeValid(m_currentResultOperation)) {
