@@ -2,7 +2,7 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
- * Copyright (C) 2011 Intel Corporation.
+ * Copyright (C) 2011-2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
@@ -46,7 +46,8 @@ namespace SignonDaemonNS {
         SIGNOND_BUS.send(errReply);
     }
 
-    QStringList SignonAuthSessionAdaptor::queryAvailableMechanisms(const QStringList &wantedMechanisms)
+    QStringList SignonAuthSessionAdaptor::queryAvailableMechanisms(const QStringList &wantedMechanisms,
+                                                                   const QVariant &userdata)
     {
         TRACE();
 
@@ -63,7 +64,9 @@ namespace SignonDaemonNS {
         return parent()->queryAvailableMechanisms(wantedMechanisms);
     }
 
-    QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa, const QString &mechanism)
+    QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
+                                                  const QString &mechanism,
+                                                  const QVariant &userdata)
     {
         TRACE();
 
@@ -105,7 +108,7 @@ namespace SignonDaemonNS {
         return parent()->process(sessionDataVa, allowedMechanism);
     }
 
-    void SignonAuthSessionAdaptor::cancel()
+    void SignonAuthSessionAdaptor::cancel(const QVariant &userdata)
     {
         TRACE();
 
@@ -118,7 +121,7 @@ namespace SignonDaemonNS {
         parent()->cancel();
     }
 
-    void SignonAuthSessionAdaptor::setId(quint32 id)
+    void SignonAuthSessionAdaptor::setId(quint32 id, const QVariant &userdata)
     {
         TRACE();
 
@@ -136,7 +139,7 @@ namespace SignonDaemonNS {
         parent()->setId(id);
     }
 
-    void SignonAuthSessionAdaptor::objectUnref()
+    void SignonAuthSessionAdaptor::objectUnref(const QVariant &userdata)
     {
         TRACE();
 

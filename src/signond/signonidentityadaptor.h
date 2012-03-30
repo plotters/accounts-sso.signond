@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -45,16 +47,22 @@ namespace SignonDaemonNS {
             { return *static_cast<QDBusContext *>(m_parent); }
 
     public Q_SLOTS:
-        quint32 requestCredentialsUpdate(const QString &message);
-        QList<QVariant> queryInfo();
-        void addReference(const QString &reference);
-        void removeReference(const QString &reference);
+        quint32 requestCredentialsUpdate(const QString &message,
+                                         const QVariant &userdata);
+        QList<QVariant> queryInfo(const QVariant &userdata);
+        void addReference(const QString &reference,
+                          const QVariant &userdata);
+        void removeReference(const QString &reference,
+                             const QVariant &userdata);
 
-        bool verifyUser(const QVariantMap &params);
-        bool verifySecret(const QString &secret);
-        void remove();
-        bool signOut();
-        quint32 store(const QVariantMap &info);
+        bool verifyUser(const QVariantMap &params,
+                        const QVariant &userdata);
+        bool verifySecret(const QString &secret,
+                          const QVariant &userdata);
+        void remove(const QVariant &userdata);
+        bool signOut(const QVariant &userdata);
+        quint32 store(const QVariantMap &info,
+                      const QVariant &userdata);
 
         quint32 storeCredentials(const quint32 id,
                                  const QString &userName,
@@ -64,7 +72,8 @@ namespace SignonDaemonNS {
                                  const QString &caption,
                                  const QStringList &realms,
                                  const QStringList &accessControlList,
-                                 const int type);
+                                 const int type,
+                                 const QVariant &userdata);
     Q_SIGNALS:
         void unregistered();
         void infoUpdated(int);
