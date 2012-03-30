@@ -4,12 +4,17 @@
  * Copyright (C) 2009-2010 Nokia Corporation.
 <<<<<<< HEAD
  * Copyright (C) 2012 Canonical Ltd.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+<<<<<<< HEAD
 =======
  * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+>>>>>>> Add user data parameter to server side interfaces
+=======
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
 >>>>>>> Add user data parameter to server side interfaces
  *
@@ -67,6 +72,7 @@ public Q_SLOTS:
 =======
     public Q_SLOTS:
         QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms,
+<<<<<<< HEAD
                                              const QDBusVariant &applicationContext);
         QVariantMap process(const QVariantMap &sessionDataVa,
                             const QString &mechanism,
@@ -88,6 +94,16 @@ public Q_SLOTS:
         Q_NOREPLY void setId(quint32 id, const QDBusVariant &applicationContext);
         Q_NOREPLY void objectUnref(const QDBusVariant &applicationContext);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+                                             const QVariant &userdata);
+        QVariantMap process(const QVariantMap &sessionDataVa,
+                            const QString &mechanism,
+                            const QVariant &userdata);
+
+        Q_NOREPLY void cancel(const QVariant &userdata);
+        Q_NOREPLY void setId(quint32 id, const QVariant &userdata);
+        Q_NOREPLY void objectUnref(const QVariant &userdata);
+>>>>>>> Add user data parameter to server side interfaces
 
 Q_SIGNALS:
     void stateChanged(int state, const QString &message);

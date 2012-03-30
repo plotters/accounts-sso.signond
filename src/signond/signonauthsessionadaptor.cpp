@@ -40,6 +40,7 @@ SignonAuthSessionAdaptor::~SignonAuthSessionAdaptor()
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void SignonAuthSessionAdaptor::errorReply(const QString &name,
                                           const QString &message)
 {
@@ -51,6 +52,10 @@ void SignonAuthSessionAdaptor::errorReply(const QString &name,
 =======
     QStringList SignonAuthSessionAdaptor::queryAvailableMechanisms(const QStringList &wantedMechanisms,
                                                                    const QDBusVariant &applicationContext)
+=======
+    QStringList SignonAuthSessionAdaptor::queryAvailableMechanisms(const QStringList &wantedMechanisms,
+                                                                   const QVariant &userdata)
+>>>>>>> Add user data parameter to server side interfaces
     {
         TRACE();
 >>>>>>> Add user data parameter to server side interfaces
@@ -83,12 +88,18 @@ SignonAuthSessionAdaptor::queryAvailableMechanisms(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     return parent()->queryAvailableMechanisms(wantedMechanisms);
 }
 =======
     QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
                                                   const QString &mechanism,
                                                   const QDBusVariant &applicationContext)
+=======
+    QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
+                                                  const QString &mechanism,
+                                                  const QVariant &userdata)
+>>>>>>> Add user data parameter to server side interfaces
     {
         TRACE();
 >>>>>>> Add user data parameter to server side interfaces
@@ -156,8 +167,12 @@ QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
         return parent()->process(sessionDataVa, allowedMechanism, applicationContext);
     }
 
+<<<<<<< HEAD
     void SignonAuthSessionAdaptor::cancel(const QDBusVariant &applicationContext)
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+    void SignonAuthSessionAdaptor::cancel(const QVariant &userdata)
+>>>>>>> Add user data parameter to server side interfaces
     {
         TRACE();
 >>>>>>> Add user data parameter to server side interfaces
@@ -184,6 +199,7 @@ void SignonAuthSessionAdaptor::cancel()
         parent()->cancel(userdata);
     }
 
+<<<<<<< HEAD
     void SignonAuthSessionAdaptor::setId(quint32 id,
                                          const QDBusVariant &userdata)
 >>>>>>> Use QDBusVariant instead of QVariant
@@ -194,6 +210,9 @@ void SignonAuthSessionAdaptor::cancel()
     void SignonAuthSessionAdaptor::setId(quint32 id,
                                          const QDBusVariant &applicationContext)
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+    void SignonAuthSessionAdaptor::setId(quint32 id, const QVariant &userdata)
+>>>>>>> Add user data parameter to server side interfaces
     {
         TRACE();
 >>>>>>> Add user data parameter to server side interfaces
@@ -227,6 +246,7 @@ void SignonAuthSessionAdaptor::setId(quint32 id)
         parent()->setId(id, userdata);
     }
 
+<<<<<<< HEAD
     void SignonAuthSessionAdaptor::objectUnref(const QDBusVariant &userdata)
 >>>>>>> Use QDBusVariant instead of QVariant
 =======
@@ -235,6 +255,9 @@ void SignonAuthSessionAdaptor::setId(quint32 id)
 
     void SignonAuthSessionAdaptor::objectUnref(const QDBusVariant &applicationContext)
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+    void SignonAuthSessionAdaptor::objectUnref(const QVariant &userdata)
+>>>>>>> Add user data parameter to server side interfaces
     {
         TRACE();
 >>>>>>> Add user data parameter to server side interfaces

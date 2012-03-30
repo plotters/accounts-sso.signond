@@ -4,14 +4,19 @@
  * Copyright (C) 2009-2010 Nokia Corporation.
 <<<<<<< HEAD
  * Copyright (C) 2012 Canonical Ltd.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+<<<<<<< HEAD
 =======
  * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+>>>>>>> Add user data parameter to server side interfaces
+=======
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
 >>>>>>> Add user data parameter to server side interfaces
  *
@@ -59,6 +64,7 @@ public:
         { return *static_cast<QDBusContext *>(m_parent); }
 =======
     public Q_SLOTS:
+<<<<<<< HEAD
         void registerNewIdentity(const QDBusVariant &applicationContext,
                                  QDBusObjectPath &objectPath);
         void registerStoredIdentity(const quint32 id,
@@ -83,6 +89,17 @@ public Q_SLOTS:
     void getIdentity(const quint32 id, QDBusObjectPath &objectPath,
                      QVariantMap &identityData);
     QString getAuthSessionObjectPath(const quint32 id, const QString &type);
+=======
+        void registerNewIdentity(QDBusObjectPath &objectPath,
+                                 const QVariant &applicationContext);
+        void getIdentity(const quint32 id,
+                         QDBusObjectPath &objectPath,
+                         QVariantMap &identityData,
+                         const QVariant &applicationContext);
+        QString getAuthSessionObjectPath(const quint32 id,
+                                         const QString &type,
+                                         const QVariant &applicationContext);
+>>>>>>> Add user data parameter to server side interfaces
 
     QStringList queryMethods();
     QStringList queryMechanisms(const QString &method);

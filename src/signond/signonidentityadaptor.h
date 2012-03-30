@@ -4,14 +4,19 @@
  * Copyright (C) 2009-2010 Nokia Corporation.
 <<<<<<< HEAD
  * Copyright (C) 2012 Canonical Ltd.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+<<<<<<< HEAD
 =======
  * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+>>>>>>> Add user data parameter to server side interfaces
+=======
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
 >>>>>>> Add user data parameter to server side interfaces
  *
@@ -73,6 +78,7 @@ Q_SIGNALS:
 =======
     public Q_SLOTS:
         quint32 requestCredentialsUpdate(const QString &message,
+<<<<<<< HEAD
                                          const QDBusVariant &applicationContext);
         QList<QVariant> queryInfo(const QDBusVariant &applicationContext);
         void addReference(const QString &reference,
@@ -88,6 +94,23 @@ Q_SIGNALS:
         bool signOut(const QDBusVariant &applicationContext);
         quint32 store(const QVariantMap &info,
                       const QDBusVariant &applicationContext);
+=======
+                                         const QVariant &applicationContext);
+        QVariantMap getInfo(const QVariant &applicationContext);
+        void addReference(const QString &reference,
+                          const QVariant &applicationContext);
+        void removeReference(const QString &reference,
+                             const QVariant &applicationContext);
+
+        bool verifyUser(const QVariantMap &params,
+                        const QVariant &userdata);
+        bool verifySecret(const QString &secret,
+                          const QVariant &userdata);
+        void remove(const QVariant &userdata);
+        bool signOut(const QVariant &userdata);
+        quint32 store(const QVariantMap &info,
+                      const QVariant &userdata);
+>>>>>>> Add user data parameter to server side interfaces
 
         quint32 storeCredentials(const quint32 id,
                                  const QString &userName,

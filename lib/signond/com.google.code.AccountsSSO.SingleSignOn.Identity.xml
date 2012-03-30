@@ -9,11 +9,16 @@
     <method name="requestCredentialsUpdate">
       <arg type="u" direction="out"/>
       <arg name="message" type="s" direction="in"/>
+<<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
+=======
+      <arg name="userdata" type="v" direction="in"/>
+>>>>>>> Add user data parameter to server side interfaces
     </method>
 <<<<<<< HEAD:lib/signond/com.google.code.AccountsSSO.SingleSignOn.Identity.xml
     <method name="getInfo">
       <arg type="a{sv}" direction="out"/>
+<<<<<<< HEAD
 =======
     <method name="queryInfo">
       <arg type="av" direction="out"/>
@@ -23,16 +28,24 @@
 =======
       <arg name="applicationContext" type="v" direction="in"/>
 >>>>>>> Rename 'userdata' to 'applicationContext':lib/signond/com.nokia.SingleSignOn.Identity.xml
+=======
+      <arg name="userdata" type="v" direction="in"/>
+>>>>>>> Add user data parameter to server side interfaces
     </method>
     <method name="verifyUser">
       <arg type="b" direction="out"/>
       <arg name="params" type="a{sv}" direction="in"/>
       <annotation name="com.trolltech.QtDBus.QtTypeName.In4" value="QVariantMap"/>
+<<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
+=======
+      <arg name="userdata" type="v" direction="in"/>
+>>>>>>> Add user data parameter to server side interfaces
     </method>
     <method name="verifySecret">
       <arg type="b" direction="out"/>
       <arg name="secret" type="s" direction="in"/>
+<<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
     </method>
     <method name="remove">
@@ -41,12 +54,26 @@
     <method name="signOut">
       <arg type="b" direction="out"/>
       <arg name="applicationContext" type="v" direction="in"/>
+=======
+      <arg name="userdata" type="v" direction="in"/>
+    </method>
+    <method name="remove">
+        <arg name="userdata" type="v" direction="in"/>
+    </method>
+    <method name="signOut">
+      <arg type="b" direction="out"/>
+      <arg name="userdata" type="v" direction="in"/>
+>>>>>>> Add user data parameter to server side interfaces
     </method>
     <method name="store">
       <arg type="u" direction="out"/>
       <arg type="a{sv}" direction="in"/>
       <annotation name="com.trolltech.QtDBus.QtTypeName.In4" value="QVariantMap"/>
+<<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
+=======
+      <arg name="userdata" type="v" direction="in"/>
+>>>>>>> Add user data parameter to server side interfaces
     </method>
 <<<<<<< HEAD:lib/signond/com.google.code.AccountsSSO.SingleSignOn.Identity.xml
 =======
@@ -68,12 +95,20 @@
     <method name="addReference">
       <arg type="i" direction="out"/>
       <arg name="reference" type="s" direction="in"/>
+<<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
+=======
+      <arg name="userdata" type="v" direction="in"/>
+>>>>>>> Add user data parameter to server side interfaces
     </method>
     <method name="removeReference">
       <arg type="i" direction="out"/>
       <arg name="reference" type="s" direction="in"/>
+<<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
+=======
+      <arg name="userdata" type="v" direction="in"/>
+>>>>>>> Add user data parameter to server side interfaces
     </method>
   </interface>
 </node>
