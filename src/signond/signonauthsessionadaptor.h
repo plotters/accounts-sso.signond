@@ -2,9 +2,16 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+<<<<<<< HEAD
  * Copyright (C) 2012 Canonical Ltd.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+=======
+ * Copyright (C) 2012 Intel Corporation.
+ *
+ * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+>>>>>>> Add user data parameter to server side interfaces
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -48,6 +55,7 @@ public:
 private:
     void errorReply(const QString &name, const QString &message);
 
+<<<<<<< HEAD
 public Q_SLOTS:
     QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms);
     QVariantMap process(const QVariantMap &sessionDataVa,
@@ -56,6 +64,18 @@ public Q_SLOTS:
     Q_NOREPLY void cancel();
     Q_NOREPLY void setId(quint32 id);
     Q_NOREPLY void objectUnref();
+=======
+    public Q_SLOTS:
+        QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms,
+                                             const QVariant &userdata);
+        QVariantMap process(const QVariantMap &sessionDataVa,
+                            const QString &mechanism,
+                            const QVariant &userdata);
+
+        Q_NOREPLY void cancel(const QVariant &userdata);
+        Q_NOREPLY void setId(quint32 id, const QVariant &userdata);
+        Q_NOREPLY void objectUnref(const QVariant &userdata);
+>>>>>>> Add user data parameter to server side interfaces
 
 Q_SIGNALS:
     void stateChanged(int state, const QString &message);

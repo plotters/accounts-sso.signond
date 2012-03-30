@@ -2,7 +2,7 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
- * Copyright (C) 2011 Intel Corporation.
+ * Copyright (C) 2011-2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
@@ -39,6 +39,7 @@ SignonAuthSessionAdaptor::~SignonAuthSessionAdaptor()
 {
 }
 
+<<<<<<< HEAD
 void SignonAuthSessionAdaptor::errorReply(const QString &name,
                                           const QString &message)
 {
@@ -47,6 +48,12 @@ void SignonAuthSessionAdaptor::errorReply(const QString &name,
         createErrorReply(name, message);
     SIGNOND_BUS.send(errReply);
 }
+=======
+    QStringList SignonAuthSessionAdaptor::queryAvailableMechanisms(const QStringList &wantedMechanisms,
+                                                                   const QVariant &userdata)
+    {
+        TRACE();
+>>>>>>> Add user data parameter to server side interfaces
 
 QStringList
 SignonAuthSessionAdaptor::queryAvailableMechanisms(
@@ -67,8 +74,16 @@ SignonAuthSessionAdaptor::queryAvailableMechanisms(
         return QStringList();
     }
 
+<<<<<<< HEAD
     return parent()->queryAvailableMechanisms(wantedMechanisms);
 }
+=======
+    QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
+                                                  const QString &mechanism,
+                                                  const QVariant &userdata)
+    {
+        TRACE();
+>>>>>>> Add user data parameter to server side interfaces
 
 QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
                                               const QString &mechanism)
@@ -116,8 +131,14 @@ QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
         return QVariantMap();
     }
 
+<<<<<<< HEAD
     return parent()->process(sessionDataVa, allowedMechanism);
 }
+=======
+    void SignonAuthSessionAdaptor::cancel(const QVariant &userdata)
+    {
+        TRACE();
+>>>>>>> Add user data parameter to server side interfaces
 
 void SignonAuthSessionAdaptor::cancel()
 {
@@ -130,8 +151,14 @@ void SignonAuthSessionAdaptor::cancel()
         return;
     }
 
+<<<<<<< HEAD
     parent()->cancel();
 }
+=======
+    void SignonAuthSessionAdaptor::setId(quint32 id, const QVariant &userdata)
+    {
+        TRACE();
+>>>>>>> Add user data parameter to server side interfaces
 
 void SignonAuthSessionAdaptor::setId(quint32 id)
 {
@@ -151,8 +178,14 @@ void SignonAuthSessionAdaptor::setId(quint32 id)
         return;
     }
 
+<<<<<<< HEAD
     parent()->setId(id);
 }
+=======
+    void SignonAuthSessionAdaptor::objectUnref(const QVariant &userdata)
+    {
+        TRACE();
+>>>>>>> Add user data parameter to server side interfaces
 
 void SignonAuthSessionAdaptor::objectUnref()
 {

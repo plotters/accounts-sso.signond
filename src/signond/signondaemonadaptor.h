@@ -2,10 +2,18 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+<<<<<<< HEAD
  * Copyright (C) 2012 Canonical Ltd.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+=======
+ * Copyright (C) 2012 Intel Corporation.
+ *
+ * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
+ * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+>>>>>>> Add user data parameter to server side interfaces
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -46,8 +54,21 @@ public:
     SignonDaemonAdaptor(SignonDaemon *parent);
     virtual ~SignonDaemonAdaptor();
 
+<<<<<<< HEAD
     inline const QDBusContext &parentDBusContext() const
         { return *static_cast<QDBusContext *>(m_parent); }
+=======
+    public Q_SLOTS:
+        void registerNewIdentity(QDBusObjectPath &objectPath,
+                                 const QVariant &userdata);
+        void registerStoredIdentity(const quint32 id,
+                                    QDBusObjectPath &objectPath,
+                                    QList<QVariant> &identityData,
+                                    const QVariant &userdata);
+        QString getAuthSessionObjectPath(const quint32 id,
+                                         const QString &type,
+                                         const QVariant &userdata);
+>>>>>>> Add user data parameter to server side interfaces
 
 public Q_SLOTS:
     void registerNewIdentity(QDBusObjectPath &objectPath);

@@ -2,7 +2,7 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
- * Copyright (C) 2011 Intel Corporation.
+ * Copyright (C) 2011-2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
@@ -40,9 +40,16 @@ SignonDaemonAdaptor::~SignonDaemonAdaptor()
 {
 }
 
+<<<<<<< HEAD
 void SignonDaemonAdaptor::registerNewIdentity(QDBusObjectPath &objectPath)
 {
     m_parent->registerNewIdentity(objectPath);
+=======
+    void SignonDaemonAdaptor::registerNewIdentity(QDBusObjectPath &objectPath,
+                                                  const QVariant &userdata)
+    {
+        m_parent->registerNewIdentity(objectPath);
+>>>>>>> Add user data parameter to server side interfaces
 
     SignonDisposable::destroyUnused();
 }
@@ -63,6 +70,7 @@ void SignonDaemonAdaptor::securityErrorReply(const char *failedMethodName)
     TRACE() << "Method FAILED Access Control check:" << failedMethodName;
 }
 
+<<<<<<< HEAD
 void SignonDaemonAdaptor::getIdentity(const quint32 id,
                                       QDBusObjectPath &objectPath,
                                       QVariantMap &identityData)
@@ -72,6 +80,18 @@ void SignonDaemonAdaptor::getIdentity(const quint32 id,
         securityErrorReply(__func__);
         return;
     }
+=======
+    void SignonDaemonAdaptor::registerStoredIdentity(const quint32 id,
+                                                     QDBusObjectPath &objectPath,
+                                                     QList<QVariant> &identityData,
+                                                     const QVariant &userdata)
+    {
+        if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
+                                        parentDBusContext().message(), id)) {
+            securityErrorReply(__func__);
+            return;
+        }
+>>>>>>> Add user data parameter to server side interfaces
 
     m_parent->getIdentity(id, objectPath, identityData);
 
@@ -83,10 +103,18 @@ QStringList SignonDaemonAdaptor::queryMethods()
     return m_parent->queryMethods();
 }
 
+<<<<<<< HEAD
 QString SignonDaemonAdaptor::getAuthSessionObjectPath(const quint32 id,
                                                       const QString &type)
 {
     SignonDisposable::destroyUnused();
+=======
+    QString SignonDaemonAdaptor::getAuthSessionObjectPath(const quint32 id,
+                                                          const QString &type,
+                                                          const QVariant &userdata)
+    {
+        SignonDisposable::destroyUnused();
+>>>>>>> Add user data parameter to server side interfaces
 
     /* Access Control */
     if (id != SIGNOND_NEW_IDENTITY) {
