@@ -10,6 +10,9 @@
 =======
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+<<<<<<< HEAD
+>>>>>>> Start adding userdata to the client side implementation
+=======
 >>>>>>> Start adding userdata to the client side implementation
  *
  * This library is free software; you can redistribute it and/or
@@ -221,7 +224,11 @@ bool AuthSessionImpl::initInterface()
     QVariantList arguments;
     arguments += m_id;
     arguments += m_methodName;
+<<<<<<< HEAD
     arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
+=======
+    arguments += m_userdata;
+>>>>>>> Start adding userdata to the client side implementation
 
     msg.setArguments(arguments);
     msg.setDelayedReply(true);

@@ -10,6 +10,9 @@
 =======
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+<<<<<<< HEAD
+>>>>>>> Start adding userdata to the client side implementation
+=======
 >>>>>>> Start adding userdata to the client side implementation
  *
  * This library is free software; you can redistribute it and/or
@@ -70,11 +73,15 @@ class IdentityImpl: public QObject
         Q_OBJECT
         Q_DISABLE_COPY(IdentityImpl)
 <<<<<<< HEAD
+<<<<<<< HEAD
         Q_PROPERTY(QVariant userdata READ userdata WRITE setUserdata);
 >>>>>>> Start adding userdata to the client side implementation
 =======
         Q_PROPERTY(QVariant applicationContext READ applicationContext WRITE setApplicationContext);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+        Q_PROPERTY(QVariant userdata READ userdata WRITE setUserdata);
+>>>>>>> Start adding userdata to the client side implementation
 
     friend class Identity;
 
@@ -128,6 +135,11 @@ public Q_SLOTS:
         void setApplicationContext (const QVariant &newApplicationContext)
         { m_applicationContext = newApplicationContext; }
 >>>>>>> Rename 'userdata' to 'applicationContext'
+
+        QVariant userdata () const
+        { return m_userdata; }
+        void setUserdata (const QVariant &newUserdata)
+        { m_userdata = newUserdata; }
 
     public Q_SLOTS:
         void errorReply(const QDBusError &err);
@@ -206,7 +218,11 @@ private:
         bool m_infoQueried;
         /* Marks this Identity as the one which requested the sign out */
         bool m_signOutRequestedByThisIdentity;
+<<<<<<< HEAD
         QVariant m_applicationContext;
+=======
+        QVariant m_userdata;
+>>>>>>> Start adding userdata to the client side implementation
     };
 >>>>>>> Start adding userdata to the client side implementation
 

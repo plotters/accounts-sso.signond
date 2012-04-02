@@ -10,6 +10,9 @@
 =======
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+<<<<<<< HEAD
+>>>>>>> Start adding userdata to the client side implementation
+=======
 >>>>>>> Start adding userdata to the client side implementation
  *
  * This library is free software; you can redistribute it and/or
@@ -66,11 +69,15 @@ class AuthSessionImpl: public QObject
         Q_OBJECT
         Q_DISABLE_COPY(AuthSessionImpl)
 <<<<<<< HEAD
+<<<<<<< HEAD
         Q_PROPERTY(QVariant userdata READ userdata WRITE setUserdata);
 >>>>>>> Start adding userdata to the client side implementation
 =======
         Q_PROPERTY(QVariant applicationContext READ applicationContext WRITE setApplicationContext);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+        Q_PROPERTY(QVariant userdata READ userdata WRITE setUserdata);
+>>>>>>> Start adding userdata to the client side implementation
 
     friend class AuthSession;
     friend class IdentityImpl;
@@ -88,10 +95,14 @@ public:
                         const QVariant &applicationContextP);
         ~AuthSessionImpl();
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Start adding userdata to the client side implementation
         QVariant userdata() const
         { return m_userdata; }
         void setUserdata (const QVariant &newUserdata)
         { m_userdata = newUserdata; }
+<<<<<<< HEAD
 >>>>>>> Start adding userdata to the client side implementation
 =======
         QVariant applicationContext() const
@@ -99,6 +110,8 @@ public:
         void setApplicationContext (const QVariant &newApplicationContext)
         { m_applicationContext = newApplicationContext; }
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+>>>>>>> Start adding userdata to the client side implementation
 
 public Q_SLOTS:
     QString name();
@@ -158,7 +171,11 @@ private:
          * */
         bool m_isValid;
 
+<<<<<<< HEAD
         QVariant m_applicationContext;
+=======
+        QVariant m_userdata;
+>>>>>>> Start adding userdata to the client side implementation
     };
 >>>>>>> Start adding userdata to the client side implementation
 

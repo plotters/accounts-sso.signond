@@ -2,13 +2,21 @@
 <node>
   <interface name="com.google.code.AccountsSSO.SingleSignOn.AuthService">
     <method name="registerNewIdentity">
+<<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
       <arg name="objectPath" type="o" direction="out"/>
+=======
+>>>>>>> Start adding userdata to the client side implementation
       <arg name="userdata" type="v" direction="in"/>
+      <arg name="objectPath" type="o" direction="out"/>
     </method>
     <method name="getIdentity">
       <arg name="id" type="u" direction="in"/>
+<<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
+=======
+      <arg name="userdata" type="v" direction="in"/>
+>>>>>>> Start adding userdata to the client side implementation
       <arg name="objectPath" type="o" direction="out"/>
 <<<<<<< HEAD:lib/signond/com.google.code.AccountsSSO.SingleSignOn.AuthService.xml
       <arg name="identityData" type="a{sv}" direction="out"/>

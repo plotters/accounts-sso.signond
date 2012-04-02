@@ -10,6 +10,9 @@
 =======
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+<<<<<<< HEAD
+>>>>>>> Start adding userdata to the client side implementation
+=======
 >>>>>>> Start adding userdata to the client side implementation
  *
  * This library is free software; you can redistribute it and/or
@@ -1260,6 +1263,8 @@ void IdentityImpl::errorReply(const QDBusError& err)
 =======
         args << QVariant::fromValue(QDBusVariant(m_applicationContext));
 >>>>>>> Rename 'userdata' to 'applicationContext'
+
+        args << m_userdata;
 
         QDBusMessage registerCall = QDBusMessage::createMethodCall(
             SIGNOND_SERVICE,

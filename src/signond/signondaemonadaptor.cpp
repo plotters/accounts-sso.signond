@@ -45,6 +45,7 @@ SignonDaemonAdaptor::~SignonDaemonAdaptor()
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void SignonDaemonAdaptor::registerNewIdentity(QDBusObjectPath &objectPath)
 {
     m_parent->registerNewIdentity(objectPath);
@@ -65,6 +66,10 @@ void SignonDaemonAdaptor::registerNewIdentity(QDBusObjectPath &objectPath)
     void SignonDaemonAdaptor::registerNewIdentity(QDBusObjectPath &objectPath,
                                                   const QVariant &userdata)
 >>>>>>> Add user data parameter to server side interfaces
+=======
+    void SignonDaemonAdaptor::registerNewIdentity(const QVariant &userdata,
+                                                  QDBusObjectPath &objectPath)
+>>>>>>> Start adding userdata to the client side implementation
     {
 <<<<<<< HEAD
 <<<<<<< HEAD

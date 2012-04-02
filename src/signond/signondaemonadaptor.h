@@ -65,6 +65,7 @@ public:
 =======
     public Q_SLOTS:
 <<<<<<< HEAD
+<<<<<<< HEAD
         void registerNewIdentity(const QDBusVariant &applicationContext,
                                  QDBusObjectPath &objectPath);
         void registerStoredIdentity(const quint32 id,
@@ -90,12 +91,22 @@ public Q_SLOTS:
                      QVariantMap &identityData);
     QString getAuthSessionObjectPath(const quint32 id, const QString &type);
 =======
+=======
+>>>>>>> Start adding userdata to the client side implementation
         void registerNewIdentity(QDBusObjectPath &objectPath,
                                  const QVariant &applicationContext);
         void getIdentity(const quint32 id,
                          QDBusObjectPath &objectPath,
                          QVariantMap &identityData,
                          const QVariant &applicationContext);
+=======
+        void registerNewIdentity(const QVariant &userdata,
+                                 QDBusObjectPath &objectPath);
+        void registerStoredIdentity(const quint32 id,
+                                    const QVariant &userdata,
+                                    QDBusObjectPath &objectPath,
+                                    QList<QVariant> &identityData);
+>>>>>>> Start adding userdata to the client side implementation
         QString getAuthSessionObjectPath(const quint32 id,
                                          const QString &type,
                                          const QVariant &applicationContext);
