@@ -2,9 +2,15 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
+<<<<<<< HEAD
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+=======
+ * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+>>>>>>> Start adding userdata to the client side implementation
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -39,6 +45,7 @@
 
 namespace SignOn {
 
+<<<<<<< HEAD
 /*!
  * @class AuthSessionImpl
  * AuthSession class implementation.
@@ -48,14 +55,36 @@ class AuthSessionImpl: public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(AuthSessionImpl)
+=======
+    /*!
+     * @class AuthSessionImpl
+     * AuthSession class implementation.
+     * @sa AuthSession
+     */
+    class AuthSessionImpl : public QObject
+    {
+        Q_OBJECT
+        Q_DISABLE_COPY(AuthSessionImpl)
+        Q_PROPERTY(QVariant userdata READ userdata WRITE setUserdata);
+>>>>>>> Start adding userdata to the client side implementation
 
     friend class AuthSession;
     friend class IdentityImpl;
 
+<<<<<<< HEAD
 public:
     AuthSessionImpl(AuthSession *parent, quint32 id,
                     const QString &methodName);
     ~AuthSessionImpl();
+=======
+    public:
+        AuthSessionImpl(AuthSession *parent, quint32 id, const QString &methodName);
+        ~AuthSessionImpl();
+        QVariant userdata() const
+        { return m_userdata; }
+        void setUserdata (const QVariant &newUserdata)
+        { m_userdata = newUserdata; }
+>>>>>>> Start adding userdata to the client side implementation
 
 public Q_SLOTS:
     QString name();
@@ -85,6 +114,7 @@ private:
     QString m_methodName;
     DBusInterface *m_DBusInterface;
 
+<<<<<<< HEAD
     /*
      * flag to prevent multiple authentication requests
      */
@@ -99,6 +129,24 @@ private:
      */
     bool m_isValid;
 };
+=======
+        /*
+         * flag to prevent multiple authentication requests
+         * */
+        bool m_isAuthInProcessing;
+        /*
+         * busy flag for process operation
+         * */
+        bool m_isBusy;
+        /*
+         * valid flag for authentication: if
+         * authentication failed once we do not try anymore
+         * */
+        bool m_isValid;
+
+        QVariant m_userdata;
+    };
+>>>>>>> Start adding userdata to the client side implementation
 
 } //namespace SignOn
 

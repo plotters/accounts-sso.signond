@@ -41,12 +41,17 @@ SignonDaemonAdaptor::~SignonDaemonAdaptor()
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void SignonDaemonAdaptor::registerNewIdentity(QDBusObjectPath &objectPath)
 {
     m_parent->registerNewIdentity(objectPath);
 =======
     void SignonDaemonAdaptor::registerNewIdentity(QDBusObjectPath &objectPath,
                                                   const QVariant &userdata)
+=======
+    void SignonDaemonAdaptor::registerNewIdentity(const QVariant &userdata,
+                                                  QDBusObjectPath &objectPath)
+>>>>>>> Start adding userdata to the client side implementation
     {
         m_parent->registerNewIdentity(objectPath);
 >>>>>>> Add user data parameter to server side interfaces
@@ -82,9 +87,9 @@ void SignonDaemonAdaptor::getIdentity(const quint32 id,
     }
 =======
     void SignonDaemonAdaptor::registerStoredIdentity(const quint32 id,
+                                                     const QVariant &userdata,
                                                      QDBusObjectPath &objectPath,
-                                                     QList<QVariant> &identityData,
-                                                     const QVariant &userdata)
+                                                     QList<QVariant> &identityData)
     {
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
                                         parentDBusContext().message(), id)) {

@@ -2,9 +2,15 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
+<<<<<<< HEAD
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+=======
+ * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+>>>>>>> Start adding userdata to the client side implementation
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -766,8 +772,18 @@ void IdentityImpl::errorReply(const QDBusError& err)
         if (m_state == this->PendingRegistration)
             updateState(NeedsRegistration);
 
+<<<<<<< HEAD
         TRACE() << "Non internal SSO error reply.";
     }
+=======
+        args << m_userdata;
+
+        QDBusMessage registerCall = QDBusMessage::createMethodCall(
+            SIGNOND_SERVICE,
+            SIGNOND_DAEMON_OBJECTPATH,
+            SIGNOND_DAEMON_INTERFACE,
+            registerMethodName);
+>>>>>>> Start adding userdata to the client side implementation
 
     /* Qt DBUS specific errors */
     if (err.type() != QDBusError::NoError) {
