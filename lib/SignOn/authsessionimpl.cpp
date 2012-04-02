@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -186,6 +188,7 @@ bool AuthSessionImpl::initInterface()
     QVariantList arguments;
     arguments += m_id;
     arguments += m_methodName;
+    arguments += m_userdata;
 
     msg.setArguments(arguments);
     msg.setDelayedReply(true);

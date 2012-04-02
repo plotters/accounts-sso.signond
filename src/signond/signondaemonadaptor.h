@@ -48,12 +48,12 @@ namespace SignonDaemonNS {
             { return *static_cast<QDBusContext *>(m_parent); }
 
     public Q_SLOTS:
-        void registerNewIdentity(QDBusObjectPath &objectPath,
-                                 const QVariant &userdata);
+        void registerNewIdentity(const QVariant &userdata,
+                                 QDBusObjectPath &objectPath);
         void registerStoredIdentity(const quint32 id,
+                                    const QVariant &userdata,
                                     QDBusObjectPath &objectPath,
-                                    QList<QVariant> &identityData,
-                                    const QVariant &userdata);
+                                    QList<QVariant> &identityData);
         QString getAuthSessionObjectPath(const quint32 id,
                                          const QString &type,
                                          const QVariant &userdata);

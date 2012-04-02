@@ -2,14 +2,14 @@
 <node>
   <interface name="com.nokia.SingleSignOn.AuthService">
     <method name="registerNewIdentity">
-      <arg name="objectPath" type="o" direction="out"/>
       <arg name="userdata" type="v" direction="in"/>
+      <arg name="objectPath" type="o" direction="out"/>
     </method>
     <method name="registerStoredIdentity">
       <arg name="id" type="u" direction="in"/>
+      <arg name="userdata" type="v" direction="in"/>
       <arg name="objectPath" type="o" direction="out"/>
       <arg name="identityData" type="av" direction="out"/>
-      <arg name="userdata" type="v" direction="in"/>
     </method>
     <method name="getAuthSessionObjectPath">
       <arg type="s" direction="out"/>

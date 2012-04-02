@@ -39,8 +39,8 @@ namespace SignonDaemonNS {
     SignonDaemonAdaptor::~SignonDaemonAdaptor()
     {}
 
-    void SignonDaemonAdaptor::registerNewIdentity(QDBusObjectPath &objectPath,
-                                                  const QVariant &userdata)
+    void SignonDaemonAdaptor::registerNewIdentity(const QVariant &userdata,
+                                                  QDBusObjectPath &objectPath)
     {
         m_parent->registerNewIdentity(objectPath);
 
@@ -64,9 +64,9 @@ namespace SignonDaemonNS {
     }
 
     void SignonDaemonAdaptor::registerStoredIdentity(const quint32 id,
+                                                     const QVariant &userdata,
                                                      QDBusObjectPath &objectPath,
-                                                     QList<QVariant> &identityData,
-                                                     const QVariant &userdata)
+                                                     QList<QVariant> &identityData)
     {
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
                                         parentDBusContext().message(), id)) {
