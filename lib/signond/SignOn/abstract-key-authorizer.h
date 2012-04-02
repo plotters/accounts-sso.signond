@@ -31,6 +31,7 @@
 #include "SignOn/key-handler.h"
 
 #include <QObject>
+#include <QFlags>
 
 namespace SignOn {
 

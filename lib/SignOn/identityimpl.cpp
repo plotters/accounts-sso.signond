@@ -163,6 +163,7 @@ void IdentityImpl::queryAvailableMethods()
         m_operationQueueHandler.enqueueOperation(
                             SIGNOND_IDENTITY_QUERY_AVAILABLE_METHODS_METHOD);
 
+<<<<<<< HEAD
         /* This flag tells the queryInfo() reply slot that the current query
            should not reply with the 'info()' signal */
         m_infoQueried = false;
@@ -183,6 +184,41 @@ void IdentityImpl::requestCredentialsUpdate(const QString &message)
 {
     TRACE() << "Requesting credentials update.";
     checkConnection();
+=======
+    void IdentityImpl::requestCredentialsUpdate(const QString &message)
+    {
+        QList<QGenericArgument *> args;
+
+        TRACE() << "Requesting credentials update.";
+        checkConnection();
+
+        switch (m_state) {
+            case NeedsRegistration:
+                args << (new Q_ARG(QString, message))
+                     << (new Q_ARG(QVariant, m_userdata));
+                m_operationQueueHandler.enqueueOperation(
+                                SIGNOND_IDENTITY_REQUEST_CREDENTIALS_UPDATE_METHOD,
+                                args);
+                sendRegisterRequest();
+                return;
+            case PendingRegistration:
+                m_operationQueueHandler.enqueueOperation(
+                                SIGNOND_IDENTITY_REQUEST_CREDENTIALS_UPDATE_METHOD,
+                                QList<QGenericArgument *>() << (new Q_ARG(QString, message)));
+                return;
+            case NeedsUpdate:
+                break;
+            case Removed:
+                emit m_parent->error(
+                        Error(Error::IdentityNotFound,
+                              QLatin1String("Removed from database.")));
+                return;
+            case Ready:
+                /* fall trough */
+            default:
+                break;
+        }
+>>>>>>> Expand userdata support
 
     switch (m_state) {
     case NeedsRegistration:
