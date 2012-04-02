@@ -39,8 +39,8 @@ namespace SignonDaemonNS {
     SignonDaemonAdaptor::~SignonDaemonAdaptor()
     {}
 
-    void SignonDaemonAdaptor::registerNewIdentity(QDBusObjectPath &objectPath,
-                                                  const QVariant &userdata)
+    void SignonDaemonAdaptor::registerNewIdentity(const QVariant &userdata,
+                                                  QDBusObjectPath &objectPath)
     {
         m_parent->registerNewIdentity(objectPath);
 
