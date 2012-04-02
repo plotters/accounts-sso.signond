@@ -229,17 +229,29 @@ void IdentityImpl::requestCredentialsUpdate(const QString &message)
 =======
     void IdentityImpl::requestCredentialsUpdate(const QString &message)
     {
+<<<<<<< HEAD
         QList<QGenericArgument *> genArgs;
+=======
+        QList<QGenericArgument *> args;
+>>>>>>> Expand userdata support
 
         TRACE() << "Requesting credentials update.";
         checkConnection();
 
         switch (m_state) {
             case NeedsRegistration:
+<<<<<<< HEAD
                 genArgs << (new Q_ARG(QString, message));
                 m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_REQUEST_CREDENTIALS_UPDATE_METHOD,
                                 genArgs);
+=======
+                args << (new Q_ARG(QString, message))
+                     << (new Q_ARG(QVariant, m_userdata));
+                m_operationQueueHandler.enqueueOperation(
+                                SIGNOND_IDENTITY_REQUEST_CREDENTIALS_UPDATE_METHOD,
+                                args);
+>>>>>>> Expand userdata support
                 sendRegisterRequest();
                 return;
             case PendingRegistration:

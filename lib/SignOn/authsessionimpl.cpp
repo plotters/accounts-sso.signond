@@ -98,8 +98,12 @@ AuthSessionImpl::AuthSessionImpl(AuthSession *parent,
 AuthSessionImpl::~AuthSessionImpl()
 {
     if (m_DBusInterface) {
+<<<<<<< HEAD
         m_DBusInterface->call(QLatin1String("objectUnref"),
                               QVariant::fromValue(QDBusVariant(m_applicationContext)));
+=======
+        m_DBusInterface->call(QLatin1String("objectUnref"), m_userdata);
+>>>>>>> Expand userdata support
         delete m_DBusInterface;
     }
 }
@@ -163,13 +167,18 @@ void AuthSessionImpl::setId(quint32 id)
 
     QVariantList arguments;
     arguments += id;
+<<<<<<< HEAD
     arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
+=======
+    arguments += m_userdata;
+>>>>>>> Expand userdata support
 
     if (m_DBusInterface)
         send2interface(remoteFunctionName, 0, arguments);
     else {
         QList<QGenericArgument *> args;
 
+<<<<<<< HEAD
         args << (new Q_ARG(quint32, id));
 
         m_operationQueueHandler.enqueueOperation(
@@ -178,6 +187,15 @@ void AuthSessionImpl::setId(quint32 id)
                                     QList<QGenericArgument *>() <<
                                     (new Q_ARG(quint32, id)));
 =======
+                                    args);
+    }
+>>>>>>> Expand userdata support
+=======
+        args << (new Q_ARG(quint32, id))
+             << (new Q_ARG(QVariant, m_userdata));
+
+        m_operationQueueHandler.enqueueOperation(
+                                    SIGNOND_SESSION_SET_ID_METHOD,
                                     args);
     }
 >>>>>>> Expand userdata support
@@ -258,6 +276,7 @@ AuthSessionImpl::queryAvailableMechanisms(const QStringList &wantedMechanisms)
 
     QVariantList arguments;
     arguments += wantedMechanisms;
+<<<<<<< HEAD
     arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
 
     if (m_DBusInterface)
@@ -276,6 +295,22 @@ AuthSessionImpl::queryAvailableMechanisms(const QStringList &wantedMechanisms)
         QList<QGenericArgument *> args;
 
         args << (new Q_ARG(QStringList, wantedMechanisms));
+
+        m_operationQueueHandler.enqueueOperation(
+                        SIGNOND_SESSION_QUERY_AVAILABLE_MECHANISMS_METHOD,
+                        args);
+    }
+>>>>>>> Expand userdata support
+=======
+    arguments += m_userdata;
+
+    if (m_DBusInterface)
+        send2interface(remoteFunctionName, SLOT(mechanismsAvailableSlot(const QStringList&)), arguments);
+    else {
+        QList<QGenericArgument *> args;
+
+        args << (new Q_ARG(QStringList, wantedMechanisms))
+             << (new Q_ARG(QVariant, m_userdata));
 
         m_operationQueueHandler.enqueueOperation(
                         SIGNOND_SESSION_QUERY_AVAILABLE_MECHANISMS_METHOD,
@@ -311,7 +346,11 @@ void AuthSessionImpl::process(const SessionData &sessionData,
     QVariantList arguments;
     arguments += sessionDataVa;
     arguments += mechanism;
+<<<<<<< HEAD
     arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
+=======
+    arguments += m_userdata;
+>>>>>>> Expand userdata support
 
     remoteFunctionName = QLatin1String("process");
 
@@ -325,7 +364,8 @@ void AuthSessionImpl::process(const SessionData &sessionData,
         QList<QGenericArgument *> args;
 
         args << (new Q_ARG(QVariantMap, sessionDataVa))
-             << (new Q_ARG(QString, mechanism));
+             << (new Q_ARG(QString, mechanism))
+             << (new Q_ARG(QVariant, m_userdata));
 
         m_operationQueueHandler.enqueueOperation(SIGNOND_SESSION_PROCESS_METHOD,
                                                  args);
@@ -363,6 +403,7 @@ void AuthSessionImpl::cancel()
         m_DBusInterface->call(QDBus::NoBlock,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 QLatin1String("cancel"), m_userdata);
 >>>>>>> Expand userdata support
 =======
@@ -372,6 +413,9 @@ void AuthSessionImpl::cancel()
                               QLatin1String("cancel"),
                               QVariant::fromValue(QDBusVariant(m_applicationContext)));
 >>>>>>> Fix call arguments
+=======
+                QLatin1String("cancel"), m_userdata);
+>>>>>>> Expand userdata support
     }
 
     m_isBusy = false;
