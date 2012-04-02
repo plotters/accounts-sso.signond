@@ -176,14 +176,18 @@ namespace SignOn {
 
     void IdentityImpl::requestCredentialsUpdate(const QString &message)
     {
+        QList<QGenericArgument *> args;
+
         TRACE() << "Requesting credentials update.";
         checkConnection();
 
         switch (m_state) {
             case NeedsRegistration:
+                args << (new Q_ARG(QString, message))
+                     << (new Q_ARG(QVariant, m_userdata));
                 m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_REQUEST_CREDENTIALS_UPDATE_METHOD,
-                                QList<QGenericArgument *>() << (new Q_ARG(QString, message)));
+                                args);
                 sendRegisterRequest();
                 return;
             case PendingRegistration:
