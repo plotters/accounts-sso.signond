@@ -73,7 +73,8 @@ namespace SignOn {
         ~IdentityImpl();
 
         quint32 id() const;
-        AuthSession *createSession(const QString &methodName, QObject *parent = 0);
+        AuthSession *createSession(const QString &methodName,
+                                   QObject *parent = 0);
         void destroySession(AuthSession *session);
 
         QVariant userdata () const

@@ -116,7 +116,8 @@ namespace SignOn {
        return m_identityInfo->id();
     }
 
-    AuthSession *IdentityImpl::createSession(const QString &methodName, QObject *parent)
+    AuthSession *IdentityImpl::createSession(const QString &methodName,
+                                             QObject *parent)
     {
         foreach (AuthSession *authSession, m_authSessions) {
             if (authSession->name() == methodName) {
@@ -127,7 +128,10 @@ namespace SignOn {
             }
         }
 
-        AuthSession *session = new AuthSession(id(), methodName, parent);
+        AuthSession *session = new AuthSession(id(),
+                                               methodName,
+                                               m_userdata,
+                                               parent);
         m_authSessions.append(session);
         return session;
     }

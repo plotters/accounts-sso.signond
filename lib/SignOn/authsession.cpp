@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -31,9 +33,12 @@
 
 namespace SignOn {
 
-    AuthSession::AuthSession(quint32 id, const QString &methodName, QObject *parent)
+    AuthSession::AuthSession(quint32 id,
+                             const QString &methodName,
+                             const QVariant &userdataP,
+                             QObject *parent)
             :  QObject(parent),
-               impl(new AuthSessionImpl(this, id, methodName))
+               impl(new AuthSessionImpl(this, id, methodName, userdataP))
     {
         qRegisterMetaType<SessionData>("SessionData");
         qRegisterMetaType<AuthSessionState>("AuthSession::AuthSessionState");
@@ -43,7 +48,6 @@ namespace SignOn {
 
         if (qMetaTypeId<AuthSessionState>() < QMetaType::User)
             BLAME() << "AuthSession::AuthSession() - AuthSessionState meta type not registered.";
-
     }
 
     AuthSession::~AuthSession()
