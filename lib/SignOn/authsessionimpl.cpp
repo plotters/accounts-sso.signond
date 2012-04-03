@@ -57,11 +57,15 @@ static QVariantMap sessionData2VariantMap(const SessionData &data)
     return result;
 }
 
-AuthSessionImpl::AuthSessionImpl(AuthSession *parent, quint32 id, const QString &methodName)
+AuthSessionImpl::AuthSessionImpl(AuthSession *parent,
+                                 quint32 id,
+                                 const QString &methodName,
+                                 const QVariant &userdataP)
     : QObject(parent),
       m_parent(parent),
       m_operationQueueHandler(this),
-      m_methodName(methodName)
+      m_methodName(methodName),
+      m_userdata(userdataP)
 {
     m_id = id;
     m_DBusInterface = 0;
