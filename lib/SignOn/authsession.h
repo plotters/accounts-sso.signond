@@ -10,6 +10,9 @@
 =======
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+<<<<<<< HEAD
+>>>>>>> Finalize API changes and implementation for user data
+=======
 >>>>>>> Finalize API changes and implementation for user data
  *
  * This library is free software; you can redistribute it and/or
@@ -117,7 +120,11 @@ public:
          */
         AuthSession(quint32 id,
                     const QString &methodName,
+<<<<<<< HEAD
                     const QVariant &applicationContextP,
+=======
+                    const QVariant &userdataP,
+>>>>>>> Finalize API changes and implementation for user data
                     QObject *parent = 0);
         ~AuthSession();
 >>>>>>> Finalize API changes and implementation for user data

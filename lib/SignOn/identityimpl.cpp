@@ -142,6 +142,7 @@ quint32 IdentityImpl::id() const
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 AuthSession *IdentityImpl::createSession(const QString &methodName,
                                          QObject *parent)
 {
@@ -153,6 +154,8 @@ AuthSession *IdentityImpl::createSession(const QString &methodName,
             return 0;
         }
 =======
+=======
+>>>>>>> Finalize API changes and implementation for user data
     AuthSession *IdentityImpl::createSession(const QString &methodName,
                                              QObject *parent)
     {
@@ -167,7 +170,11 @@ AuthSession *IdentityImpl::createSession(const QString &methodName,
 
         AuthSession *session = new AuthSession(id(),
                                                methodName,
+<<<<<<< HEAD
                                                m_applicationContext,
+=======
+                                               m_userdata,
+>>>>>>> Finalize API changes and implementation for user data
                                                parent);
         m_authSessions.append(session);
         return session;

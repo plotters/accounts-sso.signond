@@ -92,7 +92,11 @@ public:
         AuthSessionImpl(AuthSession *parent,
                         quint32 id,
                         const QString &methodName,
+<<<<<<< HEAD
                         const QVariant &applicationContextP);
+=======
+                        const QVariant &userdataP);
+>>>>>>> Finalize API changes and implementation for user data
         ~AuthSessionImpl();
 <<<<<<< HEAD
 <<<<<<< HEAD

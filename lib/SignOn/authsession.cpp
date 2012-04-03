@@ -10,6 +10,9 @@
 =======
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+<<<<<<< HEAD
+>>>>>>> Finalize API changes and implementation for user data
+=======
 >>>>>>> Finalize API changes and implementation for user data
  *
  * This library is free software; you can redistribute it and/or
@@ -38,6 +41,7 @@
 namespace SignOn {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 AuthSession::AuthSession(quint32 id, const QString &methodName,
                          QObject *parent):
     QObject(parent),
@@ -52,6 +56,14 @@ AuthSession::AuthSession(quint32 id, const QString &methodName,
                              QObject *parent)
             :  QObject(parent),
                impl(new AuthSessionImpl(this, id, methodName, applicationContextP))
+=======
+    AuthSession::AuthSession(quint32 id,
+                             const QString &methodName,
+                             const QVariant &userdataP,
+                             QObject *parent)
+            :  QObject(parent),
+               impl(new AuthSessionImpl(this, id, methodName, userdataP))
+>>>>>>> Finalize API changes and implementation for user data
     {
         qRegisterMetaType<SessionData>("SessionData");
         qRegisterMetaType<AuthSessionState>("AuthSession::AuthSessionState");

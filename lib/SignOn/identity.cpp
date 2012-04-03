@@ -10,6 +10,9 @@
 =======
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+<<<<<<< HEAD
+>>>>>>> Finalize API changes and implementation for user data
+=======
 >>>>>>> Finalize API changes and implementation for user data
  *
  * This library is free software; you can redistribute it and/or
@@ -147,6 +150,16 @@ void Identity::signOut()
     void Identity::setApplicationContext (const QVariant &newApplicationContext)
     {
         impl->setApplicationContext(newApplicationContext);
+    }
+
+    QVariant Identity::userdata ()
+    {
+        return impl->userdata();
+    }
+
+    void Identity::setUserdata (const QVariant &newUserdata)
+    {
+        impl->setUserdata(newUserdata);
     }
 
 } //namespace SignOn

@@ -10,6 +10,9 @@
 =======
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+<<<<<<< HEAD
+>>>>>>> Finalize API changes and implementation for user data
+=======
 >>>>>>> Finalize API changes and implementation for user data
  *
  * This library is free software; you can redistribute it and/or
@@ -326,6 +329,22 @@ public:
 Q_SIGNALS:
 =======
         /*!
+<<<<<<< HEAD
+=======
+         * Verifies if the given secret match the stored secret.
+         * When verification is completed, a signal secretVerified() is emitted.
+         * If the operation fails, a signal error() is emitted.
+         * If the credentials are not stored, Error::type() is
+         * Error::CredentialsNotAvailable.
+         *
+         * @see secretVerified()
+         * @see Identity::error()
+         * @param secret String to be verified
+         */
+        void verifySecret(const QString &secret);
+
+        /*!
+>>>>>>> Finalize API changes and implementation for user data
          * Signs out Identity from all services. All authentication sessions using this Identity
          * will be invalidated and all tokens cleared from cache.
          * When sign out is completed, signal signedOut() is emitted.
@@ -339,6 +358,25 @@ Q_SIGNALS:
          */
         void signOut();
 
+<<<<<<< HEAD
+=======
+        /*!
+         * Retrieve user data set earlier.
+         *
+         * @return User data
+         */
+        QVariant userdata ();
+
+        /*!
+         * Set user data to be passed to the signond.
+         *
+         * @param newUserdata User data to be set
+         */
+        void setUserdata (const QVariant &newUserdata);
+
+    Q_SIGNALS:
+
+>>>>>>> Finalize API changes and implementation for user data
         /*!
          * Retrieve application context data set earlier.
          *
