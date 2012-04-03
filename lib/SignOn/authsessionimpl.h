@@ -78,7 +78,10 @@ public:
     ~AuthSessionImpl();
 =======
     public:
-        AuthSessionImpl(AuthSession *parent, quint32 id, const QString &methodName);
+        AuthSessionImpl(AuthSession *parent,
+                        quint32 id,
+                        const QString &methodName,
+                        const QVariant &userdataP);
         ~AuthSessionImpl();
         QVariant userdata() const
         { return m_userdata; }

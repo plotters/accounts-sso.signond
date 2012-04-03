@@ -120,6 +120,7 @@ quint32 IdentityImpl::id() const
    return m_identityInfo->id();
 }
 
+<<<<<<< HEAD
 AuthSession *IdentityImpl::createSession(const QString &methodName,
                                          QObject *parent)
 {
@@ -130,6 +131,26 @@ AuthSession *IdentityImpl::createSession(const QString &methodName,
                     "`%1` already requested.").arg(methodName);
             return 0;
         }
+=======
+    AuthSession *IdentityImpl::createSession(const QString &methodName,
+                                             QObject *parent)
+    {
+        foreach (AuthSession *authSession, m_authSessions) {
+            if (authSession->name() == methodName) {
+                qWarning() << QString::fromLatin1(
+                        "Authentication session for method "
+                        "`%1` already requested.").arg(methodName);
+                return 0;
+            }
+        }
+
+        AuthSession *session = new AuthSession(id(),
+                                               methodName,
+                                               m_userdata,
+                                               parent);
+        m_authSessions.append(session);
+        return session;
+>>>>>>> Finalize API changes and implementation for user data
     }
 
     AuthSession *session = new AuthSession(id(), methodName, parent);

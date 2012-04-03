@@ -88,9 +88,16 @@ public:
                  const quint32 id = 0);
     ~IdentityImpl();
 
+<<<<<<< HEAD
     quint32 id() const;
     AuthSession *createSession(const QString &methodName, QObject *parent = 0);
     void destroySession(AuthSession *session);
+=======
+        quint32 id() const;
+        AuthSession *createSession(const QString &methodName,
+                                   QObject *parent = 0);
+        void destroySession(AuthSession *session);
+>>>>>>> Finalize API changes and implementation for user data
 
 <<<<<<< HEAD
 public Q_SLOTS:

@@ -2,9 +2,15 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
+<<<<<<< HEAD
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+=======
+ * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+>>>>>>> Finalize API changes and implementation for user data
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -31,6 +37,7 @@
 
 namespace SignOn {
 
+<<<<<<< HEAD
 AuthSession::AuthSession(quint32 id, const QString &methodName,
                          QObject *parent):
     QObject(parent),
@@ -38,16 +45,33 @@ AuthSession::AuthSession(quint32 id, const QString &methodName,
 {
     qRegisterMetaType<SessionData>("SessionData");
     qRegisterMetaType<AuthSessionState>("AuthSession::AuthSessionState");
+=======
+    AuthSession::AuthSession(quint32 id,
+                             const QString &methodName,
+                             const QVariant &userdataP,
+                             QObject *parent)
+            :  QObject(parent),
+               impl(new AuthSessionImpl(this, id, methodName, userdataP))
+    {
+        qRegisterMetaType<SessionData>("SessionData");
+        qRegisterMetaType<AuthSessionState>("AuthSession::AuthSessionState");
+>>>>>>> Finalize API changes and implementation for user data
 
     if (qMetaTypeId<SessionData>() < QMetaType::User)
         BLAME() << "AuthSession::AuthSession() - "
             "SessionData meta type not registered.";
 
+<<<<<<< HEAD
     if (qMetaTypeId<AuthSessionState>() < QMetaType::User)
         BLAME() << "AuthSession::AuthSession() - "
             "AuthSessionState meta type not registered.";
 
 }
+=======
+        if (qMetaTypeId<AuthSessionState>() < QMetaType::User)
+            BLAME() << "AuthSession::AuthSession() - AuthSessionState meta type not registered.";
+    }
+>>>>>>> Finalize API changes and implementation for user data
 
 AuthSession::~AuthSession()
 {

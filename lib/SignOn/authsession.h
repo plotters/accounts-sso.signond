@@ -2,9 +2,15 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
+<<<<<<< HEAD
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+=======
+ * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+>>>>>>> Finalize API changes and implementation for user data
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -82,6 +88,7 @@ public:
         UserInteractionError            /**< User interaction dialog failed */
     };
 
+<<<<<<< HEAD
     /*!
      * @enum AuthSessionState
      * Codes for the states of the AuthSession object.
@@ -103,6 +110,17 @@ public:
         CustomState,                    /**< Custom message. */
         MaxState,
     };
+=======
+    protected:
+        /*!
+         * @internal
+         */
+        AuthSession(quint32 id,
+                    const QString &methodName,
+                    const QVariant &userdataP,
+                    QObject *parent = 0);
+        ~AuthSession();
+>>>>>>> Finalize API changes and implementation for user data
 
 protected:
     /*!

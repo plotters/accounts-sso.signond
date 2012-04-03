@@ -2,9 +2,15 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
+<<<<<<< HEAD
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+=======
+ * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+>>>>>>> Finalize API changes and implementation for user data
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -302,6 +308,7 @@ public:
      */
     void verifySecret(const QString &secret);
 
+<<<<<<< HEAD
      /*!
      * Signs out Identity from all services. All authentication sessions using
      * this Identity will be invalidated and all tokens cleared from cache.
@@ -317,6 +324,37 @@ public:
     void signOut();
 
 Q_SIGNALS:
+=======
+        /*!
+         * Signs out Identity from all services. All authentication sessions using this Identity
+         * will be invalidated and all tokens cleared from cache.
+         * When sign out is completed, signal signedOut() is emitted.
+         * If the operation fails, a signal error() is emitted.
+         * If signout fails, Error::type() is
+         * Error::SignOutFailed.
+         *
+         * All clients using same identity will receive signedOut signal.
+         * @see signedOut()
+         * @see Identity::error()
+         */
+        void signOut();
+
+        /*!
+         * Retrieve user data set earlier.
+         *
+         * @return User data
+         */
+        QVariant userdata ();
+
+        /*!
+         * Set user data to be passed to the signond.
+         *
+         * @param newUserdata User data to be set
+         */
+        void setUserdata (const QVariant &newUserdata);
+
+    Q_SIGNALS:
+>>>>>>> Finalize API changes and implementation for user data
 
     /*!
      * Emitted when an error occurs while performing an operation.

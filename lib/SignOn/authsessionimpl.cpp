@@ -63,11 +63,21 @@ static QVariantMap sessionData2VariantMap(const SessionData &data)
 
 AuthSessionImpl::AuthSessionImpl(AuthSession *parent,
                                  quint32 id,
+<<<<<<< HEAD
                                  const QString &methodName):
     QObject(parent),
     m_parent(parent),
     m_operationQueueHandler(this),
     m_methodName(methodName)
+=======
+                                 const QString &methodName,
+                                 const QVariant &userdataP)
+    : QObject(parent),
+      m_parent(parent),
+      m_operationQueueHandler(this),
+      m_methodName(methodName),
+      m_userdata(userdataP)
+>>>>>>> Finalize API changes and implementation for user data
 {
     m_id = id;
     m_DBusInterface = 0;
