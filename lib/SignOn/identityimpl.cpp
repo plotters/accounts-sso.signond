@@ -187,24 +187,26 @@ void IdentityImpl::requestCredentialsUpdate(const QString &message)
 =======
     void IdentityImpl::requestCredentialsUpdate(const QString &message)
     {
-        QList<QGenericArgument *> args;
+        QList<QGenericArgument *> genArgs;
 
         TRACE() << "Requesting credentials update.";
         checkConnection();
 
         switch (m_state) {
             case NeedsRegistration:
-                args << (new Q_ARG(QString, message))
-                     << (new Q_ARG(QVariant, m_userdata));
+                genArgs << (new Q_ARG(QString, message))
+                        << (new Q_ARG(QVariant, m_userdata));
                 m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_REQUEST_CREDENTIALS_UPDATE_METHOD,
-                                args);
+                                genArgs);
                 sendRegisterRequest();
                 return;
             case PendingRegistration:
+                genArgs << (new Q_ARG(QString, message))
+                        << (new Q_ARG(QVariant, m_userdata));
                 m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_REQUEST_CREDENTIALS_UPDATE_METHOD,
-                                QList<QGenericArgument *>() << (new Q_ARG(QString, message)));
+                                genArgs);
                 return;
             case NeedsUpdate:
                 break;
@@ -220,6 +222,7 @@ void IdentityImpl::requestCredentialsUpdate(const QString &message)
         }
 >>>>>>> Expand userdata support
 
+<<<<<<< HEAD
     switch (m_state) {
     case NeedsRegistration:
         m_operationQueueHandler.enqueueOperation(
@@ -274,6 +277,61 @@ void IdentityImpl::storeCredentials(const IdentityInfo &info)
         IdentityInfo localInfo =
             info.impl->isEmpty() ?
             *m_identityInfo : *(m_tmpIdentityInfo = new IdentityInfo(info));
+=======
+        QList<QVariant> args;
+        args << message << m_userdata;
+        bool result = sendRequest(__func__, args,
+                                  SLOT(storeCredentialsReply(const quint32)),
+                                  SIGNOND_MAX_TIMEOUT);
+        if (!result) {
+            TRACE() << "Error occurred.";
+            emit m_parent->error(
+                    Error(Error::InternalCommunication,
+                          SIGNOND_INTERNAL_COMMUNICATION_ERR_STR));
+        }
+    }
+
+    void IdentityImpl::storeCredentials(const IdentityInfo &info)
+    {
+        IdentityInfo localInfo;
+        QList<QGenericArgument *> genArgs;
+
+        TRACE() << "Storing credentials";
+        checkConnection();
+
+        switch (m_state) {
+            case Removed:
+                updateState(NeedsRegistration);
+                // --Fallthrough-here--
+            case NeedsRegistration:
+                localInfo =
+                    info.impl->isEmpty() ?
+                    *m_identityInfo : *(m_tmpIdentityInfo = new IdentityInfo(info));
+                genArgs << (new Q_ARG(SignOn::IdentityInfo, localInfo))
+                        << (new Q_ARG(QVariant, m_userdata));
+                m_operationQueueHandler.enqueueOperation(
+                                        SIGNOND_IDENTITY_STORE_CREDENTIALS_METHOD,
+                                        genArgs);
+                sendRegisterRequest();
+                return;
+            case PendingRegistration:
+                localInfo =
+                    info.impl->isEmpty() ?
+                    *m_identityInfo : *(m_tmpIdentityInfo = new IdentityInfo(info));
+                genArgs << (new Q_ARG(SignOn::IdentityInfo, localInfo))
+                        << (new Q_ARG(QVariant, m_userdata));
+                m_operationQueueHandler.enqueueOperation(
+                                        SIGNOND_IDENTITY_STORE_CREDENTIALS_METHOD,
+                                        genArgs);
+                return;
+            case NeedsUpdate:
+                break;
+            case Ready:
+                /* fall trough */
+            default:
+                break;
+        }
+>>>>>>> Finalize midlayer userdata changes
 
         m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_STORE_CREDENTIALS_METHOD,
@@ -282,6 +340,7 @@ void IdentityImpl::storeCredentials(const IdentityInfo &info)
         sendRegisterRequest();
         return;
         }
+<<<<<<< HEAD
     case PendingRegistration:
         {
         IdentityInfo localInfo =
@@ -292,6 +351,22 @@ void IdentityImpl::storeCredentials(const IdentityInfo &info)
                                 QList<QGenericArgument *>() <<
                                 (new Q_ARG(SignOn::IdentityInfo, localInfo)));
         return;
+=======
+
+        QList<QVariant> args;
+        QVariantMap map = info.impl->toMap();
+        map.insert(SIGNOND_IDENTITY_INFO_ID, m_identityInfo->id());
+        map.insert(SIGNOND_IDENTITY_INFO_SECRET, info.secret());
+        args << map << m_userdata;
+
+        bool result = sendRequest("store", args,
+                                  SLOT(storeCredentialsReply(const quint32)));
+        if (!result) {
+            TRACE() << "Error occurred.";
+            emit m_parent->error(
+                    Error(Error::InternalCommunication,
+                          SIGNOND_INTERNAL_COMMUNICATION_ERR_STR));
+>>>>>>> Finalize midlayer userdata changes
         }
     case NeedsUpdate:
         break;
@@ -301,12 +376,20 @@ void IdentityImpl::storeCredentials(const IdentityInfo &info)
         break;
     }
 
+<<<<<<< HEAD
     if (info.impl->isEmpty()) {
         emit m_parent->error(
             Error(Error::StoreFailed,
                   QLatin1String("Invalid Identity data.")));
         return;
     }
+=======
+    void IdentityImpl::remove()
+    {
+        QList<QGenericArgument *> genArgs;
+
+        TRACE() << "Removing credentials.";
+>>>>>>> Finalize midlayer userdata changes
 
     QList<QVariant> args;
     QVariantMap map = info.impl->toMap();
@@ -324,6 +407,7 @@ void IdentityImpl::storeCredentials(const IdentityInfo &info)
     }
 }
 
+<<<<<<< HEAD
 void IdentityImpl::remove()
 {
     TRACE() << "Removing credentials.";
@@ -361,6 +445,93 @@ void IdentityImpl::remove()
 
         bool result = sendRequest(__func__, QList<QVariant>(),
                                   SLOT(removeReply()));
+=======
+            switch (m_state) {
+                case NeedsRegistration:
+                    genArgs << (new Q_ARG(QVariant, m_userdata));
+                    m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_REMOVE_METHOD,
+                                                             genArgs);
+                    sendRegisterRequest();
+                    return;
+                case PendingRegistration:
+                    genArgs << (new Q_ARG(QVariant, m_userdata));
+                    m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_REMOVE_METHOD,
+                                                             genArgs);
+                    return;
+                case Removed:
+                    emit m_parent->error(
+                            Error(Error::IdentityNotFound,
+                                  QLatin1String("Already removed from database.")));
+                    return;
+                case NeedsUpdate:
+                    break;
+                case Ready:
+                /* fall trough */
+                default:
+                    break;
+            }
+
+            QList<QVariant> args;
+
+            args << m_userdata;
+            bool result = sendRequest(__func__, args,
+                                      SLOT(removeReply()));
+            if (!result) {
+                TRACE() << "Error occurred.";
+                emit m_parent->error(
+                        Error(Error::InternalCommunication,
+                              SIGNOND_INTERNAL_COMMUNICATION_ERR_STR));
+            }
+        } else {
+            emit m_parent->error(
+                    Error(Error::IdentityNotFound,
+                          QLatin1String("Remove request failed. The identity is not stored")));
+        }
+    }
+
+    void IdentityImpl::addReference(const QString &reference)
+    {
+        QList<QGenericArgument *> genArgs;
+
+        TRACE() << "Adding reference to identity";
+        checkConnection();
+
+        switch (m_state) {
+            case NeedsRegistration:
+                genArgs << (new Q_ARG(QString, reference))
+                        << (new Q_ARG(QVariant, m_userdata));
+                m_operationQueueHandler.enqueueOperation(
+                                SIGNOND_IDENTITY_ADD_REFERENCE_METHOD,
+                                genArgs);
+                sendRegisterRequest();
+                return;
+            case PendingRegistration:
+                genArgs << (new Q_ARG(QString, reference))
+                        << (new Q_ARG(QVariant, m_userdata));
+                m_operationQueueHandler.enqueueOperation(
+                                SIGNOND_IDENTITY_ADD_REFERENCE_METHOD,
+                                genArgs);
+                return;
+            case NeedsUpdate:
+                break;
+            case Removed:
+                emit m_parent->error(
+                        Error(Error::IdentityNotFound,
+                              QLatin1String("Removed from database.")));
+                return;
+            case Ready:
+                /* fall trough */
+            default:
+                break;
+        }
+
+        QList<QVariant> args;
+
+        args << reference << m_userdata;
+        bool result = sendRequest(__func__,
+                                  args,
+                                  SLOT(addReferenceReply()));
+>>>>>>> Finalize midlayer userdata changes
         if (!result) {
             TRACE() << "Error occurred.";
             emit m_parent->error(
@@ -374,6 +545,7 @@ void IdentityImpl::remove()
     }
 }
 
+<<<<<<< HEAD
 void IdentityImpl::addReference(const QString &reference)
 {
     TRACE() << "Adding reference to identity";
@@ -413,9 +585,60 @@ void IdentityImpl::addReference(const QString &reference)
         emit m_parent->error(
                 Error(Error::InternalCommunication,
                       SIGNOND_INTERNAL_COMMUNICATION_ERR_STR));
+=======
+    void IdentityImpl::removeReference(const QString &reference)
+    {
+        QList<QGenericArgument *> genArgs;
+
+        TRACE() << "Removing reference from identity";
+        checkConnection();
+
+        switch (m_state) {
+            case NeedsRegistration:
+                genArgs << (new Q_ARG(QString, reference))
+                        << (new Q_ARG(QVariant, m_userdata));
+                m_operationQueueHandler.enqueueOperation(
+                                SIGNOND_IDENTITY_REMOVE_REFERENCE_METHOD,
+                                genArgs);
+                sendRegisterRequest();
+                return;
+            case PendingRegistration:
+                genArgs << (new Q_ARG(QString, reference))
+                        << (new Q_ARG(QVariant, m_userdata));
+                m_operationQueueHandler.enqueueOperation(
+                                SIGNOND_IDENTITY_REMOVE_REFERENCE_METHOD,
+                                genArgs);
+                return;
+            case NeedsUpdate:
+                break;
+            case Removed:
+                emit m_parent->error(
+                        Error(Error::IdentityNotFound,
+                              QLatin1String("Removed from database.")));
+                return;
+            case Ready:
+                /* fall trough */
+            default:
+                break;
+        }
+
+        QList<QVariant> args;
+
+        args << reference << m_userdata;
+        bool result = sendRequest(__func__,
+                                  args,
+                                  SLOT(removeReferenceReply()));
+        if (!result) {
+            TRACE() << "Error occurred.";
+            emit m_parent->error(
+                    Error(Error::InternalCommunication,
+                          SIGNOND_INTERNAL_COMMUNICATION_ERR_STR));
+        }
+>>>>>>> Finalize midlayer userdata changes
     }
 }
 
+<<<<<<< HEAD
 void IdentityImpl::removeReference(const QString &reference)
 {
     TRACE() << "Removing reference from identity";
@@ -445,6 +668,42 @@ void IdentityImpl::removeReference(const QString &reference)
         /* fall trough */
     default:
         break;
+=======
+    void IdentityImpl::queryInfo()
+    {
+        QList<QGenericArgument *> genArgs;
+
+        TRACE() << "Querying info.";
+        checkConnection();
+
+        switch (m_state) {
+            case NeedsRegistration:
+                genArgs << (new Q_ARG(QVariant, m_userdata));
+                m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_QUERY_INFO_METHOD,
+                                                         genArgs);
+                sendRegisterRequest();
+                return;
+            case PendingRegistration:
+                genArgs << (new Q_ARG(QVariant, m_userdata));
+                m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_QUERY_INFO_METHOD,
+                                                         genArgs);
+                return;
+            case Removed:
+                emit m_parent->error(
+                        Error(Error::IdentityNotFound,
+                              QLatin1String("Removed from database.")));
+                return;
+            case NeedsUpdate:
+                m_infoQueried = true;
+                updateContents();
+                break;
+            case Ready:
+                emit m_parent->info(IdentityInfo(*m_identityInfo));
+                return;
+            default:
+                break;
+        }
+>>>>>>> Finalize midlayer userdata changes
     }
 
     bool result = sendRequest(__func__, QList<QVariant>() << QVariant(reference),
@@ -457,6 +716,7 @@ void IdentityImpl::removeReference(const QString &reference)
     }
 }
 
+<<<<<<< HEAD
 void IdentityImpl::queryInfo()
 {
     TRACE() << "Querying info.";
@@ -486,9 +746,61 @@ void IdentityImpl::queryInfo()
         return;
     default:
         break;
+=======
+    void IdentityImpl::verifyUser(const QVariantMap &params)
+    {
+        QList<QGenericArgument *> genArgs;
+
+        TRACE() << "Verifying user.";
+        checkConnection();
+
+        switch (m_state) {
+            case NeedsRegistration:
+                genArgs << (new Q_ARG(QVariantMap, params))
+                        << (new Q_ARG(QVariant, m_userdata));
+                m_operationQueueHandler.enqueueOperation(
+                                        SIGNOND_IDENTITY_VERIFY_USER_METHOD,
+                                        genArgs);
+                sendRegisterRequest();
+                return;
+            case PendingRegistration:
+                genArgs << (new Q_ARG(QVariantMap, params))
+                        << (new Q_ARG(QVariant, m_userdata));
+                m_operationQueueHandler.enqueueOperation(
+                                        SIGNOND_IDENTITY_VERIFY_USER_METHOD,
+                                        genArgs);
+                return;
+            case Removed:
+                emit m_parent->error(
+                        Error(Error::IdentityNotFound,
+                              QLatin1String("Removed from database.")));
+                return;
+            case NeedsUpdate:
+                break;
+            case Ready:
+                /* fall trough */
+            default:
+                break;
+        }
+
+        QList<QVariant> args;
+
+        args << params << m_userdata;
+        bool result = sendRequest(__func__,
+                                  args,
+                                  SLOT(verifyUserReply(const bool)),
+                                  SIGNOND_MAX_TIMEOUT);
+        if (!result) {
+            TRACE() << "Error occurred.";
+            emit m_parent->error(
+                    Error(Error::InternalCommunication,
+                          SIGNOND_INTERNAL_COMMUNICATION_ERR_STR));
+        }
+>>>>>>> Finalize midlayer userdata changes
     }
 }
 
+<<<<<<< HEAD
 void IdentityImpl::verifyUser(const QString &message)
 {
     QVariantMap params;
@@ -543,6 +855,106 @@ void IdentityImpl::verifySecret(const QString &secret)
 {
     TRACE();
     checkConnection();
+=======
+    void IdentityImpl::verifySecret(const QString &secret)
+    {
+        QList<QGenericArgument *> genArgs;
+
+        TRACE();
+        checkConnection();
+
+        switch (m_state) {
+            case NeedsRegistration:
+                genArgs << (new Q_ARG(QString, secret))
+                        << (new Q_ARG(QVariant, m_userdata));
+                m_operationQueueHandler.enqueueOperation(
+                                        SIGNOND_IDENTITY_VERIFY_SECRET_METHOD,
+                                        genArgs);
+                sendRegisterRequest();
+                return;
+            case PendingRegistration:
+                genArgs << (new Q_ARG(QString, secret))
+                        << (new Q_ARG(QVariant, m_userdata));
+                m_operationQueueHandler.enqueueOperation(
+                                        SIGNOND_IDENTITY_VERIFY_SECRET_METHOD,
+                                        genArgs);
+                return;
+            case Removed:
+                emit m_parent->error(
+                        Error(Error::IdentityNotFound,
+                              QLatin1String("Removed from database.")));
+                return;
+            case NeedsUpdate:
+                break;
+            case Ready:
+                /* fall trough */
+            default:
+                break;
+        }
+
+        QList<QVariant> args;
+
+        args << secret << m_userdata;
+        bool result = sendRequest(__func__,
+                                  args,
+                                  SLOT(verifySecretReply(const bool)));
+        if (!result) {
+            TRACE() << "Error occurred.";
+            emit m_parent->error(
+                    Error(Error::InternalCommunication,
+                          SIGNOND_INTERNAL_COMMUNICATION_ERR_STR));
+        }
+    }
+
+    void IdentityImpl::signOut()
+    {
+        QList<QGenericArgument *> genArgs;
+
+        TRACE() << "Signing out.";
+        checkConnection();
+
+        /* if this is a stored identity, inform server about signing out
+           so that other client identity objects having the same id will
+           be able to perform the operation.
+        */
+        if (id() != SIGNOND_NEW_IDENTITY) {
+            switch (m_state) {
+                case NeedsRegistration:
+                    genArgs << (new Q_ARG(QVariant, m_userdata));
+                    m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_SIGN_OUT_METHOD,
+                                                             genArgs);
+                    sendRegisterRequest();
+                    return;
+                case PendingRegistration:
+                    genArgs << (new Q_ARG(QVariant, m_userdata));
+                    m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_SIGN_OUT_METHOD,
+                                                             genArgs);
+                    return;
+                case Removed:
+                    break;
+                case NeedsUpdate:
+                    break;
+                case Ready:
+                    break;
+                default:
+                    break;
+            }
+
+            QList<QVariant> args;
+
+            args << m_userdata;
+            bool result = sendRequest(__func__, args,
+                                      SLOT(signOutReply()));
+            if (!result) {
+                TRACE() << "Error occurred.";
+                emit m_parent->error(
+                        Error(Error::InternalCommunication,
+                              SIGNOND_INTERNAL_COMMUNICATION_ERR_STR));
+            } else {
+                m_signOutRequestedByThisIdentity = true;
+            }
+        }
+>>>>>>> Finalize midlayer userdata changes
 
     switch (m_state) {
     case NeedsRegistration:
