@@ -33,11 +33,11 @@
                   "check the signon daemon and authentication plugin.")
 
 #define SIGNOND_SESSION_PROCESS_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("process(const SessionData &, const QString &)")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("process(const SessionData &, const QString &, const QVariant &)")
 #define SIGNOND_SESSION_SET_ID_METHOD \
     SIGNOND_NORMALIZE_METHOD_SIGNATURE("setId(quint32)")
 #define SIGNOND_SESSION_QUERY_AVAILABLE_MECHANISMS_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("queryAvailableMechanisms(const QStringList &)")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("queryAvailableMechanisms(const QStringList &, const QVariant &)")
 
 #ifndef SIGNOND_NEW_IDENTITY
     #define SIGNOND_NEW_IDENTITY 0
