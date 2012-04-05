@@ -49,23 +49,23 @@
 #define SIGNOND_IDENTITY_QUERY_AVAILABLE_METHODS_METHOD \
     SIGNOND_NORMALIZE_METHOD_SIGNATURE("queryAvailableMethods()")
 #define SIGNOND_IDENTITY_REQUEST_CREDENTIALS_UPDATE_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("requestCredentialsUpdate(const QString &)")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("requestCredentialsUpdate(const QString &, const QVariant &)")
 #define SIGNOND_IDENTITY_STORE_CREDENTIALS_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("storeCredentials(const IdentityInfo &)")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("storeCredentials(const IdentityInfo &, const QVariant &)")
 #define SIGNOND_IDENTITY_REMOVE_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("remove()")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("remove(const QVariant &)")
 #define SIGNOND_IDENTITY_QUERY_INFO_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("queryInfo()")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("queryInfo(const QVariant &)")
 #define SIGNOND_IDENTITY_ADD_REFERENCE_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("addReference(const QString &)")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("addReference(const QString &, const QVariant &)")
 #define SIGNOND_IDENTITY_REMOVE_REFERENCE_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("removeReference(const QString &)")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("removeReference(const QString &, const QVariant &)")
 #define SIGNOND_IDENTITY_VERIFY_USER_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("verifyUser(const QVariantMap &)")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("verifyUser(const QVariantMap &, const QVariant &)")
 #define SIGNOND_IDENTITY_VERIFY_SECRET_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("verifySecret(const QString &)")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("verifySecret(const QString &, const QVariant &)")
 #define SIGNOND_IDENTITY_SIGN_OUT_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("signOut()")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("signOut(const QVariant &)")
 
 namespace SignOn {
 
@@ -95,7 +95,11 @@ IdentityImpl::IdentityImpl(Identity *parent, const quint32 id):
           m_state(NeedsRegistration),
           m_infoQueried(true),
           m_signOutRequestedByThisIdentity(false),
+<<<<<<< HEAD
           m_applicationContext(QString::fromLatin1(""))
+=======
+          m_userdata(QString::fromLatin1(""))
+>>>>>>> Method signature fixes
     {
         m_identityInfo->setId(id);
         sendRegisterRequest();
