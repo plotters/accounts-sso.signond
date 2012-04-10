@@ -10,6 +10,9 @@
 =======
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+<<<<<<< HEAD
+>>>>>>> Use QDBusVariant instead of QVariant
+=======
 >>>>>>> Use QDBusVariant instead of QVariant
  *
  * This library is free software; you can redistribute it and/or
@@ -518,10 +521,17 @@ void SignonDaemon::identityStored(SignonIdentity *identity)
     }
 }
 
+<<<<<<< HEAD
 void SignonDaemon::registerNewIdentity(const QDBusVariant &applicationContext,
                                        QDBusObjectPath &objectPath)
 {
     Q_UNUSED(applicationContext);
+=======
+void SignonDaemon::registerNewIdentity(const QDBusVariant &userdata,
+                                       QDBusObjectPath &objectPath)
+{
+    Q_UNUSED(userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
     TRACE() << "Registering new identity:";
 
     SignonIdentity *identity =
@@ -557,6 +567,7 @@ int SignonDaemon::authSessionTimeout() const
 <<<<<<< HEAD
 void SignonDaemon::getIdentity(const quint32 id,
                                QDBusObjectPath &objectPath,
+<<<<<<< HEAD
                                QVariantMap &identityData)
 =======
 void SignonDaemon::registerStoredIdentity(const quint32 id,
@@ -566,6 +577,12 @@ void SignonDaemon::registerStoredIdentity(const quint32 id,
 >>>>>>> Use QDBusVariant instead of QVariant
 {
     Q_UNUSED(applicationContext);
+=======
+                               QVariantMap &identityData,
+                               const QDBusVariant &applicationContext)
+{
+    Q_UNUSED(userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
     SIGNON_RETURN_IF_CAM_UNAVAILABLE();
 
     TRACE() << "Registering identity:" << id;
@@ -587,7 +604,11 @@ void SignonDaemon::registerStoredIdentity(const quint32 id,
     }
 
     bool ok;
+<<<<<<< HEAD
     SignonIdentityInfo info = identity->queryInfo(ok, applicationContext, false);
+=======
+    SignonIdentityInfo info = identity->queryInfo(ok, userdata, false);
+>>>>>>> Use QDBusVariant instead of QVariant
 
     if (info.isNew())
     {
@@ -712,6 +733,7 @@ bool SignonDaemon::clear()
 
 QString SignonDaemon::getAuthSessionObjectPath(const quint32 id,
 <<<<<<< HEAD
+<<<<<<< HEAD
                                                const QString type)
 =======
                                                const QString type,
@@ -723,6 +745,12 @@ QString SignonDaemon::getAuthSessionObjectPath(const quint32 id,
 >>>>>>> Rename 'userdata' to 'applicationContext'
 {
     Q_UNUSED(applicationContext);
+=======
+                                               const QString type,
+                                               const QDBusVariant &userdata)
+{
+    Q_UNUSED(userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
 
     bool supportsAuthMethod = false;
     pid_t ownerPid = AccessControlManagerHelper::pidOfPeer(*this);
@@ -730,7 +758,11 @@ QString SignonDaemon::getAuthSessionObjectPath(const quint32 id,
         SignonAuthSession::getAuthSessionObjectPath(id, type, this,
                                                     supportsAuthMethod,
                                                     ownerPid,
+<<<<<<< HEAD
                                                     applicationContext.variant());
+=======
+                                                    userdata.variant());
+>>>>>>> Use QDBusVariant instead of QVariant
     if (objectPath.isEmpty() && !supportsAuthMethod) {
         sendErrorReply(SIGNOND_METHOD_NOT_KNOWN_ERR_NAME,
                        SIGNOND_METHOD_NOT_KNOWN_ERR_STR);

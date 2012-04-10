@@ -4,12 +4,17 @@
  * Copyright (C) 2009-2010 Nokia Corporation.
 <<<<<<< HEAD
  * Copyright (C) 2012 Canonical Ltd.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+<<<<<<< HEAD
 =======
  * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+>>>>>>> Use QDBusVariant instead of QVariant
+=======
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
 >>>>>>> Use QDBusVariant instead of QVariant
  *
@@ -86,7 +91,11 @@ public Q_SLOTS:
                                                 SignonDaemon *parent,
                                                 bool &supportsAuthMethod,
                                                 pid_t ownerPid,
+<<<<<<< HEAD
                                                 const QVariant &applicationContext);
+=======
+                                                const QVariant &userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
         static void stopAllAuthSessions();
         quint32 id() const;
         QString method() const;
@@ -95,14 +104,21 @@ public Q_SLOTS:
 
     public Q_SLOTS:
         QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms,
+<<<<<<< HEAD
                                              const QDBusVariant &applicationContext);
         QVariantMap process(const QVariantMap &sessionDataVa,
                             const QString &mechanism,
 <<<<<<< HEAD
+=======
+                                             const QDBusVariant &userdata);
+        QVariantMap process(const QVariantMap &sessionDataVa,
+                            const QString &mechanism,
+>>>>>>> Use QDBusVariant instead of QVariant
                             const QDBusVariant &userdata);
         void cancel(const QDBusVariant &userdata);
         void setId(quint32 id, const QDBusVariant &userdata);
         void objectUnref(const QDBusVariant &userdata);
+<<<<<<< HEAD
 >>>>>>> Use QDBusVariant instead of QVariant
 =======
                             const QDBusVariant &applicationContext);
@@ -110,6 +126,8 @@ public Q_SLOTS:
         void setId(quint32 id, const QDBusVariant &applicationContext);
         void objectUnref(const QDBusVariant &applicationContext);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+>>>>>>> Use QDBusVariant instead of QVariant
 
 Q_SIGNALS:
     void stateChanged(int state, const QString &message);

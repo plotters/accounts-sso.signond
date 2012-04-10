@@ -158,6 +158,7 @@ SignonIdentityInfo SignonIdentity::queryInfo(bool &ok, bool queryPassword)
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (needLoadFromDB) {
         if (m_pInfo != 0) {
             delete m_pInfo;
@@ -168,6 +169,13 @@ SignonIdentityInfo SignonIdentity::queryInfo(bool &ok, bool queryPassword)
                                                  bool queryPassword)
     {
         Q_UNUSED(applicationContext);
+=======
+    SignonIdentityInfo SignonIdentity::queryInfo(bool &ok,
+                                                 const QDBusVariant &userdata,
+                                                 bool queryPassword)
+    {
+        Q_UNUSED(userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
 
         ok = true;
 >>>>>>> Use QDBusVariant instead of QVariant
@@ -185,6 +193,7 @@ SignonIdentityInfo SignonIdentity::queryInfo(bool &ok, bool queryPassword)
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     /* Make sure that we clear the password, if the caller doesn't need it */
     SignonIdentityInfo info = *m_pInfo;
     if (!queryPassword) {
@@ -197,6 +206,12 @@ SignonIdentityInfo SignonIdentity::queryInfo(bool &ok, bool queryPassword)
                                       const QDBusVariant &applicationContext)
     {
         Q_UNUSED(applicationContext);
+=======
+    bool SignonIdentity::addReference(const QString &reference,
+                                      const QDBusVariant &userdata)
+    {
+        Q_UNUSED(userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
 
         TRACE() << "addReference: " << reference;
 >>>>>>> Use QDBusVariant instead of QVariant
@@ -220,6 +235,7 @@ bool SignonIdentity::addReference(const QString &reference)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 bool SignonIdentity::removeReference(const QString &reference)
 {
     TRACE() << "removeReference: " << reference;
@@ -228,6 +244,12 @@ bool SignonIdentity::removeReference(const QString &reference)
                                          const QDBusVariant &applicationContext)
     {
         Q_UNUSED(applicationContext);
+=======
+    bool SignonIdentity::removeReference(const QString &reference,
+                                         const QDBusVariant &userdata)
+    {
+        Q_UNUSED(userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
 
         TRACE() << "removeReference: " << reference;
 >>>>>>> Use QDBusVariant instead of QVariant
@@ -247,6 +269,7 @@ bool SignonIdentity::removeReference(const QString &reference)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 quint32 SignonIdentity::requestCredentialsUpdate(const QString &displayMessage)
 {
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(SIGNOND_NEW_IDENTITY);
@@ -256,16 +279,24 @@ quint32 SignonIdentity::requestCredentialsUpdate(const QString &displayMessage)
 =======
     quint32 SignonIdentity::requestCredentialsUpdate(const QString &displayMessage,
                                                      const QDBusVariant &applicationContext)
+=======
+    quint32 SignonIdentity::requestCredentialsUpdate(const QString &displayMessage,
+                                                     const QDBusVariant &userdata)
+>>>>>>> Use QDBusVariant instead of QVariant
     {
         SIGNON_RETURN_IF_CAM_UNAVAILABLE(SIGNOND_NEW_IDENTITY);
 
         bool ok;
+<<<<<<< HEAD
 <<<<<<< HEAD
         SignonIdentityInfo info = queryInfo(ok, userdata, false);
 >>>>>>> Use QDBusVariant instead of QVariant
 =======
         SignonIdentityInfo info = queryInfo(ok, applicationContext, false);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+        SignonIdentityInfo info = queryInfo(ok, userdata, false);
+>>>>>>> Use QDBusVariant instead of QVariant
 
     if (!ok) {
         BLAME() << "Identity not found.";
@@ -303,6 +334,7 @@ quint32 SignonIdentity::requestCredentialsUpdate(const QString &displayMessage)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 QVariantMap SignonIdentity::getInfo()
 {
     TRACE() << "QUERYING INFO";
@@ -311,6 +343,9 @@ QVariantMap SignonIdentity::getInfo()
 =======
     QList<QVariant> SignonIdentity::queryInfo(const QDBusVariant &applicationContext)
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+    QVariantMap SignonIdentity::getInfo(const QDBusVariant &applicationContext)
+>>>>>>> Use QDBusVariant instead of QVariant
     {
         TRACE() << "QUERYING INFO";
 >>>>>>> Use QDBusVariant instead of QVariant
@@ -323,11 +358,23 @@ QVariantMap SignonIdentity::getInfo()
 =======
         bool ok;
 <<<<<<< HEAD
+<<<<<<< HEAD
         SignonIdentityInfo info = queryInfo(ok, userdata, false);
 >>>>>>> Use QDBusVariant instead of QVariant
 =======
         SignonIdentityInfo info = queryInfo(ok, applicationContext, false);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+        SignonIdentityInfo info = queryInfo(ok, userdata, false);
+
+        if (!ok) {
+            TRACE();
+            sendErrorReply(SIGNOND_CREDENTIALS_NOT_AVAILABLE_ERR_NAME,
+                           SIGNOND_CREDENTIALS_NOT_AVAILABLE_ERR_STR +
+                           QLatin1String("Database querying error occurred."));
+            return QVariantMap();
+        }
+>>>>>>> Use QDBusVariant instead of QVariant
 
     if (!ok) {
         TRACE();
@@ -356,6 +403,7 @@ void SignonIdentity::queryUserPassword(const QVariantMap &params) {
             SLOT(verifyUiSlot(QDBusPendingCallWatcher*)));
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     setAutoDestruct(false);
 }
 
@@ -368,16 +416,24 @@ bool SignonIdentity::verifyUser(const QVariantMap &params)
 =======
     bool SignonIdentity::verifyUser(const QVariantMap &params,
                                     const QDBusVariant &applicationContext)
+=======
+    bool SignonIdentity::verifyUser(const QVariantMap &params,
+                                    const QDBusVariant &userdata)
+>>>>>>> Use QDBusVariant instead of QVariant
     {
         SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
 
         bool ok;
+<<<<<<< HEAD
 <<<<<<< HEAD
         SignonIdentityInfo info = queryInfo(ok, userdata, true);
 >>>>>>> Use QDBusVariant instead of QVariant
 =======
         SignonIdentityInfo info = queryInfo(ok, applicationContext, true);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+        SignonIdentityInfo info = queryInfo(ok, userdata, true);
+>>>>>>> Use QDBusVariant instead of QVariant
 
     if (!ok) {
         BLAME() << "Identity not found.";
@@ -412,6 +468,7 @@ bool SignonIdentity::verifySecret(const QString &secret)
 {
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
 
+<<<<<<< HEAD
     bool ok;
     queryInfo(ok);
     if (!ok) {
@@ -420,11 +477,19 @@ bool SignonIdentity::verifySecret(const QString &secret)
 =======
     bool SignonIdentity::verifySecret(const QString &secret,
                                       const QDBusVariant &applicationContext)
+=======
+    bool SignonIdentity::verifySecret(const QString &secret,
+                                      const QDBusVariant &userdata)
+>>>>>>> Use QDBusVariant instead of QVariant
     {
         SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
 
         bool ok;
+<<<<<<< HEAD
         queryInfo(ok, applicationContext);
+=======
+        queryInfo(ok, userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
         if (!ok) {
             TRACE();
             replyError(SIGNOND_CREDENTIALS_NOT_AVAILABLE_ERR_NAME,
@@ -443,6 +508,7 @@ bool SignonIdentity::verifySecret(const QString &secret)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void SignonIdentity::remove()
 {
     SIGNON_RETURN_IF_CAM_UNAVAILABLE();
@@ -453,6 +519,11 @@ void SignonIdentity::remove()
 >>>>>>> Rename 'userdata' to 'applicationContext'
     {
         Q_UNUSED(applicationContext);
+=======
+    void SignonIdentity::remove(const QDBusVariant &userdata)
+    {
+        Q_UNUSED(userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
 
         SIGNON_RETURN_IF_CAM_UNAVAILABLE();
 >>>>>>> Use QDBusVariant instead of QVariant
@@ -469,6 +540,7 @@ void SignonIdentity::remove()
     keepInUse();
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 bool SignonIdentity::signOut()
@@ -495,6 +567,11 @@ bool SignonIdentity::signOut()
 >>>>>>> Rename 'userdata' to 'applicationContext'
     {
         Q_UNUSED(applicationContext);
+=======
+    bool SignonIdentity::signOut(const QDBusVariant &userdata)
+    {
+        Q_UNUSED(userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
 
         TRACE() << "Signout request. Identity ID: " << id();
         /*
@@ -528,6 +605,7 @@ quint32 SignonIdentity::store(const QVariantMap &info)
     keepInUse();
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(SIGNOND_NEW_IDENTITY);
 
+<<<<<<< HEAD
     QString secret = info.value(SIGNOND_IDENTITY_INFO_SECRET).toString();
     QString appId =
         AccessControlManagerHelper::instance()->appIdOfPeer(
@@ -535,6 +613,10 @@ quint32 SignonIdentity::store(const QVariantMap &info)
 =======
     quint32 SignonIdentity::store(const QVariantMap &info,
                                   const QDBusVariant &applicationContext)
+=======
+    quint32 SignonIdentity::store(const QVariantMap &info,
+                                  const QDBusVariant &userdata)
+>>>>>>> Use QDBusVariant instead of QVariant
     {
         keepInUse();
         SIGNON_RETURN_IF_CAM_UNAVAILABLE(SIGNOND_NEW_IDENTITY);
@@ -692,6 +774,7 @@ quint32 SignonIdentity::store(const QVariantMap &info)
             m_pInfo->setPassword(QString());
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         m_id = storeCredentials(*m_pInfo, storeSecret, userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
 =======
@@ -702,6 +785,9 @@ quint32 SignonIdentity::store(const QVariantMap &info)
         sendErrorReply(SIGNOND_STORE_FAILED_ERR_NAME,
                        SIGNOND_STORE_FAILED_ERR_STR);
     }
+=======
+        m_id = storeCredentials(*m_pInfo, storeSecret, userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
 
 <<<<<<< HEAD
     return m_id;
@@ -773,9 +859,15 @@ quint32 SignonIdentity::storeCredentials(const SignonIdentityInfo &info,
 
     quint32 SignonIdentity::storeCredentials(const SignonIdentityInfo &info,
                                              bool storeSecret,
+<<<<<<< HEAD
                                              const QDBusVariant &applicationContext)
     {
         Q_UNUSED(applicationContext);
+=======
+                                             const QDBusVariant &userdata)
+    {
+        Q_UNUSED(userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
 
         CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
         if (db == NULL) {

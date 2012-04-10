@@ -134,9 +134,18 @@ public Q_SLOTS:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     void registerNewIdentity(QDBusObjectPath &objectPath);
     void getIdentity(const quint32 id, QDBusObjectPath &objectPath,
                      QVariantMap &identityData);
+=======
+    void registerNewIdentity(QDBusObjectPath &objectPath,
+                             const QDBusVariant &applicationContext);
+    void getIdentity(const quint32 id,
+                     QDBusObjectPath &objectPath,
+                     QVariantMap &identityData,
+                     const QDBusVariant &applicationContext);
+>>>>>>> Use QDBusVariant instead of QVariant
     QString getAuthSessionObjectPath(const quint32 id, const QString type);
 =======
     void registerNewIdentity(const QDBusVariant &userdata,

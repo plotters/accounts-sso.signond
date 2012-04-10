@@ -54,8 +54,12 @@ void SignonAuthSessionAdaptor::errorReply(const QString &name,
                                                                    const QDBusVariant &applicationContext)
 =======
     QStringList SignonAuthSessionAdaptor::queryAvailableMechanisms(const QStringList &wantedMechanisms,
+<<<<<<< HEAD
                                                                    const QVariant &userdata)
 >>>>>>> Add user data parameter to server side interfaces
+=======
+                                                                   const QDBusVariant &userdata)
+>>>>>>> Use QDBusVariant instead of QVariant
     {
         TRACE();
 >>>>>>> Add user data parameter to server side interfaces
@@ -66,6 +70,7 @@ SignonAuthSessionAdaptor::queryAvailableMechanisms(
 {
     TRACE();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
@@ -85,6 +90,9 @@ SignonAuthSessionAdaptor::queryAvailableMechanisms(
 =======
         return parent()->queryAvailableMechanisms(wantedMechanisms, applicationContext);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+        return parent()->queryAvailableMechanisms(wantedMechanisms, userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
     }
 
 <<<<<<< HEAD
@@ -98,8 +106,12 @@ SignonAuthSessionAdaptor::queryAvailableMechanisms(
 =======
     QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
                                                   const QString &mechanism,
+<<<<<<< HEAD
                                                   const QVariant &userdata)
 >>>>>>> Add user data parameter to server side interfaces
+=======
+                                                  const QDBusVariant &userdata)
+>>>>>>> Use QDBusVariant instead of QVariant
     {
         TRACE();
 >>>>>>> Add user data parameter to server side interfaces
@@ -161,6 +173,7 @@ QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
         return parent()->process(sessionDataVa, allowedMechanism, userdata);
     }
 
+<<<<<<< HEAD
     void SignonAuthSessionAdaptor::cancel(const QDBusVariant &userdata)
 >>>>>>> Use QDBusVariant instead of QVariant
 =======
@@ -173,6 +186,12 @@ QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
 =======
     void SignonAuthSessionAdaptor::cancel(const QVariant &userdata)
 >>>>>>> Add user data parameter to server side interfaces
+=======
+        return parent()->process(sessionDataVa, allowedMechanism, userdata);
+    }
+
+    void SignonAuthSessionAdaptor::cancel(const QDBusVariant &userdata)
+>>>>>>> Use QDBusVariant instead of QVariant
     {
         TRACE();
 >>>>>>> Add user data parameter to server side interfaces
@@ -181,6 +200,7 @@ void SignonAuthSessionAdaptor::cancel()
 {
     TRACE();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
     if (AccessControlManagerHelper::pidOfPeer(dbusContext) != parent()->ownerPid()) {
@@ -213,6 +233,13 @@ void SignonAuthSessionAdaptor::cancel()
 =======
     void SignonAuthSessionAdaptor::setId(quint32 id, const QVariant &userdata)
 >>>>>>> Add user data parameter to server side interfaces
+=======
+        parent()->cancel(userdata);
+    }
+
+    void SignonAuthSessionAdaptor::setId(quint32 id,
+                                         const QDBusVariant &userdata)
+>>>>>>> Use QDBusVariant instead of QVariant
     {
         TRACE();
 >>>>>>> Add user data parameter to server side interfaces
@@ -221,6 +248,7 @@ void SignonAuthSessionAdaptor::setId(quint32 id)
 {
     TRACE();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
@@ -258,6 +286,12 @@ void SignonAuthSessionAdaptor::setId(quint32 id)
 =======
     void SignonAuthSessionAdaptor::objectUnref(const QVariant &userdata)
 >>>>>>> Add user data parameter to server side interfaces
+=======
+        parent()->setId(id, userdata);
+    }
+
+    void SignonAuthSessionAdaptor::objectUnref(const QDBusVariant &userdata)
+>>>>>>> Use QDBusVariant instead of QVariant
     {
         TRACE();
 >>>>>>> Add user data parameter to server side interfaces
@@ -266,6 +300,7 @@ void SignonAuthSessionAdaptor::objectUnref()
 {
     TRACE();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
@@ -280,6 +315,9 @@ void SignonAuthSessionAdaptor::objectUnref()
 =======
         parent()->objectUnref(applicationContext);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+        parent()->objectUnref(userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
     }
 
     parent()->objectUnref();

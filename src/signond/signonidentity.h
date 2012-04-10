@@ -4,14 +4,19 @@
  * Copyright (C) 2009-2010 Nokia Corporation.
 <<<<<<< HEAD
  * Copyright (C) 2012 Canonical Ltd.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+<<<<<<< HEAD
 =======
  * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+>>>>>>> Use QDBusVariant instead of QVariant
+=======
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
 >>>>>>> Use QDBusVariant instead of QVariant
  *
@@ -70,6 +75,7 @@ public:
     SignonIdentityInfo queryInfo(bool &ok, bool queryPassword = true);
     quint32 storeCredentials(const SignonIdentityInfo &info, bool storeSecret);
 
+<<<<<<< HEAD
 public Q_SLOTS:
     quint32 requestCredentialsUpdate(const QString &message);
     QVariantMap getInfo();
@@ -93,11 +99,23 @@ Q_SIGNALS:
         quint32 storeCredentials(const SignonIdentityInfo &info,
                                  bool storeSecret,
                                  const QDBusVariant &applicationContext);
+=======
+        SignonIdentityInfo queryInfo(bool &ok,
+                                     const QDBusVariant &userdata,
+                                     bool queryPassword = true);
+        quint32 storeCredentials(const SignonIdentityInfo &info,
+                                 bool storeSecret,
+                                 const QDBusVariant &userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
 
     public Q_SLOTS:
         quint32 requestCredentialsUpdate(const QString &message,
                                          const QDBusVariant &applicationContext);
+<<<<<<< HEAD
         QList<QVariant> queryInfo(const QDBusVariant &applicationContext);
+=======
+        QVariantMap getInfo(const QDBusVariant &applicationContext);
+>>>>>>> Use QDBusVariant instead of QVariant
         bool addReference(const QString &reference,
                           const QDBusVariant &applicationContext);
         bool removeReference(const QString &reference,
@@ -110,6 +128,7 @@ Q_SIGNALS:
         bool signOut(const QDBusVariant &applicationContext);
         quint32 store(const QVariantMap &info,
                       const QDBusVariant &applicationContext);
+<<<<<<< HEAD
         quint32 storeCredentials(const quint32 id,
                                  const QString &userName,
                                  const QString &secret,
@@ -120,6 +139,8 @@ Q_SIGNALS:
                                  const QStringList &accessControlList,
                                  const int type,
                                  const QDBusVariant &applicationContext);
+=======
+>>>>>>> Use QDBusVariant instead of QVariant
         void queryUiSlot(QDBusPendingCallWatcher *call);
         void verifyUiSlot(QDBusPendingCallWatcher *call);
     Q_SIGNALS:

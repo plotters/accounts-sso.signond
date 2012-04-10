@@ -46,6 +46,7 @@ SignonDaemonAdaptor::~SignonDaemonAdaptor()
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void SignonDaemonAdaptor::registerNewIdentity(QDBusObjectPath &objectPath)
 {
     m_parent->registerNewIdentity(objectPath);
@@ -68,9 +69,13 @@ void SignonDaemonAdaptor::registerNewIdentity(QDBusObjectPath &objectPath)
 >>>>>>> Add user data parameter to server side interfaces
 =======
     void SignonDaemonAdaptor::registerNewIdentity(const QVariant &userdata,
+=======
+    void SignonDaemonAdaptor::registerNewIdentity(const QDBusVariant &userdata,
+>>>>>>> Use QDBusVariant instead of QVariant
                                                   QDBusObjectPath &objectPath)
 >>>>>>> Start adding userdata to the client side implementation
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         m_parent->registerNewIdentity(objectPath);
@@ -81,6 +86,9 @@ void SignonDaemonAdaptor::registerNewIdentity(QDBusObjectPath &objectPath)
 =======
         m_parent->registerNewIdentity(applicationContext, objectPath);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+        m_parent->registerNewIdentity(userdata, objectPath);
+>>>>>>> Use QDBusVariant instead of QVariant
 
     SignonDisposable::destroyUnused();
 }
@@ -121,8 +129,12 @@ void SignonDaemonAdaptor::getIdentity(const quint32 id,
     void SignonDaemonAdaptor::getIdentity(const quint32 id,
                                           QDBusObjectPath &objectPath,
                                           QVariantMap &identityData,
+<<<<<<< HEAD
                                           const QVariant &userdata)
 >>>>>>> Add user data parameter to server side interfaces
+=======
+                                          const QVariant &applicationContext)
+>>>>>>> Use QDBusVariant instead of QVariant
     {
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
                                         parentDBusContext().message(), id)) {
@@ -161,8 +173,12 @@ QString SignonDaemonAdaptor::getAuthSessionObjectPath(const quint32 id,
 =======
     QString SignonDaemonAdaptor::getAuthSessionObjectPath(const quint32 id,
                                                           const QString &type,
+<<<<<<< HEAD
                                                           const QVariant &userdata)
 >>>>>>> Add user data parameter to server side interfaces
+=======
+                                                          const QDBusVariant &userdata)
+>>>>>>> Use QDBusVariant instead of QVariant
     {
         SignonDisposable::destroyUnused();
 >>>>>>> Add user data parameter to server side interfaces
@@ -179,11 +195,15 @@ QString SignonDaemonAdaptor::getAuthSessionObjectPath(const quint32 id,
 
         TRACE() << "ACM passed, creating AuthSession object";
 <<<<<<< HEAD
+<<<<<<< HEAD
         return m_parent->getAuthSessionObjectPath(id, type, userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
 =======
         return m_parent->getAuthSessionObjectPath(id, type, applicationContext);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+        return m_parent->getAuthSessionObjectPath(id, type, userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
     }
 
     TRACE() << "ACM passed, creating AuthSession object";

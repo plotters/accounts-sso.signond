@@ -49,23 +49,23 @@
 #define SIGNOND_IDENTITY_QUERY_AVAILABLE_METHODS_METHOD \
     SIGNOND_NORMALIZE_METHOD_SIGNATURE("queryAvailableMethods()")
 #define SIGNOND_IDENTITY_REQUEST_CREDENTIALS_UPDATE_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("requestCredentialsUpdate(const QString &, const QVariant &)")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("requestCredentialsUpdate(const QString &)")
 #define SIGNOND_IDENTITY_STORE_CREDENTIALS_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("storeCredentials(const IdentityInfo &, const QVariant &)")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("storeCredentials(const IdentityInfo &)")
 #define SIGNOND_IDENTITY_REMOVE_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("remove(const QVariant &)")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("remove()")
 #define SIGNOND_IDENTITY_QUERY_INFO_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("queryInfo(const QVariant &)")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("queryInfo()")
 #define SIGNOND_IDENTITY_ADD_REFERENCE_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("addReference(const QString &, const QVariant &)")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("addReference(const QString &)")
 #define SIGNOND_IDENTITY_REMOVE_REFERENCE_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("removeReference(const QString &, const QVariant &)")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("removeReference(const QString &)")
 #define SIGNOND_IDENTITY_VERIFY_USER_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("verifyUser(const QVariantMap &, const QVariant &)")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("verifyUser(const QVariantMap &)")
 #define SIGNOND_IDENTITY_VERIFY_SECRET_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("verifySecret(const QString &, const QVariant &)")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("verifySecret(const QString &)")
 #define SIGNOND_IDENTITY_SIGN_OUT_METHOD \
-    SIGNOND_NORMALIZE_METHOD_SIGNATURE("signOut(const QVariant &)")
+    SIGNOND_NORMALIZE_METHOD_SIGNATURE("signOut()")
 
 namespace SignOn {
 
@@ -257,6 +257,7 @@ void IdentityImpl::requestCredentialsUpdate(const QString &message)
             case NeedsRegistration:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 genArgs << (new Q_ARG(QString, message));
                 m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_REQUEST_CREDENTIALS_UPDATE_METHOD,
@@ -275,15 +276,22 @@ void IdentityImpl::requestCredentialsUpdate(const QString &message)
 =======
                 genArgs << (new Q_ARG(QString, message))
                         << (new Q_ARG(QVariant, m_userdata));
+=======
+                genArgs << (new Q_ARG(QString, message));
+>>>>>>> Use QDBusVariant instead of QVariant
                 m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_REQUEST_CREDENTIALS_UPDATE_METHOD,
                                 genArgs);
                 sendRegisterRequest();
                 return;
             case PendingRegistration:
+<<<<<<< HEAD
                 genArgs << (new Q_ARG(QString, message))
                         << (new Q_ARG(QVariant, m_userdata));
 >>>>>>> Finalize midlayer userdata changes
+=======
+                genArgs << (new Q_ARG(QString, message));
+>>>>>>> Use QDBusVariant instead of QVariant
                 m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_REQUEST_CREDENTIALS_UPDATE_METHOD,
                                 genArgs);
@@ -360,11 +368,15 @@ void IdentityImpl::storeCredentials(const IdentityInfo &info)
 =======
         QList<QVariant> args;
 <<<<<<< HEAD
+<<<<<<< HEAD
         args << message
              << QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
         args << message << m_userdata;
 >>>>>>> Finalize midlayer userdata changes
+=======
+        args << message << QVariant::fromValue(QDBusVariant(m_userdata));
+>>>>>>> Use QDBusVariant instead of QVariant
         bool result = sendRequest(__func__, args,
                                   SLOT(storeCredentialsReply(const quint32)),
                                   SIGNOND_MAX_TIMEOUT);
@@ -393,11 +405,15 @@ void IdentityImpl::storeCredentials(const IdentityInfo &info)
                     info.impl->isEmpty() ?
                     *m_identityInfo : *(m_tmpIdentityInfo = new IdentityInfo(info));
 <<<<<<< HEAD
+<<<<<<< HEAD
                 genArgs << (new Q_ARG(SignOn::IdentityInfo, localInfo));
 =======
                 genArgs << (new Q_ARG(SignOn::IdentityInfo, localInfo))
                         << (new Q_ARG(QVariant, m_userdata));
 >>>>>>> Finalize midlayer userdata changes
+=======
+                genArgs << (new Q_ARG(SignOn::IdentityInfo, localInfo));
+>>>>>>> Use QDBusVariant instead of QVariant
                 m_operationQueueHandler.enqueueOperation(
                                         SIGNOND_IDENTITY_STORE_CREDENTIALS_METHOD,
                                         genArgs);
@@ -408,11 +424,15 @@ void IdentityImpl::storeCredentials(const IdentityInfo &info)
                     info.impl->isEmpty() ?
                     *m_identityInfo : *(m_tmpIdentityInfo = new IdentityInfo(info));
 <<<<<<< HEAD
+<<<<<<< HEAD
                 genArgs << (new Q_ARG(SignOn::IdentityInfo, localInfo));
 =======
                 genArgs << (new Q_ARG(SignOn::IdentityInfo, localInfo))
                         << (new Q_ARG(QVariant, m_userdata));
 >>>>>>> Finalize midlayer userdata changes
+=======
+                genArgs << (new Q_ARG(SignOn::IdentityInfo, localInfo));
+>>>>>>> Use QDBusVariant instead of QVariant
                 m_operationQueueHandler.enqueueOperation(
                                         SIGNOND_IDENTITY_STORE_CREDENTIALS_METHOD,
                                         genArgs);
@@ -451,11 +471,15 @@ void IdentityImpl::storeCredentials(const IdentityInfo &info)
         map.insert(SIGNOND_IDENTITY_INFO_ID, m_identityInfo->id());
         map.insert(SIGNOND_IDENTITY_INFO_SECRET, info.secret());
 <<<<<<< HEAD
+<<<<<<< HEAD
         args << map
              << QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
         args << map << m_userdata;
 >>>>>>> Finalize midlayer userdata changes
+=======
+        args << map << QVariant::fromValue(QDBusVariant(m_userdata));
+>>>>>>> Use QDBusVariant instead of QVariant
 
         bool result = sendRequest("store", args,
                                   SLOT(storeCredentialsReply(const quint32)));
@@ -547,18 +571,24 @@ void IdentityImpl::remove()
             switch (m_state) {
                 case NeedsRegistration:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                     genArgs << (new Q_ARG(QVariant, m_userdata));
 >>>>>>> Finalize midlayer userdata changes
+=======
+>>>>>>> Use QDBusVariant instead of QVariant
                     m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_REMOVE_METHOD,
                                                              genArgs);
                     sendRegisterRequest();
                     return;
                 case PendingRegistration:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                     genArgs << (new Q_ARG(QVariant, m_userdata));
 >>>>>>> Finalize midlayer userdata changes
+=======
+>>>>>>> Use QDBusVariant instead of QVariant
                     m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_REMOVE_METHOD,
                                                              genArgs);
                     return;
@@ -578,10 +608,14 @@ void IdentityImpl::remove()
             QList<QVariant> args;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             args << QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
             args << m_userdata;
 >>>>>>> Finalize midlayer userdata changes
+=======
+            args << QVariant::fromValue(QDBusVariant(m_userdata));
+>>>>>>> Use QDBusVariant instead of QVariant
             bool result = sendRequest(__func__, args,
                                       SLOT(removeReply()));
             if (!result) {
@@ -607,11 +641,15 @@ void IdentityImpl::remove()
         switch (m_state) {
             case NeedsRegistration:
 <<<<<<< HEAD
+<<<<<<< HEAD
                 genArgs << (new Q_ARG(QString, reference));
 =======
                 genArgs << (new Q_ARG(QString, reference))
                         << (new Q_ARG(QVariant, m_userdata));
 >>>>>>> Finalize midlayer userdata changes
+=======
+                genArgs << (new Q_ARG(QString, reference));
+>>>>>>> Use QDBusVariant instead of QVariant
                 m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_ADD_REFERENCE_METHOD,
                                 genArgs);
@@ -619,11 +657,15 @@ void IdentityImpl::remove()
                 return;
             case PendingRegistration:
 <<<<<<< HEAD
+<<<<<<< HEAD
                 genArgs << (new Q_ARG(QString, reference));
 =======
                 genArgs << (new Q_ARG(QString, reference))
                         << (new Q_ARG(QVariant, m_userdata));
 >>>>>>> Finalize midlayer userdata changes
+=======
+                genArgs << (new Q_ARG(QString, reference));
+>>>>>>> Use QDBusVariant instead of QVariant
                 m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_ADD_REFERENCE_METHOD,
                                 genArgs);
@@ -644,11 +686,15 @@ void IdentityImpl::remove()
         QList<QVariant> args;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         args << reference
              << QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
         args << reference << m_userdata;
 >>>>>>> Finalize midlayer userdata changes
+=======
+        args << reference << QVariant::fromValue(QDBusVariant(m_userdata));
+>>>>>>> Use QDBusVariant instead of QVariant
         bool result = sendRequest(__func__,
                                   args,
                                   SLOT(addReferenceReply()));
@@ -717,11 +763,15 @@ void IdentityImpl::addReference(const QString &reference)
         switch (m_state) {
             case NeedsRegistration:
 <<<<<<< HEAD
+<<<<<<< HEAD
                 genArgs << (new Q_ARG(QString, reference));
 =======
                 genArgs << (new Q_ARG(QString, reference))
                         << (new Q_ARG(QVariant, m_userdata));
 >>>>>>> Finalize midlayer userdata changes
+=======
+                genArgs << (new Q_ARG(QString, reference));
+>>>>>>> Use QDBusVariant instead of QVariant
                 m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_REMOVE_REFERENCE_METHOD,
                                 genArgs);
@@ -729,11 +779,15 @@ void IdentityImpl::addReference(const QString &reference)
                 return;
             case PendingRegistration:
 <<<<<<< HEAD
+<<<<<<< HEAD
                 genArgs << (new Q_ARG(QString, reference));
 =======
                 genArgs << (new Q_ARG(QString, reference))
                         << (new Q_ARG(QVariant, m_userdata));
 >>>>>>> Finalize midlayer userdata changes
+=======
+                genArgs << (new Q_ARG(QString, reference));
+>>>>>>> Use QDBusVariant instead of QVariant
                 m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_REMOVE_REFERENCE_METHOD,
                                 genArgs);
@@ -754,11 +808,15 @@ void IdentityImpl::addReference(const QString &reference)
         QList<QVariant> args;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         args << reference
              << QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
         args << reference << m_userdata;
 >>>>>>> Finalize midlayer userdata changes
+=======
+        args << reference << QVariant::fromValue(QDBusVariant(m_userdata));
+>>>>>>> Use QDBusVariant instead of QVariant
         bool result = sendRequest(__func__,
                                   args,
                                   SLOT(removeReferenceReply()));
@@ -813,18 +871,24 @@ void IdentityImpl::removeReference(const QString &reference)
         switch (m_state) {
             case NeedsRegistration:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                 genArgs << (new Q_ARG(QVariant, m_userdata));
 >>>>>>> Finalize midlayer userdata changes
+=======
+>>>>>>> Use QDBusVariant instead of QVariant
                 m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_QUERY_INFO_METHOD,
                                                          genArgs);
                 sendRegisterRequest();
                 return;
             case PendingRegistration:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                 genArgs << (new Q_ARG(QVariant, m_userdata));
 >>>>>>> Finalize midlayer userdata changes
+=======
+>>>>>>> Use QDBusVariant instead of QVariant
                 m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_QUERY_INFO_METHOD,
                                                          genArgs);
                 return;
@@ -897,11 +961,15 @@ void IdentityImpl::queryInfo()
         switch (m_state) {
             case NeedsRegistration:
 <<<<<<< HEAD
+<<<<<<< HEAD
                 genArgs << (new Q_ARG(QVariantMap, params));
 =======
                 genArgs << (new Q_ARG(QVariantMap, params))
                         << (new Q_ARG(QVariant, m_userdata));
 >>>>>>> Finalize midlayer userdata changes
+=======
+                genArgs << (new Q_ARG(QVariantMap, params));
+>>>>>>> Use QDBusVariant instead of QVariant
                 m_operationQueueHandler.enqueueOperation(
                                         SIGNOND_IDENTITY_VERIFY_USER_METHOD,
                                         genArgs);
@@ -909,11 +977,15 @@ void IdentityImpl::queryInfo()
                 return;
             case PendingRegistration:
 <<<<<<< HEAD
+<<<<<<< HEAD
                 genArgs << (new Q_ARG(QVariantMap, params));
 =======
                 genArgs << (new Q_ARG(QVariantMap, params))
                         << (new Q_ARG(QVariant, m_userdata));
 >>>>>>> Finalize midlayer userdata changes
+=======
+                genArgs << (new Q_ARG(QVariantMap, params));
+>>>>>>> Use QDBusVariant instead of QVariant
                 m_operationQueueHandler.enqueueOperation(
                                         SIGNOND_IDENTITY_VERIFY_USER_METHOD,
                                         genArgs);
@@ -934,11 +1006,15 @@ void IdentityImpl::queryInfo()
         QList<QVariant> args;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         args << params
              << QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
         args << params << m_userdata;
 >>>>>>> Finalize midlayer userdata changes
+=======
+        args << params << QVariant::fromValue(QDBusVariant(m_userdata));
+>>>>>>> Use QDBusVariant instead of QVariant
         bool result = sendRequest(__func__,
                                   args,
                                   SLOT(verifyUserReply(const bool)),
@@ -1019,11 +1095,15 @@ void IdentityImpl::verifySecret(const QString &secret)
         switch (m_state) {
             case NeedsRegistration:
 <<<<<<< HEAD
+<<<<<<< HEAD
                 genArgs << (new Q_ARG(QString, secret));
 =======
                 genArgs << (new Q_ARG(QString, secret))
                         << (new Q_ARG(QVariant, m_userdata));
 >>>>>>> Finalize midlayer userdata changes
+=======
+                genArgs << (new Q_ARG(QString, secret));
+>>>>>>> Use QDBusVariant instead of QVariant
                 m_operationQueueHandler.enqueueOperation(
                                         SIGNOND_IDENTITY_VERIFY_SECRET_METHOD,
                                         genArgs);
@@ -1031,11 +1111,15 @@ void IdentityImpl::verifySecret(const QString &secret)
                 return;
             case PendingRegistration:
 <<<<<<< HEAD
+<<<<<<< HEAD
                 genArgs << (new Q_ARG(QString, secret));
 =======
                 genArgs << (new Q_ARG(QString, secret))
                         << (new Q_ARG(QVariant, m_userdata));
 >>>>>>> Finalize midlayer userdata changes
+=======
+                genArgs << (new Q_ARG(QString, secret));
+>>>>>>> Use QDBusVariant instead of QVariant
                 m_operationQueueHandler.enqueueOperation(
                                         SIGNOND_IDENTITY_VERIFY_SECRET_METHOD,
                                         genArgs);
@@ -1056,11 +1140,15 @@ void IdentityImpl::verifySecret(const QString &secret)
         QList<QVariant> args;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         args << secret
              << QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
         args << secret << m_userdata;
 >>>>>>> Finalize midlayer userdata changes
+=======
+        args << secret << QVariant::fromValue(QDBusVariant(m_userdata));
+>>>>>>> Use QDBusVariant instead of QVariant
         bool result = sendRequest(__func__,
                                   args,
                                   SLOT(verifySecretReply(const bool)));
@@ -1087,18 +1175,24 @@ void IdentityImpl::verifySecret(const QString &secret)
             switch (m_state) {
                 case NeedsRegistration:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                     genArgs << (new Q_ARG(QVariant, m_userdata));
 >>>>>>> Finalize midlayer userdata changes
+=======
+>>>>>>> Use QDBusVariant instead of QVariant
                     m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_SIGN_OUT_METHOD,
                                                              genArgs);
                     sendRegisterRequest();
                     return;
                 case PendingRegistration:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                     genArgs << (new Q_ARG(QVariant, m_userdata));
 >>>>>>> Finalize midlayer userdata changes
+=======
+>>>>>>> Use QDBusVariant instead of QVariant
                     m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_SIGN_OUT_METHOD,
                                                              genArgs);
                     return;
@@ -1115,10 +1209,14 @@ void IdentityImpl::verifySecret(const QString &secret)
             QList<QVariant> args;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             args << QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
             args << m_userdata;
 >>>>>>> Finalize midlayer userdata changes
+=======
+            args << QVariant::fromValue(QDBusVariant(m_userdata));
+>>>>>>> Use QDBusVariant instead of QVariant
             bool result = sendRequest(__func__, args,
                                       SLOT(signOutReply()));
             if (!result) {
@@ -1410,7 +1508,7 @@ void IdentityImpl::errorReply(const QDBusError& err)
         args << QVariant::fromValue(QDBusVariant(m_applicationContext));
 >>>>>>> Rename 'userdata' to 'applicationContext'
 
-        args << m_userdata;
+        args << QVariant::fromValue(QDBusVariant(m_userdata));
 
         QDBusMessage registerCall = QDBusMessage::createMethodCall(
             SIGNOND_SERVICE,
