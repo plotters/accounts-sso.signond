@@ -50,7 +50,7 @@ void SignonAuthSessionAdaptor::errorReply(const QString &name,
 }
 =======
     QStringList SignonAuthSessionAdaptor::queryAvailableMechanisms(const QStringList &wantedMechanisms,
-                                                                   const QVariant &userdata)
+                                                                   const QDBusVariant &userdata)
     {
         TRACE();
 >>>>>>> Add user data parameter to server side interfaces
@@ -61,6 +61,7 @@ SignonAuthSessionAdaptor::queryAvailableMechanisms(
 {
     TRACE();
 
+<<<<<<< HEAD
     QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
     if (AccessControlManagerHelper::pidOfPeer(dbusContext) !=
         parent()->ownerPid()) {
@@ -72,6 +73,9 @@ SignonAuthSessionAdaptor::queryAvailableMechanisms(
                              "process.";
         errorReply(SIGNOND_PERMISSION_DENIED_ERR_NAME, errMsg);
         return QStringList();
+=======
+        return parent()->queryAvailableMechanisms(wantedMechanisms, userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
     }
 
 <<<<<<< HEAD
@@ -80,7 +84,7 @@ SignonAuthSessionAdaptor::queryAvailableMechanisms(
 =======
     QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
                                                   const QString &mechanism,
-                                                  const QVariant &userdata)
+                                                  const QDBusVariant &userdata)
     {
         TRACE();
 >>>>>>> Add user data parameter to server side interfaces
@@ -118,6 +122,7 @@ QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
         }
     }
 
+<<<<<<< HEAD
     QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
     if (AccessControlManagerHelper::pidOfPeer(dbusContext) !=
         parent()->ownerPid()) {
@@ -136,6 +141,12 @@ QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
 }
 =======
     void SignonAuthSessionAdaptor::cancel(const QVariant &userdata)
+=======
+        return parent()->process(sessionDataVa, allowedMechanism, userdata);
+    }
+
+    void SignonAuthSessionAdaptor::cancel(const QDBusVariant &userdata)
+>>>>>>> Use QDBusVariant instead of QVariant
     {
         TRACE();
 >>>>>>> Add user data parameter to server side interfaces
@@ -144,6 +155,7 @@ void SignonAuthSessionAdaptor::cancel()
 {
     TRACE();
 
+<<<<<<< HEAD
     QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
     if (AccessControlManagerHelper::pidOfPeer(dbusContext) != parent()->ownerPid()) {
         TRACE() << "cancel called from peer that doesn't own the AuthSession "
@@ -156,6 +168,13 @@ void SignonAuthSessionAdaptor::cancel()
 }
 =======
     void SignonAuthSessionAdaptor::setId(quint32 id, const QVariant &userdata)
+=======
+        parent()->cancel(userdata);
+    }
+
+    void SignonAuthSessionAdaptor::setId(quint32 id,
+                                         const QDBusVariant &userdata)
+>>>>>>> Use QDBusVariant instead of QVariant
     {
         TRACE();
 >>>>>>> Add user data parameter to server side interfaces
@@ -164,6 +183,7 @@ void SignonAuthSessionAdaptor::setId(quint32 id)
 {
     TRACE();
 
+<<<<<<< HEAD
     QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
     if (AccessControlManagerHelper::pidOfPeer(dbusContext) !=
         parent()->ownerPid()) {
@@ -183,6 +203,12 @@ void SignonAuthSessionAdaptor::setId(quint32 id)
 }
 =======
     void SignonAuthSessionAdaptor::objectUnref(const QVariant &userdata)
+=======
+        parent()->setId(id, userdata);
+    }
+
+    void SignonAuthSessionAdaptor::objectUnref(const QDBusVariant &userdata)
+>>>>>>> Use QDBusVariant instead of QVariant
     {
         TRACE();
 >>>>>>> Add user data parameter to server side interfaces
@@ -191,12 +217,16 @@ void SignonAuthSessionAdaptor::objectUnref()
 {
     TRACE();
 
+<<<<<<< HEAD
     QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
     if (AccessControlManagerHelper::pidOfPeer(dbusContext) !=
         parent()->ownerPid()) {
         TRACE() << "objectUnref called from peer that doesn't own the "
             "AuthSession object";
         return;
+=======
+        parent()->objectUnref(userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
     }
 
     parent()->objectUnref();

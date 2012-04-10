@@ -2,10 +2,18 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+<<<<<<< HEAD
  * Copyright (C) 2012 Canonical Ltd.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+=======
+ * Copyright (C) 2012 Intel Corporation.
+ *
+ * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
+ * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
+>>>>>>> Use QDBusVariant instead of QVariant
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -58,6 +66,7 @@ public:
     static SignonIdentity *createIdentity(quint32 id, SignonDaemon *parent);
     quint32 id() const { return m_id; }
 
+<<<<<<< HEAD
     SignonIdentityInfo queryInfo(bool &ok, bool queryPassword = true);
     quint32 storeCredentials(const SignonIdentityInfo &info, bool storeSecret);
 
@@ -77,6 +86,47 @@ Q_SIGNALS:
     void unregistered();
     //TODO - split this into the 3 separate signals(updated, removed, signed out)
     void infoUpdated(int);
+=======
+        SignonIdentityInfo queryInfo(bool &ok,
+                                     const QDBusVariant &userdata,
+                                     bool queryPassword = true);
+        quint32 storeCredentials(const SignonIdentityInfo &info,
+                                 bool storeSecret,
+                                 const QDBusVariant &userdata);
+
+    public Q_SLOTS:
+        quint32 requestCredentialsUpdate(const QString &message,
+                                         const QDBusVariant &userdata);
+        QList<QVariant> queryInfo(const QDBusVariant &userdata);
+        bool addReference(const QString &reference,
+                          const QDBusVariant &userdata);
+        bool removeReference(const QString &reference,
+                             const QDBusVariant &userdata);
+        bool verifyUser(const QVariantMap &params,
+                        const QDBusVariant &userdata);
+        bool verifySecret(const QString &secret,
+                          const QDBusVariant &userdata);
+        void remove(const QDBusVariant &userdata);
+        bool signOut(const QDBusVariant &userdata);
+        quint32 store(const QVariantMap &info,
+                      const QDBusVariant &userdata);
+        quint32 storeCredentials(const quint32 id,
+                                 const QString &userName,
+                                 const QString &secret,
+                                 const bool storeSecret,
+                                 const QMap<QString, QVariant> &methods,
+                                 const QString &caption,
+                                 const QStringList &realms,
+                                 const QStringList &accessControlList,
+                                 const int type,
+                                 const QDBusVariant &userdata);
+        void queryUiSlot(QDBusPendingCallWatcher *call);
+        void verifyUiSlot(QDBusPendingCallWatcher *call);
+    Q_SIGNALS:
+        void unregistered();
+        //TODO - split this into the 3 separate signals(updated, removed, signed out)
+        void infoUpdated(int);
+>>>>>>> Use QDBusVariant instead of QVariant
 
 private:
     SignonIdentity(quint32 id, int timeout, SignonDaemon *parent);

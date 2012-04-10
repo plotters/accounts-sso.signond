@@ -67,15 +67,21 @@ public Q_SLOTS:
 =======
     public Q_SLOTS:
         QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms,
-                                             const QVariant &userdata);
+                                             const QDBusVariant &userdata);
         QVariantMap process(const QVariantMap &sessionDataVa,
                             const QString &mechanism,
-                            const QVariant &userdata);
+                            const QDBusVariant &userdata);
 
+<<<<<<< HEAD
         Q_NOREPLY void cancel(const QVariant &userdata);
         Q_NOREPLY void setId(quint32 id, const QVariant &userdata);
         Q_NOREPLY void objectUnref(const QVariant &userdata);
 >>>>>>> Add user data parameter to server side interfaces
+=======
+        Q_NOREPLY void cancel(const QDBusVariant &userdata);
+        Q_NOREPLY void setId(quint32 id, const QDBusVariant &userdata);
+        Q_NOREPLY void objectUnref(const QDBusVariant &userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
 
 Q_SIGNALS:
     void stateChanged(int state, const QString &message);

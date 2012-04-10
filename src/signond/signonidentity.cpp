@@ -2,7 +2,7 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
- * Copyright (C) 2011 Intel Corporation.
+ * Copyright (C) 2011-2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
@@ -157,10 +157,20 @@ SignonIdentityInfo SignonIdentity::queryInfo(bool &ok, bool queryPassword)
         }
     }
 
+<<<<<<< HEAD
     if (needLoadFromDB) {
         if (m_pInfo != 0) {
             delete m_pInfo;
         }
+=======
+    SignonIdentityInfo SignonIdentity::queryInfo(bool &ok,
+                                                 const QDBusVariant &userdata,
+                                                 bool queryPassword)
+    {
+        Q_UNUSED(userdata);
+
+        ok = true;
+>>>>>>> Use QDBusVariant instead of QVariant
 
         CredentialsDB *db =
             CredentialsAccessManager::instance()->credentialsDB();
@@ -174,6 +184,7 @@ SignonIdentityInfo SignonIdentity::queryInfo(bool &ok, bool queryPassword)
         }
     }
 
+<<<<<<< HEAD
     /* Make sure that we clear the password, if the caller doesn't need it */
     SignonIdentityInfo info = *m_pInfo;
     if (!queryPassword) {
@@ -181,6 +192,14 @@ SignonIdentityInfo SignonIdentity::queryInfo(bool &ok, bool queryPassword)
     }
     return info;
 }
+=======
+    bool SignonIdentity::addReference(const QString &reference,
+                                      const QDBusVariant &userdata)
+    {
+        Q_UNUSED(userdata);
+
+        TRACE() << "addReference: " << reference;
+>>>>>>> Use QDBusVariant instead of QVariant
 
 bool SignonIdentity::addReference(const QString &reference)
 {
@@ -200,9 +219,18 @@ bool SignonIdentity::addReference(const QString &reference)
     return db->addReference(m_id, appId, reference);
 }
 
+<<<<<<< HEAD
 bool SignonIdentity::removeReference(const QString &reference)
 {
     TRACE() << "removeReference: " << reference;
+=======
+    bool SignonIdentity::removeReference(const QString &reference,
+                                         const QDBusVariant &userdata)
+    {
+        Q_UNUSED(userdata);
+
+        TRACE() << "removeReference: " << reference;
+>>>>>>> Use QDBusVariant instead of QVariant
 
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
 
@@ -218,12 +246,22 @@ bool SignonIdentity::removeReference(const QString &reference)
     return db->removeReference(m_id, appId, reference);
 }
 
+<<<<<<< HEAD
 quint32 SignonIdentity::requestCredentialsUpdate(const QString &displayMessage)
 {
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(SIGNOND_NEW_IDENTITY);
 
     bool ok;
     SignonIdentityInfo info = queryInfo(ok, false);
+=======
+    quint32 SignonIdentity::requestCredentialsUpdate(const QString &displayMessage,
+                                                     const QDBusVariant &userdata)
+    {
+        SIGNON_RETURN_IF_CAM_UNAVAILABLE(SIGNOND_NEW_IDENTITY);
+
+        bool ok;
+        SignonIdentityInfo info = queryInfo(ok, userdata, false);
+>>>>>>> Use QDBusVariant instead of QVariant
 
     if (!ok) {
         BLAME() << "Identity not found.";
@@ -259,14 +297,25 @@ quint32 SignonIdentity::requestCredentialsUpdate(const QString &displayMessage)
     return 0;
 }
 
+<<<<<<< HEAD
 QVariantMap SignonIdentity::getInfo()
 {
     TRACE() << "QUERYING INFO";
+=======
+    QList<QVariant> SignonIdentity::queryInfo(const QDBusVariant &userdata)
+    {
+        TRACE() << "QUERYING INFO";
+>>>>>>> Use QDBusVariant instead of QVariant
 
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(QVariantMap());
 
+<<<<<<< HEAD
     bool ok;
     SignonIdentityInfo info = queryInfo(ok, false);
+=======
+        bool ok;
+        SignonIdentityInfo info = queryInfo(ok, userdata, false);
+>>>>>>> Use QDBusVariant instead of QVariant
 
     if (!ok) {
         TRACE();
@@ -294,6 +343,7 @@ void SignonIdentity::queryUserPassword(const QVariantMap &params) {
     connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), this,
             SLOT(verifyUiSlot(QDBusPendingCallWatcher*)));
 
+<<<<<<< HEAD
     setAutoDestruct(false);
 }
 
@@ -303,6 +353,15 @@ bool SignonIdentity::verifyUser(const QVariantMap &params)
 
     bool ok;
     SignonIdentityInfo info = queryInfo(ok, true);
+=======
+    bool SignonIdentity::verifyUser(const QVariantMap &params,
+                                    const QDBusVariant &userdata)
+    {
+        SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
+
+        bool ok;
+        SignonIdentityInfo info = queryInfo(ok, userdata, true);
+>>>>>>> Use QDBusVariant instead of QVariant
 
     if (!ok) {
         BLAME() << "Identity not found.";
@@ -332,6 +391,7 @@ bool SignonIdentity::verifyUser(const QVariantMap &params)
     return false;
 }
 
+<<<<<<< HEAD
 bool SignonIdentity::verifySecret(const QString &secret)
 {
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
@@ -341,6 +401,18 @@ bool SignonIdentity::verifySecret(const QString &secret)
     if (!ok) {
         TRACE();
         sendErrorReply(SIGNOND_CREDENTIALS_NOT_AVAILABLE_ERR_NAME,
+=======
+    bool SignonIdentity::verifySecret(const QString &secret,
+                                      const QDBusVariant &userdata)
+    {
+        SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
+
+        bool ok;
+        queryInfo(ok, userdata);
+        if (!ok) {
+            TRACE();
+            replyError(SIGNOND_CREDENTIALS_NOT_AVAILABLE_ERR_NAME,
+>>>>>>> Use QDBusVariant instead of QVariant
                        SIGNOND_CREDENTIALS_NOT_AVAILABLE_ERR_STR +
                        QLatin1String("Database querying error occurred."));
         return false;
@@ -353,9 +425,17 @@ bool SignonIdentity::verifySecret(const QString &secret)
     return ret;
 }
 
+<<<<<<< HEAD
 void SignonIdentity::remove()
 {
     SIGNON_RETURN_IF_CAM_UNAVAILABLE();
+=======
+    void SignonIdentity::remove(const QDBusVariant &userdata)
+    {
+        Q_UNUSED(userdata);
+
+        SIGNON_RETURN_IF_CAM_UNAVAILABLE();
+>>>>>>> Use QDBusVariant instead of QVariant
 
     CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
     if ((db == 0) || !db->removeCredentials(m_id)) {
@@ -369,6 +449,7 @@ void SignonIdentity::remove()
     keepInUse();
 }
 
+<<<<<<< HEAD
 bool SignonIdentity::signOut()
 {
     TRACE() << "Signout request. Identity ID: " << id();
@@ -386,6 +467,29 @@ bool SignonIdentity::signOut()
             CredentialsAccessManager::instance()->credentialsDB();
         if ((db == 0) || !db->removeData(m_id)) {
             TRACE() << "clear data failed";
+=======
+    bool SignonIdentity::signOut(const QDBusVariant &userdata)
+    {
+        Q_UNUSED(userdata);
+
+        TRACE() << "Signout request. Identity ID: " << id();
+        /*
+           - If the identity is stored (thus registered here)
+           signal 'sign out' to all identities subsribed to this object,
+           otherwise the only identity subscribed to this is the newly
+           created client side identity, which called this method.
+           - This is just a safety check, as the client identity - if it is a new one -
+           should not inform server side to sign out.
+        */
+        if (id() != SIGNOND_NEW_IDENTITY) {
+            //clear stored sessiondata
+            CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
+            if ((db == 0) || !db->removeData(m_id)) {
+                TRACE() << "clear data failed";
+            }
+
+            emit infoUpdated((int)SignOn::IdentitySignedOut);
+>>>>>>> Use QDBusVariant instead of QVariant
         }
 
         emit infoUpdated((int)SignOn::IdentitySignedOut);
@@ -394,6 +498,7 @@ bool SignonIdentity::signOut()
     return true;
 }
 
+<<<<<<< HEAD
 quint32 SignonIdentity::store(const QVariantMap &info)
 {
     keepInUse();
@@ -403,6 +508,13 @@ quint32 SignonIdentity::store(const QVariantMap &info)
     QString appId =
         AccessControlManagerHelper::instance()->appIdOfPeer(
                                  (static_cast<QDBusContext>(*this)).message());
+=======
+    quint32 SignonIdentity::store(const QVariantMap &info,
+                                  const QDBusVariant &userdata)
+    {
+        keepInUse();
+        SIGNON_RETURN_IF_CAM_UNAVAILABLE(SIGNOND_NEW_IDENTITY);
+>>>>>>> Use QDBusVariant instead of QVariant
 
     bool storeSecret = info.value(SIGNOND_IDENTITY_INFO_STORESECRET).toBool();
     QVariant container = info.value(SIGNOND_IDENTITY_INFO_AUTHMETHODS);
@@ -491,20 +603,45 @@ quint32 SignonIdentity::store(const QVariantMap &info)
         m_pInfo->setType(type);
     }
 
+<<<<<<< HEAD
     if (storeSecret) {
         m_pInfo->setPassword(secret);
     } else {
         m_pInfo->setPassword(QString());
     }
     m_id = storeCredentials(*m_pInfo, storeSecret);
+=======
+        if (storeSecret) {
+            m_pInfo->setPassword(secret);
+        } else {
+            m_pInfo->setPassword(QString());
+        }
+        m_id = storeCredentials(*m_pInfo, storeSecret, userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
 
     if (m_id == SIGNOND_NEW_IDENTITY) {
         sendErrorReply(SIGNOND_STORE_FAILED_ERR_NAME,
                        SIGNOND_STORE_FAILED_ERR_STR);
     }
 
+<<<<<<< HEAD
     return m_id;
 }
+=======
+    quint32 SignonIdentity::storeCredentials(const quint32 id,
+                                             const QString &userName,
+                                             const QString &secret,
+                                             const bool storeSecret,
+                                             const QMap<QString, QVariant> &methods,
+                                             const QString &caption,
+                                             const QStringList &realms,
+                                             const QStringList &accessControlList,
+                                             const int type,
+                                             const QDBusVariant &userdata)
+    {
+        keepInUse();
+        SIGNON_RETURN_IF_CAM_UNAVAILABLE(SIGNOND_NEW_IDENTITY);
+>>>>>>> Use QDBusVariant instead of QVariant
 
 quint32 SignonIdentity::storeCredentials(const SignonIdentityInfo &info,
                                          bool storeSecret)
@@ -522,9 +659,13 @@ quint32 SignonIdentity::storeCredentials(const SignonIdentityInfo &info,
     else
         db->updateCredentials(info, storeSecret);
 
+<<<<<<< HEAD
     if (db->errorOccurred()) {
         if (newIdentity)
             m_id = SIGNOND_NEW_IDENTITY;
+=======
+        storeCredentials(*m_pInfo, storeSecret, userdata);
+>>>>>>> Use QDBusVariant instead of QVariant
 
         TRACE() << "Error occurred while inserting/updating credentials.";
     } else {
@@ -534,6 +675,7 @@ quint32 SignonIdentity::storeCredentials(const SignonIdentityInfo &info,
         }
         m_pSignonDaemon->identityStored(this);
 
+<<<<<<< HEAD
         //If secrets db is not available cache auth. data.
         if (!db->isSecretsDBOpen()) {
             AuthCache *cache = new AuthCache;
@@ -542,6 +684,21 @@ quint32 SignonIdentity::storeCredentials(const SignonIdentityInfo &info,
             AuthCoreCache::instance()->insert(
                 AuthCoreCache::CacheId(m_id, AuthCoreCache::AuthMethod()),
                 cache);
+=======
+        return m_id;
+    }
+
+    quint32 SignonIdentity::storeCredentials(const SignonIdentityInfo &info,
+                                             bool storeSecret,
+                                             const QDBusVariant &userdata)
+    {
+        Q_UNUSED(userdata);
+
+        CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
+        if (db == NULL) {
+            BLAME() << "NULL database handler object.";
+            return SIGNOND_NEW_IDENTITY;
+>>>>>>> Use QDBusVariant instead of QVariant
         }
         TRACE() << "FRESH, JUST STORED CREDENTIALS ID:" << m_id;
         emit infoUpdated((int)SignOn::IdentityDataUpdated);
