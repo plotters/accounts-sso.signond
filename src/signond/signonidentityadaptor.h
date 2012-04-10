@@ -48,21 +48,21 @@ namespace SignonDaemonNS {
 
     public Q_SLOTS:
         quint32 requestCredentialsUpdate(const QString &message,
-                                         const QVariant &userdata);
-        QList<QVariant> queryInfo(const QVariant &userdata);
+                                         const QDBusVariant &userdata);
+        QList<QVariant> queryInfo(const QDBusVariant &userdata);
         void addReference(const QString &reference,
-                          const QVariant &userdata);
+                          const QDBusVariant &userdata);
         void removeReference(const QString &reference,
-                             const QVariant &userdata);
+                             const QDBusVariant &userdata);
 
         bool verifyUser(const QVariantMap &params,
-                        const QVariant &userdata);
+                        const QDBusVariant &userdata);
         bool verifySecret(const QString &secret,
-                          const QVariant &userdata);
-        void remove(const QVariant &userdata);
-        bool signOut(const QVariant &userdata);
+                          const QDBusVariant &userdata);
+        void remove(const QDBusVariant &userdata);
+        bool signOut(const QDBusVariant &userdata);
         quint32 store(const QVariantMap &info,
-                      const QVariant &userdata);
+                      const QDBusVariant &userdata);
 
         quint32 storeCredentials(const quint32 id,
                                  const QString &userName,
@@ -73,7 +73,7 @@ namespace SignonDaemonNS {
                                  const QStringList &realms,
                                  const QStringList &accessControlList,
                                  const int type,
-                                 const QVariant &userdata);
+                                 const QDBusVariant &userdata);
     Q_SIGNALS:
         void unregistered();
         void infoUpdated(int);

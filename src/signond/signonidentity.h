@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -58,19 +60,29 @@ namespace SignonDaemonNS {
         static SignonIdentity *createIdentity(quint32 id, SignonDaemon *parent);
         quint32 id() const { return m_id; }
 
-        SignonIdentityInfo queryInfo(bool &ok, bool queryPassword = true);
-        quint32 storeCredentials(const SignonIdentityInfo &info, bool storeSecret);
+        SignonIdentityInfo queryInfo(bool &ok,
+                                     const QDBusVariant &userdata,
+                                     bool queryPassword = true);
+        quint32 storeCredentials(const SignonIdentityInfo &info,
+                                 bool storeSecret,
+                                 const QDBusVariant &userdata);
 
     public Q_SLOTS:
-        quint32 requestCredentialsUpdate(const QString &message);
-        QList<QVariant> queryInfo();
-        bool addReference(const QString &reference);
-        bool removeReference(const QString &reference);
-        bool verifyUser(const QVariantMap &params);
-        bool verifySecret(const QString &secret);
-        void remove();
-        bool signOut();
-        quint32 store(const QVariantMap &info);
+        quint32 requestCredentialsUpdate(const QString &message,
+                                         const QDBusVariant &userdata);
+        QList<QVariant> queryInfo(const QDBusVariant &userdata);
+        bool addReference(const QString &reference,
+                          const QDBusVariant &userdata);
+        bool removeReference(const QString &reference,
+                             const QDBusVariant &userdata);
+        bool verifyUser(const QVariantMap &params,
+                        const QDBusVariant &userdata);
+        bool verifySecret(const QString &secret,
+                          const QDBusVariant &userdata);
+        void remove(const QDBusVariant &userdata);
+        bool signOut(const QDBusVariant &userdata);
+        quint32 store(const QVariantMap &info,
+                      const QDBusVariant &userdata);
         quint32 storeCredentials(const quint32 id,
                                  const QString &userName,
                                  const QString &secret,
@@ -79,7 +91,8 @@ namespace SignonDaemonNS {
                                  const QString &caption,
                                  const QStringList &realms,
                                  const QStringList &accessControlList,
-                                 const int type);
+                                 const int type,
+                                 const QDBusVariant &userdata);
         void queryUiSlot(QDBusPendingCallWatcher *call);
         void verifyUiSlot(QDBusPendingCallWatcher *call);
     Q_SIGNALS:
