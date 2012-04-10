@@ -39,6 +39,7 @@ AbstractAccessControlManager *SmackAccessControlPlugin::accessControlManager(QOb
     return new SmackAccessControlManager(parent);
 }
 
+<<<<<<< HEAD
 AbstractSecretsStorage *SmackAccessControlPlugin::secretsStorage(QObject *parent) const
 {
     return 0;
