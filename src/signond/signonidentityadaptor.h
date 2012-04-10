@@ -57,13 +57,13 @@ namespace SignonDaemonNS {
                              const QVariant &applicationContext);
 
         bool verifyUser(const QVariantMap &params,
-                        const QVariant &userdata);
+                        const QDBusVariant &userdata);
         bool verifySecret(const QString &secret,
-                          const QVariant &userdata);
-        void remove(const QVariant &userdata);
-        bool signOut(const QVariant &userdata);
+                          const QDBusVariant &userdata);
+        void remove(const QDBusVariant &userdata);
+        bool signOut(const QDBusVariant &userdata);
         quint32 store(const QVariantMap &info,
-                      const QVariant &userdata);
+                      const QDBusVariant &userdata);
 
     Q_SIGNALS:
         void unregistered();

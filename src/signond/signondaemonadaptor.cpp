@@ -39,10 +39,10 @@ namespace SignonDaemonNS {
     SignonDaemonAdaptor::~SignonDaemonAdaptor()
     {}
 
-    void SignonDaemonAdaptor::registerNewIdentity(const QVariant &userdata,
+    void SignonDaemonAdaptor::registerNewIdentity(const QDBusVariant &userdata,
                                                   QDBusObjectPath &objectPath)
     {
-        m_parent->registerNewIdentity(objectPath);
+        m_parent->registerNewIdentity(userdata, objectPath);
 
         SignonDisposable::destroyUnused();
     }
@@ -66,7 +66,7 @@ namespace SignonDaemonNS {
     void SignonDaemonAdaptor::getIdentity(const quint32 id,
                                           QDBusObjectPath &objectPath,
                                           QVariantMap &identityData,
-                                          const QVariant &userdata)
+                                          const QVariant &applicationContext)
     {
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
                                         parentDBusContext().message(), id)) {
@@ -86,7 +86,7 @@ namespace SignonDaemonNS {
 
     QString SignonDaemonAdaptor::getAuthSessionObjectPath(const quint32 id,
                                                           const QString &type,
-                                                          const QVariant &userdata)
+                                                          const QDBusVariant &userdata)
     {
         SignonDisposable::destroyUnused();
 
@@ -100,7 +100,7 @@ namespace SignonDaemonNS {
         }
 
         TRACE() << "ACM passed, creating AuthSession object";
-        return m_parent->getAuthSessionObjectPath(id, type);
+        return m_parent->getAuthSessionObjectPath(id, type, userdata);
     }
 
     QStringList SignonDaemonAdaptor::queryMechanisms(const QString &method)

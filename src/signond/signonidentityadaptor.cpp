@@ -61,7 +61,7 @@ namespace SignonDaemonNS {
     }
 
     quint32 SignonIdentityAdaptor::requestCredentialsUpdate(const QString &msg,
-                                                            const QVariant &userdata)
+                                                            const QDBusVariant &userdata)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -70,7 +70,7 @@ namespace SignonDaemonNS {
             return 0;
         }
 
-        return m_parent->requestCredentialsUpdate(msg);
+        return m_parent->requestCredentialsUpdate(msg, userdata);
     }
 
     QVariantMap SignonIdentityAdaptor::getInfo(const QVariant &applicationContext)
@@ -86,7 +86,7 @@ namespace SignonDaemonNS {
     }
 
     void SignonIdentityAdaptor::addReference(const QString &reference,
-                                             const QVariant &userdata)
+                                             const QDBusVariant &userdata)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -95,7 +95,7 @@ namespace SignonDaemonNS {
             return;
         }
 
-        if (!m_parent->addReference(reference)) {
+        if (!m_parent->addReference(reference, userdata)) {
             /* TODO: add a lastError() method to SignonIdentity */
             errorReply(SIGNOND_OPERATION_FAILED_ERR_NAME,
                        SIGNOND_OPERATION_FAILED_ERR_STR);
@@ -103,7 +103,7 @@ namespace SignonDaemonNS {
     }
 
     void SignonIdentityAdaptor::removeReference(const QString &reference,
-                                                const QVariant &userdata)
+                                                const QDBusVariant &userdata)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -112,7 +112,7 @@ namespace SignonDaemonNS {
             return;
         }
 
-        if (!m_parent->removeReference(reference)) {
+        if (!m_parent->removeReference(reference, userdata)) {
             /* TODO: add a lastError() method to SignonIdentity */
             errorReply(SIGNOND_OPERATION_FAILED_ERR_NAME,
                        SIGNOND_OPERATION_FAILED_ERR_STR);
@@ -121,7 +121,7 @@ namespace SignonDaemonNS {
 
 
     bool SignonIdentityAdaptor::verifyUser(const QVariantMap &params,
-                                           const QVariant &userdata)
+                                           const QDBusVariant &userdata)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -130,11 +130,11 @@ namespace SignonDaemonNS {
             return false;
         }
 
-        return m_parent->verifyUser(params);
+        return m_parent->verifyUser(params, userdata);
     }
 
     bool SignonIdentityAdaptor::verifySecret(const QString &secret,
-                                             const QVariant &userdata)
+                                             const QDBusVariant &userdata)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -143,10 +143,10 @@ namespace SignonDaemonNS {
             return false;
         }
 
-        return m_parent->verifySecret(secret);
+        return m_parent->verifySecret(secret, userdata);
     }
 
-    void SignonIdentityAdaptor::remove(const QVariant &userdata)
+    void SignonIdentityAdaptor::remove(const QDBusVariant &userdata)
     {
         /* Access Control */
         AccessControlManagerHelper::IdentityOwnership ownership =
@@ -163,10 +163,10 @@ namespace SignonDaemonNS {
             }
         }
 
-        m_parent->remove();
+        m_parent->remove(userdata);
     }
 
-    bool SignonIdentityAdaptor::signOut(const QVariant &userdata)
+    bool SignonIdentityAdaptor::signOut(const QDBusVariant &userdata)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -175,11 +175,11 @@ namespace SignonDaemonNS {
             return false;
         }
 
-        return m_parent->signOut();
+        return m_parent->signOut(userdata);
     }
 
     quint32 SignonIdentityAdaptor::store(const QVariantMap &info,
-                                         const QVariant &userdata)
+                                         const QDBusVariant &userdata)
     {
         quint32 id = info.value(QLatin1String("Id"), SIGNOND_NEW_IDENTITY).toInt();
         /* Access Control */
@@ -198,7 +198,7 @@ namespace SignonDaemonNS {
                 }
             }
         }
-        return m_parent->store(info);
+        return m_parent->store(info, userdata);
     }
 
 } //namespace SignonDaemonNS

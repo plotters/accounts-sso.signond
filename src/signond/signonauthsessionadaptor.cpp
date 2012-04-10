@@ -47,7 +47,7 @@ namespace SignonDaemonNS {
     }
 
     QStringList SignonAuthSessionAdaptor::queryAvailableMechanisms(const QStringList &wantedMechanisms,
-                                                                   const QVariant &userdata)
+                                                                   const QDBusVariant &userdata)
     {
         TRACE();
 
@@ -61,12 +61,12 @@ namespace SignonDaemonNS {
             return QStringList();
         }
 
-        return parent()->queryAvailableMechanisms(wantedMechanisms);
+        return parent()->queryAvailableMechanisms(wantedMechanisms, userdata);
     }
 
     QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
                                                   const QString &mechanism,
-                                                  const QVariant &userdata)
+                                                  const QDBusVariant &userdata)
     {
         TRACE();
 
@@ -105,10 +105,10 @@ namespace SignonDaemonNS {
             return QVariantMap();
         }
 
-        return parent()->process(sessionDataVa, allowedMechanism);
+        return parent()->process(sessionDataVa, allowedMechanism, userdata);
     }
 
-    void SignonAuthSessionAdaptor::cancel(const QVariant &userdata)
+    void SignonAuthSessionAdaptor::cancel(const QDBusVariant &userdata)
     {
         TRACE();
 
@@ -118,10 +118,11 @@ namespace SignonDaemonNS {
             return;
         }
 
-        parent()->cancel();
+        parent()->cancel(userdata);
     }
 
-    void SignonAuthSessionAdaptor::setId(quint32 id, const QVariant &userdata)
+    void SignonAuthSessionAdaptor::setId(quint32 id,
+                                         const QDBusVariant &userdata)
     {
         TRACE();
 
@@ -136,10 +137,10 @@ namespace SignonDaemonNS {
             return;
         }
 
-        parent()->setId(id);
+        parent()->setId(id, userdata);
     }
 
-    void SignonAuthSessionAdaptor::objectUnref(const QVariant &userdata)
+    void SignonAuthSessionAdaptor::objectUnref(const QDBusVariant &userdata)
     {
         TRACE();
 
@@ -149,7 +150,7 @@ namespace SignonDaemonNS {
             return;
         }
 
-        parent()->objectUnref();
+        parent()->objectUnref(userdata);
     }
 
 } //namespace SignonDaemonNS

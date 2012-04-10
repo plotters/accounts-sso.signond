@@ -2,7 +2,7 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
- * Copyright (C) 2011 Intel Corporation.
+ * Copyright (C) 2011-2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
@@ -143,8 +143,12 @@ namespace SignonDaemonNS {
         deleteLater();
     }
 
-    SignonIdentityInfo SignonIdentity::queryInfo(bool &ok, bool queryPassword)
+    SignonIdentityInfo SignonIdentity::queryInfo(bool &ok,
+                                                 const QDBusVariant &userdata,
+                                                 bool queryPassword)
     {
+        Q_UNUSED(userdata);
+
         ok = true;
 
         if (m_pInfo) {
@@ -163,8 +167,11 @@ namespace SignonDaemonNS {
         return *m_pInfo;
     }
 
-    bool SignonIdentity::addReference(const QString &reference)
+    bool SignonIdentity::addReference(const QString &reference,
+                                      const QDBusVariant &userdata)
     {
+        Q_UNUSED(userdata);
+
         TRACE() << "addReference: " << reference;
 
         SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
@@ -179,8 +186,11 @@ namespace SignonDaemonNS {
         return db->addReference(m_id, appId, reference);
     }
 
-    bool SignonIdentity::removeReference(const QString &reference)
+    bool SignonIdentity::removeReference(const QString &reference,
+                                         const QDBusVariant &userdata)
     {
+        Q_UNUSED(userdata);
+
         TRACE() << "removeReference: " << reference;
 
         SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
@@ -195,12 +205,13 @@ namespace SignonDaemonNS {
         return db->removeReference(m_id, appId, reference);
     }
 
-    quint32 SignonIdentity::requestCredentialsUpdate(const QString &displayMessage)
+    quint32 SignonIdentity::requestCredentialsUpdate(const QString &displayMessage,
+                                                     const QDBusVariant &userdata)
     {
         SIGNON_RETURN_IF_CAM_UNAVAILABLE(SIGNOND_NEW_IDENTITY);
 
         bool ok;
-        SignonIdentityInfo info = queryInfo(ok, false);
+        SignonIdentityInfo info = queryInfo(ok, userdata, false);
 
         if (!ok) {
             BLAME() << "Identity not found.";
@@ -235,14 +246,14 @@ namespace SignonDaemonNS {
         return 0;
     }
 
-    QVariantMap SignonIdentity::getInfo()
+    QVariantMap SignonIdentity::getInfo(const QDBusVariant &applicationContext)
     {
         TRACE() << "QUERYING INFO";
 
         SIGNON_RETURN_IF_CAM_UNAVAILABLE(QVariantMap());
 
         bool ok;
-        SignonIdentityInfo info = queryInfo(ok, false);
+        SignonIdentityInfo info = queryInfo(ok, userdata, false);
 
         if (!ok) {
             TRACE();
@@ -273,12 +284,13 @@ namespace SignonDaemonNS {
         setAutoDestruct(false);
     }
 
-    bool SignonIdentity::verifyUser(const QVariantMap &params)
+    bool SignonIdentity::verifyUser(const QVariantMap &params,
+                                    const QDBusVariant &userdata)
     {
         SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
 
         bool ok;
-        SignonIdentityInfo info = queryInfo(ok, true);
+        SignonIdentityInfo info = queryInfo(ok, userdata, true);
 
         if (!ok) {
             BLAME() << "Identity not found.";
@@ -308,12 +320,13 @@ namespace SignonDaemonNS {
         return false;
     }
 
-    bool SignonIdentity::verifySecret(const QString &secret)
+    bool SignonIdentity::verifySecret(const QString &secret,
+                                      const QDBusVariant &userdata)
     {
         SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
 
         bool ok;
-        queryInfo(ok);
+        queryInfo(ok, userdata);
         if (!ok) {
             TRACE();
             sendErrorReply(SIGNOND_CREDENTIALS_NOT_AVAILABLE_ERR_NAME,
@@ -329,8 +342,10 @@ namespace SignonDaemonNS {
         return ret;
     }
 
-    void SignonIdentity::remove()
+    void SignonIdentity::remove(const QDBusVariant &userdata)
     {
+        Q_UNUSED(userdata);
+
         SIGNON_RETURN_IF_CAM_UNAVAILABLE();
 
         CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
@@ -345,8 +360,10 @@ namespace SignonDaemonNS {
         keepInUse();
     }
 
-    bool SignonIdentity::signOut()
+    bool SignonIdentity::signOut(const QDBusVariant &userdata)
     {
+        Q_UNUSED(userdata);
+
         TRACE() << "Signout request. Identity ID: " << id();
         /*
            - If the identity is stored (thus registered here)
@@ -369,7 +386,8 @@ namespace SignonDaemonNS {
         return true;
     }
 
-    quint32 SignonIdentity::store(const QVariantMap &info)
+    quint32 SignonIdentity::store(const QVariantMap &info,
+                                  const QDBusVariant &userdata)
     {
         keepInUse();
         SIGNON_RETURN_IF_CAM_UNAVAILABLE(SIGNOND_NEW_IDENTITY);
@@ -439,7 +457,7 @@ namespace SignonDaemonNS {
         } else {
             m_pInfo->setPassword(QString());
         }
-        m_id = storeCredentials(*m_pInfo, storeSecret);
+        m_id = storeCredentials(*m_pInfo, storeSecret, userdata);
 
         if (m_id == SIGNOND_NEW_IDENTITY) {
             sendErrorReply(SIGNOND_STORE_FAILED_ERR_NAME,
@@ -449,8 +467,12 @@ namespace SignonDaemonNS {
         return m_id;
     }
 
-    quint32 SignonIdentity::storeCredentials(const SignonIdentityInfo &info, bool storeSecret)
+    quint32 SignonIdentity::storeCredentials(const SignonIdentityInfo &info,
+                                             bool storeSecret,
+                                             const QDBusVariant &userdata)
     {
+        Q_UNUSED(userdata);
+
         CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
         if (db == NULL) {
             BLAME() << "NULL database handler object.";

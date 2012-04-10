@@ -3,8 +3,10 @@
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
  * Copyright (C) 2012 Canonical Ltd.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -58,7 +60,8 @@ namespace SignonDaemonNS {
                                                 const QString &method,
                                                 SignonDaemon *parent,
                                                 bool &supportsAuthMethod,
-                                                pid_t ownerPid);
+                                                pid_t ownerPid,
+                                                const QVariant &userdata);
         static void stopAllAuthSessions();
         quint32 id() const;
         QString method() const;
@@ -66,11 +69,14 @@ namespace SignonDaemonNS {
         pid_t ownerPid() const;
 
     public Q_SLOTS:
-        QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms);
-        QVariantMap process(const QVariantMap &sessionDataVa, const QString &mechanism);
-        void cancel();
-        void setId(quint32 id);
-        void objectUnref();
+        QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms,
+                                             const QDBusVariant &userdata);
+        QVariantMap process(const QVariantMap &sessionDataVa,
+                            const QString &mechanism,
+                            const QDBusVariant &userdata);
+        void cancel(const QDBusVariant &userdata);
+        void setId(quint32 id, const QDBusVariant &userdata);
+        void objectUnref(const QDBusVariant &userdata);
 
     Q_SIGNALS:
         void stateChanged(int state, const QString &message);
