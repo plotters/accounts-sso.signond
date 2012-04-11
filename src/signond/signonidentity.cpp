@@ -406,10 +406,27 @@ namespace SignonDaemonNS {
         QVariant container = info.value(SIGNOND_IDENTITY_INFO_AUTHMETHODS);
         QVariantMap methods = qdbus_cast<QVariantMap>(container.value<QDBusArgument>());
 
-        //Add creator to owner list if it has AID
         QStringList ownerList = info.value(SIGNOND_IDENTITY_INFO_OWNER).toStringList();
-        if (!appId.isNull())
+        if (appId.isEmpty() && ownerList.isEmpty()) {
+            /* send an error reply, because otherwise we may end up with empty owner */
+            replyError(SIGNOND_INVALID_QUERY_ERR_NAME,
+                       SIGNOND_INVALID_QUERY_ERR_STR);
+            return 0;
+        }
+        /* if owner list is empty, add the appId of application to it by default */
+        if (ownerList.isEmpty())
             ownerList.append(appId);
+        else {
+            /* check that application is allowed to set the specified list of owners */
+            bool allowed = AccessControlManagerHelper::instance()->isACLValid(
+                            (static_cast<QDBusContext>(*this)).message(),ownerList);
+            if (!allowed) {
+                /* send an error reply, because otherwise uncontrolled sharing might happen */
+                replyError(SIGNOND_PERMISSION_DENIED_ERR_NAME,
+                           SIGNOND_PERMISSION_DENIED_ERR_STR); 
+                return 0;
+            }
+        }
 
         if (m_pInfo == 0) {
             m_pInfo = new SignonIdentityInfo(info);
@@ -420,6 +437,16 @@ namespace SignonDaemonNS {
             QString caption = info.value(SIGNOND_IDENTITY_INFO_CAPTION).toString();
             QStringList realms = info.value(SIGNOND_IDENTITY_INFO_REALMS).toStringList();
             QStringList accessControlList = info.value(SIGNOND_IDENTITY_INFO_ACL).toStringList();
+            /* before setting this ACL value to the new identity, 
+               we need to make sure that it isn't unconrolled sharing attempt.*/
+            bool allowed = AccessControlManagerHelper::instance()->isACLValid(
+                            (static_cast<QDBusContext>(*this)).message(),accessControlList);
+            if (!allowed) {
+                /* send an error reply, because otherwise uncontrolled sharing might happen */
+                replyError(SIGNOND_PERMISSION_DENIED_ERR_NAME,
+                           SIGNOND_PERMISSION_DENIED_ERR_STR);
+                return 0;
+            }
             int type = info.value(SIGNOND_IDENTITY_INFO_TYPE).toInt();
 
             m_pInfo->setUserName(userName);
