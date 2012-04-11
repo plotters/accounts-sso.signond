@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -48,13 +50,21 @@ namespace SignOn {
     {
         Q_OBJECT
         Q_DISABLE_COPY(AuthSessionImpl)
+        Q_PROPERTY(QVariant userdata READ userdata WRITE setUserdata);
 
         friend class AuthSession;
         friend class IdentityImpl;
 
     public:
-        AuthSessionImpl(AuthSession *parent, quint32 id, const QString &methodName);
+        AuthSessionImpl(AuthSession *parent,
+                        quint32 id,
+                        const QString &methodName,
+                        const QVariant &userdataP);
         ~AuthSessionImpl();
+        QVariant userdata() const
+        { return m_userdata; }
+        void setUserdata (const QVariant &newUserdata)
+        { m_userdata = newUserdata; }
 
     public Q_SLOTS:
         QString name();
@@ -96,6 +106,8 @@ namespace SignOn {
          * authentication failed once we do not try anymore
          * */
         bool m_isValid;
+
+        QVariant m_userdata;
     };
 
 } //namespace SignOn

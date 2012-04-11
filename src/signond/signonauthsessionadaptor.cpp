@@ -2,7 +2,7 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
- * Copyright (C) 2011 Intel Corporation.
+ * Copyright (C) 2011-2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
@@ -46,7 +46,8 @@ namespace SignonDaemonNS {
         SIGNOND_BUS.send(errReply);
     }
 
-    QStringList SignonAuthSessionAdaptor::queryAvailableMechanisms(const QStringList &wantedMechanisms)
+    QStringList SignonAuthSessionAdaptor::queryAvailableMechanisms(const QStringList &wantedMechanisms,
+                                                                   const QDBusVariant &userdata)
     {
         TRACE();
 
@@ -60,10 +61,12 @@ namespace SignonDaemonNS {
             return QStringList();
         }
 
-        return parent()->queryAvailableMechanisms(wantedMechanisms);
+        return parent()->queryAvailableMechanisms(wantedMechanisms, userdata);
     }
 
-    QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa, const QString &mechanism)
+    QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
+                                                  const QString &mechanism,
+                                                  const QDBusVariant &userdata)
     {
         TRACE();
 
@@ -102,10 +105,10 @@ namespace SignonDaemonNS {
             return QVariantMap();
         }
 
-        return parent()->process(sessionDataVa, allowedMechanism);
+        return parent()->process(sessionDataVa, allowedMechanism, userdata);
     }
 
-    void SignonAuthSessionAdaptor::cancel()
+    void SignonAuthSessionAdaptor::cancel(const QDBusVariant &userdata)
     {
         TRACE();
 
@@ -115,10 +118,11 @@ namespace SignonDaemonNS {
             return;
         }
 
-        parent()->cancel();
+        parent()->cancel(userdata);
     }
 
-    void SignonAuthSessionAdaptor::setId(quint32 id)
+    void SignonAuthSessionAdaptor::setId(quint32 id,
+                                         const QDBusVariant &userdata)
     {
         TRACE();
 
@@ -133,10 +137,10 @@ namespace SignonDaemonNS {
             return;
         }
 
-        parent()->setId(id);
+        parent()->setId(id, userdata);
     }
 
-    void SignonAuthSessionAdaptor::objectUnref()
+    void SignonAuthSessionAdaptor::objectUnref(const QDBusVariant &userdata)
     {
         TRACE();
 
@@ -146,7 +150,7 @@ namespace SignonDaemonNS {
             return;
         }
 
-        parent()->objectUnref();
+        parent()->objectUnref(userdata);
     }
 
 } //namespace SignonDaemonNS

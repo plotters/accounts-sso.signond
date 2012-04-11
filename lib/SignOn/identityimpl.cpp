@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -69,7 +71,8 @@ namespace SignOn {
           m_DBusInterface(NULL),
           m_state(NeedsRegistration),
           m_infoQueried(true),
-          m_signOutRequestedByThisIdentity(false)
+          m_signOutRequestedByThisIdentity(false),
+          m_userdata(QString::fromLatin1(""))
     {
         m_identityInfo->setId(id);
         sendRegisterRequest();
@@ -114,7 +117,8 @@ namespace SignOn {
        return m_identityInfo->id();
     }
 
-    AuthSession *IdentityImpl::createSession(const QString &methodName, QObject *parent)
+    AuthSession *IdentityImpl::createSession(const QString &methodName,
+                                             QObject *parent)
     {
         foreach (AuthSession *authSession, m_authSessions) {
             if (authSession->name() == methodName) {
@@ -125,7 +129,10 @@ namespace SignOn {
             }
         }
 
-        AuthSession *session = new AuthSession(id(), methodName, parent);
+        AuthSession *session = new AuthSession(id(),
+                                               methodName,
+                                               m_userdata,
+                                               parent);
         m_authSessions.append(session);
         return session;
     }
@@ -174,20 +181,24 @@ namespace SignOn {
 
     void IdentityImpl::requestCredentialsUpdate(const QString &message)
     {
+        QList<QGenericArgument *> genArgs;
+
         TRACE() << "Requesting credentials update.";
         checkConnection();
 
         switch (m_state) {
             case NeedsRegistration:
+                genArgs << (new Q_ARG(QString, message));
                 m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_REQUEST_CREDENTIALS_UPDATE_METHOD,
-                                QList<QGenericArgument *>() << (new Q_ARG(QString, message)));
+                                genArgs);
                 sendRegisterRequest();
                 return;
             case PendingRegistration:
+                genArgs << (new Q_ARG(QString, message));
                 m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_REQUEST_CREDENTIALS_UPDATE_METHOD,
-                                QList<QGenericArgument *>() << (new Q_ARG(QString, message)));
+                                genArgs);
                 return;
             case NeedsUpdate:
                 break;
@@ -203,9 +214,10 @@ namespace SignOn {
         }
 
         QList<QVariant> args;
-        args << message;
+        args << message << QVariant::fromValue(QDBusVariant(m_userdata));
         bool result = sendRequest(__func__, args,
-                                  SLOT(storeCredentialsReply(const quint32)), SIGNOND_MAX_TIMEOUT);
+                                  SLOT(storeCredentialsReply(const quint32)),
+                                  SIGNOND_MAX_TIMEOUT);
         if (!result) {
             TRACE() << "Error occurred.";
             emit m_parent->error(
@@ -216,6 +228,9 @@ namespace SignOn {
 
     void IdentityImpl::storeCredentials(const IdentityInfo &info)
     {
+        IdentityInfo localInfo;
+        QList<QGenericArgument *> genArgs;
+
         TRACE() << "Storing credentials";
         checkConnection();
 
@@ -224,25 +239,24 @@ namespace SignOn {
                 updateState(NeedsRegistration);
                 // --Fallthrough-here--
             case NeedsRegistration:
-                {
-                IdentityInfo localInfo =
-                    info.impl->isEmpty() ? *m_identityInfo : *(m_tmpIdentityInfo = new IdentityInfo(info));
-
+                localInfo =
+                    info.impl->isEmpty() ?
+                    *m_identityInfo : *(m_tmpIdentityInfo = new IdentityInfo(info));
+                genArgs << (new Q_ARG(SignOn::IdentityInfo, localInfo));
                 m_operationQueueHandler.enqueueOperation(
                                         SIGNOND_IDENTITY_STORE_CREDENTIALS_METHOD,
-                                        QList<QGenericArgument *>() << (new Q_ARG(SignOn::IdentityInfo, localInfo)));
+                                        genArgs);
                 sendRegisterRequest();
                 return;
-                }
             case PendingRegistration:
-                {
-                IdentityInfo localInfo =
-                    info.impl->isEmpty() ? *m_identityInfo : *(m_tmpIdentityInfo = new IdentityInfo(info));
+                localInfo =
+                    info.impl->isEmpty() ?
+                    *m_identityInfo : *(m_tmpIdentityInfo = new IdentityInfo(info));
+                genArgs << (new Q_ARG(SignOn::IdentityInfo, localInfo));
                 m_operationQueueHandler.enqueueOperation(
                                         SIGNOND_IDENTITY_STORE_CREDENTIALS_METHOD,
-                                        QList<QGenericArgument *>() << (new Q_ARG(SignOn::IdentityInfo, localInfo)));
+                                        genArgs);
                 return;
-                }
             case NeedsUpdate:
                 break;
             case Ready:
@@ -262,7 +276,7 @@ namespace SignOn {
         QVariantMap map = info.impl->toMap();
         map.insert(SIGNOND_IDENTITY_INFO_ID, m_identityInfo->id());
         map.insert(SIGNOND_IDENTITY_INFO_SECRET, info.secret());
-        args << map;
+        args << map << QVariant::fromValue(QDBusVariant(m_userdata));
 
         bool result = sendRequest("store", args,
                                   SLOT(storeCredentialsReply(const quint32)));
@@ -276,6 +290,8 @@ namespace SignOn {
 
     void IdentityImpl::remove()
     {
+        QList<QGenericArgument *> genArgs;
+
         TRACE() << "Removing credentials.";
 
         /* If the Identity is not stored, it makes no sense to request a removal
@@ -288,11 +304,13 @@ namespace SignOn {
 
             switch (m_state) {
                 case NeedsRegistration:
-                    m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_REMOVE_METHOD);
+                    m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_REMOVE_METHOD,
+                                                             genArgs);
                     sendRegisterRequest();
                     return;
                 case PendingRegistration:
-                    m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_REMOVE_METHOD);
+                    m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_REMOVE_METHOD,
+                                                             genArgs);
                     return;
                 case Removed:
                     emit m_parent->error(
@@ -307,7 +325,10 @@ namespace SignOn {
                     break;
             }
 
-            bool result = sendRequest(__func__, QList<QVariant>(),
+            QList<QVariant> args;
+
+            args << QVariant::fromValue(QDBusVariant(m_userdata));
+            bool result = sendRequest(__func__, args,
                                       SLOT(removeReply()));
             if (!result) {
                 TRACE() << "Error occurred.";
@@ -324,20 +345,24 @@ namespace SignOn {
 
     void IdentityImpl::addReference(const QString &reference)
     {
+        QList<QGenericArgument *> genArgs;
+
         TRACE() << "Adding reference to identity";
         checkConnection();
 
         switch (m_state) {
             case NeedsRegistration:
+                genArgs << (new Q_ARG(QString, reference));
                 m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_ADD_REFERENCE_METHOD,
-                                QList<QGenericArgument *>() << (new Q_ARG(QString, reference)));
+                                genArgs);
                 sendRegisterRequest();
                 return;
             case PendingRegistration:
+                genArgs << (new Q_ARG(QString, reference));
                 m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_ADD_REFERENCE_METHOD,
-                                QList<QGenericArgument *>() << (new Q_ARG(QString, reference)));
+                                genArgs);
                 return;
             case NeedsUpdate:
                 break;
@@ -352,7 +377,11 @@ namespace SignOn {
                 break;
         }
 
-        bool result = sendRequest(__func__, QList<QVariant>() << QVariant(reference),
+        QList<QVariant> args;
+
+        args << reference << QVariant::fromValue(QDBusVariant(m_userdata));
+        bool result = sendRequest(__func__,
+                                  args,
                                   SLOT(addReferenceReply()));
         if (!result) {
             TRACE() << "Error occurred.";
@@ -364,20 +393,24 @@ namespace SignOn {
 
     void IdentityImpl::removeReference(const QString &reference)
     {
+        QList<QGenericArgument *> genArgs;
+
         TRACE() << "Removing reference from identity";
         checkConnection();
 
         switch (m_state) {
             case NeedsRegistration:
+                genArgs << (new Q_ARG(QString, reference));
                 m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_REMOVE_REFERENCE_METHOD,
-                                QList<QGenericArgument *>() << (new Q_ARG(QString, reference)));
+                                genArgs);
                 sendRegisterRequest();
                 return;
             case PendingRegistration:
+                genArgs << (new Q_ARG(QString, reference));
                 m_operationQueueHandler.enqueueOperation(
                                 SIGNOND_IDENTITY_REMOVE_REFERENCE_METHOD,
-                                QList<QGenericArgument *>() << (new Q_ARG(QString, reference)));
+                                genArgs);
                 return;
             case NeedsUpdate:
                 break;
@@ -392,7 +425,11 @@ namespace SignOn {
                 break;
         }
 
-        bool result = sendRequest(__func__, QList<QVariant>() << QVariant(reference),
+        QList<QVariant> args;
+
+        args << reference << QVariant::fromValue(QDBusVariant(m_userdata));
+        bool result = sendRequest(__func__,
+                                  args,
                                   SLOT(removeReferenceReply()));
         if (!result) {
             TRACE() << "Error occurred.";
@@ -404,16 +441,20 @@ namespace SignOn {
 
     void IdentityImpl::queryInfo()
     {
+        QList<QGenericArgument *> genArgs;
+
         TRACE() << "Querying info.";
         checkConnection();
 
         switch (m_state) {
             case NeedsRegistration:
-                m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_QUERY_INFO_METHOD);
+                m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_QUERY_INFO_METHOD,
+                                                         genArgs);
                 sendRegisterRequest();
                 return;
             case PendingRegistration:
-                m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_QUERY_INFO_METHOD);
+                m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_QUERY_INFO_METHOD,
+                                                         genArgs);
                 return;
             case Removed:
                 emit m_parent->error(
@@ -441,20 +482,24 @@ namespace SignOn {
 
     void IdentityImpl::verifyUser(const QVariantMap &params)
     {
+        QList<QGenericArgument *> genArgs;
+
         TRACE() << "Verifying user.";
         checkConnection();
 
         switch (m_state) {
             case NeedsRegistration:
+                genArgs << (new Q_ARG(QVariantMap, params));
                 m_operationQueueHandler.enqueueOperation(
                                         SIGNOND_IDENTITY_VERIFY_USER_METHOD,
-                                        QList<QGenericArgument *>() << (new Q_ARG(QVariantMap, params)));
+                                        genArgs);
                 sendRegisterRequest();
                 return;
             case PendingRegistration:
+                genArgs << (new Q_ARG(QVariantMap, params));
                 m_operationQueueHandler.enqueueOperation(
                                         SIGNOND_IDENTITY_VERIFY_USER_METHOD,
-                                        QList<QGenericArgument *>() << (new Q_ARG(QVariantMap, params)));
+                                        genArgs);
                 return;
             case Removed:
                 emit m_parent->error(
@@ -469,8 +514,13 @@ namespace SignOn {
                 break;
         }
 
-        bool result = sendRequest(__func__, QList<QVariant>() << params,
-                                  SLOT(verifyUserReply(const bool)), SIGNOND_MAX_TIMEOUT);
+        QList<QVariant> args;
+
+        args << params << QVariant::fromValue(QDBusVariant(m_userdata));
+        bool result = sendRequest(__func__,
+                                  args,
+                                  SLOT(verifyUserReply(const bool)),
+                                  SIGNOND_MAX_TIMEOUT);
         if (!result) {
             TRACE() << "Error occurred.";
             emit m_parent->error(
@@ -481,20 +531,24 @@ namespace SignOn {
 
     void IdentityImpl::verifySecret(const QString &secret)
     {
+        QList<QGenericArgument *> genArgs;
+
         TRACE();
         checkConnection();
 
         switch (m_state) {
             case NeedsRegistration:
+                genArgs << (new Q_ARG(QString, secret));
                 m_operationQueueHandler.enqueueOperation(
                                         SIGNOND_IDENTITY_VERIFY_SECRET_METHOD,
-                                        QList<QGenericArgument *>() << (new Q_ARG(QString, secret)));
+                                        genArgs);
                 sendRegisterRequest();
                 return;
             case PendingRegistration:
+                genArgs << (new Q_ARG(QString, secret));
                 m_operationQueueHandler.enqueueOperation(
                                         SIGNOND_IDENTITY_VERIFY_SECRET_METHOD,
-                                        QList<QGenericArgument *>() << (new Q_ARG(QString, secret)));
+                                        genArgs);
                 return;
             case Removed:
                 emit m_parent->error(
@@ -509,7 +563,11 @@ namespace SignOn {
                 break;
         }
 
-        bool result = sendRequest(__func__, QList<QVariant>() << QVariant(secret),
+        QList<QVariant> args;
+
+        args << secret << QVariant::fromValue(QDBusVariant(m_userdata));
+        bool result = sendRequest(__func__,
+                                  args,
                                   SLOT(verifySecretReply(const bool)));
         if (!result) {
             TRACE() << "Error occurred.";
@@ -521,6 +579,8 @@ namespace SignOn {
 
     void IdentityImpl::signOut()
     {
+        QList<QGenericArgument *> genArgs;
+
         TRACE() << "Signing out.";
         checkConnection();
 
@@ -531,11 +591,13 @@ namespace SignOn {
         if (id() != SIGNOND_NEW_IDENTITY) {
             switch (m_state) {
                 case NeedsRegistration:
-                    m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_SIGN_OUT_METHOD);
+                    m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_SIGN_OUT_METHOD,
+                                                             genArgs);
                     sendRegisterRequest();
                     return;
                 case PendingRegistration:
-                    m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_SIGN_OUT_METHOD);
+                    m_operationQueueHandler.enqueueOperation(SIGNOND_IDENTITY_SIGN_OUT_METHOD,
+                                                             genArgs);
                     return;
                 case Removed:
                     break;
@@ -547,7 +609,10 @@ namespace SignOn {
                     break;
             }
 
-            bool result = sendRequest(__func__, QList<QVariant>(),
+            QList<QVariant> args;
+
+            args << QVariant::fromValue(QDBusVariant(m_userdata));
+            bool result = sendRequest(__func__, args,
                                       SLOT(signOutReply()));
             if (!result) {
                 TRACE() << "Error occurred.";
@@ -797,6 +862,8 @@ namespace SignOn {
             registerReplyMethodName =
                 SLOT(registerReply(const QDBusObjectPath &, const QList<QVariant> &));
         }
+
+        args << QVariant::fromValue(QDBusVariant(m_userdata));
 
         QDBusMessage registerCall = QDBusMessage::createMethodCall(
             SIGNOND_SERVICE,

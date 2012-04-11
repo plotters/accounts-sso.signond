@@ -31,6 +31,7 @@
 #include "SignOn/key-handler.h"
 
 #include <QObject>
+#include <QFlags>
 
 namespace SignOn {
 
@@ -60,12 +61,12 @@ public:
      * Flags specifying why signond is asking for authorizing a key.
      * @sa queryKeyAuthorization
      */
-    enum Reason {
+    enum Reason_e {
         SystemStarted     = 1 << 0,
         KeyInserted       = 1 << 1,
         StorageNeeded     = 1 << 2,
     };
-    Q_DECLARE_FLAGS(Reason, Reason);
+    Q_DECLARE_FLAGS(Reason, Reason_e);
 
     /*!
      * Constructor

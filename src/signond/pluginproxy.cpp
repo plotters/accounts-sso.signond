@@ -330,7 +330,7 @@ namespace SignonDaemonNS {
             TRACE() << "Unknown operation code - skipping.";
 
             //flushing the stdin channel
-            Q_UNUSED(m_process->readAllStandardOutput());
+            m_process->readAllStandardOutput();
 
             connect(m_process, SIGNAL(readyRead()), this, SLOT(onReadStandardOutput()));
             return;

@@ -10,6 +10,7 @@
     <method name="queryAvailableMechanisms">
       <arg type="as" direction="out"/>
       <arg name="wantedMechanisms" type="as" direction="in"/>
+      <arg name="userdata" type="v" direction="in"/>
     </method>
     <method name="process">
       <arg type="a{sv}" direction="out"/>
@@ -17,16 +18,20 @@
       <arg name="sessionDataVa" type="a{sv}" direction="in"/>
       <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QVariantMap"/>
       <arg name="mechanism" type="s" direction="in"/>
+      <arg name="userdata" type="v" direction="in"/>
     </method>
     <method name="cancel">
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+      <arg name="userdata" type="v" direction="in"/>
     </method>
     <method name="setId">
       <arg name="id" type="u" direction="in"/>
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+      <arg name="userdata" type="v" direction="in"/>
     </method>
     <method name="objectUnref">
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+      <arg name="userdata" type="v" direction="in"/>
     </method>
   </interface>
 </node>

@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -421,7 +423,7 @@ void SignonDaemon::init()
     if (!initStorage())
         BLAME() << "Signond: Cannot initialize credentials storage.";
 
-    Q_UNUSED(AuthCoreCache::instance(this));
+    AuthCoreCache::instance(this);
 
     if (m_configuration->daemonTimeout() > 0) {
         SignonDisposable::invokeOnIdle(m_configuration->daemonTimeout(),
@@ -506,8 +508,10 @@ void SignonDaemon::identityStored(SignonIdentity *identity)
     }
 }
 
-void SignonDaemon::registerNewIdentity(QDBusObjectPath &objectPath)
+void SignonDaemon::registerNewIdentity(const QDBusVariant &userdata,
+                                       QDBusObjectPath &objectPath)
 {
+    Q_UNUSED(userdata);
     TRACE() << "Registering new identity:";
 
     SignonIdentity *identity = SignonIdentity::createIdentity(SIGNOND_NEW_IDENTITY, this);
@@ -539,8 +543,12 @@ int SignonDaemon::authSessionTimeout() const
                                      m_configuration->authSessionTimeout());
 }
 
-void SignonDaemon::registerStoredIdentity(const quint32 id, QDBusObjectPath &objectPath, QList<QVariant> &identityData)
+void SignonDaemon::registerStoredIdentity(const quint32 id,
+                                          const QDBusVariant &userdata,
+                                          QDBusObjectPath &objectPath,
+                                          QList<QVariant> &identityData)
 {
+    Q_UNUSED(userdata);
     SIGNON_RETURN_IF_CAM_UNAVAILABLE();
 
     TRACE() << "Registering identity:" << id;
@@ -562,7 +570,7 @@ void SignonDaemon::registerStoredIdentity(const quint32 id, QDBusObjectPath &obj
     }
 
     bool ok;
-    SignonIdentityInfo info = identity->queryInfo(ok, false);
+    SignonIdentityInfo info = identity->queryInfo(ok, userdata, false);
 
     if (info.isNew())
     {
@@ -686,14 +694,19 @@ bool SignonDaemon::clear()
     return true;
 }
 
-QString SignonDaemon::getAuthSessionObjectPath(const quint32 id, const QString type)
+QString SignonDaemon::getAuthSessionObjectPath(const quint32 id,
+                                               const QString type,
+                                               const QDBusVariant &userdata)
 {
+    Q_UNUSED(userdata);
+
     bool supportsAuthMethod = false;
     pid_t ownerPid = AccessControlManagerHelper::pidOfPeer(*this);
     QString objectPath =
         SignonAuthSession::getAuthSessionObjectPath(id, type, this,
                                                     supportsAuthMethod,
-                                                    ownerPid);
+                                                    ownerPid,
+                                                    userdata.variant());
     if (objectPath.isEmpty() && !supportsAuthMethod) {
         QDBusMessage errReply = message().createErrorReply(
                                                 SIGNOND_METHOD_NOT_KNOWN_ERR_NAME,
