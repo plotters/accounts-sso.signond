@@ -522,6 +522,7 @@ void SignonDaemon::identityStored(SignonIdentity *identity)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void SignonDaemon::registerNewIdentity(const QDBusVariant &applicationContext,
                                        QDBusObjectPath &objectPath)
 {
@@ -532,6 +533,12 @@ void SignonDaemon::registerNewIdentity(const QDBusVariant &userdata,
 {
     Q_UNUSED(userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+void SignonDaemon::registerNewIdentity(const QDBusVariant &applicationContext,
+                                       QDBusObjectPath &objectPath)
+{
+    Q_UNUSED(applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
     TRACE() << "Registering new identity:";
 
     SignonIdentity *identity =
@@ -566,7 +573,9 @@ int SignonDaemon::authSessionTimeout() const
 
 <<<<<<< HEAD
 void SignonDaemon::getIdentity(const quint32 id,
+                               const QDBusVariant &applicationContext,
                                QDBusObjectPath &objectPath,
+<<<<<<< HEAD
 <<<<<<< HEAD
                                QVariantMap &identityData)
 =======
@@ -583,6 +592,11 @@ void SignonDaemon::registerStoredIdentity(const quint32 id,
 {
     Q_UNUSED(userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+                               QVariantMap &identityData)
+{
+    Q_UNUSED(applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
     SIGNON_RETURN_IF_CAM_UNAVAILABLE();
 
     TRACE() << "Registering identity:" << id;
@@ -605,10 +619,14 @@ void SignonDaemon::registerStoredIdentity(const quint32 id,
 
     bool ok;
 <<<<<<< HEAD
+<<<<<<< HEAD
     SignonIdentityInfo info = identity->queryInfo(ok, applicationContext, false);
 =======
     SignonIdentityInfo info = identity->queryInfo(ok, userdata, false);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+    SignonIdentityInfo info = identity->queryInfo(ok, applicationContext, false);
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
     if (info.isNew())
     {
@@ -747,10 +765,14 @@ QString SignonDaemon::getAuthSessionObjectPath(const quint32 id,
     Q_UNUSED(applicationContext);
 =======
                                                const QString type,
-                                               const QDBusVariant &userdata)
+                                               const QDBusVariant &applicationContext)
 {
+<<<<<<< HEAD
     Q_UNUSED(userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+    Q_UNUSED(applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
     bool supportsAuthMethod = false;
     pid_t ownerPid = AccessControlManagerHelper::pidOfPeer(*this);
@@ -759,10 +781,14 @@ QString SignonDaemon::getAuthSessionObjectPath(const quint32 id,
                                                     supportsAuthMethod,
                                                     ownerPid,
 <<<<<<< HEAD
+<<<<<<< HEAD
                                                     applicationContext.variant());
 =======
                                                     userdata.variant());
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+                                                    applicationContext.variant());
+>>>>>>> Rename 'userdata' to 'applicationContext'
     if (objectPath.isEmpty() && !supportsAuthMethod) {
         sendErrorReply(SIGNOND_METHOD_NOT_KNOWN_ERR_NAME,
                        SIGNOND_METHOD_NOT_KNOWN_ERR_STR);

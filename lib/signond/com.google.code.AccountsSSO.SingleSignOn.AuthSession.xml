@@ -11,10 +11,14 @@
       <arg type="as" direction="out"/>
       <arg name="wantedMechanisms" type="as" direction="in"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
 =======
       <arg name="userdata" type="v" direction="in"/>
 >>>>>>> Add user data parameter to server side interfaces
+=======
+      <arg name="applicationContext" type="v" direction="in"/>
+>>>>>>> Rename 'userdata' to 'applicationContext'
     </method>
     <method name="process">
       <arg type="a{sv}" direction="out"/>
@@ -23,6 +27,7 @@
       <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QVariantMap"/>
       <arg name="mechanism" type="s" direction="in"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
     </method>
     <method name="cancel">
@@ -35,10 +40,18 @@
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="userdata" type="v" direction="in"/>
 >>>>>>> Add user data parameter to server side interfaces
+=======
+      <arg name="applicationContext" type="v" direction="in"/>
+    </method>
+    <method name="cancel">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+      <arg name="applicationContext" type="v" direction="in"/>
+>>>>>>> Rename 'userdata' to 'applicationContext'
     </method>
     <method name="setId">
       <arg name="id" type="u" direction="in"/>
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+<<<<<<< HEAD
 <<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
     </method>
@@ -52,6 +65,13 @@
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="userdata" type="v" direction="in"/>
 >>>>>>> Add user data parameter to server side interfaces
+=======
+      <arg name="applicationContext" type="v" direction="in"/>
+    </method>
+    <method name="objectUnref">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+      <arg name="applicationContext" type="v" direction="in"/>
+>>>>>>> Rename 'userdata' to 'applicationContext'
     </method>
   </interface>
 </node>

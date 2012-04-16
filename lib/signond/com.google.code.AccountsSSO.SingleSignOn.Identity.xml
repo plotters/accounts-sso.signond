@@ -10,14 +10,19 @@
       <arg type="u" direction="out"/>
       <arg name="message" type="s" direction="in"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
 =======
       <arg name="userdata" type="v" direction="in"/>
 >>>>>>> Add user data parameter to server side interfaces
+=======
+      <arg name="applicationContext" type="v" direction="in"/>
+>>>>>>> Rename 'userdata' to 'applicationContext'
     </method>
 <<<<<<< HEAD:lib/signond/com.google.code.AccountsSSO.SingleSignOn.Identity.xml
     <method name="getInfo">
       <arg type="a{sv}" direction="out"/>
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
     <method name="queryInfo">
@@ -31,20 +36,28 @@
 =======
       <arg name="userdata" type="v" direction="in"/>
 >>>>>>> Add user data parameter to server side interfaces
+=======
+      <arg name="applicationContext" type="v" direction="in"/>
+>>>>>>> Rename 'userdata' to 'applicationContext'
     </method>
     <method name="verifyUser">
       <arg type="b" direction="out"/>
       <arg name="params" type="a{sv}" direction="in"/>
       <annotation name="com.trolltech.QtDBus.QtTypeName.In4" value="QVariantMap"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
 =======
       <arg name="userdata" type="v" direction="in"/>
 >>>>>>> Add user data parameter to server side interfaces
+=======
+      <arg name="applicationContext" type="v" direction="in"/>
+>>>>>>> Rename 'userdata' to 'applicationContext'
     </method>
     <method name="verifySecret">
       <arg type="b" direction="out"/>
       <arg name="secret" type="s" direction="in"/>
+<<<<<<< HEAD
 <<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
     </method>
@@ -56,19 +69,27 @@
       <arg name="applicationContext" type="v" direction="in"/>
 =======
       <arg name="userdata" type="v" direction="in"/>
+=======
+      <arg name="applicationContext" type="v" direction="in"/>
+>>>>>>> Rename 'userdata' to 'applicationContext'
     </method>
     <method name="remove">
-        <arg name="userdata" type="v" direction="in"/>
+        <arg name="applicationContext" type="v" direction="in"/>
     </method>
     <method name="signOut">
       <arg type="b" direction="out"/>
+<<<<<<< HEAD
       <arg name="userdata" type="v" direction="in"/>
 >>>>>>> Add user data parameter to server side interfaces
+=======
+      <arg name="applicationContext" type="v" direction="in"/>
+>>>>>>> Rename 'userdata' to 'applicationContext'
     </method>
     <method name="store">
       <arg type="u" direction="out"/>
       <arg type="a{sv}" direction="in"/>
       <annotation name="com.trolltech.QtDBus.QtTypeName.In4" value="QVariantMap"/>
+<<<<<<< HEAD
 <<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
 =======
@@ -89,6 +110,8 @@
       <arg name="realms" type="as" direction="in"/>
       <arg name="accessControlList" type="as" direction="in"/>
       <arg name="type" type="i" direction="in"/>
+=======
+>>>>>>> Rename 'userdata' to 'applicationContext'
       <arg name="applicationContext" type="v" direction="in"/>
     </method>
 >>>>>>> Add user data parameter to server side interfaces:lib/signond/com.nokia.SingleSignOn.Identity.xml
@@ -96,19 +119,27 @@
       <arg type="i" direction="out"/>
       <arg name="reference" type="s" direction="in"/>
 <<<<<<< HEAD
-      <arg name="applicationContext" type="v" direction="in"/>
-=======
-      <arg name="userdata" type="v" direction="in"/>
->>>>>>> Add user data parameter to server side interfaces
-    </method>
-    <method name="removeReference">
-      <arg type="i" direction="out"/>
-      <arg name="reference" type="s" direction="in"/>
 <<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
 =======
       <arg name="userdata" type="v" direction="in"/>
 >>>>>>> Add user data parameter to server side interfaces
+=======
+      <arg name="applicationContext" type="v" direction="in"/>
+>>>>>>> Rename 'userdata' to 'applicationContext'
+    </method>
+    <method name="removeReference">
+      <arg type="i" direction="out"/>
+      <arg name="reference" type="s" direction="in"/>
+<<<<<<< HEAD
+<<<<<<< HEAD
+      <arg name="applicationContext" type="v" direction="in"/>
+=======
+      <arg name="userdata" type="v" direction="in"/>
+>>>>>>> Add user data parameter to server side interfaces
+=======
+      <arg name="applicationContext" type="v" direction="in"/>
+>>>>>>> Rename 'userdata' to 'applicationContext'
     </method>
   </interface>
 </node>

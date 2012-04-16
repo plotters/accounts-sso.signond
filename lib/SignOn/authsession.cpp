@@ -59,11 +59,15 @@ AuthSession::AuthSession(quint32 id, const QString &methodName,
 =======
     AuthSession::AuthSession(quint32 id,
                              const QString &methodName,
-                             const QVariant &userdataP,
+                             const QVariant &applicationContextP,
                              QObject *parent)
             :  QObject(parent),
+<<<<<<< HEAD
                impl(new AuthSessionImpl(this, id, methodName, userdataP))
 >>>>>>> Finalize API changes and implementation for user data
+=======
+               impl(new AuthSessionImpl(this, id, methodName, applicationContextP))
+>>>>>>> Rename 'userdata' to 'applicationContext'
     {
         qRegisterMetaType<SessionData>("SessionData");
         qRegisterMetaType<AuthSessionState>("AuthSession::AuthSessionState");

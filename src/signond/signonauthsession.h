@@ -92,10 +92,14 @@ public Q_SLOTS:
                                                 bool &supportsAuthMethod,
                                                 pid_t ownerPid,
 <<<<<<< HEAD
+<<<<<<< HEAD
                                                 const QVariant &applicationContext);
 =======
                                                 const QVariant &userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+                                                const QVariant &applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
         static void stopAllAuthSessions();
         quint32 id() const;
         QString method() const;
@@ -104,6 +108,7 @@ public Q_SLOTS:
 
     public Q_SLOTS:
         QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms,
+<<<<<<< HEAD
 <<<<<<< HEAD
                                              const QDBusVariant &applicationContext);
         QVariantMap process(const QVariantMap &sessionDataVa,
@@ -121,13 +126,21 @@ public Q_SLOTS:
 <<<<<<< HEAD
 >>>>>>> Use QDBusVariant instead of QVariant
 =======
+=======
+                                             const QDBusVariant &applicationContext);
+        QVariantMap process(const QVariantMap &sessionDataVa,
+                            const QString &mechanism,
+>>>>>>> Rename 'userdata' to 'applicationContext'
                             const QDBusVariant &applicationContext);
         void cancel(const QDBusVariant &applicationContext);
         void setId(quint32 id, const QDBusVariant &applicationContext);
         void objectUnref(const QDBusVariant &applicationContext);
+<<<<<<< HEAD
 >>>>>>> Rename 'userdata' to 'applicationContext'
 =======
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
 Q_SIGNALS:
     void stateChanged(int state, const QString &message);

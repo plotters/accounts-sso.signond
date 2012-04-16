@@ -96,10 +96,14 @@ IdentityImpl::IdentityImpl(Identity *parent, const quint32 id):
           m_infoQueried(true),
           m_signOutRequestedByThisIdentity(false),
 <<<<<<< HEAD
+<<<<<<< HEAD
           m_applicationContext(QString::fromLatin1(""))
 =======
           m_userdata(QString::fromLatin1(""))
 >>>>>>> Method signature fixes
+=======
+          m_applicationContext(QString::fromLatin1(""))
+>>>>>>> Rename 'userdata' to 'applicationContext'
     {
         m_identityInfo->setId(id);
         sendRegisterRequest();
@@ -175,10 +179,14 @@ AuthSession *IdentityImpl::createSession(const QString &methodName,
         AuthSession *session = new AuthSession(id(),
                                                methodName,
 <<<<<<< HEAD
+<<<<<<< HEAD
                                                m_applicationContext,
 =======
                                                m_userdata,
 >>>>>>> Finalize API changes and implementation for user data
+=======
+                                               m_applicationContext,
+>>>>>>> Rename 'userdata' to 'applicationContext'
                                                parent);
         m_authSessions.append(session);
         return session;
@@ -369,6 +377,7 @@ void IdentityImpl::storeCredentials(const IdentityInfo &info)
         QList<QVariant> args;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         args << message
              << QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
@@ -377,6 +386,10 @@ void IdentityImpl::storeCredentials(const IdentityInfo &info)
 =======
         args << message << QVariant::fromValue(QDBusVariant(m_userdata));
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+        args << message
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
+>>>>>>> Rename 'userdata' to 'applicationContext'
         bool result = sendRequest(__func__, args,
                                   SLOT(storeCredentialsReply(const quint32)),
                                   SIGNOND_MAX_TIMEOUT);
@@ -472,6 +485,7 @@ void IdentityImpl::storeCredentials(const IdentityInfo &info)
         map.insert(SIGNOND_IDENTITY_INFO_SECRET, info.secret());
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         args << map
              << QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
@@ -480,6 +494,10 @@ void IdentityImpl::storeCredentials(const IdentityInfo &info)
 =======
         args << map << QVariant::fromValue(QDBusVariant(m_userdata));
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+        args << map
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
         bool result = sendRequest("store", args,
                                   SLOT(storeCredentialsReply(const quint32)));
@@ -609,6 +627,7 @@ void IdentityImpl::remove()
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             args << QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
             args << m_userdata;
@@ -616,6 +635,9 @@ void IdentityImpl::remove()
 =======
             args << QVariant::fromValue(QDBusVariant(m_userdata));
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+            args << QVariant::fromValue(QDBusVariant(m_applicationContext));
+>>>>>>> Rename 'userdata' to 'applicationContext'
             bool result = sendRequest(__func__, args,
                                       SLOT(removeReply()));
             if (!result) {
@@ -687,6 +709,7 @@ void IdentityImpl::remove()
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         args << reference
              << QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
@@ -695,6 +718,10 @@ void IdentityImpl::remove()
 =======
         args << reference << QVariant::fromValue(QDBusVariant(m_userdata));
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+        args << reference
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
+>>>>>>> Rename 'userdata' to 'applicationContext'
         bool result = sendRequest(__func__,
                                   args,
                                   SLOT(addReferenceReply()));
@@ -809,6 +836,7 @@ void IdentityImpl::addReference(const QString &reference)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         args << reference
              << QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
@@ -817,6 +845,10 @@ void IdentityImpl::addReference(const QString &reference)
 =======
         args << reference << QVariant::fromValue(QDBusVariant(m_userdata));
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+        args << reference
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
+>>>>>>> Rename 'userdata' to 'applicationContext'
         bool result = sendRequest(__func__,
                                   args,
                                   SLOT(removeReferenceReply()));
@@ -1007,6 +1039,7 @@ void IdentityImpl::queryInfo()
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         args << params
              << QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
@@ -1015,6 +1048,10 @@ void IdentityImpl::queryInfo()
 =======
         args << params << QVariant::fromValue(QDBusVariant(m_userdata));
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+        args << params
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
+>>>>>>> Rename 'userdata' to 'applicationContext'
         bool result = sendRequest(__func__,
                                   args,
                                   SLOT(verifyUserReply(const bool)),
@@ -1141,6 +1178,7 @@ void IdentityImpl::verifySecret(const QString &secret)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         args << secret
              << QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
@@ -1149,6 +1187,10 @@ void IdentityImpl::verifySecret(const QString &secret)
 =======
         args << secret << QVariant::fromValue(QDBusVariant(m_userdata));
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+        args << secret
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
+>>>>>>> Rename 'userdata' to 'applicationContext'
         bool result = sendRequest(__func__,
                                   args,
                                   SLOT(verifySecretReply(const bool)));
@@ -1210,6 +1252,7 @@ void IdentityImpl::verifySecret(const QString &secret)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             args << QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
             args << m_userdata;
@@ -1217,6 +1260,9 @@ void IdentityImpl::verifySecret(const QString &secret)
 =======
             args << QVariant::fromValue(QDBusVariant(m_userdata));
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+            args << QVariant::fromValue(QDBusVariant(m_applicationContext));
+>>>>>>> Rename 'userdata' to 'applicationContext'
             bool result = sendRequest(__func__, args,
                                       SLOT(signOutReply()));
             if (!result) {
@@ -1508,7 +1554,7 @@ void IdentityImpl::errorReply(const QDBusError& err)
         args << QVariant::fromValue(QDBusVariant(m_applicationContext));
 >>>>>>> Rename 'userdata' to 'applicationContext'
 
-        args << QVariant::fromValue(QDBusVariant(m_userdata));
+        args << QVariant::fromValue(QDBusVariant(m_applicationContext));
 
         QDBusMessage registerCall = QDBusMessage::createMethodCall(
             SIGNOND_SERVICE,

@@ -74,6 +74,7 @@ public Q_SLOTS:
         QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                              const QDBusVariant &applicationContext);
         QVariantMap process(const QVariantMap &sessionDataVa,
                             const QString &mechanism,
@@ -100,10 +101,14 @@ public Q_SLOTS:
 =======
                                              const QDBusVariant &userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+                                             const QDBusVariant &applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
         QVariantMap process(const QVariantMap &sessionDataVa,
                             const QString &mechanism,
-                            const QDBusVariant &userdata);
+                            const QDBusVariant &applicationContext);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         Q_NOREPLY void cancel(const QVariant &userdata);
         Q_NOREPLY void setId(quint32 id, const QVariant &userdata);
@@ -114,6 +119,11 @@ public Q_SLOTS:
         Q_NOREPLY void setId(quint32 id, const QDBusVariant &userdata);
         Q_NOREPLY void objectUnref(const QDBusVariant &userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+        Q_NOREPLY void cancel(const QDBusVariant &applicationContext);
+        Q_NOREPLY void setId(quint32 id, const QDBusVariant &applicationContext);
+        Q_NOREPLY void objectUnref(const QDBusVariant &applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
 Q_SIGNALS:
     void stateChanged(int state, const QString &message);

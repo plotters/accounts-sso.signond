@@ -103,18 +103,22 @@ Q_SIGNALS:
                              const QVariant &applicationContext);
 
         bool verifyUser(const QVariantMap &params,
-                        const QDBusVariant &userdata);
+                        const QDBusVariant &applicationContext);
         bool verifySecret(const QString &secret,
-                          const QDBusVariant &userdata);
-        void remove(const QDBusVariant &userdata);
-        bool signOut(const QDBusVariant &userdata);
+                          const QDBusVariant &applicationContext);
+        void remove(const QDBusVariant &applicationContext);
+        bool signOut(const QDBusVariant &applicationContext);
         quint32 store(const QVariantMap &info,
+<<<<<<< HEAD
 <<<<<<< HEAD
                       const QVariant &userdata);
 >>>>>>> Add user data parameter to server side interfaces
 =======
                       const QDBusVariant &userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+                      const QDBusVariant &applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
         quint32 storeCredentials(const quint32 id,
                                  const QString &userName,

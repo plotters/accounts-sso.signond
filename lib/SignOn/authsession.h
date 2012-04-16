@@ -121,10 +121,14 @@ public:
         AuthSession(quint32 id,
                     const QString &methodName,
 <<<<<<< HEAD
+<<<<<<< HEAD
                     const QVariant &applicationContextP,
 =======
                     const QVariant &userdataP,
 >>>>>>> Finalize API changes and implementation for user data
+=======
+                    const QVariant &applicationContextP,
+>>>>>>> Rename 'userdata' to 'applicationContext'
                     QObject *parent = 0);
         ~AuthSession();
 >>>>>>> Finalize API changes and implementation for user data

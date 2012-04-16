@@ -101,12 +101,16 @@ Q_SIGNALS:
                                  const QDBusVariant &applicationContext);
 =======
         SignonIdentityInfo queryInfo(bool &ok,
-                                     const QDBusVariant &userdata,
+                                     const QDBusVariant &applicationContext,
                                      bool queryPassword = true);
         quint32 storeCredentials(const SignonIdentityInfo &info,
                                  bool storeSecret,
+<<<<<<< HEAD
                                  const QDBusVariant &userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+                                 const QDBusVariant &applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
     public Q_SLOTS:
         quint32 requestCredentialsUpdate(const QString &message,
@@ -129,6 +133,7 @@ Q_SIGNALS:
         quint32 store(const QVariantMap &info,
                       const QDBusVariant &applicationContext);
 <<<<<<< HEAD
+<<<<<<< HEAD
         quint32 storeCredentials(const quint32 id,
                                  const QString &userName,
                                  const QString &secret,
@@ -141,6 +146,9 @@ Q_SIGNALS:
                                  const QDBusVariant &applicationContext);
 =======
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+
+>>>>>>> Rename 'userdata' to 'applicationContext'
         void queryUiSlot(QDBusPendingCallWatcher *call);
         void verifyUiSlot(QDBusPendingCallWatcher *call);
     Q_SIGNALS:

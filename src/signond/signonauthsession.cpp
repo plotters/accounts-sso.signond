@@ -73,6 +73,7 @@ QString SignonAuthSession::getAuthSessionObjectPath(const quint32 id,
                                                     bool &supportsAuthMethod,
                                                     pid_t ownerPid,
 <<<<<<< HEAD
+<<<<<<< HEAD
                                                     const QVariant &applicationContext)
 {
     Q_UNUSED(applicationContext);
@@ -81,6 +82,11 @@ QString SignonAuthSession::getAuthSessionObjectPath(const quint32 id,
 {
     Q_UNUSED(userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+                                                    const QVariant &applicationContext)
+{
+    Q_UNUSED(applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
     TRACE();
     supportsAuthMethod = true;
@@ -156,16 +162,21 @@ QStringList SignonAuthSession::queryAvailableMechanisms(const QStringList &wante
     Q_UNUSED(applicationContext);
 =======
 QStringList SignonAuthSession::queryAvailableMechanisms(const QStringList &wantedMechanisms,
-                                                        const QDBusVariant &userdata)
+                                                        const QDBusVariant &applicationContext)
 {
+<<<<<<< HEAD
     Q_UNUSED(userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+    Q_UNUSED(applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
     return parent()->queryAvailableMechanisms(wantedMechanisms);
 }
 
 QVariantMap SignonAuthSession::process(const QVariantMap &sessionDataVa,
                                        const QString &mechanism,
+<<<<<<< HEAD
 <<<<<<< HEAD
                                        const QDBusVariant &applicationContext)
 {
@@ -175,6 +186,11 @@ QVariantMap SignonAuthSession::process(const QVariantMap &sessionDataVa,
 {
     Q_UNUSED(userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+                                       const QDBusVariant &applicationContext)
+{
+    Q_UNUSED(applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
     setDelayedReply(true);
     parent()->process(connection(),
@@ -186,6 +202,7 @@ QVariantMap SignonAuthSession::process(const QVariantMap &sessionDataVa,
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void SignonAuthSession::cancel(const QDBusVariant &applicationContext)
 {
     Q_UNUSED(applicationContext);
@@ -194,11 +211,17 @@ void SignonAuthSession::cancel(const QDBusVariant &userdata)
 {
     Q_UNUSED(userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+void SignonAuthSession::cancel(const QDBusVariant &applicationContext)
+{
+    Q_UNUSED(applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
     TRACE();
     parent()->cancel(objectName());
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 void SignonAuthSession::setId(quint32 id, const QDBusVariant &applicationContext)
 {
@@ -208,11 +231,17 @@ void SignonAuthSession::setId(quint32 id, const QDBusVariant &userdata)
 {
     Q_UNUSED(userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+void SignonAuthSession::setId(quint32 id, const QDBusVariant &applicationContext)
+{
+    Q_UNUSED(applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
     m_id = id;
     parent()->setId(id);
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 void SignonAuthSession::objectUnref(const QDBusVariant &applicationContext)
 {
@@ -223,13 +252,20 @@ void SignonAuthSession::objectUnref(const QDBusVariant &applicationContext)
     cancel(applicationContext);
 =======
 void SignonAuthSession::objectUnref(const QDBusVariant &userdata)
+=======
+void SignonAuthSession::objectUnref(const QDBusVariant &applicationContext)
+>>>>>>> Rename 'userdata' to 'applicationContext'
 {
-    Q_UNUSED(userdata);
+    Q_UNUSED(applicationContext);
 
     //TODO - remove the `objectUnref` functionality from the DBus API
     TRACE();
+<<<<<<< HEAD
     cancel(userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+    cancel(applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
     if (m_registered) {
         QDBusConnection connection(SIGNOND_BUS);
