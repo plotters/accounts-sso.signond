@@ -60,12 +60,12 @@ static QVariantMap sessionData2VariantMap(const SessionData &data)
 AuthSessionImpl::AuthSessionImpl(AuthSession *parent,
                                  quint32 id,
                                  const QString &methodName,
-                                 const QVariant &userdataP)
+                                 const QVariant &applicationContextP)
     : QObject(parent),
       m_parent(parent),
       m_operationQueueHandler(this),
       m_methodName(methodName),
-      m_userdata(userdataP)
+      m_applicationContext(applicationContextP)
 {
     m_id = id;
     m_DBusInterface = 0;
@@ -79,7 +79,8 @@ AuthSessionImpl::AuthSessionImpl(AuthSession *parent,
 AuthSessionImpl::~AuthSessionImpl()
 {
     if (m_DBusInterface) {
-        m_DBusInterface->call(QLatin1String("objectUnref"), m_userdata);
+        m_DBusInterface->call(QLatin1String("objectUnref"),
+                              m_applicationContext);
         delete m_DBusInterface;
     }
 }
@@ -141,7 +142,7 @@ void AuthSessionImpl::setId(quint32 id)
 
     QVariantList arguments;
     arguments += id;
-    arguments += m_userdata;
+    arguments += m_applicationContext;
 
     if (m_DBusInterface)
         send2interface(remoteFunctionName, 0, arguments);
@@ -149,7 +150,7 @@ void AuthSessionImpl::setId(quint32 id)
         QList<QGenericArgument *> args;
 
         args << (new Q_ARG(quint32, id))
-             << (new Q_ARG(QVariant, m_userdata));
+             << (new Q_ARG(QVariant, m_applicationContext));
 
         m_operationQueueHandler.enqueueOperation(
                                     SIGNOND_SESSION_SET_ID_METHOD,
@@ -199,7 +200,7 @@ bool AuthSessionImpl::initInterface()
     QVariantList arguments;
     arguments += m_id;
     arguments += m_methodName;
-    arguments += m_userdata;
+    arguments += m_applicationContext;
 
     msg.setArguments(arguments);
     msg.setDelayedReply(true);
@@ -229,7 +230,7 @@ void AuthSessionImpl::queryAvailableMechanisms(const QStringList &wantedMechanis
 
     QVariantList arguments;
     arguments += wantedMechanisms;
-    arguments += m_userdata;
+    arguments += m_applicationContext;
 
     if (m_DBusInterface)
         send2interface(remoteFunctionName, SLOT(mechanismsAvailableSlot(const QStringList&)), arguments);
@@ -237,7 +238,7 @@ void AuthSessionImpl::queryAvailableMechanisms(const QStringList &wantedMechanis
         QList<QGenericArgument *> args;
 
         args << (new Q_ARG(QStringList, wantedMechanisms))
-             << (new Q_ARG(QVariant, m_userdata));
+             << (new Q_ARG(QVariant, m_applicationContext));
 
         m_operationQueueHandler.enqueueOperation(
                         SIGNOND_SESSION_QUERY_AVAILABLE_MECHANISMS_METHOD,
@@ -271,7 +272,7 @@ void AuthSessionImpl::process(const SessionData &sessionData, const QString &mec
     QVariantList arguments;
     arguments += sessionDataVa;
     arguments += mechanism;
-    arguments += m_userdata;
+    arguments += m_applicationContext;
 
     remoteFunctionName = QLatin1String("process");
 
@@ -285,7 +286,7 @@ void AuthSessionImpl::process(const SessionData &sessionData, const QString &mec
 
         args << (new Q_ARG(QVariantMap, sessionDataVa))
              << (new Q_ARG(QString, mechanism))
-             << (new Q_ARG(QVariant, m_userdata));
+             << (new Q_ARG(QVariant, m_applicationContext));
 
         m_operationQueueHandler.enqueueOperation(SIGNOND_SESSION_PROCESS_METHOD,
                                                  args);
@@ -318,7 +319,7 @@ void AuthSessionImpl::cancel()
     } else {
         TRACE() << "Sending cancel-request";
         m_DBusInterface->call(QDBus::NoBlock,
-                QLatin1String("cancel"), m_userdata);
+                QLatin1String("cancel"), m_applicationContext);
     }
 
     m_isBusy = false;

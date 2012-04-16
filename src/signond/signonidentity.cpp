@@ -144,10 +144,10 @@ namespace SignonDaemonNS {
     }
 
     SignonIdentityInfo SignonIdentity::queryInfo(bool &ok,
-                                                 const QDBusVariant &userdata,
+                                                 const QDBusVariant &applicationContext,
                                                  bool queryPassword)
     {
-        Q_UNUSED(userdata);
+        Q_UNUSED(applicationContext);
 
         ok = true;
 
@@ -168,9 +168,9 @@ namespace SignonDaemonNS {
     }
 
     bool SignonIdentity::addReference(const QString &reference,
-                                      const QDBusVariant &userdata)
+                                      const QDBusVariant &applicationContext)
     {
-        Q_UNUSED(userdata);
+        Q_UNUSED(applicationContext);
 
         TRACE() << "addReference: " << reference;
 
@@ -187,9 +187,9 @@ namespace SignonDaemonNS {
     }
 
     bool SignonIdentity::removeReference(const QString &reference,
-                                         const QDBusVariant &userdata)
+                                         const QDBusVariant &applicationContext)
     {
-        Q_UNUSED(userdata);
+        Q_UNUSED(applicationContext);
 
         TRACE() << "removeReference: " << reference;
 
@@ -206,12 +206,12 @@ namespace SignonDaemonNS {
     }
 
     quint32 SignonIdentity::requestCredentialsUpdate(const QString &displayMessage,
-                                                     const QDBusVariant &userdata)
+                                                     const QDBusVariant &applicationContext)
     {
         SIGNON_RETURN_IF_CAM_UNAVAILABLE(SIGNOND_NEW_IDENTITY);
 
         bool ok;
-        SignonIdentityInfo info = queryInfo(ok, userdata, false);
+        SignonIdentityInfo info = queryInfo(ok, applicationContext, false);
 
         if (!ok) {
             BLAME() << "Identity not found.";
@@ -253,7 +253,7 @@ namespace SignonDaemonNS {
         SIGNON_RETURN_IF_CAM_UNAVAILABLE(QVariantMap());
 
         bool ok;
-        SignonIdentityInfo info = queryInfo(ok, userdata, false);
+        SignonIdentityInfo info = queryInfo(ok, applicationContext, false);
 
         if (!ok) {
             TRACE();
@@ -285,12 +285,12 @@ namespace SignonDaemonNS {
     }
 
     bool SignonIdentity::verifyUser(const QVariantMap &params,
-                                    const QDBusVariant &userdata)
+                                    const QDBusVariant &applicationContext)
     {
         SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
 
         bool ok;
-        SignonIdentityInfo info = queryInfo(ok, userdata, true);
+        SignonIdentityInfo info = queryInfo(ok, applicationContext, true);
 
         if (!ok) {
             BLAME() << "Identity not found.";
@@ -321,12 +321,12 @@ namespace SignonDaemonNS {
     }
 
     bool SignonIdentity::verifySecret(const QString &secret,
-                                      const QDBusVariant &userdata)
+                                      const QDBusVariant &applicationContext)
     {
         SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
 
         bool ok;
-        queryInfo(ok, userdata);
+        queryInfo(ok, applicationContext);
         if (!ok) {
             TRACE();
             sendErrorReply(SIGNOND_CREDENTIALS_NOT_AVAILABLE_ERR_NAME,
@@ -342,9 +342,9 @@ namespace SignonDaemonNS {
         return ret;
     }
 
-    void SignonIdentity::remove(const QDBusVariant &userdata)
+    void SignonIdentity::remove(const QDBusVariant &applicationContext)
     {
-        Q_UNUSED(userdata);
+        Q_UNUSED(applicationContext);
 
         SIGNON_RETURN_IF_CAM_UNAVAILABLE();
 
@@ -360,9 +360,9 @@ namespace SignonDaemonNS {
         keepInUse();
     }
 
-    bool SignonIdentity::signOut(const QDBusVariant &userdata)
+    bool SignonIdentity::signOut(const QDBusVariant &applicationContext)
     {
-        Q_UNUSED(userdata);
+        Q_UNUSED(applicationContext);
 
         TRACE() << "Signout request. Identity ID: " << id();
         /*
@@ -387,7 +387,7 @@ namespace SignonDaemonNS {
     }
 
     quint32 SignonIdentity::store(const QVariantMap &info,
-                                  const QDBusVariant &userdata)
+                                  const QDBusVariant &applicationContext)
     {
         keepInUse();
         SIGNON_RETURN_IF_CAM_UNAVAILABLE(SIGNOND_NEW_IDENTITY);
@@ -457,7 +457,7 @@ namespace SignonDaemonNS {
         } else {
             m_pInfo->setPassword(QString());
         }
-        m_id = storeCredentials(*m_pInfo, storeSecret, userdata);
+        m_id = storeCredentials(*m_pInfo, storeSecret, applicationContext);
 
         if (m_id == SIGNOND_NEW_IDENTITY) {
             sendErrorReply(SIGNOND_STORE_FAILED_ERR_NAME,
@@ -469,9 +469,9 @@ namespace SignonDaemonNS {
 
     quint32 SignonIdentity::storeCredentials(const SignonIdentityInfo &info,
                                              bool storeSecret,
-                                             const QDBusVariant &userdata)
+                                             const QDBusVariant &applicationContext)
     {
-        Q_UNUSED(userdata);
+        Q_UNUSED(applicationContext);
 
         CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
         if (db == NULL) {

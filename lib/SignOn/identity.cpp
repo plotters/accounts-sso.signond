@@ -133,14 +133,14 @@ namespace SignOn {
         impl->signOut();
     }
 
-    QVariant Identity::userdata ()
+    QVariant Identity::applicationContext ()
     {
-        return impl->userdata();
+        return impl->applicationContext();
     }
 
-    void Identity::setUserdata (const QVariant &newUserdata)
+    void Identity::setApplicationContext (const QVariant &newApplicationContext)
     {
-        impl->setUserdata(newUserdata);
+        impl->setApplicationContext(newApplicationContext);
     }
 
 } //namespace SignOn

@@ -112,7 +112,7 @@ namespace SignOn {
          */
         AuthSession(quint32 id,
                     const QString &methodName,
-                    const QVariant &userdataP,
+                    const QVariant &applicationContextP,
                     QObject *parent = 0);
         ~AuthSession();
 

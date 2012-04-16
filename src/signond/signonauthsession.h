@@ -61,7 +61,7 @@ namespace SignonDaemonNS {
                                                 SignonDaemon *parent,
                                                 bool &supportsAuthMethod,
                                                 pid_t ownerPid,
-                                                const QVariant &userdata);
+                                                const QVariant &applicationContext);
         static void stopAllAuthSessions();
         quint32 id() const;
         QString method() const;
@@ -70,13 +70,13 @@ namespace SignonDaemonNS {
 
     public Q_SLOTS:
         QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms,
-                                             const QDBusVariant &userdata);
+                                             const QDBusVariant &applicationContext);
         QVariantMap process(const QVariantMap &sessionDataVa,
                             const QString &mechanism,
-                            const QDBusVariant &userdata);
-        void cancel(const QDBusVariant &userdata);
-        void setId(quint32 id, const QDBusVariant &userdata);
-        void objectUnref(const QDBusVariant &userdata);
+                            const QDBusVariant &applicationContext);
+        void cancel(const QDBusVariant &applicationContext);
+        void setId(quint32 id, const QDBusVariant &applicationContext);
+        void objectUnref(const QDBusVariant &applicationContext);
 
     Q_SIGNALS:
         void stateChanged(int state, const QString &message);

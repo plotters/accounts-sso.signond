@@ -2,18 +2,12 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
-<<<<<<< HEAD
  * Copyright (C) 2012 Canonical Ltd.
- *
- * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
- * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
-=======
  * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
- * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
->>>>>>> Use QDBusVariant instead of QVariant
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -129,13 +123,15 @@ public:
 public Q_SLOTS:
     /* Immediate reply calls */
 
-    void registerNewIdentity(QDBusObjectPath &objectPath,
-                             const QDBusVariant &applicationContext);
+    void registerNewIdentity(const QDBusVariant &applicationContext,
+                             QDBusObjectPath &objectPath);
     void getIdentity(const quint32 id,
+                     const QDBusVariant &applicationContext,
                      QDBusObjectPath &objectPath,
-                     QVariantMap &identityData,
-                     const QDBusVariant &applicationContext);
-    QString getAuthSessionObjectPath(const quint32 id, const QString type);
+                     QVariantMap &identityData);
+    QString getAuthSessionObjectPath(const quint32 id,
+                                     const QString type,
+                                     const QDBusVariant &applicationContext);
 
     QStringList queryMethods();
     QStringList queryMechanisms(const QString &method);

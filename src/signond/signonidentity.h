@@ -61,11 +61,11 @@ namespace SignonDaemonNS {
         quint32 id() const { return m_id; }
 
         SignonIdentityInfo queryInfo(bool &ok,
-                                     const QDBusVariant &userdata,
+                                     const QDBusVariant &applicationContext,
                                      bool queryPassword = true);
         quint32 storeCredentials(const SignonIdentityInfo &info,
                                  bool storeSecret,
-                                 const QDBusVariant &userdata);
+                                 const QDBusVariant &applicationContext);
 
     public Q_SLOTS:
         quint32 requestCredentialsUpdate(const QString &message,
@@ -83,6 +83,7 @@ namespace SignonDaemonNS {
         bool signOut(const QDBusVariant &applicationContext);
         quint32 store(const QVariantMap &info,
                       const QDBusVariant &applicationContext);
+
         void queryUiSlot(QDBusPendingCallWatcher *call);
         void verifyUiSlot(QDBusPendingCallWatcher *call);
     Q_SIGNALS:
