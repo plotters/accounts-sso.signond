@@ -69,8 +69,12 @@ class IdentityImpl: public QObject
     {
         Q_OBJECT
         Q_DISABLE_COPY(IdentityImpl)
+<<<<<<< HEAD
         Q_PROPERTY(QVariant userdata READ userdata WRITE setUserdata);
 >>>>>>> Start adding userdata to the client side implementation
+=======
+        Q_PROPERTY(QVariant applicationContext READ applicationContext WRITE setApplicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
     friend class Identity;
 
@@ -100,6 +104,7 @@ public:
 >>>>>>> Finalize API changes and implementation for user data
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 public Q_SLOTS:
     void errorReply(const QDBusError &err);
     void storeCredentialsReply(const quint32 id);
@@ -117,6 +122,12 @@ public Q_SLOTS:
         { return m_userdata; }
         void setUserdata (const QVariant &newUserdata)
         { m_userdata = newUserdata; }
+=======
+        QVariant applicationContext () const
+        { return m_applicationContext; }
+        void setApplicationContext (const QVariant &newApplicationContext)
+        { m_applicationContext = newApplicationContext; }
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
     public Q_SLOTS:
         void errorReply(const QDBusError &err);
@@ -195,7 +206,7 @@ private:
         bool m_infoQueried;
         /* Marks this Identity as the one which requested the sign out */
         bool m_signOutRequestedByThisIdentity;
-        QVariant m_userdata;
+        QVariant m_applicationContext;
     };
 >>>>>>> Start adding userdata to the client side implementation
 

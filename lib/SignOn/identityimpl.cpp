@@ -92,7 +92,7 @@ IdentityImpl::IdentityImpl(Identity *parent, const quint32 id):
           m_state(NeedsRegistration),
           m_infoQueried(true),
           m_signOutRequestedByThisIdentity(false),
-          m_userdata(QString::fromLatin1(""))
+          m_applicationContext(QString::fromLatin1(""))
     {
         m_identityInfo->setId(id);
         sendRegisterRequest();
@@ -164,7 +164,7 @@ AuthSession *IdentityImpl::createSession(const QString &methodName,
 
         AuthSession *session = new AuthSession(id(),
                                                methodName,
-                                               m_userdata,
+                                               m_applicationContext,
                                                parent);
         m_authSessions.append(session);
         return session;
@@ -316,7 +316,8 @@ void IdentityImpl::storeCredentials(const IdentityInfo &info)
             *m_identityInfo : *(m_tmpIdentityInfo = new IdentityInfo(info));
 =======
         QList<QVariant> args;
-        args << message << QVariant::fromValue(QDBusVariant(m_userdata));
+        args << message
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
         bool result = sendRequest(__func__, args,
                                   SLOT(storeCredentialsReply(const quint32)),
                                   SIGNOND_MAX_TIMEOUT);
@@ -392,7 +393,8 @@ void IdentityImpl::storeCredentials(const IdentityInfo &info)
         QVariantMap map = info.impl->toMap();
         map.insert(SIGNOND_IDENTITY_INFO_ID, m_identityInfo->id());
         map.insert(SIGNOND_IDENTITY_INFO_SECRET, info.secret());
-        args << map << QVariant::fromValue(QDBusVariant(m_userdata));
+        args << map
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
 
         bool result = sendRequest("store", args,
                                   SLOT(storeCredentialsReply(const quint32)));
@@ -506,7 +508,7 @@ void IdentityImpl::remove()
 
             QList<QVariant> args;
 
-            args << QVariant::fromValue(QDBusVariant(m_userdata));
+            args << QVariant::fromValue(QDBusVariant(m_applicationContext));
             bool result = sendRequest(__func__, args,
                                       SLOT(removeReply()));
             if (!result) {
@@ -558,7 +560,8 @@ void IdentityImpl::remove()
 
         QList<QVariant> args;
 
-        args << reference << QVariant::fromValue(QDBusVariant(m_userdata));
+        args << reference
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
         bool result = sendRequest(__func__,
                                   args,
                                   SLOT(addReferenceReply()));
@@ -653,7 +656,8 @@ void IdentityImpl::addReference(const QString &reference)
 
         QList<QVariant> args;
 
-        args << reference << QVariant::fromValue(QDBusVariant(m_userdata));
+        args << reference
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
         bool result = sendRequest(__func__,
                                   args,
                                   SLOT(removeReferenceReply()));
@@ -810,7 +814,8 @@ void IdentityImpl::queryInfo()
 
         QList<QVariant> args;
 
-        args << params << QVariant::fromValue(QDBusVariant(m_userdata));
+        args << params
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
         bool result = sendRequest(__func__,
                                   args,
                                   SLOT(verifyUserReply(const bool)),
@@ -917,7 +922,8 @@ void IdentityImpl::verifySecret(const QString &secret)
 
         QList<QVariant> args;
 
-        args << secret << QVariant::fromValue(QDBusVariant(m_userdata));
+        args << secret
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
         bool result = sendRequest(__func__,
                                   args,
                                   SLOT(verifySecretReply(const bool)));
@@ -963,7 +969,7 @@ void IdentityImpl::verifySecret(const QString &secret)
 
             QList<QVariant> args;
 
-            args << QVariant::fromValue(QDBusVariant(m_userdata));
+            args << QVariant::fromValue(QDBusVariant(m_applicationContext));
             bool result = sendRequest(__func__, args,
                                       SLOT(signOutReply()));
             if (!result) {
@@ -1243,6 +1249,7 @@ void IdentityImpl::errorReply(const QDBusError& err)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         TRACE() << "Non internal SSO error reply.";
     }
 =======
@@ -1250,6 +1257,9 @@ void IdentityImpl::errorReply(const QDBusError& err)
 =======
         args << QVariant::fromValue(QDBusVariant(m_userdata));
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+        args << QVariant::fromValue(QDBusVariant(m_applicationContext));
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
         QDBusMessage registerCall = QDBusMessage::createMethodCall(
             SIGNOND_SERVICE,

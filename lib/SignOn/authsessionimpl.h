@@ -65,8 +65,12 @@ class AuthSessionImpl: public QObject
     {
         Q_OBJECT
         Q_DISABLE_COPY(AuthSessionImpl)
+<<<<<<< HEAD
         Q_PROPERTY(QVariant userdata READ userdata WRITE setUserdata);
 >>>>>>> Start adding userdata to the client side implementation
+=======
+        Q_PROPERTY(QVariant applicationContext READ applicationContext WRITE setApplicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
     friend class AuthSession;
     friend class IdentityImpl;
@@ -81,13 +85,20 @@ public:
         AuthSessionImpl(AuthSession *parent,
                         quint32 id,
                         const QString &methodName,
-                        const QVariant &userdataP);
+                        const QVariant &applicationContextP);
         ~AuthSessionImpl();
+<<<<<<< HEAD
         QVariant userdata() const
         { return m_userdata; }
         void setUserdata (const QVariant &newUserdata)
         { m_userdata = newUserdata; }
 >>>>>>> Start adding userdata to the client side implementation
+=======
+        QVariant applicationContext() const
+        { return m_applicationContext; }
+        void setApplicationContext (const QVariant &newApplicationContext)
+        { m_applicationContext = newApplicationContext; }
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
 public Q_SLOTS:
     QString name();
@@ -147,7 +158,7 @@ private:
          * */
         bool m_isValid;
 
-        QVariant m_userdata;
+        QVariant m_applicationContext;
     };
 >>>>>>> Start adding userdata to the client side implementation
 

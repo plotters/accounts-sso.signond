@@ -59,20 +59,24 @@ public:
         { return *static_cast<QDBusContext *>(m_parent); }
 =======
     public Q_SLOTS:
-        void registerNewIdentity(const QDBusVariant &userdata,
+        void registerNewIdentity(const QDBusVariant &applicationContext,
                                  QDBusObjectPath &objectPath);
         void registerStoredIdentity(const quint32 id,
-                                    const QDBusVariant &userdata,
+                                    const QDBusVariant &applicationContext,
                                     QDBusObjectPath &objectPath,
                                     QList<QVariant> &identityData);
         QString getAuthSessionObjectPath(const quint32 id,
                                          const QString &type,
+<<<<<<< HEAD
 <<<<<<< HEAD
                                          const QVariant &userdata);
 >>>>>>> Add user data parameter to server side interfaces
 =======
                                          const QDBusVariant &userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+                                         const QDBusVariant &applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
 public Q_SLOTS:
     void registerNewIdentity(QDBusObjectPath &objectPath);

@@ -72,7 +72,7 @@ void SignonIdentityAdaptor::errorReply(const QString &name,
     }
 
     quint32 SignonIdentityAdaptor::requestCredentialsUpdate(const QString &msg,
-                                                            const QDBusVariant &userdata)
+                                                            const QDBusVariant &applicationContext)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -82,6 +82,7 @@ void SignonIdentityAdaptor::errorReply(const QString &name,
         }
 >>>>>>> Add user data parameter to server side interfaces
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 quint32 SignonIdentityAdaptor::requestCredentialsUpdate(const QString &msg)
 {
@@ -104,6 +105,12 @@ quint32 SignonIdentityAdaptor::requestCredentialsUpdate(const QString &msg)
 
     QList<QVariant> SignonIdentityAdaptor::queryInfo(const QDBusVariant &userdata)
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+        return m_parent->requestCredentialsUpdate(msg, applicationContext);
+    }
+
+    QList<QVariant> SignonIdentityAdaptor::queryInfo(const QDBusVariant &applicationContext)
+>>>>>>> Rename 'userdata' to 'applicationContext'
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -113,6 +120,7 @@ quint32 SignonIdentityAdaptor::requestCredentialsUpdate(const QString &msg)
         }
 >>>>>>> Add user data parameter to server side interfaces
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 QVariantMap SignonIdentityAdaptor::getInfo()
 {
@@ -124,6 +132,9 @@ QVariantMap SignonIdentityAdaptor::getInfo()
 =======
         return m_parent->queryInfo(userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+        return m_parent->queryInfo(applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
     }
 
 <<<<<<< HEAD
@@ -131,7 +142,7 @@ QVariantMap SignonIdentityAdaptor::getInfo()
 }
 =======
     void SignonIdentityAdaptor::addReference(const QString &reference,
-                                             const QDBusVariant &userdata)
+                                             const QDBusVariant &applicationContext)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -141,6 +152,7 @@ QVariantMap SignonIdentityAdaptor::getInfo()
         }
 >>>>>>> Add user data parameter to server side interfaces
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 void SignonIdentityAdaptor::addReference(const QString &reference)
 {
@@ -152,6 +164,9 @@ void SignonIdentityAdaptor::addReference(const QString &reference)
         return;
 =======
         if (!m_parent->addReference(reference, userdata)) {
+=======
+        if (!m_parent->addReference(reference, applicationContext)) {
+>>>>>>> Rename 'userdata' to 'applicationContext'
             /* TODO: add a lastError() method to SignonIdentity */
             errorReply(SIGNOND_OPERATION_FAILED_ERR_NAME,
                        SIGNOND_OPERATION_FAILED_ERR_STR);
@@ -168,7 +183,7 @@ void SignonIdentityAdaptor::addReference(const QString &reference)
 }
 =======
     void SignonIdentityAdaptor::removeReference(const QString &reference,
-                                                const QDBusVariant &userdata)
+                                                const QDBusVariant &applicationContext)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -178,6 +193,7 @@ void SignonIdentityAdaptor::addReference(const QString &reference)
         }
 >>>>>>> Add user data parameter to server side interfaces
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 void SignonIdentityAdaptor::removeReference(const QString &reference)
 {
@@ -189,6 +205,9 @@ void SignonIdentityAdaptor::removeReference(const QString &reference)
         return;
 =======
         if (!m_parent->removeReference(reference, userdata)) {
+=======
+        if (!m_parent->removeReference(reference, applicationContext)) {
+>>>>>>> Rename 'userdata' to 'applicationContext'
             /* TODO: add a lastError() method to SignonIdentity */
             errorReply(SIGNOND_OPERATION_FAILED_ERR_NAME,
                        SIGNOND_OPERATION_FAILED_ERR_STR);
@@ -206,7 +225,7 @@ void SignonIdentityAdaptor::removeReference(const QString &reference)
 <<<<<<< HEAD
 =======
     bool SignonIdentityAdaptor::verifyUser(const QVariantMap &params,
-                                           const QDBusVariant &userdata)
+                                           const QDBusVariant &applicationContext)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -216,6 +235,7 @@ void SignonIdentityAdaptor::removeReference(const QString &reference)
         }
 >>>>>>> Add user data parameter to server side interfaces
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 bool SignonIdentityAdaptor::verifyUser(const QVariantMap &params)
 {
@@ -228,6 +248,9 @@ bool SignonIdentityAdaptor::verifyUser(const QVariantMap &params)
 =======
         return m_parent->verifyUser(params, userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+        return m_parent->verifyUser(params, applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
     }
 
 <<<<<<< HEAD
@@ -235,7 +258,7 @@ bool SignonIdentityAdaptor::verifyUser(const QVariantMap &params)
 }
 =======
     bool SignonIdentityAdaptor::verifySecret(const QString &secret,
-                                             const QDBusVariant &userdata)
+                                             const QDBusVariant &applicationContext)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -257,6 +280,7 @@ bool SignonIdentityAdaptor::verifySecret(const QString &secret)
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     return m_parent->verifySecret(secret);
 }
 =======
@@ -267,6 +291,12 @@ bool SignonIdentityAdaptor::verifySecret(const QString &secret)
 
     void SignonIdentityAdaptor::remove(const QDBusVariant &userdata)
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+        return m_parent->verifySecret(secret, applicationContext);
+    }
+
+    void SignonIdentityAdaptor::remove(const QDBusVariant &applicationContext)
+>>>>>>> Rename 'userdata' to 'applicationContext'
     {
         /* Access Control */
         AccessControlManagerHelper::IdentityOwnership ownership =
@@ -287,6 +317,7 @@ void SignonIdentityAdaptor::remove()
                         parentDBusContext().message(), m_parent->id());
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (ownership != AccessControlManagerHelper::IdentityDoesNotHaveOwner) {
         //Identity has an owner
         if (ownership == AccessControlManagerHelper::ApplicationIsNotOwner &&
@@ -302,6 +333,12 @@ void SignonIdentityAdaptor::remove()
 
     bool SignonIdentityAdaptor::signOut(const QDBusVariant &userdata)
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+        m_parent->remove(applicationContext);
+    }
+
+    bool SignonIdentityAdaptor::signOut(const QDBusVariant &applicationContext)
+>>>>>>> Rename 'userdata' to 'applicationContext'
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -313,8 +350,12 @@ void SignonIdentityAdaptor::remove()
 <<<<<<< HEAD
 =======
 
+<<<<<<< HEAD
         return m_parent->signOut(userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+        return m_parent->signOut(applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
     }
 
 <<<<<<< HEAD
@@ -322,7 +363,7 @@ void SignonIdentityAdaptor::remove()
 }
 =======
     quint32 SignonIdentityAdaptor::store(const QVariantMap &info,
-                                         const QDBusVariant &userdata)
+                                         const QDBusVariant &applicationContext)
     {
         quint32 id = info.value(QLatin1String("Id"), SIGNOND_NEW_IDENTITY).toInt();
         /* Access Control */
@@ -351,8 +392,12 @@ bool SignonIdentityAdaptor::signOut()
                 }
             }
         }
+<<<<<<< HEAD
         return m_parent->store(info, userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+        return m_parent->store(info, applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
     }
 
 <<<<<<< HEAD
@@ -368,7 +413,7 @@ bool SignonIdentityAdaptor::signOut()
                                                     const QStringList &realms,
                                                     const QStringList &accessControlList,
                                                     const int type,
-                                                    const QDBusVariant &userdata)
+                                                    const QDBusVariant &applicationContext)
     {
         /* Access Control */
         if (id != SIGNOND_NEW_IDENTITY) {
@@ -408,8 +453,12 @@ quint32 SignonIdentityAdaptor::store(const QVariantMap &info)
                                           realms,
                                           accessControlList,
                                           type,
+<<<<<<< HEAD
                                           userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+                                          applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
     }
     return m_parent->store(info);
 }

@@ -133,21 +133,29 @@ public Q_SLOTS:
     /* Immediate reply calls */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     void registerNewIdentity(QDBusObjectPath &objectPath);
     void getIdentity(const quint32 id, QDBusObjectPath &objectPath,
                      QVariantMap &identityData);
     QString getAuthSessionObjectPath(const quint32 id, const QString type);
 =======
     void registerNewIdentity(const QDBusVariant &userdata,
+=======
+    void registerNewIdentity(const QDBusVariant &applicationContext,
+>>>>>>> Rename 'userdata' to 'applicationContext'
                              QDBusObjectPath &objectPath);
     void registerStoredIdentity(const quint32 id,
-                                const QDBusVariant &userdata,
+                                const QDBusVariant &applicationContext,
                                 QDBusObjectPath &objectPath,
                                 QList<QVariant> &identityData);
     QString getAuthSessionObjectPath(const quint32 id,
                                      const QString type,
+<<<<<<< HEAD
                                      const QDBusVariant &userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+                                     const QDBusVariant &applicationContext);
+>>>>>>> Rename 'userdata' to 'applicationContext'
 
     QStringList queryMethods();
     QStringList queryMechanisms(const QString &method);

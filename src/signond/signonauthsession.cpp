@@ -67,9 +67,9 @@ QString SignonAuthSession::getAuthSessionObjectPath(const quint32 id,
                                                     SignonDaemon *parent,
                                                     bool &supportsAuthMethod,
                                                     pid_t ownerPid,
-                                                    const QVariant &userdata)
+                                                    const QVariant &applicationContext)
 {
-    Q_UNUSED(userdata);
+    Q_UNUSED(applicationContext);
 
     TRACE();
     supportsAuthMethod = true;
@@ -134,19 +134,23 @@ QStringList
 SignonAuthSession::queryAvailableMechanisms(const QStringList &wantedMechanisms)
 =======
 QStringList SignonAuthSession::queryAvailableMechanisms(const QStringList &wantedMechanisms,
+<<<<<<< HEAD
                                                         const QDBusVariant &userdata)
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+                                                        const QDBusVariant &applicationContext)
+>>>>>>> Rename 'userdata' to 'applicationContext'
 {
-    Q_UNUSED(userdata);
+    Q_UNUSED(applicationContext);
 
     return parent()->queryAvailableMechanisms(wantedMechanisms);
 }
 
 QVariantMap SignonAuthSession::process(const QVariantMap &sessionDataVa,
                                        const QString &mechanism,
-                                       const QDBusVariant &userdata)
+                                       const QDBusVariant &applicationContext)
 {
-    Q_UNUSED(userdata);
+    Q_UNUSED(applicationContext);
 
     setDelayedReply(true);
     parent()->process(connection(),
@@ -157,29 +161,29 @@ QVariantMap SignonAuthSession::process(const QVariantMap &sessionDataVa,
     return QVariantMap();
 }
 
-void SignonAuthSession::cancel(const QDBusVariant &userdata)
+void SignonAuthSession::cancel(const QDBusVariant &applicationContext)
 {
-    Q_UNUSED(userdata);
+    Q_UNUSED(applicationContext);
 
     TRACE();
     parent()->cancel(objectName());
 }
 
-void SignonAuthSession::setId(quint32 id, const QDBusVariant &userdata)
+void SignonAuthSession::setId(quint32 id, const QDBusVariant &applicationContext)
 {
-    Q_UNUSED(userdata);
+    Q_UNUSED(applicationContext);
 
     m_id = id;
     parent()->setId(id);
 }
 
-void SignonAuthSession::objectUnref(const QDBusVariant &userdata)
+void SignonAuthSession::objectUnref(const QDBusVariant &applicationContext)
 {
-    Q_UNUSED(userdata);
+    Q_UNUSED(applicationContext);
 
     //TODO - remove the `objectUnref` functionality from the DBus API
     TRACE();
-    cancel(userdata);
+    cancel(applicationContext);
 
     if (m_registered) {
         QDBusConnection connection(SIGNOND_BUS);
