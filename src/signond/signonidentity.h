@@ -61,28 +61,28 @@ namespace SignonDaemonNS {
         quint32 id() const { return m_id; }
 
         SignonIdentityInfo queryInfo(bool &ok,
-                                     const QDBusVariant &userdata,
+                                     const QDBusVariant &applicationContext,
                                      bool queryPassword = true);
         quint32 storeCredentials(const SignonIdentityInfo &info,
                                  bool storeSecret,
-                                 const QDBusVariant &userdata);
+                                 const QDBusVariant &applicationContext);
 
     public Q_SLOTS:
         quint32 requestCredentialsUpdate(const QString &message,
-                                         const QDBusVariant &userdata);
-        QList<QVariant> queryInfo(const QDBusVariant &userdata);
+                                         const QDBusVariant &applicationContext);
+        QList<QVariant> queryInfo(const QDBusVariant &applicationContext);
         bool addReference(const QString &reference,
-                          const QDBusVariant &userdata);
+                          const QDBusVariant &applicationContext);
         bool removeReference(const QString &reference,
-                             const QDBusVariant &userdata);
+                             const QDBusVariant &applicationContext);
         bool verifyUser(const QVariantMap &params,
-                        const QDBusVariant &userdata);
+                        const QDBusVariant &applicationContext);
         bool verifySecret(const QString &secret,
-                          const QDBusVariant &userdata);
-        void remove(const QDBusVariant &userdata);
-        bool signOut(const QDBusVariant &userdata);
+                          const QDBusVariant &applicationContext);
+        void remove(const QDBusVariant &applicationContext);
+        bool signOut(const QDBusVariant &applicationContext);
         quint32 store(const QVariantMap &info,
-                      const QDBusVariant &userdata);
+                      const QDBusVariant &applicationContext);
         quint32 storeCredentials(const quint32 id,
                                  const QString &userName,
                                  const QString &secret,
@@ -92,7 +92,7 @@ namespace SignonDaemonNS {
                                  const QStringList &realms,
                                  const QStringList &accessControlList,
                                  const int type,
-                                 const QDBusVariant &userdata);
+                                 const QDBusVariant &applicationContext);
         void queryUiSlot(QDBusPendingCallWatcher *call);
         void verifyUiSlot(QDBusPendingCallWatcher *call);
     Q_SIGNALS:

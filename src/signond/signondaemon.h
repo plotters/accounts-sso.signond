@@ -123,15 +123,15 @@ public:
 public Q_SLOTS:
     /* Immediate reply calls */
 
-    void registerNewIdentity(const QDBusVariant &userdata,
+    void registerNewIdentity(const QDBusVariant &applicationContext,
                              QDBusObjectPath &objectPath);
     void registerStoredIdentity(const quint32 id,
-                                const QDBusVariant &userdata,
+                                const QDBusVariant &applicationContext,
                                 QDBusObjectPath &objectPath,
                                 QList<QVariant> &identityData);
     QString getAuthSessionObjectPath(const quint32 id,
                                      const QString type,
-                                     const QDBusVariant &userdata);
+                                     const QDBusVariant &applicationContext);
 
     QStringList queryMethods();
     QStringList queryMechanisms(const QString &method);

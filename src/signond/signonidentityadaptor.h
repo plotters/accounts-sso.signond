@@ -48,21 +48,21 @@ namespace SignonDaemonNS {
 
     public Q_SLOTS:
         quint32 requestCredentialsUpdate(const QString &message,
-                                         const QDBusVariant &userdata);
-        QList<QVariant> queryInfo(const QDBusVariant &userdata);
+                                         const QDBusVariant &applicationContext);
+        QList<QVariant> queryInfo(const QDBusVariant &applicationContext);
         void addReference(const QString &reference,
-                          const QDBusVariant &userdata);
+                          const QDBusVariant &applicationContext);
         void removeReference(const QString &reference,
-                             const QDBusVariant &userdata);
+                             const QDBusVariant &applicationContext);
 
         bool verifyUser(const QVariantMap &params,
-                        const QDBusVariant &userdata);
+                        const QDBusVariant &applicationContext);
         bool verifySecret(const QString &secret,
-                          const QDBusVariant &userdata);
-        void remove(const QDBusVariant &userdata);
-        bool signOut(const QDBusVariant &userdata);
+                          const QDBusVariant &applicationContext);
+        void remove(const QDBusVariant &applicationContext);
+        bool signOut(const QDBusVariant &applicationContext);
         quint32 store(const QVariantMap &info,
-                      const QDBusVariant &userdata);
+                      const QDBusVariant &applicationContext);
 
         quint32 storeCredentials(const quint32 id,
                                  const QString &userName,
@@ -73,7 +73,7 @@ namespace SignonDaemonNS {
                                  const QStringList &realms,
                                  const QStringList &accessControlList,
                                  const int type,
-                                 const QDBusVariant &userdata);
+                                 const QDBusVariant &applicationContext);
     Q_SIGNALS:
         void unregistered();
         void infoUpdated(int);

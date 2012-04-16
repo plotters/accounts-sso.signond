@@ -308,18 +308,18 @@ namespace SignOn {
         void signOut();
 
         /*!
-         * Retrieve user data set earlier.
+         * Retrieve application context data set earlier.
          *
-         * @return User data
+         * @return Application context
          */
-        QVariant userdata ();
+        QVariant applicationContext ();
 
         /*!
-         * Set user data to be passed to the signond.
+         * Set application context to be passed to the signond.
          *
-         * @param newUserdata User data to be set
+         * @param newApplicationContext Application context to be set
          */
-        void setUserdata (const QVariant &newUserdata);
+        void setApplicationContext (const QVariant &newApplicationContext);
 
     Q_SIGNALS:
 

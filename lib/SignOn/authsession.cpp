@@ -35,10 +35,10 @@ namespace SignOn {
 
     AuthSession::AuthSession(quint32 id,
                              const QString &methodName,
-                             const QVariant &userdataP,
+                             const QVariant &applicationContextP,
                              QObject *parent)
             :  QObject(parent),
-               impl(new AuthSessionImpl(this, id, methodName, userdataP))
+               impl(new AuthSessionImpl(this, id, methodName, applicationContextP))
     {
         qRegisterMetaType<SessionData>("SessionData");
         qRegisterMetaType<AuthSessionState>("AuthSession::AuthSessionState");

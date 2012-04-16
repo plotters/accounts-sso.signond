@@ -51,14 +51,14 @@ namespace SignonDaemonNS {
 
     public Q_SLOTS:
         QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms,
-                                             const QDBusVariant &userdata);
+                                             const QDBusVariant &applicationContext);
         QVariantMap process(const QVariantMap &sessionDataVa,
                             const QString &mechanism,
-                            const QDBusVariant &userdata);
+                            const QDBusVariant &applicationContext);
 
-        Q_NOREPLY void cancel(const QDBusVariant &userdata);
-        Q_NOREPLY void setId(quint32 id, const QDBusVariant &userdata);
-        Q_NOREPLY void objectUnref(const QDBusVariant &userdata);
+        Q_NOREPLY void cancel(const QDBusVariant &applicationContext);
+        Q_NOREPLY void setId(quint32 id, const QDBusVariant &applicationContext);
+        Q_NOREPLY void objectUnref(const QDBusVariant &applicationContext);
 
     Q_SIGNALS:
         void stateChanged(int state, const QString &message);

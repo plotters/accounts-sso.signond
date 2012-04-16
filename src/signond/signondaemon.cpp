@@ -508,10 +508,10 @@ void SignonDaemon::identityStored(SignonIdentity *identity)
     }
 }
 
-void SignonDaemon::registerNewIdentity(const QDBusVariant &userdata,
+void SignonDaemon::registerNewIdentity(const QDBusVariant &applicationContext,
                                        QDBusObjectPath &objectPath)
 {
-    Q_UNUSED(userdata);
+    Q_UNUSED(applicationContext);
     TRACE() << "Registering new identity:";
 
     SignonIdentity *identity = SignonIdentity::createIdentity(SIGNOND_NEW_IDENTITY, this);
@@ -544,11 +544,11 @@ int SignonDaemon::authSessionTimeout() const
 }
 
 void SignonDaemon::registerStoredIdentity(const quint32 id,
-                                          const QDBusVariant &userdata,
+                                          const QDBusVariant &applicationContext,
                                           QDBusObjectPath &objectPath,
                                           QList<QVariant> &identityData)
 {
-    Q_UNUSED(userdata);
+    Q_UNUSED(applicationContext);
     SIGNON_RETURN_IF_CAM_UNAVAILABLE();
 
     TRACE() << "Registering identity:" << id;
@@ -570,7 +570,7 @@ void SignonDaemon::registerStoredIdentity(const quint32 id,
     }
 
     bool ok;
-    SignonIdentityInfo info = identity->queryInfo(ok, userdata, false);
+    SignonIdentityInfo info = identity->queryInfo(ok, applicationContext, false);
 
     if (info.isNew())
     {
@@ -696,9 +696,9 @@ bool SignonDaemon::clear()
 
 QString SignonDaemon::getAuthSessionObjectPath(const quint32 id,
                                                const QString type,
-                                               const QDBusVariant &userdata)
+                                               const QDBusVariant &applicationContext)
 {
-    Q_UNUSED(userdata);
+    Q_UNUSED(applicationContext);
 
     bool supportsAuthMethod = false;
     pid_t ownerPid = AccessControlManagerHelper::pidOfPeer(*this);
@@ -706,7 +706,7 @@ QString SignonDaemon::getAuthSessionObjectPath(const quint32 id,
         SignonAuthSession::getAuthSessionObjectPath(id, type, this,
                                                     supportsAuthMethod,
                                                     ownerPid,
-                                                    userdata.variant());
+                                                    applicationContext.variant());
     if (objectPath.isEmpty() && !supportsAuthMethod) {
         QDBusMessage errReply = message().createErrorReply(
                                                 SIGNOND_METHOD_NOT_KNOWN_ERR_NAME,

@@ -50,7 +50,7 @@ namespace SignOn {
     {
         Q_OBJECT
         Q_DISABLE_COPY(AuthSessionImpl)
-        Q_PROPERTY(QVariant userdata READ userdata WRITE setUserdata);
+        Q_PROPERTY(QVariant applicationContext READ applicationContext WRITE setApplicationContext);
 
         friend class AuthSession;
         friend class IdentityImpl;
@@ -59,12 +59,12 @@ namespace SignOn {
         AuthSessionImpl(AuthSession *parent,
                         quint32 id,
                         const QString &methodName,
-                        const QVariant &userdataP);
+                        const QVariant &applicationContextP);
         ~AuthSessionImpl();
-        QVariant userdata() const
-        { return m_userdata; }
-        void setUserdata (const QVariant &newUserdata)
-        { m_userdata = newUserdata; }
+        QVariant applicationContext() const
+        { return m_applicationContext; }
+        void setApplicationContext (const QVariant &newApplicationContext)
+        { m_applicationContext = newApplicationContext; }
 
     public Q_SLOTS:
         QString name();
@@ -107,7 +107,7 @@ namespace SignOn {
          * */
         bool m_isValid;
 
-        QVariant m_userdata;
+        QVariant m_applicationContext;
     };
 
 } //namespace SignOn

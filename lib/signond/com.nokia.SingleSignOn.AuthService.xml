@@ -2,12 +2,12 @@
 <node>
   <interface name="com.nokia.SingleSignOn.AuthService">
     <method name="registerNewIdentity">
-      <arg name="userdata" type="v" direction="in"/>
+      <arg name="applicationContext" type="v" direction="in"/>
       <arg name="objectPath" type="o" direction="out"/>
     </method>
     <method name="registerStoredIdentity">
       <arg name="id" type="u" direction="in"/>
-      <arg name="userdata" type="v" direction="in"/>
+      <arg name="applicationContext" type="v" direction="in"/>
       <arg name="objectPath" type="o" direction="out"/>
       <arg name="identityData" type="av" direction="out"/>
     </method>
@@ -15,7 +15,7 @@
       <arg type="s" direction="out"/>
       <arg name="id" type="u" direction="in"/>
       <arg name="type" type="s" direction="in"/>
-      <arg name="userdata" type="v" direction="in"/>
+      <arg name="applicationContext" type="v" direction="in"/>
     </method>
     <method name="queryMethods">
       <arg type="as" direction="out"/>

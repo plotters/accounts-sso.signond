@@ -39,10 +39,10 @@ namespace SignonDaemonNS {
     SignonDaemonAdaptor::~SignonDaemonAdaptor()
     {}
 
-    void SignonDaemonAdaptor::registerNewIdentity(const QDBusVariant &userdata,
+    void SignonDaemonAdaptor::registerNewIdentity(const QDBusVariant &applicationContext,
                                                   QDBusObjectPath &objectPath)
     {
-        m_parent->registerNewIdentity(userdata, objectPath);
+        m_parent->registerNewIdentity(applicationContext, objectPath);
 
         SignonDisposable::destroyUnused();
     }
@@ -64,7 +64,7 @@ namespace SignonDaemonNS {
     }
 
     void SignonDaemonAdaptor::registerStoredIdentity(const quint32 id,
-                                                     const QDBusVariant &userdata,
+                                                     const QDBusVariant &applicationContext,
                                                      QDBusObjectPath &objectPath,
                                                      QList<QVariant> &identityData)
     {
@@ -75,7 +75,7 @@ namespace SignonDaemonNS {
         }
 
         m_parent->registerStoredIdentity(id,
-                                         userdata,
+                                         applicationContext,
                                          objectPath,
                                          identityData);
 
@@ -89,7 +89,7 @@ namespace SignonDaemonNS {
 
     QString SignonDaemonAdaptor::getAuthSessionObjectPath(const quint32 id,
                                                           const QString &type,
-                                                          const QDBusVariant &userdata)
+                                                          const QDBusVariant &applicationContext)
     {
         SignonDisposable::destroyUnused();
 
@@ -103,7 +103,7 @@ namespace SignonDaemonNS {
         }
 
         TRACE() << "ACM passed, creating AuthSession object";
-        return m_parent->getAuthSessionObjectPath(id, type, userdata);
+        return m_parent->getAuthSessionObjectPath(id, type, applicationContext);
     }
 
     QStringList SignonDaemonAdaptor::queryMechanisms(const QString &method)

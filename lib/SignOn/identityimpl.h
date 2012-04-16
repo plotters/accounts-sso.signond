@@ -55,7 +55,7 @@ namespace SignOn {
     {
         Q_OBJECT
         Q_DISABLE_COPY(IdentityImpl)
-        Q_PROPERTY(QVariant userdata READ userdata WRITE setUserdata);
+        Q_PROPERTY(QVariant applicationContext READ applicationContext WRITE setApplicationContext);
 
         friend class Identity;
 
@@ -77,10 +77,10 @@ namespace SignOn {
                                    QObject *parent = 0);
         void destroySession(AuthSession *session);
 
-        QVariant userdata () const
-        { return m_userdata; }
-        void setUserdata (const QVariant &newUserdata)
-        { m_userdata = newUserdata; }
+        QVariant applicationContext () const
+        { return m_applicationContext; }
+        void setApplicationContext (const QVariant &newApplicationContext)
+        { m_applicationContext = newApplicationContext; }
 
     public Q_SLOTS:
         void errorReply(const QDBusError &err);
@@ -140,7 +140,7 @@ namespace SignOn {
         bool m_infoQueried;
         /* Marks this Identity as the one which requested the sign out */
         bool m_signOutRequestedByThisIdentity;
-        QVariant m_userdata;
+        QVariant m_applicationContext;
     };
 
 }  // namespace SignOn

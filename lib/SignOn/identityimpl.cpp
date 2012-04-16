@@ -72,7 +72,7 @@ namespace SignOn {
           m_state(NeedsRegistration),
           m_infoQueried(true),
           m_signOutRequestedByThisIdentity(false),
-          m_userdata(QString::fromLatin1(""))
+          m_applicationContext(QString::fromLatin1(""))
     {
         m_identityInfo->setId(id);
         sendRegisterRequest();
@@ -131,7 +131,7 @@ namespace SignOn {
 
         AuthSession *session = new AuthSession(id(),
                                                methodName,
-                                               m_userdata,
+                                               m_applicationContext,
                                                parent);
         m_authSessions.append(session);
         return session;
@@ -214,7 +214,8 @@ namespace SignOn {
         }
 
         QList<QVariant> args;
-        args << message << QVariant::fromValue(QDBusVariant(m_userdata));
+        args << message
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
         bool result = sendRequest(__func__, args,
                                   SLOT(storeCredentialsReply(const quint32)),
                                   SIGNOND_MAX_TIMEOUT);
@@ -276,7 +277,8 @@ namespace SignOn {
         QVariantMap map = info.impl->toMap();
         map.insert(SIGNOND_IDENTITY_INFO_ID, m_identityInfo->id());
         map.insert(SIGNOND_IDENTITY_INFO_SECRET, info.secret());
-        args << map << QVariant::fromValue(QDBusVariant(m_userdata));
+        args << map
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
 
         bool result = sendRequest("store", args,
                                   SLOT(storeCredentialsReply(const quint32)));
@@ -327,7 +329,7 @@ namespace SignOn {
 
             QList<QVariant> args;
 
-            args << QVariant::fromValue(QDBusVariant(m_userdata));
+            args << QVariant::fromValue(QDBusVariant(m_applicationContext));
             bool result = sendRequest(__func__, args,
                                       SLOT(removeReply()));
             if (!result) {
@@ -379,7 +381,8 @@ namespace SignOn {
 
         QList<QVariant> args;
 
-        args << reference << QVariant::fromValue(QDBusVariant(m_userdata));
+        args << reference
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
         bool result = sendRequest(__func__,
                                   args,
                                   SLOT(addReferenceReply()));
@@ -427,7 +430,8 @@ namespace SignOn {
 
         QList<QVariant> args;
 
-        args << reference << QVariant::fromValue(QDBusVariant(m_userdata));
+        args << reference
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
         bool result = sendRequest(__func__,
                                   args,
                                   SLOT(removeReferenceReply()));
@@ -516,7 +520,8 @@ namespace SignOn {
 
         QList<QVariant> args;
 
-        args << params << QVariant::fromValue(QDBusVariant(m_userdata));
+        args << params
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
         bool result = sendRequest(__func__,
                                   args,
                                   SLOT(verifyUserReply(const bool)),
@@ -565,7 +570,8 @@ namespace SignOn {
 
         QList<QVariant> args;
 
-        args << secret << QVariant::fromValue(QDBusVariant(m_userdata));
+        args << secret
+             << QVariant::fromValue(QDBusVariant(m_applicationContext));
         bool result = sendRequest(__func__,
                                   args,
                                   SLOT(verifySecretReply(const bool)));
@@ -611,7 +617,7 @@ namespace SignOn {
 
             QList<QVariant> args;
 
-            args << QVariant::fromValue(QDBusVariant(m_userdata));
+            args << QVariant::fromValue(QDBusVariant(m_applicationContext));
             bool result = sendRequest(__func__, args,
                                       SLOT(signOutReply()));
             if (!result) {
@@ -863,7 +869,7 @@ namespace SignOn {
                 SLOT(registerReply(const QDBusObjectPath &, const QList<QVariant> &));
         }
 
-        args << QVariant::fromValue(QDBusVariant(m_userdata));
+        args << QVariant::fromValue(QDBusVariant(m_applicationContext));
 
         QDBusMessage registerCall = QDBusMessage::createMethodCall(
             SIGNOND_SERVICE,
