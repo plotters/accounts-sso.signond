@@ -124,8 +124,12 @@ AuthSessionImpl::~AuthSessionImpl()
 >>>>>>> Expand userdata support
 =======
         m_DBusInterface->call(QLatin1String("objectUnref"),
+<<<<<<< HEAD
                               m_applicationContext);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+                              QVariant::fromValue(QDBusVariant(m_applicationContext)));
+>>>>>>> Fix call arguments
         delete m_DBusInterface;
     }
 }
@@ -191,6 +195,7 @@ void AuthSessionImpl::setId(quint32 id)
     arguments += id;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
     arguments += m_userdata;
@@ -198,12 +203,16 @@ void AuthSessionImpl::setId(quint32 id)
 =======
     arguments += m_applicationContext;
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+    arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
+>>>>>>> Fix call arguments
 
     if (m_DBusInterface)
         send2interface(remoteFunctionName, 0, arguments);
     else {
         QList<QGenericArgument *> args;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         args << (new Q_ARG(quint32, id));
 
@@ -219,6 +228,9 @@ void AuthSessionImpl::setId(quint32 id)
 =======
         args << (new Q_ARG(quint32, id))
              << (new Q_ARG(QVariant, m_applicationContext));
+=======
+        args << (new Q_ARG(quint32, id));
+>>>>>>> Fix call arguments
 
         m_operationQueueHandler.enqueueOperation(
                                     SIGNOND_SESSION_SET_ID_METHOD,
@@ -270,6 +282,7 @@ bool AuthSessionImpl::initInterface()
     arguments += m_methodName;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
     arguments += m_userdata;
@@ -277,6 +290,9 @@ bool AuthSessionImpl::initInterface()
 =======
     arguments += m_applicationContext;
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+    arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
+>>>>>>> Fix call arguments
 
     msg.setArguments(arguments);
     msg.setDelayedReply(true);
@@ -308,6 +324,7 @@ AuthSessionImpl::queryAvailableMechanisms(const QStringList &wantedMechanisms)
     arguments += wantedMechanisms;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
 
     if (m_DBusInterface)
@@ -337,14 +354,16 @@ AuthSessionImpl::queryAvailableMechanisms(const QStringList &wantedMechanisms)
 =======
     arguments += m_applicationContext;
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+    arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
+>>>>>>> Fix call arguments
 
     if (m_DBusInterface)
         send2interface(remoteFunctionName, SLOT(mechanismsAvailableSlot(const QStringList&)), arguments);
     else {
         QList<QGenericArgument *> args;
 
-        args << (new Q_ARG(QStringList, wantedMechanisms))
-             << (new Q_ARG(QVariant, m_applicationContext));
+        args << (new Q_ARG(QStringList, wantedMechanisms));
 
         m_operationQueueHandler.enqueueOperation(
                         SIGNOND_SESSION_QUERY_AVAILABLE_MECHANISMS_METHOD,
@@ -382,6 +401,7 @@ void AuthSessionImpl::process(const SessionData &sessionData,
     arguments += mechanism;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
 =======
     arguments += m_userdata;
@@ -389,6 +409,9 @@ void AuthSessionImpl::process(const SessionData &sessionData,
 =======
     arguments += m_applicationContext;
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+    arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
+>>>>>>> Fix call arguments
 
     remoteFunctionName = QLatin1String("process");
 
@@ -402,8 +425,7 @@ void AuthSessionImpl::process(const SessionData &sessionData,
         QList<QGenericArgument *> args;
 
         args << (new Q_ARG(QVariantMap, sessionDataVa))
-             << (new Q_ARG(QString, mechanism))
-             << (new Q_ARG(QVariant, m_applicationContext));
+             << (new Q_ARG(QString, mechanism));
 
         m_operationQueueHandler.enqueueOperation(SIGNOND_SESSION_PROCESS_METHOD,
                                                  args);
@@ -443,6 +465,7 @@ void AuthSessionImpl::cancel()
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 QLatin1String("cancel"), m_userdata);
 >>>>>>> Expand userdata support
 =======
@@ -458,6 +481,10 @@ void AuthSessionImpl::cancel()
 =======
                 QLatin1String("cancel"), m_applicationContext);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+                              QLatin1String("cancel"),
+                              QVariant::fromValue(QDBusVariant(m_applicationContext)));
+>>>>>>> Fix call arguments
     }
 
     m_isBusy = false;
