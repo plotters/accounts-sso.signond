@@ -403,8 +403,8 @@ namespace SignonDaemonNS {
         QStringList ownerList = info.value(SIGNOND_IDENTITY_INFO_OWNER).toStringList();
         if (appId.isEmpty() && ownerList.isEmpty()) {
             /* send an error reply, because otherwise we may end up with empty owner */
-            replyError(SIGNOND_INVALID_QUERY_ERR_NAME,
-                       SIGNOND_INVALID_QUERY_ERR_STR);
+            sendErrorReply(SIGNOND_INVALID_QUERY_ERR_NAME,
+                           SIGNOND_INVALID_QUERY_ERR_STR);
             return 0;
         }
         /* if owner list is empty, add the appId of application to it by default */
@@ -416,8 +416,8 @@ namespace SignonDaemonNS {
                             (static_cast<QDBusContext>(*this)).message(),ownerList);
             if (!allowed) {
                 /* send an error reply, because otherwise uncontrolled sharing might happen */
-                replyError(SIGNOND_PERMISSION_DENIED_ERR_NAME,
-                           SIGNOND_PERMISSION_DENIED_ERR_STR); 
+                sendErrorReply(SIGNOND_PERMISSION_DENIED_ERR_NAME,
+                               SIGNOND_PERMISSION_DENIED_ERR_STR); 
                 return 0;
             }
         }
@@ -437,8 +437,8 @@ namespace SignonDaemonNS {
                             (static_cast<QDBusContext>(*this)).message(),accessControlList);
             if (!allowed) {
                 /* send an error reply, because otherwise uncontrolled sharing might happen */
-                replyError(SIGNOND_PERMISSION_DENIED_ERR_NAME,
-                           SIGNOND_PERMISSION_DENIED_ERR_STR);
+                sendErrorReply(SIGNOND_PERMISSION_DENIED_ERR_NAME,
+                               SIGNOND_PERMISSION_DENIED_ERR_STR);
                 return 0;
             }
             int type = info.value(SIGNOND_IDENTITY_INFO_TYPE).toInt();

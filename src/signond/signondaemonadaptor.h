@@ -52,14 +52,14 @@ namespace SignonDaemonNS {
 
     public Q_SLOTS:
         void registerNewIdentity(const QDBusVariant &applicationContext,
-                                 const QVariant &applicationContext);
+                                 QDBusObjectPath &objectPath);
         void getIdentity(const quint32 id,
-                         const QVariant &applicationContext,
+                         const QDBusVariant &applicationContext,
                          QDBusObjectPath &objectPath,
                          QVariantMap &identityData);
         QString getAuthSessionObjectPath(const quint32 id,
                                          const QString &type,
-                                         const QVariant &applicationContext);
+                                         const QDBusVariant &applicationContext);
 
         QStringList queryMethods();
         QStringList queryMechanisms(const QString &method);

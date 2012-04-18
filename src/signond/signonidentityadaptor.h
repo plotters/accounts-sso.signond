@@ -49,12 +49,12 @@ namespace SignonDaemonNS {
 
     public Q_SLOTS:
         quint32 requestCredentialsUpdate(const QString &message,
-                                         const QVariant &applicationContext);
-        QVariantMap getInfo(const QVariant &applicationContext);
+                                         const QDBusVariant &applicationContext);
+        QVariantMap getInfo(const QDBusVariant &applicationContext);
         void addReference(const QString &reference,
-                          const QVariant &applicationContext);
+                          const QDBusVariant &applicationContext);
         void removeReference(const QString &reference,
-                             const QVariant &applicationContext);
+                             const QDBusVariant &applicationContext);
 
         bool verifyUser(const QVariantMap &params,
                         const QDBusVariant &applicationContext);

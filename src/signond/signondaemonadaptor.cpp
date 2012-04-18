@@ -64,7 +64,7 @@ namespace SignonDaemonNS {
     }
 
     void SignonDaemonAdaptor::getIdentity(const quint32 id,
-                                          const QVariant &applicationContext,
+                                          const QDBusVariant &applicationContext,
                                           QDBusObjectPath &objectPath,
                                           QVariantMap &identityData)
     {

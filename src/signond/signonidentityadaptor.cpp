@@ -73,7 +73,7 @@ namespace SignonDaemonNS {
         return m_parent->requestCredentialsUpdate(msg, applicationContext);
     }
 
-    QVariantMap SignonIdentityAdaptor::getInfo(const QVariant &applicationContext)
+    QVariantMap SignonIdentityAdaptor::getInfo(const QDBusVariant &applicationContext)
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -82,7 +82,7 @@ namespace SignonDaemonNS {
             return QVariantMap();
         }
 
-        return m_parent->getInfo();
+        return m_parent->getInfo(applicationContext);
     }
 
     void SignonIdentityAdaptor::addReference(const QString &reference,
