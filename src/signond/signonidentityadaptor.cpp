@@ -122,6 +122,7 @@ quint32 SignonIdentityAdaptor::requestCredentialsUpdate(const QString &msg)
 >>>>>>> Rename 'userdata' to 'applicationContext'
     }
 
+<<<<<<< HEAD
     QList<QVariant> SignonIdentityAdaptor::queryInfo(const QDBusVariant &userdata)
 >>>>>>> Use QDBusVariant instead of QVariant
 =======
@@ -134,6 +135,9 @@ quint32 SignonIdentityAdaptor::requestCredentialsUpdate(const QString &msg)
 =======
     QVariantMap SignonIdentityAdaptor::getInfo(const QVariant &applicationContext)
 >>>>>>> Add user data parameter to server side interfaces
+=======
+    QVariantMap SignonIdentityAdaptor::getInfo(const QDBusVariant &applicationContext)
+>>>>>>> Rebase
     {
         /* Access Control */
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -143,6 +147,7 @@ quint32 SignonIdentityAdaptor::requestCredentialsUpdate(const QString &msg)
         }
 >>>>>>> Add user data parameter to server side interfaces
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 QVariantMap SignonIdentityAdaptor::getInfo()
@@ -158,6 +163,9 @@ QVariantMap SignonIdentityAdaptor::getInfo()
 =======
         return m_parent->queryInfo(applicationContext);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+        return m_parent->getInfo(applicationContext);
+>>>>>>> Rebase
     }
 
 <<<<<<< HEAD

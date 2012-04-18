@@ -721,8 +721,8 @@ quint32 SignonIdentity::store(const QVariantMap &info)
         if (appId.isEmpty() && ownerList.isEmpty()) {
 >>>>>>> returning error codes when setting isn't allowed
             /* send an error reply, because otherwise we may end up with empty owner */
-            replyError(SIGNOND_INVALID_QUERY_ERR_NAME,
-                       SIGNOND_INVALID_QUERY_ERR_STR);
+            sendErrorReply(SIGNOND_INVALID_QUERY_ERR_NAME,
+                           SIGNOND_INVALID_QUERY_ERR_STR);
             return 0;
 <<<<<<< HEAD
 =======
@@ -758,8 +758,8 @@ quint32 SignonIdentity::store(const QVariantMap &info)
                             (static_cast<QDBusContext>(*this)).message(),ownerList);
             if (!allowed) {
                 /* send an error reply, because otherwise uncontrolled sharing might happen */
-                replyError(SIGNOND_PERMISSION_DENIED_ERR_NAME,
-                           SIGNOND_PERMISSION_DENIED_ERR_STR); 
+                sendErrorReply(SIGNOND_PERMISSION_DENIED_ERR_NAME,
+                               SIGNOND_PERMISSION_DENIED_ERR_STR); 
                 return 0;
 >>>>>>> returning error codes when setting isn't allowed
             }
@@ -799,8 +799,8 @@ quint32 SignonIdentity::store(const QVariantMap &info)
                             (static_cast<QDBusContext>(*this)).message(),accessControlList);
             if (!allowed) {
                 /* send an error reply, because otherwise uncontrolled sharing might happen */
-                replyError(SIGNOND_PERMISSION_DENIED_ERR_NAME,
-                           SIGNOND_PERMISSION_DENIED_ERR_STR);
+                sendErrorReply(SIGNOND_PERMISSION_DENIED_ERR_NAME,
+                               SIGNOND_PERMISSION_DENIED_ERR_STR);
                 return 0;
 >>>>>>> returning error codes when setting isn't allowed
             }

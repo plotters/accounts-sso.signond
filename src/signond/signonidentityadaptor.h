@@ -79,6 +79,7 @@ Q_SIGNALS:
     public Q_SLOTS:
         quint32 requestCredentialsUpdate(const QString &message,
 <<<<<<< HEAD
+<<<<<<< HEAD
                                          const QDBusVariant &applicationContext);
         QList<QVariant> queryInfo(const QDBusVariant &applicationContext);
         void addReference(const QString &reference,
@@ -97,10 +98,14 @@ Q_SIGNALS:
 =======
                                          const QVariant &applicationContext);
         QVariantMap getInfo(const QVariant &applicationContext);
+=======
+                                         const QDBusVariant &applicationContext);
+        QVariantMap getInfo(const QDBusVariant &applicationContext);
+>>>>>>> Rebase
         void addReference(const QString &reference,
-                          const QVariant &applicationContext);
+                          const QDBusVariant &applicationContext);
         void removeReference(const QString &reference,
-                             const QVariant &applicationContext);
+                             const QDBusVariant &applicationContext);
 
         bool verifyUser(const QVariantMap &params,
                         const QDBusVariant &applicationContext);

@@ -135,7 +135,7 @@ void SignonDaemonAdaptor::getIdentity(const quint32 id,
                                                      QList<QVariant> &identityData)
 =======
     void SignonDaemonAdaptor::getIdentity(const quint32 id,
-                                          const QVariant &applicationContext,
+                                          const QDBusVariant &applicationContext,
                                           QDBusObjectPath &objectPath,
 <<<<<<< HEAD
                                           QVariantMap &identityData,

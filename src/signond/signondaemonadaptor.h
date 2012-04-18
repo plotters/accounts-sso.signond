@@ -100,16 +100,24 @@ public Q_SLOTS:
         void registerNewIdentity(QDBusObjectPath &objectPath,
 =======
         void registerNewIdentity(const QDBusVariant &applicationContext,
+<<<<<<< HEAD
 >>>>>>> Rename 'userdata' to 'applicationContext'
                                  const QVariant &applicationContext);
+=======
+                                 QDBusObjectPath &objectPath);
+>>>>>>> Rebase
         void getIdentity(const quint32 id,
-                         const QVariant &applicationContext,
+                         const QDBusVariant &applicationContext,
                          QDBusObjectPath &objectPath,
                          QVariantMap &identityData);
         QString getAuthSessionObjectPath(const quint32 id,
                                          const QString &type,
+<<<<<<< HEAD
                                          const QVariant &applicationContext);
 >>>>>>> Add user data parameter to server side interfaces
+=======
+                                         const QDBusVariant &applicationContext);
+>>>>>>> Rebase
 
     QStringList queryMethods();
     QStringList queryMechanisms(const QString &method);
