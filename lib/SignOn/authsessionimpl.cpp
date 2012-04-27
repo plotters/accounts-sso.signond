@@ -5,19 +5,8 @@
  * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
-<<<<<<< HEAD
-<<<<<<< HEAD
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
-=======
- * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
-=======
- * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
->>>>>>> Merge & cleanup from master
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
-<<<<<<< HEAD
->>>>>>> Start adding userdata to the client side implementation
-=======
->>>>>>> Start adding userdata to the client side implementation
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -70,51 +59,13 @@ static QVariantMap sessionData2VariantMap(const SessionData &data)
 
 AuthSessionImpl::AuthSessionImpl(AuthSession *parent,
                                  quint32 id,
-<<<<<<< HEAD
-<<<<<<< HEAD
-                                 const QString &methodName):
-    QObject(parent),
-    m_parent(parent),
-    m_operationQueueHandler(this),
-    m_methodName(methodName)
-=======
                                  const QString &methodName,
-<<<<<<< HEAD
-                                 const QVariant &applicationContextP)
-=======
-                                 const QString &methodName,
-<<<<<<< HEAD
-                                 const QVariant &userdataP)
->>>>>>> Finalize API changes and implementation for user data
-=======
-                                 const QVariant &applicationContextP)
->>>>>>> Rename 'userdata' to 'applicationContext'
-    : QObject(parent),
-      m_parent(parent),
-      m_operationQueueHandler(this),
-      m_methodName(methodName),
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-      m_userdata(userdataP)
->>>>>>> Finalize API changes and implementation for user data
-=======
-      m_applicationContext(applicationContextP)
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
-      m_userdata(userdataP)
->>>>>>> Finalize API changes and implementation for user data
-=======
-      m_applicationContext(applicationContextP)
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
                                  const QVariant &applicationContextP) :
     QObject(parent),
     m_parent(parent),
     m_operationQueueHandler(this),
     m_methodName(methodName),
     m_applicationContext(applicationContextP)
->>>>>>> Merge & cleanup from master
 {
     m_id = id;
     m_DBusInterface = 0;
@@ -128,25 +79,8 @@ AuthSessionImpl::AuthSessionImpl(AuthSession *parent,
 AuthSessionImpl::~AuthSessionImpl()
 {
     if (m_DBusInterface) {
-<<<<<<< HEAD
-<<<<<<< HEAD
         m_DBusInterface->call(QLatin1String("objectUnref"),
-<<<<<<< HEAD
-                              QVariant::fromValue(QDBusVariant(m_applicationContext)));
-=======
-        m_DBusInterface->call(QLatin1String("objectUnref"), m_userdata);
->>>>>>> Expand userdata support
-=======
-        m_DBusInterface->call(QLatin1String("objectUnref"),
-<<<<<<< HEAD
-                              m_applicationContext);
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
-                              QVariant::fromValue(QDBusVariant(m_applicationContext)));
->>>>>>> Fix call arguments
-=======
                     QVariant::fromValue(QDBusVariant(m_applicationContext)));
->>>>>>> Merge & cleanup from master
         delete m_DBusInterface;
     }
 }
@@ -210,58 +144,15 @@ void AuthSessionImpl::setId(quint32 id)
 
     QVariantList arguments;
     arguments += id;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
-=======
-    arguments += m_userdata;
->>>>>>> Expand userdata support
-=======
-    arguments += m_applicationContext;
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
-    arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
->>>>>>> Fix call arguments
 
     if (m_DBusInterface)
         send2interface(remoteFunctionName, 0, arguments);
-<<<<<<< HEAD
-    else {
-        QList<QGenericArgument *> args;
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-        args << (new Q_ARG(quint32, id));
-
-        m_operationQueueHandler.enqueueOperation(
-                                    SIGNOND_SESSION_SET_ID_METHOD,
-<<<<<<< HEAD
-                                    QList<QGenericArgument *>() <<
-                                    (new Q_ARG(quint32, id)));
-=======
-                                    args);
-    }
->>>>>>> Expand userdata support
-=======
-        args << (new Q_ARG(quint32, id))
-             << (new Q_ARG(QVariant, m_applicationContext));
-=======
-        args << (new Q_ARG(quint32, id));
->>>>>>> Fix call arguments
-
-        m_operationQueueHandler.enqueueOperation(
-                                    SIGNOND_SESSION_SET_ID_METHOD,
-                                    args);
-    }
->>>>>>> Expand userdata support
-=======
     else
         m_operationQueueHandler.enqueueOperation(
                                     SIGNOND_SESSION_SET_ID_METHOD,
                                     QList<QGenericArgument *>() <<
                                     (new Q_ARG(quint32, id)));
->>>>>>> Merge & cleanup from master
 }
 
 bool AuthSessionImpl::checkConnection()
@@ -305,19 +196,7 @@ bool AuthSessionImpl::initInterface()
     QVariantList arguments;
     arguments += m_id;
     arguments += m_methodName;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
-=======
-    arguments += m_userdata;
->>>>>>> Start adding userdata to the client side implementation
-=======
-    arguments += m_applicationContext;
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
-    arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
->>>>>>> Fix call arguments
 
     msg.setArguments(arguments);
     msg.setDelayedReply(true);
@@ -347,13 +226,9 @@ AuthSessionImpl::queryAvailableMechanisms(const QStringList &wantedMechanisms)
 
     QVariantList arguments;
     arguments += wantedMechanisms;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
 
     if (m_DBusInterface)
-<<<<<<< HEAD
         send2interface(remoteFunctionName,
                        SLOT(mechanismsAvailableSlot(const QStringList&)),
                        arguments);
@@ -362,42 +237,6 @@ AuthSessionImpl::queryAvailableMechanisms(const QStringList &wantedMechanisms)
                         SIGNOND_SESSION_QUERY_AVAILABLE_MECHANISMS_METHOD,
                         QList<QGenericArgument *>() <<
                         (new Q_ARG(QStringList, wantedMechanisms)));
-=======
-        send2interface(remoteFunctionName, SLOT(mechanismsAvailableSlot(const QStringList&)), arguments);
-    else {
-        QList<QGenericArgument *> args;
-
-        args << (new Q_ARG(QStringList, wantedMechanisms));
-
-        m_operationQueueHandler.enqueueOperation(
-                        SIGNOND_SESSION_QUERY_AVAILABLE_MECHANISMS_METHOD,
-                        args);
-    }
->>>>>>> Expand userdata support
-=======
-    arguments += m_userdata;
-=======
-    arguments += m_applicationContext;
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
-    arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
->>>>>>> Fix call arguments
-
-    if (m_DBusInterface)
-        send2interface(remoteFunctionName,
-                       SLOT(mechanismsAvailableSlot(const QStringList&)),
-                       arguments);
-    else
-        m_operationQueueHandler.enqueueOperation(
-                        SIGNOND_SESSION_QUERY_AVAILABLE_MECHANISMS_METHOD,
-<<<<<<< HEAD
-                        args);
-    }
->>>>>>> Expand userdata support
-=======
-                        QList<QGenericArgument *>() <<
-                        (new Q_ARG(QStringList, wantedMechanisms)));
->>>>>>> Merge & cleanup from master
 }
 
 void AuthSessionImpl::process(const SessionData &sessionData,
@@ -427,19 +266,7 @@ void AuthSessionImpl::process(const SessionData &sessionData,
     QVariantList arguments;
     arguments += sessionDataVa;
     arguments += mechanism;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
-=======
-    arguments += m_userdata;
->>>>>>> Expand userdata support
-=======
-    arguments += m_applicationContext;
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
-    arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
->>>>>>> Fix call arguments
 
     remoteFunctionName = QLatin1String("process");
 
@@ -484,41 +311,10 @@ void AuthSessionImpl::cancel()
 
     } else {
         TRACE() << "Sending cancel-request";
-<<<<<<< HEAD
-<<<<<<< HEAD
-        m_DBusInterface->call(QDBus::NoBlock, QLatin1String("cancel"));
-=======
-        m_DBusInterface->call(QDBus::NoBlock,
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-                QLatin1String("cancel"), m_userdata);
->>>>>>> Expand userdata support
-=======
-                QLatin1String("cancel"), m_applicationContext);
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
-                              QLatin1String("cancel"),
-                              QVariant::fromValue(QDBusVariant(m_applicationContext)));
->>>>>>> Fix call arguments
-=======
-                QLatin1String("cancel"), m_userdata);
->>>>>>> Expand userdata support
-=======
-                QLatin1String("cancel"), m_applicationContext);
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
-                              QLatin1String("cancel"),
-                              QVariant::fromValue(QDBusVariant(m_applicationContext)));
->>>>>>> Fix call arguments
-=======
         m_DBusInterface->call(
                     QDBus::NoBlock,
                     QLatin1String("cancel"),
                     QVariant::fromValue(QDBusVariant(m_applicationContext)));
->>>>>>> Merge & cleanup from master
     }
 
     m_isBusy = false;

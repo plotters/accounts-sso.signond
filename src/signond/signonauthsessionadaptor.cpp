@@ -39,11 +39,6 @@ SignonAuthSessionAdaptor::~SignonAuthSessionAdaptor()
 {
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Merge & cleanup from master
 void SignonAuthSessionAdaptor::errorReply(const QString &name,
                                           const QString &message)
 {
@@ -52,37 +47,6 @@ void SignonAuthSessionAdaptor::errorReply(const QString &name,
         createErrorReply(name, message);
     SIGNOND_BUS.send(errReply);
 }
-<<<<<<< HEAD
-=======
-    QStringList SignonAuthSessionAdaptor::queryAvailableMechanisms(const QStringList &wantedMechanisms,
-                                                                   const QDBusVariant &applicationContext)
-=======
-    QStringList SignonAuthSessionAdaptor::queryAvailableMechanisms(const QStringList &wantedMechanisms,
-<<<<<<< HEAD
-<<<<<<< HEAD
-                                                                   const QVariant &userdata)
->>>>>>> Add user data parameter to server side interfaces
-=======
-                                                                   const QDBusVariant &userdata)
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-                                                                   const QDBusVariant &applicationContext)
->>>>>>> Rename 'userdata' to 'applicationContext'
-    {
-        TRACE();
->>>>>>> Add user data parameter to server side interfaces
-
-QStringList
-SignonAuthSessionAdaptor::queryAvailableMechanisms(
-                                           const QStringList &wantedMechanisms)
-{
-    TRACE();
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
 QStringList
 SignonAuthSessionAdaptor::queryAvailableMechanisms(
@@ -91,7 +55,6 @@ SignonAuthSessionAdaptor::queryAvailableMechanisms(
 {
     TRACE();
 
->>>>>>> Merge & cleanup from master
     QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
     if (AccessControlManagerHelper::pidOfPeer(dbusContext) !=
         parent()->ownerPid()) {
@@ -103,49 +66,6 @@ SignonAuthSessionAdaptor::queryAvailableMechanisms(
                              "process.";
         errorReply(SIGNOND_PERMISSION_DENIED_ERR_NAME, errMsg);
         return QStringList();
-<<<<<<< HEAD
-=======
-        return parent()->queryAvailableMechanisms(wantedMechanisms, userdata);
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-        return parent()->queryAvailableMechanisms(wantedMechanisms, applicationContext);
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
-        return parent()->queryAvailableMechanisms(wantedMechanisms, userdata);
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-        return parent()->queryAvailableMechanisms(wantedMechanisms, applicationContext);
->>>>>>> Rename 'userdata' to 'applicationContext'
-    }
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-    return parent()->queryAvailableMechanisms(wantedMechanisms);
-}
-=======
-    QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
-                                                  const QString &mechanism,
-                                                  const QDBusVariant &applicationContext)
-=======
-    QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
-                                                  const QString &mechanism,
-<<<<<<< HEAD
-<<<<<<< HEAD
-                                                  const QVariant &userdata)
->>>>>>> Add user data parameter to server side interfaces
-=======
-                                                  const QDBusVariant &userdata)
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-                                                  const QDBusVariant &applicationContext)
->>>>>>> Rename 'userdata' to 'applicationContext'
-    {
-        TRACE();
->>>>>>> Add user data parameter to server side interfaces
-
-QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
-                                              const QString &mechanism)
-=======
     }
 
     return parent()->queryAvailableMechanisms(wantedMechanisms,
@@ -156,158 +76,10 @@ QVariantMap SignonAuthSessionAdaptor::process(
                                         const QVariantMap &sessionDataVa,
                                         const QString &mechanism,
                                         const QDBusVariant &applicationContext)
->>>>>>> Merge & cleanup from master
 {
     TRACE();
 
     QString allowedMechanism(mechanism);
-<<<<<<< HEAD
-
-    if (parent()->id() != SIGNOND_NEW_IDENTITY) {
-        CredentialsDB *db =
-            CredentialsAccessManager::instance()->credentialsDB();
-        if (db) {
-            SignonIdentityInfo identityInfo = db->credentials(parent()->id(),
-                                                              false);
-            if (!identityInfo.checkMethodAndMechanism(parent()->method(),
-                                                      mechanism,
-                                                      allowedMechanism)) {
-                QString errMsg;
-                QTextStream(&errMsg) << SIGNOND_METHOD_OR_MECHANISM_NOT_ALLOWED_ERR_STR
-                                     << " Method:"
-                                     << parent()->method()
-                                     << ", mechanism:"
-                                     << mechanism
-                                     << ", allowed:"
-                                     << allowedMechanism;
-                errorReply(SIGNOND_METHOD_OR_MECHANISM_NOT_ALLOWED_ERR_NAME,
-                           errMsg);
-                return QVariantMap();
-            }
-        } else {
-            BLAME() << "Null database handler object.";
-        }
-    }
-
-<<<<<<< HEAD
-    QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
-    if (AccessControlManagerHelper::pidOfPeer(dbusContext) !=
-        parent()->ownerPid()) {
-        TRACE() << "process called from peer that doesn't own the AuthSession "
-            "object";
-        QString errMsg;
-        QTextStream(&errMsg) << SIGNOND_PERMISSION_DENIED_ERR_STR
-                             << " Authentication session owned by other "
-                             "process.";
-        errorReply(SIGNOND_PERMISSION_DENIED_ERR_NAME, errMsg);
-        return QVariantMap();
-    }
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-    return parent()->process(sessionDataVa, allowedMechanism);
-}
-=======
-    void SignonAuthSessionAdaptor::cancel(const QVariant &userdata)
-=======
-        return parent()->process(sessionDataVa, allowedMechanism, userdata);
-    }
-
-<<<<<<< HEAD
-    void SignonAuthSessionAdaptor::cancel(const QDBusVariant &userdata)
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-        return parent()->process(sessionDataVa, allowedMechanism, applicationContext);
-    }
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-    void SignonAuthSessionAdaptor::cancel(const QDBusVariant &applicationContext)
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
-    void SignonAuthSessionAdaptor::cancel(const QVariant &userdata)
->>>>>>> Add user data parameter to server side interfaces
-=======
-        return parent()->process(sessionDataVa, allowedMechanism, userdata);
-    }
-
-    void SignonAuthSessionAdaptor::cancel(const QDBusVariant &userdata)
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-        return parent()->process(sessionDataVa, allowedMechanism, applicationContext);
-    }
-
-    void SignonAuthSessionAdaptor::cancel(const QDBusVariant &applicationContext)
->>>>>>> Rename 'userdata' to 'applicationContext'
-    {
-        TRACE();
->>>>>>> Add user data parameter to server side interfaces
-
-void SignonAuthSessionAdaptor::cancel()
-{
-    TRACE();
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
-    if (AccessControlManagerHelper::pidOfPeer(dbusContext) != parent()->ownerPid()) {
-        TRACE() << "cancel called from peer that doesn't own the AuthSession "
-            "object";
-        return;
-    }
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-    parent()->cancel();
-}
-=======
-    void SignonAuthSessionAdaptor::setId(quint32 id, const QVariant &userdata)
-=======
-        parent()->cancel(userdata);
-    }
-
-<<<<<<< HEAD
-    void SignonAuthSessionAdaptor::setId(quint32 id,
-                                         const QDBusVariant &userdata)
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-        parent()->cancel(applicationContext);
-    }
-
-    void SignonAuthSessionAdaptor::setId(quint32 id,
-                                         const QDBusVariant &applicationContext)
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
-    void SignonAuthSessionAdaptor::setId(quint32 id, const QVariant &userdata)
->>>>>>> Add user data parameter to server side interfaces
-=======
-        parent()->cancel(userdata);
-    }
-
-    void SignonAuthSessionAdaptor::setId(quint32 id,
-                                         const QDBusVariant &userdata)
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-        parent()->cancel(applicationContext);
-    }
-
-    void SignonAuthSessionAdaptor::setId(quint32 id,
-                                         const QDBusVariant &applicationContext)
->>>>>>> Rename 'userdata' to 'applicationContext'
-    {
-        TRACE();
->>>>>>> Add user data parameter to server side interfaces
-
-void SignonAuthSessionAdaptor::setId(quint32 id)
-{
-    TRACE();
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
     if (parent()->id() != SIGNOND_NEW_IDENTITY) {
         CredentialsDB *db =
@@ -372,7 +144,6 @@ void SignonAuthSessionAdaptor::setId(quint32 id,
 {
     TRACE();
 
->>>>>>> Merge & cleanup from master
     QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
     if (AccessControlManagerHelper::pidOfPeer(dbusContext) !=
         parent()->ownerPid()) {
@@ -385,55 +156,6 @@ void SignonAuthSessionAdaptor::setId(quint32 id,
         TRACE() << "setId called with an identifier the peer is not allowed "
             "to use";
         return;
-<<<<<<< HEAD
-    }
-
-<<<<<<< HEAD
-    parent()->setId(id);
-}
-=======
-    void SignonAuthSessionAdaptor::objectUnref(const QVariant &userdata)
-=======
-        parent()->setId(id, userdata);
-    }
-
-<<<<<<< HEAD
-    void SignonAuthSessionAdaptor::objectUnref(const QDBusVariant &userdata)
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-        parent()->setId(id, applicationContext);
-    }
-
-    void SignonAuthSessionAdaptor::objectUnref(const QDBusVariant &applicationContext)
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
-    void SignonAuthSessionAdaptor::objectUnref(const QVariant &userdata)
->>>>>>> Add user data parameter to server side interfaces
-=======
-        parent()->setId(id, userdata);
-    }
-
-    void SignonAuthSessionAdaptor::objectUnref(const QDBusVariant &userdata)
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-        parent()->setId(id, applicationContext);
-    }
-
-    void SignonAuthSessionAdaptor::objectUnref(const QDBusVariant &applicationContext)
->>>>>>> Rename 'userdata' to 'applicationContext'
-    {
-        TRACE();
->>>>>>> Add user data parameter to server side interfaces
-
-void SignonAuthSessionAdaptor::objectUnref()
-{
-    TRACE();
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
     }
 
     parent()->setId(id, applicationContext);
@@ -444,34 +166,15 @@ void SignonAuthSessionAdaptor::objectUnref(
 {
     TRACE();
 
->>>>>>> Merge & cleanup from master
     QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
     if (AccessControlManagerHelper::pidOfPeer(dbusContext) !=
         parent()->ownerPid()) {
         TRACE() << "objectUnref called from peer that doesn't own the "
             "AuthSession object";
         return;
-<<<<<<< HEAD
-=======
-        parent()->objectUnref(userdata);
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-        parent()->objectUnref(applicationContext);
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
-        parent()->objectUnref(userdata);
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-        parent()->objectUnref(applicationContext);
->>>>>>> Rename 'userdata' to 'applicationContext'
-    }
-
-    parent()->objectUnref();
-=======
     }
 
     parent()->objectUnref(applicationContext);
->>>>>>> Merge & cleanup from master
 }
 
 } //namespace SignonDaemonNS

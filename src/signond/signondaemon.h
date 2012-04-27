@@ -126,52 +126,15 @@ public:
 public Q_SLOTS:
     /* Immediate reply calls */
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    void registerNewIdentity(QDBusObjectPath &objectPath);
-    void getIdentity(const quint32 id, QDBusObjectPath &objectPath,
-                     QVariantMap &identityData);
-=======
-    void registerNewIdentity(QDBusObjectPath &objectPath,
-                             const QDBusVariant &applicationContext);
-=======
     void registerNewIdentity(const QDBusVariant &applicationContext,
                              QDBusObjectPath &objectPath);
->>>>>>> Rename 'userdata' to 'applicationContext'
     void getIdentity(const quint32 id,
                      const QDBusVariant &applicationContext,
                      QDBusObjectPath &objectPath,
-<<<<<<< HEAD
-                     QVariantMap &identityData,
-                     const QDBusVariant &applicationContext);
->>>>>>> Use QDBusVariant instead of QVariant
-    QString getAuthSessionObjectPath(const quint32 id, const QString type);
-=======
-    void registerNewIdentity(const QDBusVariant &userdata,
-=======
-    void registerNewIdentity(const QDBusVariant &applicationContext,
->>>>>>> Rename 'userdata' to 'applicationContext'
-                             QDBusObjectPath &objectPath);
-    void registerStoredIdentity(const quint32 id,
-                                const QDBusVariant &applicationContext,
-                                QDBusObjectPath &objectPath,
-                                QList<QVariant> &identityData);
-    QString getAuthSessionObjectPath(const quint32 id,
-                                     const QString type,
-<<<<<<< HEAD
-                                     const QDBusVariant &userdata);
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-                                     const QDBusVariant &applicationContext);
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
                      QVariantMap &identityData);
     QString getAuthSessionObjectPath(const quint32 id,
                                      const QString type,
                                      const QDBusVariant &applicationContext);
->>>>>>> Rename 'userdata' to 'applicationContext'
 
     QStringList queryMethods();
     QStringList queryMechanisms(const QString &method);

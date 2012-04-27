@@ -5,19 +5,8 @@
  * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
-<<<<<<< HEAD
-<<<<<<< HEAD
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
-=======
- * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
-=======
- * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
->>>>>>> Merge & cleanup from master
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
-<<<<<<< HEAD
->>>>>>> Start adding userdata to the client side implementation
-=======
->>>>>>> Start adding userdata to the client side implementation
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -56,10 +45,6 @@ namespace SignOn {
 
 class IdentityInfo;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Merge & cleanup from master
 /*!
  * @class IdentityImpl
  * Identity class implementation.
@@ -69,34 +54,7 @@ class IdentityImpl: public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(IdentityImpl)
-<<<<<<< HEAD
-=======
-    /*!
-     * @class IdentityImpl
-     * Identity class implementation.
-     * @sa Identity
-     */
-    class IdentityImpl : public QObject
-    {
-        Q_OBJECT
-        Q_DISABLE_COPY(IdentityImpl)
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-        Q_PROPERTY(QVariant userdata READ userdata WRITE setUserdata);
->>>>>>> Start adding userdata to the client side implementation
-=======
-        Q_PROPERTY(QVariant applicationContext READ applicationContext WRITE setApplicationContext);
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
-        Q_PROPERTY(QVariant userdata READ userdata WRITE setUserdata);
->>>>>>> Start adding userdata to the client side implementation
-=======
-        Q_PROPERTY(QVariant applicationContext READ applicationContext WRITE setApplicationContext);
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
     Q_PROPERTY(QVariant applicationContext READ applicationContext WRITE setApplicationContext);
->>>>>>> Merge & cleanup from master
 
     friend class Identity;
 
@@ -114,69 +72,15 @@ public:
                  const quint32 id = 0);
     ~IdentityImpl();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     quint32 id() const;
     AuthSession *createSession(const QString &methodName, QObject *parent = 0);
     void destroySession(AuthSession *session);
-=======
-        quint32 id() const;
-        AuthSession *createSession(const QString &methodName,
-                                   QObject *parent = 0);
-        void destroySession(AuthSession *session);
->>>>>>> Finalize API changes and implementation for user data
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-public Q_SLOTS:
-    void errorReply(const QDBusError &err);
-    void storeCredentialsReply(const quint32 id);
-    void removeReply();
-    void addReferenceReply();
-    void removeReferenceReply();
-    void getInfoReply(const QVariantMap &infoData);
-    void verifyUserReply(const bool valid);
-    void verifySecretReply(const bool valid);
-    void signOutReply();
-    void infoUpdated(int);
-    void removeObjectDestroyed();
-=======
-        QVariant userdata () const
-        { return m_userdata; }
-        void setUserdata (const QVariant &newUserdata)
-        { m_userdata = newUserdata; }
-=======
-        QVariant applicationContext () const
-        { return m_applicationContext; }
-        void setApplicationContext (const QVariant &newApplicationContext)
-        { m_applicationContext = newApplicationContext; }
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
-    quint32 id() const;
-    AuthSession *createSession(const QString &methodName, QObject *parent = 0);
-    void destroySession(AuthSession *session);
->>>>>>> Merge & cleanup from master
 
     QVariant applicationContext () const
         { return m_applicationContext; }
     void setApplicationContext (const QVariant &newApplicationContext)
         { m_applicationContext = newApplicationContext; }
 
-<<<<<<< HEAD
-    public Q_SLOTS:
-        void errorReply(const QDBusError &err);
-        void storeCredentialsReply(const quint32 id);
-        void removeReply();
-        void addReferenceReply();
-        void removeReferenceReply();
-        void queryInfoReply(const QList<QVariant> &infoData);
-        void verifyUserReply(const bool valid);
-        void verifySecretReply(const bool valid);
-        void signOutReply();
-        void infoUpdated(int);
-        void removeObjectDestroyed();
->>>>>>> Start adding userdata to the client side implementation
-=======
 public Q_SLOTS:
     void errorReply(const QDBusError &err);
     void storeCredentialsReply(const quint32 id);
@@ -189,7 +93,6 @@ public Q_SLOTS:
     void signOutReply();
     void infoUpdated(int);
     void removeObjectDestroyed();
->>>>>>> Merge & cleanup from master
 
 private Q_SLOTS:
     void queryAvailableMethods();
@@ -225,10 +128,6 @@ private:
     IdentityInfo *m_identityInfo;
     DBusOperationQueueHandler m_operationQueueHandler;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Merge & cleanup from master
     /* Cache info in the storing case, so that if the storing succeeds, server
      * side does not have to send succesfully stored data over IPC channel.
      */
@@ -243,37 +142,9 @@ private:
     bool m_infoQueried;
     /* Marks this Identity as the one which requested the sign out */
     bool m_signOutRequestedByThisIdentity;
-<<<<<<< HEAD
-};
-=======
-        /* Cache info in the storing case, so that if the storing succeeds, server side
-           does not have to send succesfully stored data over IPC channel */
-        IdentityInfo *m_tmpIdentityInfo;
-        DBusInterface *m_DBusInterface;
-        State m_state;
-        QList<AuthSession *> m_authSessions;
-        /* This flag allows the queryInfo() reply slot not to reply with the 'info()'
-           signal, but with the 'methodsAvailable()' signal, for the case when the
-           cached info is updated at a queryAvaialbleMethods() request */
-        bool m_infoQueried;
-        /* Marks this Identity as the one which requested the sign out */
-        bool m_signOutRequestedByThisIdentity;
-<<<<<<< HEAD
-<<<<<<< HEAD
-        QVariant m_applicationContext;
-=======
-        QVariant m_userdata;
->>>>>>> Start adding userdata to the client side implementation
-=======
-        QVariant m_applicationContext;
->>>>>>> Rename 'userdata' to 'applicationContext'
-    };
->>>>>>> Start adding userdata to the client side implementation
-=======
     /* Application level context info. */
     QVariant m_applicationContext;
 };
->>>>>>> Merge & cleanup from master
 
 }  // namespace SignOn
 

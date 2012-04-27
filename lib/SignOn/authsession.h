@@ -5,19 +5,8 @@
  * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
-<<<<<<< HEAD
-<<<<<<< HEAD
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
-=======
- * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
-=======
- * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
->>>>>>> Merge & cleanup from master
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
-<<<<<<< HEAD
->>>>>>> Finalize API changes and implementation for user data
-=======
->>>>>>> Finalize API changes and implementation for user data
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -95,10 +84,6 @@ public:
         UserInteractionError            /**< User interaction dialog failed */
     };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Merge & cleanup from master
     /*!
      * @enum AuthSessionState
      * Codes for the states of the AuthSession object.
@@ -120,41 +105,15 @@ public:
         CustomState,                    /**< Custom message. */
         MaxState,
     };
-<<<<<<< HEAD
-=======
-    protected:
-        /*!
-         * @internal
-         */
-        AuthSession(quint32 id,
-                    const QString &methodName,
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    const QVariant &applicationContextP,
-=======
-                    const QVariant &userdataP,
->>>>>>> Finalize API changes and implementation for user data
-=======
-                    const QVariant &applicationContextP,
->>>>>>> Rename 'userdata' to 'applicationContext'
-                    QObject *parent = 0);
-        ~AuthSession();
->>>>>>> Finalize API changes and implementation for user data
-=======
->>>>>>> Merge & cleanup from master
 
 protected:
     /*!
      * @internal
      */
-<<<<<<< HEAD
-    AuthSession(quint32 id, const QString &methodName, QObject *parent = 0);
-=======
     AuthSession(quint32 id,
                 const QString &methodName,
                 const QVariant &applicationContextP,
                 QObject *parent = 0);
->>>>>>> Merge & cleanup from master
     ~AuthSession();
 
 public:

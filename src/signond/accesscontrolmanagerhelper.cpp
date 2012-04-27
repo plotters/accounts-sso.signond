@@ -60,27 +60,10 @@ AccessControlManagerHelper::~AccessControlManagerHelper()
 }
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Merge & cleanup from master
 bool
 AccessControlManagerHelper::isPeerAllowedToUseIdentity(
                                                const QDBusMessage &peerMessage,
                                                const quint32 identityId)
-<<<<<<< HEAD
-=======
-bool AccessControlManagerHelper::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
-                                                            const quint32 identityId)
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> cleaning up
-=======
->>>>>>> adding ac fixes
-=======
->>>>>>> cleaning up
-=======
->>>>>>> Merge & cleanup from master
 {
     // TODO - improve this, the error handling and more precise behaviour
 
@@ -124,43 +107,17 @@ AccessControlManagerHelper::isPeerOwnerOfIdentity(
     if (ownerSecContexts.isEmpty())
         return IdentityDoesNotHaveOwner;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    return peerHasOneOfAccesses(peerMessage, ownerSecContexts) ?
-        ApplicationIsOwner : ApplicationIsNotOwner;
-=======
-=======
->>>>>>> adding ac fixes
-=======
->>>>>>> adding ac fixes
-    foreach(QString securityContext, ownerSecContexts)
-    {
-=======
     foreach(QString securityContext, ownerSecContexts) {
->>>>>>> Merge & cleanup from master
         TRACE() << securityContext;
         if (m_acManager->isPeerOwnerOfIdentity(peerMessage, securityContext))
             return ApplicationIsOwner;
     }
     return ApplicationIsNotOwner;
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> adding ac fixes
-=======
->>>>>>> adding ac fixes
-=======
->>>>>>> adding ac fixes
 }
 
 bool
-<<<<<<< HEAD
-AccessControlManagerHelper::isPeerKeychainWidget(const QDBusMessage &peerMessage)
-=======
 AccessControlManagerHelper::isPeerKeychainWidget(
                                                 const QDBusMessage &peerMessage)
->>>>>>> Merge & cleanup from master
 {
     static QString keychainWidgetAppId = m_acManager->keychainWidgetAppId();
     QString peerAppId = m_acManager->appIdOfPeer(peerMessage);
@@ -173,27 +130,10 @@ QString AccessControlManagerHelper::appIdOfPeer(const QDBusMessage &peerMessage)
     return m_acManager->appIdOfPeer(peerMessage);
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-bool
-AccessControlManagerHelper::peerHasOneOfAccesses(const QDBusMessage &peerMessage,
-                                                 const QStringList secContexts)
-=======
-bool AccessControlManagerHelper::peerHasOneOfAccesses(const QDBusMessage &peerMessage,
-                                                      const QStringList secContexts)
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> cleaning up
-=======
->>>>>>> adding ac fixes
-=======
->>>>>>> cleaning up
-=======
 bool
 AccessControlManagerHelper::peerHasOneOfAccesses(
                                             const QDBusMessage &peerMessage,
                                             const QStringList secContexts)
->>>>>>> Merge & cleanup from master
 {
     foreach (QString securityContext, secContexts) {
         TRACE() << securityContext;
@@ -206,27 +146,10 @@ AccessControlManagerHelper::peerHasOneOfAccesses(
     return false;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Merge & cleanup from master
 bool
 AccessControlManagerHelper::isPeerAllowedToAccess(
                                                const QDBusMessage &peerMessage,
                                                const QString securityContext)
-<<<<<<< HEAD
-=======
-bool AccessControlManagerHelper::isPeerAllowedToAccess(const QDBusMessage &peerMessage,
-                                                       const QString securityContext)
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> cleaning up
-=======
->>>>>>> adding ac fixes
-=======
->>>>>>> cleaning up
-=======
->>>>>>> Merge & cleanup from master
 {
     TRACE() << securityContext;
     return m_acManager->isPeerAllowedToUseIdentity(peerMessage,
@@ -239,22 +162,8 @@ pid_t AccessControlManagerHelper::pidOfPeer(const QDBusContext &peerContext)
     return peerContext.connection().interface()->servicePid(service).value();
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 bool AccessControlManagerHelper::isACLValid(const QDBusMessage &peerMessage,
                                             const QStringList aclList)
 {
     return m_acManager->isACLValid(peerMessage, aclList);
-=======
-bool AccessControlManagerHelper::isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-                                                       const QStringList aclList)
-{
-    return m_acManager->isPeerAllowedToSetACL(peerMessage, aclList);
->>>>>>> adding ac fixes
-=======
-bool AccessControlManagerHelper::isACLValid(const QDBusMessage &peerMessage,
-                                            const QStringList aclList)
-{
-    return m_acManager->isACLValid(peerMessage, aclList);
->>>>>>> changing ACL function name
 }

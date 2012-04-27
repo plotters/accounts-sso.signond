@@ -34,65 +34,18 @@ AbstractAccessControlManager::~AbstractAccessControlManager()
 {
 }
 
-<<<<<<< HEAD
-QString AbstractAccessControlManager::keychainWidgetAppId()
-{
-    return QString();
-}
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-bool AbstractAccessControlManager::isPeerAllowedToAccess(
-                                               const QDBusMessage &peerMessage,
-=======
-=======
->>>>>>> adding ac fixes
-bool AbstractAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
-                                                              const QString &securityContext)
-=======
-bool AbstractAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
-<<<<<<< HEAD
-                                               const QString &securityContext)
->>>>>>> adding ac fixes
-=======
-                                                              const QString &securityContext)
->>>>>>> cleaning up
-=======
 bool AbstractAccessControlManager::isPeerAllowedToUseIdentity(
                                             const QDBusMessage &peerMessage,
                                             const QString &securityContext)
->>>>>>> Merge & cleanup from master
 {
     Q_UNUSED(peerMessage);
     Q_UNUSED(securityContext);
     return true;
 }
 
-<<<<<<< HEAD
-bool AbstractAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> adding ac fixes
-=======
->>>>>>> adding ac fixes
-                                               const QString &securityContext)
-=======
-                                                         const QString &securityContext)
->>>>>>> cleaning up
-=======
-                                                         const QString &securityContext)
->>>>>>> adding ac fixes
-=======
-                                                         const QString &securityContext)
->>>>>>> cleaning up
-=======
 bool AbstractAccessControlManager::isPeerOwnerOfIdentity(
                                                const QDBusMessage &peerMessage,
                                                const QString &securityContext)
->>>>>>> Merge & cleanup from master
 {
     Q_UNUSED(peerMessage);
     Q_UNUSED(securityContext);
@@ -106,30 +59,13 @@ AbstractAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
     return QString();
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-bool AbstractAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
-                                              const QStringList &aclList)
-=======
-bool AbstractAccessControlManager::isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-<<<<<<< HEAD
-                              const QStringList aclList)
->>>>>>> adding ac fixes
-=======
-                                                         const QStringList &aclList)
->>>>>>> cleaning up
-=======
-=======
 QString AbstractAccessControlManager::keychainWidgetAppId()
 {
     return QString();
 }
 
->>>>>>> Merge & cleanup from master
 bool AbstractAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
                                               const QStringList &aclList)
->>>>>>> changing ACL function name
 {
     Q_UNUSED(peerMessage);
     Q_UNUSED(aclList);

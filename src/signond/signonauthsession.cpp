@@ -4,21 +4,8 @@
  * Copyright (C) 2009-2010 Nokia Corporation.
  * Copyright (C) 2012 Intel Corporation.
  *
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
- * Conta Alberto Mardegan <alberto.mardegan@canonical.com>
-=======
- * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
-=======
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
->>>>>>> Merge & cleanup from master
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
->>>>>>> Use QDBusVariant instead of QVariant
-=======
- * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
- * Contact: Jussi Laako <jussi.laako@linux.intel.com>
->>>>>>> Use QDBusVariant instead of QVariant
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -71,25 +58,6 @@ SignonAuthSession::~SignonAuthSession()
     }
 }
 
-<<<<<<< HEAD
-QString SignonAuthSession::getAuthSessionObjectPath(const quint32 id,
-                                                    const QString &method,
-                                                    SignonDaemon *parent,
-                                                    bool &supportsAuthMethod,
-                                                    pid_t ownerPid,
-<<<<<<< HEAD
-<<<<<<< HEAD
-                                                    const QVariant &applicationContext)
-{
-    Q_UNUSED(applicationContext);
-=======
-                                                    const QVariant &userdata)
-{
-    Q_UNUSED(userdata);
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-                                                    const QVariant &applicationContext)
-=======
 QString SignonAuthSession::getAuthSessionObjectPath(
                                         const quint32 id,
                                         const QString &method,
@@ -97,10 +65,8 @@ QString SignonAuthSession::getAuthSessionObjectPath(
                                         bool &supportsAuthMethod,
                                         pid_t ownerPid,
                                         const QDBusVariant &applicationContext)
->>>>>>> Merge & cleanup from master
 {
     Q_UNUSED(applicationContext);
->>>>>>> Rename 'userdata' to 'applicationContext'
 
     TRACE();
     supportsAuthMethod = true;
@@ -160,58 +126,21 @@ pid_t SignonAuthSession::ownerPid() const
     return m_ownerPid;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-QStringList
-SignonAuthSession::queryAvailableMechanisms(const QStringList &wantedMechanisms)
-=======
-QStringList SignonAuthSession::queryAvailableMechanisms(const QStringList &wantedMechanisms,
-<<<<<<< HEAD
-                                                        const QDBusVariant &userdata)
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-                                                        const QDBusVariant &applicationContext)
->>>>>>> Rename 'userdata' to 'applicationContext'
-=======
 QStringList
 SignonAuthSession::queryAvailableMechanisms(
                                         const QStringList &wantedMechanisms,
                                         const QDBusVariant &applicationContext)
->>>>>>> Merge & cleanup from master
 {
     Q_UNUSED(applicationContext);
-=======
-QStringList SignonAuthSession::queryAvailableMechanisms(const QStringList &wantedMechanisms,
-                                                        const QDBusVariant &applicationContext)
-{
-<<<<<<< HEAD
-    Q_UNUSED(userdata);
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-    Q_UNUSED(applicationContext);
->>>>>>> Rename 'userdata' to 'applicationContext'
 
     return parent()->queryAvailableMechanisms(wantedMechanisms);
 }
 
 QVariantMap SignonAuthSession::process(const QVariantMap &sessionDataVa,
                                        const QString &mechanism,
-<<<<<<< HEAD
-<<<<<<< HEAD
                                        const QDBusVariant &applicationContext)
 {
     Q_UNUSED(applicationContext);
-=======
-                                       const QDBusVariant &userdata)
-{
-    Q_UNUSED(userdata);
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-                                       const QDBusVariant &applicationContext)
-{
-    Q_UNUSED(applicationContext);
->>>>>>> Rename 'userdata' to 'applicationContext'
 
     setDelayedReply(true);
     parent()->process(connection(),
@@ -222,74 +151,28 @@ QVariantMap SignonAuthSession::process(const QVariantMap &sessionDataVa,
     return QVariantMap();
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 void SignonAuthSession::cancel(const QDBusVariant &applicationContext)
 {
     Q_UNUSED(applicationContext);
-=======
-void SignonAuthSession::cancel(const QDBusVariant &userdata)
-{
-    Q_UNUSED(userdata);
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-void SignonAuthSession::cancel(const QDBusVariant &applicationContext)
-{
-    Q_UNUSED(applicationContext);
->>>>>>> Rename 'userdata' to 'applicationContext'
 
     TRACE();
     parent()->cancel(objectName());
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-void SignonAuthSession::setId(quint32 id, const QDBusVariant &applicationContext)
-{
-    Q_UNUSED(applicationContext);
-=======
-void SignonAuthSession::setId(quint32 id, const QDBusVariant &userdata)
-{
-    Q_UNUSED(userdata);
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-void SignonAuthSession::setId(quint32 id, const QDBusVariant &applicationContext)
-=======
 void SignonAuthSession::setId(quint32 id,
                               const QDBusVariant &applicationContext)
->>>>>>> Merge & cleanup from master
 {
     Q_UNUSED(applicationContext);
->>>>>>> Rename 'userdata' to 'applicationContext'
 
     m_id = id;
     parent()->setId(id);
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 void SignonAuthSession::objectUnref(const QDBusVariant &applicationContext)
 {
-    Q_UNUSED(applicationContext);
-
     //TODO - remove the `objectUnref` functionality from the DBus API
     TRACE();
     cancel(applicationContext);
-=======
-void SignonAuthSession::objectUnref(const QDBusVariant &userdata)
-=======
-void SignonAuthSession::objectUnref(const QDBusVariant &applicationContext)
->>>>>>> Rename 'userdata' to 'applicationContext'
-{
-    //TODO - remove the `objectUnref` functionality from the DBus API
-    TRACE();
-<<<<<<< HEAD
-    cancel(userdata);
->>>>>>> Use QDBusVariant instead of QVariant
-=======
-    cancel(applicationContext);
->>>>>>> Rename 'userdata' to 'applicationContext'
 
     if (m_registered) {
         QDBusConnection connection(SIGNOND_BUS);

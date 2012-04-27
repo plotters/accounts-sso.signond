@@ -160,56 +160,6 @@ public:
      * @param secContexts, the objects' securityContexts to be checked against.
      * @returns true, if the peer is allowed, false otherwise.
      */
-<<<<<<< HEAD
-    bool peerHasOneOfAccesses(const QDBusMessage &peerMessage,
-                              const QStringList secContexts);
-<<<<<<< HEAD
-=======
-    /*!
-        Checks if a client process is allowed to set the specified acl on data item.
-        The restrictions depend on the AC framework being used and concrete function implementation.
-        @param peerMessage, the request message sent over DBUS by the process.
-        @param aclList, the acl list to be checked against
-        @returns true, if the peer is allowed, false otherwise.
-    */
-<<<<<<< HEAD
-=======
-    bool peerHasOneOfAccesses(const QDBusMessage &peerMessage,
-                              const QStringList secContexts);
-    /*!
-        Checks if a client process is allowed to set the specified acl on data item.
-<<<<<<< HEAD
-<<<<<<< HEAD
-        The restrictions depend on the AC framework being used and concrete function implementation.
-=======
-        The restrcitions depend on the AC framework being used and concrete function implementation.
->>>>>>> adding ac fixes
-=======
-        The restrictions depend on the AC framework being used and concrete function implementation.
->>>>>>> cleaning up
-        @param peerMessage, the request message sent over DBUS by the process.
-        @param aclList, the acl list to be checked against
-        @returns true, if the peer is allowed, false otherwise.
-    */
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> adding ac fixes
-    bool isACLValid(const QDBusMessage &peerMessage,
-                               const QStringList aclList);
-=======
-    bool isPeerAllowedToSetACL(const QDBusMessage &peerMessage,
-<<<<<<< HEAD
-                              const QStringList aclList);
->>>>>>> adding ac fixes
-=======
-=======
-    bool isACLValid(const QDBusMessage &peerMessage,
->>>>>>> changing ACL function name
-                               const QStringList aclList);
->>>>>>> cleaning up
-private:
->>>>>>> adding ac fixes
-=======
     bool peerHasOneOfAccesses(const QDBusMessage &peerMessage,
                               const QStringList secContexts);
     /*!
@@ -222,7 +172,6 @@ private:
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isACLValid(const QDBusMessage &peerMessage, const QStringList aclList);
->>>>>>> Merge & cleanup from master
 
 private:
     SignOn::AbstractAccessControlManager *m_acManager;

@@ -5,19 +5,8 @@
  * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
-<<<<<<< HEAD
-<<<<<<< HEAD
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
-=======
- * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
-=======
- * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
->>>>>>> Merge & cleanup from master
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
-<<<<<<< HEAD
->>>>>>> Finalize API changes and implementation for user data
-=======
->>>>>>> Finalize API changes and implementation for user data
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -135,7 +124,6 @@ void Identity::verifyUser(const QVariantMap &params)
 {
     impl->verifyUser(params);
 }
-<<<<<<< HEAD
 
 void Identity::verifySecret(const QString &secret)
 {
@@ -146,28 +134,6 @@ void Identity::signOut()
 {
     impl->signOut();
 }
-
-    QVariant Identity::applicationContext ()
-    {
-        return impl->applicationContext();
-    }
-
-    void Identity::setApplicationContext (const QVariant &newApplicationContext)
-    {
-        impl->setApplicationContext(newApplicationContext);
-    }
-=======
-
-void Identity::verifySecret(const QString &secret)
-{
-    impl->verifySecret(secret);
-}
-
-void Identity::signOut()
-{
-    impl->signOut();
-}
->>>>>>> Merge & cleanup from master
 
 QVariant Identity::applicationContext ()
 {

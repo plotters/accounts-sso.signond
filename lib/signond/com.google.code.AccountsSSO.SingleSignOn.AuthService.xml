@@ -2,60 +2,20 @@
 <node>
   <interface name="com.google.code.AccountsSSO.SingleSignOn.AuthService">
     <method name="registerNewIdentity">
-<<<<<<< HEAD
-<<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
-      <arg name="objectPath" type="o" direction="out"/>
-=======
->>>>>>> Start adding userdata to the client side implementation
-      <arg name="userdata" type="v" direction="in"/>
-=======
-      <arg name="applicationContext" type="v" direction="in"/>
->>>>>>> Rename 'userdata' to 'applicationContext'
       <arg name="objectPath" type="o" direction="out"/>
     </method>
     <method name="getIdentity">
       <arg name="id" type="u" direction="in"/>
-<<<<<<< HEAD
-<<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
-=======
-      <arg name="userdata" type="v" direction="in"/>
->>>>>>> Start adding userdata to the client side implementation
-=======
-      <arg name="applicationContext" type="v" direction="in"/>
->>>>>>> Rename 'userdata' to 'applicationContext'
       <arg name="objectPath" type="o" direction="out"/>
-<<<<<<< HEAD:lib/signond/com.google.code.AccountsSSO.SingleSignOn.AuthService.xml
       <arg name="identityData" type="a{sv}" direction="out"/>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-      <arg name="identityData" type="av" direction="out"/>
-<<<<<<< HEAD:lib/signond/com.google.code.AccountsSSO.SingleSignOn.AuthService.xml
-      <arg name="userdata" type="v" direction="in"/>
->>>>>>> Add user data parameter to server side interfaces:lib/signond/com.nokia.SingleSignOn.AuthService.xml
-=======
->>>>>>> Start adding userdata to the client side implementation:lib/signond/com.nokia.SingleSignOn.AuthService.xml
-=======
-      <arg name="userdata" type="v" direction="in"/>
->>>>>>> Add user data parameter to server side interfaces
-=======
->>>>>>> Rename 'userdata' to 'applicationContext'
     </method>
     <method name="getAuthSessionObjectPath">
       <arg type="s" direction="out"/>
       <arg name="id" type="u" direction="in"/>
       <arg name="type" type="s" direction="in"/>
-<<<<<<< HEAD
-<<<<<<< HEAD
       <arg name="applicationContext" type="v" direction="in"/>
-=======
-      <arg name="userdata" type="v" direction="in"/>
->>>>>>> Add user data parameter to server side interfaces
-=======
-      <arg name="applicationContext" type="v" direction="in"/>
->>>>>>> Rename 'userdata' to 'applicationContext'
     </method>
     <method name="queryMethods">
       <arg type="as" direction="out"/>
