@@ -5,7 +5,7 @@
  * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
- * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -41,108 +41,110 @@
 #include "dbusinterface.h"
 #include "dbusoperationqueuehandler.h"
 
-
 namespace SignOn {
 
-    class IdentityInfo;
+class IdentityInfo;
 
-    /*!
-     * @class IdentityImpl
-     * Identity class implementation.
-     * @sa Identity
-     */
-    class IdentityImpl : public QObject
-    {
-        Q_OBJECT
-        Q_DISABLE_COPY(IdentityImpl)
-        Q_PROPERTY(QVariant applicationContext READ applicationContext WRITE setApplicationContext);
+/*!
+ * @class IdentityImpl
+ * Identity class implementation.
+ * @sa Identity
+ */
+class IdentityImpl: public QObject
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(IdentityImpl)
+    Q_PROPERTY(QVariant applicationContext READ applicationContext WRITE setApplicationContext);
 
-        friend class Identity;
+    friend class Identity;
 
-        enum State {
-            PendingRegistration = 0, /* Ongoing registration */
-            NeedsRegistration,       /* Remote object not created or destroyed */
-            NeedsUpdate,             /* Remote data changed */
-            Removed,                 /* Removed from database */
-            Ready                    /* Ready for querying locally cached data, or any remote operation */
-        };
+    enum State {
+        PendingRegistration = 0, /* Ongoing registration */
+        NeedsRegistration,       /* Remote object not created or destroyed */
+        NeedsUpdate,             /* Remote data changed */
+        Removed,                 /* Removed from database */
+        Ready                    /* Ready for querying locally cached data, or
+                                    any remote operation */
+    };
 
-    public:
-        IdentityImpl(Identity *parent,
-                     const quint32 id = 0);
-        ~IdentityImpl();
+public:
+    IdentityImpl(Identity *parent,
+                 const quint32 id = 0);
+    ~IdentityImpl();
 
-        quint32 id() const;
-        AuthSession *createSession(const QString &methodName,
-                                   QObject *parent = 0);
-        void destroySession(AuthSession *session);
+    quint32 id() const;
+    AuthSession *createSession(const QString &methodName, QObject *parent = 0);
+    void destroySession(AuthSession *session);
 
-        QVariant applicationContext () const
+    QVariant applicationContext () const
         { return m_applicationContext; }
-        void setApplicationContext (const QVariant &newApplicationContext)
+    void setApplicationContext (const QVariant &newApplicationContext)
         { m_applicationContext = newApplicationContext; }
 
-    public Q_SLOTS:
-        void errorReply(const QDBusError &err);
-        void storeCredentialsReply(const quint32 id);
-        void removeReply();
-        void addReferenceReply();
-        void removeReferenceReply();
-        void getInfoReply(const QVariantMap &infoData);
-        void verifyUserReply(const bool valid);
-        void verifySecretReply(const bool valid);
-        void signOutReply();
-        void infoUpdated(int);
-        void removeObjectDestroyed();
+public Q_SLOTS:
+    void errorReply(const QDBusError &err);
+    void storeCredentialsReply(const quint32 id);
+    void removeReply();
+    void addReferenceReply();
+    void removeReferenceReply();
+    void getInfoReply(const QVariantMap &infoData);
+    void verifyUserReply(const bool valid);
+    void verifySecretReply(const bool valid);
+    void signOutReply();
+    void infoUpdated(int);
+    void removeObjectDestroyed();
 
-    private Q_SLOTS:
-        void queryAvailableMethods();
-        void requestCredentialsUpdate(const QString &message = QString());
-        void storeCredentials(const IdentityInfo &info);
-        void remove();
-        void addReference(const QString &reference = QString());
-        void removeReference(const QString &reference = QString());
-        void queryInfo();
-        void verifyUser(const QString &message = QString());
-        void verifyUser(const QVariantMap &params);
-        void verifySecret(const QString &secret);
-        void signOut();
-        void authSessionCancelReply(const SignOn::Error &err);
-        void registerReply(const QDBusObjectPath &objectPath,
-                           const QVariantMap &infoData);
-        void registerReply(const QDBusObjectPath &objectPath);
+private Q_SLOTS:
+    void queryAvailableMethods();
+    void requestCredentialsUpdate(const QString &message = QString());
+    void storeCredentials(const IdentityInfo &info);
+    void remove();
+    void addReference(const QString &reference = QString());
+    void removeReference(const QString &reference = QString());
+    void queryInfo();
+    void verifyUser(const QString &message = QString());
+    void verifyUser(const QVariantMap &params);
+    void verifySecret(const QString &secret);
+    void signOut();
+    void authSessionCancelReply(const SignOn::Error &err);
+    void registerReply(const QDBusObjectPath &objectPath,
+                       const QVariantMap &infoData);
+    void registerReply(const QDBusObjectPath &objectPath);
 
-    private:
-        void copyInfo(const IdentityInfo &info);
-        bool sendRequest(const char *remoteMethod, const QList<QVariant> &args,
-                         const char *replySlot, int timeout = -1);
-        void updateState(State state);
-        void checkConnection();
+private:
+    void copyInfo(const IdentityInfo &info);
+    bool sendRequest(const char *remoteMethod, const QList<QVariant> &args,
+                     const char *replySlot, int timeout = -1);
+    void updateState(State state);
+    void checkConnection();
 
-        bool sendRegisterRequest();
-        void updateContents();
-        void updateCachedData(const QVariantMap &infoData);
-        void clearAuthSessionsCache();
+    bool sendRegisterRequest();
+    void updateContents();
+    void updateCachedData(const QVariantMap &infoData);
+    void clearAuthSessionsCache();
 
-    private:
-        Identity *m_parent;
-        IdentityInfo *m_identityInfo;
-        DBusOperationQueueHandler m_operationQueueHandler;
+private:
+    Identity *m_parent;
+    IdentityInfo *m_identityInfo;
+    DBusOperationQueueHandler m_operationQueueHandler;
 
-        /* Cache info in the storing case, so that if the storing succeeds, server side
-           does not have to send succesfully stored data over IPC channel */
-        IdentityInfo *m_tmpIdentityInfo;
-        DBusInterface *m_DBusInterface;
-        State m_state;
-        QList<AuthSession *> m_authSessions;
-        /* This flag allows the queryInfo() reply slot not to reply with the 'info()'
-           signal, but with the 'methodsAvailable()' signal, for the case when the
-           cached info is updated at a queryAvaialbleMethods() request */
-        bool m_infoQueried;
-        /* Marks this Identity as the one which requested the sign out */
-        bool m_signOutRequestedByThisIdentity;
-        QVariant m_applicationContext;
-    };
+    /* Cache info in the storing case, so that if the storing succeeds, server
+     * side does not have to send succesfully stored data over IPC channel.
+     */
+    IdentityInfo *m_tmpIdentityInfo;
+    DBusInterface *m_DBusInterface;
+    State m_state;
+    QList<AuthSession *> m_authSessions;
+    /* This flag allows the queryInfo() reply slot not to reply with the
+     * 'info()' signal, but with the 'methodsAvailable()' signal, for the case
+     * when the cached info is updated at a queryAvaialbleMethods() request.
+     */
+    bool m_infoQueried;
+    /* Marks this Identity as the one which requested the sign out */
+    bool m_signOutRequestedByThisIdentity;
+    /* Application level context info. */
+    QVariant m_applicationContext;
+};
 
 }  // namespace SignOn
 

@@ -35,47 +35,48 @@
 
 namespace SignonDaemonNS {
 
-    class SignonIdentityAdaptor : public QDBusAbstractAdaptor
-    {
-        Q_OBJECT
-        Q_CLASSINFO("D-Bus Interface", "com.google.code.AccountsSSO.SingleSignOn.Identity")
+class SignonIdentityAdaptor : public QDBusAbstractAdaptor
+{
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface",
+                "com.google.code.AccountsSSO.SingleSignOn.Identity")
 
-    public:
-        SignonIdentityAdaptor(SignonIdentity *parent);
-        virtual ~SignonIdentityAdaptor();
+public:
+    SignonIdentityAdaptor(SignonIdentity *parent);
+    virtual ~SignonIdentityAdaptor();
 
-        inline const QDBusContext &parentDBusContext() const
-            { return *static_cast<QDBusContext *>(m_parent); }
+    inline const QDBusContext &parentDBusContext() const
+        { return *static_cast<QDBusContext *>(m_parent); }
 
-    public Q_SLOTS:
-        quint32 requestCredentialsUpdate(const QString &message,
-                                         const QDBusVariant &applicationContext);
-        QVariantMap getInfo(const QDBusVariant &applicationContext);
-        void addReference(const QString &reference,
-                          const QDBusVariant &applicationContext);
-        void removeReference(const QString &reference,
-                             const QDBusVariant &applicationContext);
-
-        bool verifyUser(const QVariantMap &params,
-                        const QDBusVariant &applicationContext);
-        bool verifySecret(const QString &secret,
-                          const QDBusVariant &applicationContext);
-        void remove(const QDBusVariant &applicationContext);
-        bool signOut(const QDBusVariant &applicationContext);
-        quint32 store(const QVariantMap &info,
+public Q_SLOTS:
+    quint32 requestCredentialsUpdate(const QString &message,
+                                     const QDBusVariant &applicationContext);
+    QVariantMap getInfo(const QDBusVariant &applicationContext);
+    void addReference(const QString &reference,
                       const QDBusVariant &applicationContext);
+    void removeReference(const QString &reference,
+                         const QDBusVariant &applicationContext);
 
-    Q_SIGNALS:
-        void unregistered();
-        void infoUpdated(int);
+    bool verifyUser(const QVariantMap &params,
+                    const QDBusVariant &applicationContext);
+    bool verifySecret(const QString &secret,
+                      const QDBusVariant &applicationContext);
+    void remove(const QDBusVariant &applicationContext);
+    bool signOut(const QDBusVariant &applicationContext);
+    quint32 store(const QVariantMap &info,
+                  const QDBusVariant &applicationContext);
 
-    private:
-        void securityErrorReply(const char *failedMethodName);
-        void errorReply(const QString &name, const QString &message);
+Q_SIGNALS:
+    void unregistered();
+    void infoUpdated(int);
 
-    private:
-        SignonIdentity *m_parent;
-    };
+private:
+    void securityErrorReply(const char *failedMethodName);
+    void errorReply(const QString &name, const QString &message);
+
+private:
+    SignonIdentity *m_parent;
+};
 
 } //namespace SignonDaemonNS
 

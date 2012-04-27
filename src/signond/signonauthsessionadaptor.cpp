@@ -4,7 +4,7 @@
  * Copyright (C) 2009-2010 Nokia Corporation.
  * Copyright (C) 2011-2012 Intel Corporation.
  *
- * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -29,128 +29,152 @@
 
 namespace SignonDaemonNS {
 
-    SignonAuthSessionAdaptor::SignonAuthSessionAdaptor(SignonAuthSession *parent) : QDBusAbstractAdaptor(parent)
-    {
-        setAutoRelaySignals(true);
+SignonAuthSessionAdaptor::SignonAuthSessionAdaptor(SignonAuthSession *parent):
+    QDBusAbstractAdaptor(parent)
+{
+    setAutoRelaySignals(true);
+}
+
+SignonAuthSessionAdaptor::~SignonAuthSessionAdaptor()
+{
+}
+
+void SignonAuthSessionAdaptor::errorReply(const QString &name,
+                                          const QString &message)
+{
+    QDBusMessage errReply =
+        static_cast<QDBusContext *>(parent())->message().
+        createErrorReply(name, message);
+    SIGNOND_BUS.send(errReply);
+}
+
+QStringList
+SignonAuthSessionAdaptor::queryAvailableMechanisms(
+                                        const QStringList &wantedMechanisms,
+                                        const QDBusVariant &applicationContext)
+{
+    TRACE();
+
+    QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
+    if (AccessControlManagerHelper::pidOfPeer(dbusContext) !=
+        parent()->ownerPid()) {
+        TRACE() << "queryAvailableMechanisms called from peer that doesn't "
+            "own the AuthSession object\n";
+        QString errMsg;
+        QTextStream(&errMsg) << SIGNOND_PERMISSION_DENIED_ERR_STR
+                             << " Authentication session owned by other "
+                             "process.";
+        errorReply(SIGNOND_PERMISSION_DENIED_ERR_NAME, errMsg);
+        return QStringList();
     }
 
-    SignonAuthSessionAdaptor::~SignonAuthSessionAdaptor()
-    {
-    }
+    return parent()->queryAvailableMechanisms(wantedMechanisms,
+                                              applicationContext);
+}
 
-    void SignonAuthSessionAdaptor::errorReply(const QString &name,
-                                              const QString &message)
-    {
-        QDBusMessage errReply =
-            static_cast<QDBusContext *>(parent())->message().createErrorReply(name, message);
-        SIGNOND_BUS.send(errReply);
-    }
+QVariantMap SignonAuthSessionAdaptor::process(
+                                        const QVariantMap &sessionDataVa,
+                                        const QString &mechanism,
+                                        const QDBusVariant &applicationContext)
+{
+    TRACE();
 
-    QStringList SignonAuthSessionAdaptor::queryAvailableMechanisms(const QStringList &wantedMechanisms,
-                                                                   const QDBusVariant &applicationContext)
-    {
-        TRACE();
+    QString allowedMechanism(mechanism);
 
-        QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
-        if (AccessControlManagerHelper::pidOfPeer(dbusContext) != parent()->ownerPid()) {
-            TRACE() << "queryAvailableMechanisms called from peer that doesn't own the AuthSession object\n";
-            QString errMsg;
-            QTextStream(&errMsg) << SIGNOND_PERMISSION_DENIED_ERR_STR
-                                 << " Authentication session owned by other process.";
-            errorReply(SIGNOND_PERMISSION_DENIED_ERR_NAME, errMsg);
-            return QStringList();
-        }
-
-        return parent()->queryAvailableMechanisms(wantedMechanisms, applicationContext);
-    }
-
-    QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
-                                                  const QString &mechanism,
-                                                  const QDBusVariant &applicationContext)
-    {
-        TRACE();
-
-        QString allowedMechanism(mechanism);
-
-        if (parent()->id() != SIGNOND_NEW_IDENTITY) {
-            CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
-            if (db) {
-                SignonIdentityInfo identityInfo = db->credentials(parent()->id(), false);
-                if (!identityInfo.checkMethodAndMechanism(parent()->method(),
-                                                          mechanism,
-                                                          allowedMechanism)) {
-                    QString errMsg;
-                    QTextStream(&errMsg) << SIGNOND_METHOD_OR_MECHANISM_NOT_ALLOWED_ERR_STR
-                                         << " Method:"
-                                         << parent()->method()
-                                         << ", mechanism:"
-                                         << mechanism
-                                         << ", allowed:"
-                                         << allowedMechanism;
-                    errorReply(SIGNOND_METHOD_OR_MECHANISM_NOT_ALLOWED_ERR_NAME, errMsg);
-                    return QVariantMap();
-                }
-            } else {
-                BLAME() << "Null database handler object.";
+    if (parent()->id() != SIGNOND_NEW_IDENTITY) {
+        CredentialsDB *db =
+            CredentialsAccessManager::instance()->credentialsDB();
+        if (db) {
+            SignonIdentityInfo identityInfo = db->credentials(parent()->id(),
+                                                              false);
+            if (!identityInfo.checkMethodAndMechanism(parent()->method(),
+                                                      mechanism,
+                                                      allowedMechanism)) {
+                QString errMsg;
+                QTextStream(&errMsg) << SIGNOND_METHOD_OR_MECHANISM_NOT_ALLOWED_ERR_STR
+                                     << " Method:"
+                                     << parent()->method()
+                                     << ", mechanism:"
+                                     << mechanism
+                                     << ", allowed:"
+                                     << allowedMechanism;
+                errorReply(SIGNOND_METHOD_OR_MECHANISM_NOT_ALLOWED_ERR_NAME,
+                           errMsg);
+                return QVariantMap();
             }
+        } else {
+            BLAME() << "Null database handler object.";
         }
-
-        QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
-        if (AccessControlManagerHelper::pidOfPeer(dbusContext) != parent()->ownerPid()) {
-            TRACE() << "process called from peer that doesn't own the AuthSession object\n";
-            QString errMsg;
-            QTextStream(&errMsg) << SIGNOND_PERMISSION_DENIED_ERR_STR
-                                 << " Authentication session owned by other process.";
-            errorReply(SIGNOND_PERMISSION_DENIED_ERR_NAME, errMsg);
-            return QVariantMap();
-        }
-
-        return parent()->process(sessionDataVa, allowedMechanism, applicationContext);
     }
 
-    void SignonAuthSessionAdaptor::cancel(const QDBusVariant &applicationContext)
-    {
-        TRACE();
-
-        QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
-        if (AccessControlManagerHelper::pidOfPeer(dbusContext) != parent()->ownerPid()) {
-            TRACE() << "cancel called from peer that doesn't own the AuthSession object\n";
-            return;
-        }
-
-        parent()->cancel(applicationContext);
+    QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
+    if (AccessControlManagerHelper::pidOfPeer(dbusContext) !=
+        parent()->ownerPid()) {
+        TRACE() << "process called from peer that doesn't own the AuthSession "
+            "object";
+        QString errMsg;
+        QTextStream(&errMsg) << SIGNOND_PERMISSION_DENIED_ERR_STR
+                             << " Authentication session owned by other "
+                             "process.";
+        errorReply(SIGNOND_PERMISSION_DENIED_ERR_NAME, errMsg);
+        return QVariantMap();
     }
 
-    void SignonAuthSessionAdaptor::setId(quint32 id,
-                                         const QDBusVariant &applicationContext)
-    {
-        TRACE();
+    return parent()->process(sessionDataVa,
+                             allowedMechanism,
+                             applicationContext);
+}
 
-        QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
-        if (AccessControlManagerHelper::pidOfPeer(dbusContext) != parent()->ownerPid()) {
-            TRACE() << "setId called from peer that doesn't own the AuthSession object\n";
-            return;
-        }
-        if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
-                                        dbusContext.message(), id)) {
-            TRACE() << "setId called with an identifier the peer is not allowed to use";
-            return;
-        }
+void SignonAuthSessionAdaptor::cancel(const QDBusVariant &applicationContext)
+{
+    TRACE();
 
-        parent()->setId(id, applicationContext);
+    QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
+    if (AccessControlManagerHelper::pidOfPeer(dbusContext) != parent()->ownerPid()) {
+        TRACE() << "cancel called from peer that doesn't own the AuthSession "
+            "object";
+        return;
     }
 
-    void SignonAuthSessionAdaptor::objectUnref(const QDBusVariant &applicationContext)
-    {
-        TRACE();
+    parent()->cancel(applicationContext);
+}
 
-        QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
-        if (AccessControlManagerHelper::pidOfPeer(dbusContext) != parent()->ownerPid()) {
-            TRACE() << "objectUnref called from peer that doesn't own the AuthSession object\n";
-            return;
-        }
+void SignonAuthSessionAdaptor::setId(quint32 id,
+                                     const QDBusVariant &applicationContext)
+{
+    TRACE();
 
-        parent()->objectUnref(applicationContext);
+    QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
+    if (AccessControlManagerHelper::pidOfPeer(dbusContext) !=
+        parent()->ownerPid()) {
+        TRACE() << "setId called from peer that doesn't own the AuthSession "
+            "object";
+        return;
     }
+    if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
+                                    dbusContext.message(), id)) {
+        TRACE() << "setId called with an identifier the peer is not allowed "
+            "to use";
+        return;
+    }
+
+    parent()->setId(id, applicationContext);
+}
+
+void SignonAuthSessionAdaptor::objectUnref(
+                                        const QDBusVariant &applicationContext)
+{
+    TRACE();
+
+    QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
+    if (AccessControlManagerHelper::pidOfPeer(dbusContext) !=
+        parent()->ownerPid()) {
+        TRACE() << "objectUnref called from peer that doesn't own the "
+            "AuthSession object";
+        return;
+    }
+
+    parent()->objectUnref(applicationContext);
+}
 
 } //namespace SignonDaemonNS

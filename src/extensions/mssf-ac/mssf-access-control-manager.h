@@ -36,7 +36,7 @@
  * MSSF implementation of AbstractAccessControlManager
  * @ingroup Accounts_and_SSO_Framework
  */
-class MSSFAccessControlManager : public SignOn::AbstractAccessControlManager
+class MSSFAccessControlManager: public SignOn::AbstractAccessControlManager
 {
     Q_OBJECT
 
@@ -55,21 +55,25 @@ public:
     // reimplemented virtual methods
 
     /*!
-     * Checks if a client process is allowed to perform operations on specified identity
+     * Checks if a client process is allowed to perform operations on specified
+     * identity.
      * The notion of access type doesn't exist in MSSF,
      * so simple check on token possesion is done instead.  
      * @param peerMessage, the request message sent over DBUS by the process.
-     * @param securityContext, the security context of identity to be checked against.
+     * @param securityContext, the security context of identity to be checked
+     * against.
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
                                     const QString &securityContext);
+
     /*!
-     * Checks if a client process is owner of identify.
+     * Checks if a client process is owner of identity.
      * The notion of access type doesn't exist in MSSF, 
      * so simple check on token possesion is done instead.  
      * @param peerMessage, the request message sent over DBUS by the process. 
-     * @param securityContext, the security context of identity to be checked against.
+     * @param securityContext, the security context of identity to be checked
+     * against.
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
@@ -78,7 +82,8 @@ public:
     /*!
      * Looks up for the application identifier of a specific client process.
      * @param peerMessage, the request message sent over DBUS by the process.
-     * @returns the application identifier of the process, or an empty string if none found.
+     * @returns the application identifier of the process, or an empty string
+     * if none found.
      */
     QString appIdOfPeer(const QDBusMessage &peerMessage);
 
@@ -88,11 +93,12 @@ public:
     QString keychainWidgetAppId();
 
     /*!
-     *  Checks if a client process is allowed to set the specified acl on data item.
-     *  A valid acl can contain only tokens that application itself has
-     *  @param peerMessage, the request message sent over DBUS by the process.
-     *  @param aclList, the acl list to be checked against
-     *  @returns true, if the peer is allowed, false otherwise.
+     * Checks if a client process is allowed to set the specified acl on data
+     * item.
+     * A valid acl can contain only tokens that application itself has
+     * @param peerMessage, the request message sent over DBUS by the process.
+     * @param aclList, the acl list to be checked against
+     * @returns true, if the peer is allowed, false otherwise.
      */
     bool isACLValid(const QDBusMessage &peerMessage,
                     const QStringList &aclList);

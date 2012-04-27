@@ -6,7 +6,7 @@
  * Copyright (C) 2011 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
- * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
  * Contact: Elena Reshetova <elena.reshetova@intel.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -33,18 +33,17 @@
 #include "credentialsaccessmanager.h"
 #include "signonidentity.h"
 
-
 using namespace SignonDaemonNS;
 
-
-AccessControlManagerHelper *AccessControlManagerHelper::m_pInstance = NULL;  
+AccessControlManagerHelper *AccessControlManagerHelper::m_pInstance = NULL;
 
 AccessControlManagerHelper *AccessControlManagerHelper::instance()
 {
     return m_pInstance;
 }
 
-AccessControlManagerHelper::AccessControlManagerHelper(SignOn::AbstractAccessControlManager *acManager) 
+AccessControlManagerHelper::AccessControlManagerHelper(
+                                SignOn::AbstractAccessControlManager *acManager)
 {
     if (!m_pInstance) {
         m_pInstance = this;
@@ -54,15 +53,17 @@ AccessControlManagerHelper::AccessControlManagerHelper(SignOn::AbstractAccessCon
     }
 }
 
-AccessControlManagerHelper::~AccessControlManagerHelper() 
+AccessControlManagerHelper::~AccessControlManagerHelper()
 {
     m_acManager = NULL;
     m_pInstance = NULL;
 }
 
 
-bool AccessControlManagerHelper::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
-                                                            const quint32 identityId)
+bool
+AccessControlManagerHelper::isPeerAllowedToUseIdentity(
+                                               const QDBusMessage &peerMessage,
+                                               const quint32 identityId)
 {
     // TODO - improve this, the error handling and more precise behaviour
 
@@ -88,9 +89,10 @@ bool AccessControlManagerHelper::isPeerAllowedToUseIdentity(const QDBusMessage &
     return peerHasOneOfAccesses(peerMessage, acl);
 }
 
-AccessControlManagerHelper::IdentityOwnership AccessControlManagerHelper::isPeerOwnerOfIdentity(
-                                                               const QDBusMessage &peerMessage,
-                                                               const quint32 identityId)
+AccessControlManagerHelper::IdentityOwnership
+AccessControlManagerHelper::isPeerOwnerOfIdentity(
+                                               const QDBusMessage &peerMessage,
+                                               const quint32 identityId)
 {
     CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
     if (db == 0) {
@@ -105,8 +107,7 @@ AccessControlManagerHelper::IdentityOwnership AccessControlManagerHelper::isPeer
     if (ownerSecContexts.isEmpty())
         return IdentityDoesNotHaveOwner;
 
-    foreach(QString securityContext, ownerSecContexts)
-    {
+    foreach(QString securityContext, ownerSecContexts) {
         TRACE() << securityContext;
         if (m_acManager->isPeerOwnerOfIdentity(peerMessage, securityContext))
             return ApplicationIsOwner;
@@ -114,7 +115,9 @@ AccessControlManagerHelper::IdentityOwnership AccessControlManagerHelper::isPeer
     return ApplicationIsNotOwner;
 }
 
-bool AccessControlManagerHelper::isPeerKeychainWidget(const QDBusMessage &peerMessage)
+bool
+AccessControlManagerHelper::isPeerKeychainWidget(
+                                                const QDBusMessage &peerMessage)
 {
     static QString keychainWidgetAppId = m_acManager->keychainWidgetAppId();
     QString peerAppId = m_acManager->appIdOfPeer(peerMessage);
@@ -127,13 +130,15 @@ QString AccessControlManagerHelper::appIdOfPeer(const QDBusMessage &peerMessage)
     return m_acManager->appIdOfPeer(peerMessage);
 }
 
-bool AccessControlManagerHelper::peerHasOneOfAccesses(const QDBusMessage &peerMessage,
-                                                      const QStringList secContexts)
+bool
+AccessControlManagerHelper::peerHasOneOfAccesses(
+                                            const QDBusMessage &peerMessage,
+                                            const QStringList secContexts)
 {
-    foreach (QString securityContext, secContexts)
-    {
+    foreach (QString securityContext, secContexts) {
         TRACE() << securityContext;
-        if (m_acManager->isPeerAllowedToUseIdentity(peerMessage, securityContext))
+        if (m_acManager->isPeerAllowedToUseIdentity(
+                                                peerMessage, securityContext))
             return true;
     }
 
@@ -141,11 +146,14 @@ bool AccessControlManagerHelper::peerHasOneOfAccesses(const QDBusMessage &peerMe
     return false;
 }
 
-bool AccessControlManagerHelper::isPeerAllowedToAccess(const QDBusMessage &peerMessage,
-                                                       const QString securityContext)
+bool
+AccessControlManagerHelper::isPeerAllowedToAccess(
+                                               const QDBusMessage &peerMessage,
+                                               const QString securityContext)
 {
     TRACE() << securityContext;
-    return m_acManager->isPeerAllowedToUseIdentity(peerMessage, securityContext);
+    return m_acManager->isPeerAllowedToUseIdentity(peerMessage,
+                                                   securityContext);
 }
 
 pid_t AccessControlManagerHelper::pidOfPeer(const QDBusContext &peerContext)

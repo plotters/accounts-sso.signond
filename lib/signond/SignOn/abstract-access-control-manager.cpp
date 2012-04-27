@@ -26,7 +26,7 @@ using namespace SignOn;
 
 
 AbstractAccessControlManager::AbstractAccessControlManager(QObject *parent):
-    QObject(parent) 
+    QObject(parent)
 {
 }
 
@@ -34,30 +34,33 @@ AbstractAccessControlManager::~AbstractAccessControlManager()
 {
 }
 
-QString AbstractAccessControlManager::keychainWidgetAppId()
-{ 
+bool AbstractAccessControlManager::isPeerAllowedToUseIdentity(
+                                            const QDBusMessage &peerMessage,
+                                            const QString &securityContext)
+{
+    Q_UNUSED(peerMessage);
+    Q_UNUSED(securityContext);
+    return true;
+}
+
+bool AbstractAccessControlManager::isPeerOwnerOfIdentity(
+                                               const QDBusMessage &peerMessage,
+                                               const QString &securityContext)
+{
+    Q_UNUSED(peerMessage);
+    Q_UNUSED(securityContext);
+    return true;
+}
+
+QString
+AbstractAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
+{
+    Q_UNUSED(peerMessage);
     return QString();
 }
 
-bool AbstractAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
-                                                              const QString &securityContext)
+QString AbstractAccessControlManager::keychainWidgetAppId()
 {
-    Q_UNUSED(peerMessage);
-    Q_UNUSED(securityContext);
-    return true;
-}
-
-bool AbstractAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
-                                                         const QString &securityContext)
-{
-    Q_UNUSED(peerMessage);
-    Q_UNUSED(securityContext);
-    return true;
-}
-
-QString AbstractAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
-{
-    Q_UNUSED(peerMessage);
     return QString();
 }
 

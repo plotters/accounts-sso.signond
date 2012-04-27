@@ -5,7 +5,7 @@
  * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
- * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -323,7 +323,8 @@ SignonDaemon *SignonDaemon::instance()
     QCoreApplication *app = QCoreApplication::instance();
 
     if (!app)
-        qFatal("SignonDaemon requires a QCoreApplication instance to be constructed first");
+        qFatal("SignonDaemon requires a QCoreApplication instance to be "
+               "constructed first");
 
     TRACE() << "Creating new daemon instance.";
     m_instance = new SignonDaemon(app);
@@ -345,7 +346,8 @@ void SignonDaemon::init()
 
     QCoreApplication *app = QCoreApplication::instance();
     if (!app)
-        qFatal("SignonDaemon requires a QCoreApplication instance to be constructed first");
+        qFatal("SignonDaemon requires a QCoreApplication instance to be "
+               "constructed first");
 
     setupSignalHandlers();
     m_backup = app->arguments().contains(QLatin1String("-backup"));
@@ -357,26 +359,31 @@ void SignonDaemon::init()
 
     if (!sessionConnection.isConnected()) {
         QDBusError err = sessionConnection.lastError();
-        TRACE() << "Session connection cannot be established:" << err.errorString(err.type());
+        TRACE() << "Session connection cannot be established:" <<
+            err.errorString(err.type());
         TRACE() << err.message();
 
         qFatal("SignonDaemon requires session bus to start working");
     }
 
-    QDBusConnection::RegisterOptions registerSessionOptions = QDBusConnection::ExportAdaptors;
+    QDBusConnection::RegisterOptions registerSessionOptions =
+        QDBusConnection::ExportAdaptors;
 
     (void)new BackupIfAdaptor(this);
 
     if (!sessionConnection.registerObject(SIGNOND_DAEMON_OBJECTPATH
-                                          + QLatin1String("/Backup"), this, registerSessionOptions)) {
+                                          + QLatin1String("/Backup"),
+                                          this, registerSessionOptions)) {
         TRACE() << "Object cannot be registered";
 
         qFatal("SignonDaemon requires to register backup object");
     }
 
-    if (!sessionConnection.registerService(SIGNOND_SERVICE+QLatin1String(".Backup"))) {
+    if (!sessionConnection.registerService(SIGNOND_SERVICE +
+                                           QLatin1String(".Backup"))) {
         QDBusError err = sessionConnection.lastError();
-        TRACE() << "Service cannot be registered: " << err.errorString(err.type());
+        TRACE() << "Service cannot be registered: " <<
+            err.errorString(err.type());
 
         qFatal("SignonDaemon requires to register backup service");
     }
@@ -392,18 +399,21 @@ void SignonDaemon::init()
 
     if (!connection.isConnected()) {
         QDBusError err = connection.lastError();
-        TRACE() << "Connection cannot be established:" << err.errorString(err.type());
+        TRACE() << "Connection cannot be established:" <<
+            err.errorString(err.type());
         TRACE() << err.message();
 
         qFatal("SignonDaemon requires DBus to start working");
     }
 
-    QDBusConnection::RegisterOptions registerOptions = QDBusConnection::ExportAllContents;
+    QDBusConnection::RegisterOptions registerOptions =
+        QDBusConnection::ExportAllContents;
 
     (void)new SignonDaemonAdaptor(this);
     registerOptions = QDBusConnection::ExportAdaptors;
 
-    if (!connection.registerObject(SIGNOND_DAEMON_OBJECTPATH, this, registerOptions)) {
+    if (!connection.registerObject(SIGNOND_DAEMON_OBJECTPATH,
+                                   this, registerOptions)) {
         TRACE() << "Object cannot be registered";
 
         qFatal("SignonDaemon requires to register daemon's object");
@@ -411,7 +421,8 @@ void SignonDaemon::init()
 
     if (!connection.registerService(SIGNOND_SERVICE)) {
         QDBusError err = connection.lastError();
-        TRACE() << "Service cannot be registered: " << err.errorString(err.type());
+        TRACE() << "Service cannot be registered: " <<
+            err.errorString(err.type());
 
         qFatal("SignonDaemon requires to register daemon's service");
     }
@@ -509,7 +520,8 @@ void SignonDaemon::registerNewIdentity(const QDBusVariant &applicationContext,
     Q_UNUSED(applicationContext);
     TRACE() << "Registering new identity:";
 
-    SignonIdentity *identity = SignonIdentity::createIdentity(SIGNOND_NEW_IDENTITY, this);
+    SignonIdentity *identity =
+        SignonIdentity::createIdentity(SIGNOND_NEW_IDENTITY, this);
 
     if (identity == NULL) {
         sendErrorReply(internalServerErrName,
@@ -565,7 +577,9 @@ void SignonDaemon::getIdentity(const quint32 id,
     }
 
     bool ok;
-    SignonIdentityInfo info = identity->queryInfo(ok, applicationContext, false);
+    SignonIdentityInfo info = identity->queryInfo(ok,
+                                                  applicationContext,
+                                                  false);
 
     if (info.isNew())
     {
@@ -589,13 +603,15 @@ QStringList SignonDaemon::queryMethods()
     QDir pluginsDir(m_configuration->pluginsDir());
     //TODO: in the future remove the sym links comment
     QStringList fileNames = pluginsDir.entryList(
-            QStringList() << QLatin1String("*.so*"), QDir::Files | QDir::NoDotAndDotDot);
+            QStringList() << QLatin1String("*.so*"),
+            QDir::Files | QDir::NoDotAndDotDot);
 
     QStringList ret;
     QString fileName;
     foreach (fileName, fileNames) {
         if (fileName.startsWith(QLatin1String("lib"))) {
-            fileName = fileName.mid(3, fileName.indexOf(QLatin1String("plugin")) -3);
+            fileName =
+                fileName.mid(3, fileName.indexOf(QLatin1String("plugin")) -3);
             if ((fileName.length() > 0) && !ret.contains(fileName))
                 ret << fileName;
         }
@@ -630,7 +646,6 @@ QStringList SignonDaemon::queryMechanisms(const QString &method)
 
     return mechs;
 }
-
 
 QList<QVariantMap> SignonDaemon::queryIdentities(const QVariantMap &filter)
 {
@@ -687,19 +702,23 @@ bool SignonDaemon::clear()
     return true;
 }
 
-QString SignonDaemon::getAuthSessionObjectPath(const quint32 id,
-                                               const QString type,
-                                               const QDBusVariant &applicationContext)
+QString SignonDaemon::getAuthSessionObjectPath(
+                                        const quint32 id,
+                                        const QString type,
+                                        const QDBusVariant &applicationContext)
 {
     Q_UNUSED(applicationContext);
 
     bool supportsAuthMethod = false;
     pid_t ownerPid = AccessControlManagerHelper::pidOfPeer(*this);
     QString objectPath =
-        SignonAuthSession::getAuthSessionObjectPath(id, type, this,
+        SignonAuthSession::getAuthSessionObjectPath(
+                                                    id,
+                                                    type,
+                                                    this,
                                                     supportsAuthMethod,
                                                     ownerPid,
-                                                    applicationContext.variant());
+                                                    applicationContext);
     if (objectPath.isEmpty() && !supportsAuthMethod) {
         sendErrorReply(SIGNOND_METHOD_NOT_KNOWN_ERR_NAME,
                        SIGNOND_METHOD_NOT_KNOWN_ERR_STR);
@@ -845,7 +864,8 @@ bool SignonDaemon::createStorageFileTree(const QStringList &backupFiles) const
         QString filePath = storageDir.path() + QDir::separator() + fileName;
         QFile file(filePath);
         if (!file.open(QIODevice::WriteOnly)) {
-            qCritical() << "Failed to create empty file for backup:" << filePath;
+            qCritical() << "Failed to create empty file for backup:"
+                        << filePath;
             return false;
         } else {
             file.close();

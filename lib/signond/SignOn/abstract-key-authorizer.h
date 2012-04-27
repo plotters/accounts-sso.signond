@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2011 Nokia Corporation.
  *
- * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -57,16 +57,16 @@ public:
     };
 
     /*!
-     * @enum Reason
+     * @enum Reasons
      * Flags specifying why signond is asking for authorizing a key.
      * @sa queryKeyAuthorization
      */
-    enum Reason_e {
+    enum Reasons {
         SystemStarted     = 1 << 0,
         KeyInserted       = 1 << 1,
         StorageNeeded     = 1 << 2,
     };
-    Q_DECLARE_FLAGS(Reason, Reason_e);
+    Q_DECLARE_FLAGS(Reason, Reasons);
 
     /*!
      * Constructor

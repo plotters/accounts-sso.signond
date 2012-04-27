@@ -5,7 +5,7 @@
  * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
- * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -60,12 +60,12 @@ static QVariantMap sessionData2VariantMap(const SessionData &data)
 AuthSessionImpl::AuthSessionImpl(AuthSession *parent,
                                  quint32 id,
                                  const QString &methodName,
-                                 const QVariant &applicationContextP)
-    : QObject(parent),
-      m_parent(parent),
-      m_operationQueueHandler(this),
-      m_methodName(methodName),
-      m_applicationContext(applicationContextP)
+                                 const QVariant &applicationContextP) :
+    QObject(parent),
+    m_parent(parent),
+    m_operationQueueHandler(this),
+    m_methodName(methodName),
+    m_applicationContext(applicationContextP)
 {
     m_id = id;
     m_DBusInterface = 0;
@@ -80,49 +80,51 @@ AuthSessionImpl::~AuthSessionImpl()
 {
     if (m_DBusInterface) {
         m_DBusInterface->call(QLatin1String("objectUnref"),
-                              QVariant::fromValue(QDBusVariant(m_applicationContext)));
+                    QVariant::fromValue(QDBusVariant(m_applicationContext)));
         delete m_DBusInterface;
     }
 }
 
-void AuthSessionImpl::send2interface(const QString &operation, const char *slot, const QVariantList &arguments)
+void AuthSessionImpl::send2interface(const QString &operation,
+                                     const char *slot,
+                                     const QVariantList &arguments)
 {
     if (!m_DBusInterface || !m_DBusInterface->isValid()) {
-        emit m_parent->error(
-                Error(Error::InternalCommunication,
-                      SIGNOND_INTERNAL_COMMUNICATION_ERR_STR));
+        emit m_parent->error(Error(Error::InternalCommunication,
+                                   SIGNOND_INTERNAL_COMMUNICATION_ERR_STR));
         return;
     }
 
     bool res = true;
 
     if (slot) {
-        QDBusMessage msg = QDBusMessage::createMethodCall(m_DBusInterface->service(),
-                                                          m_DBusInterface->path(),
-                                                          m_DBusInterface->interface(),
-                                                          operation);
+        QDBusMessage msg =
+            QDBusMessage::createMethodCall(m_DBusInterface->service(),
+                                           m_DBusInterface->path(),
+                                           m_DBusInterface->interface(),
+                                           operation);
         if (!arguments.isEmpty())
             msg.setArguments(arguments);
 
         msg.setDelayedReply(true);
 
-        res = m_DBusInterface->connection().callWithCallback(msg,
-                                                         this,
-                                                         slot,
-                                                         SLOT(errorSlot(const QDBusError&)),
-                                                         SIGNOND_MAX_TIMEOUT);
+        res = m_DBusInterface->connection().
+            callWithCallback(msg, this, slot,
+                             SLOT(errorSlot(const QDBusError&)),
+                             SIGNOND_MAX_TIMEOUT);
     } else {
-        m_DBusInterface->callWithArgumentList(QDBus::NoBlock, operation, arguments);
+        m_DBusInterface->callWithArgumentList(QDBus::NoBlock,
+                                              operation, arguments);
     }
 
     if (!res) {
-        emit m_parent->error(
-                Error(Error::InternalCommunication,
-                      m_DBusInterface->lastError().message()));
+        emit m_parent->error(Error(Error::InternalCommunication,
+                                   m_DBusInterface->lastError().message()));
 
     } else {
         emit m_parent->stateChanged(AuthSession::ProcessPending,
-                                    QLatin1String("The request is added to queue."));
+                                    QLatin1String("The request is added "
+                                                  "to queue."));
     }
 }
 
@@ -131,8 +133,8 @@ void AuthSessionImpl::setId(quint32 id)
     if (!m_isValid) {
         emit m_parent->error(
                 Error(Error::InternalCommunication,
-                      QString(QLatin1String("AuthSession(%1) cannot perform operation."))
-                        .arg(m_methodName)));
+                      QString(QLatin1String("AuthSession(%1) cannot perform "
+                                            "operation.")).arg(m_methodName)));
         return;
     }
 
@@ -146,15 +148,11 @@ void AuthSessionImpl::setId(quint32 id)
 
     if (m_DBusInterface)
         send2interface(remoteFunctionName, 0, arguments);
-    else {
-        QList<QGenericArgument *> args;
-
-        args << (new Q_ARG(quint32, id));
-
+    else
         m_operationQueueHandler.enqueueOperation(
                                     SIGNOND_SESSION_SET_ID_METHOD,
-                                    args);
-    }
+                                    QList<QGenericArgument *>() <<
+                                    (new Q_ARG(quint32, id)));
 }
 
 bool AuthSessionImpl::checkConnection()
@@ -163,8 +161,7 @@ bool AuthSessionImpl::checkConnection()
      * if the AuthSession is unable to connect to SignonDaemon
      * or was refused to create a remote AuthSession then
      * there is no sense to try again (????)
-     *
-     * */
+     */
     if (!m_isValid)
         return false;
 
@@ -215,13 +212,13 @@ QString AuthSessionImpl::name()
     return m_methodName;
 }
 
-void AuthSessionImpl::queryAvailableMechanisms(const QStringList &wantedMechanisms)
+void
+AuthSessionImpl::queryAvailableMechanisms(const QStringList &wantedMechanisms)
 {
     if (!checkConnection()) {
         qCritical() << SIGNOND_AUTHSESSION_CONNECTION_PROBLEM;
-        emit m_parent->error(
-                Error(Error::InternalCommunication,
-                      SIGNOND_AUTHSESSION_CONNECTION_PROBLEM));
+        emit m_parent->error(Error(Error::InternalCommunication,
+                                   SIGNOND_AUTHSESSION_CONNECTION_PROBLEM));
         return;
     }
 
@@ -232,19 +229,18 @@ void AuthSessionImpl::queryAvailableMechanisms(const QStringList &wantedMechanis
     arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
 
     if (m_DBusInterface)
-        send2interface(remoteFunctionName, SLOT(mechanismsAvailableSlot(const QStringList&)), arguments);
-    else {
-        QList<QGenericArgument *> args;
-
-        args << (new Q_ARG(QStringList, wantedMechanisms));
-
+        send2interface(remoteFunctionName,
+                       SLOT(mechanismsAvailableSlot(const QStringList&)),
+                       arguments);
+    else
         m_operationQueueHandler.enqueueOperation(
                         SIGNOND_SESSION_QUERY_AVAILABLE_MECHANISMS_METHOD,
-                        args);
-    }
+                        QList<QGenericArgument *>() <<
+                        (new Q_ARG(QStringList, wantedMechanisms)));
 }
 
-void AuthSessionImpl::process(const SessionData &sessionData, const QString &mechanism)
+void AuthSessionImpl::process(const SessionData &sessionData,
+                              const QString &mechanism)
 {
     if (!checkConnection()) {
         qCritical() << SIGNOND_AUTHSESSION_CONNECTION_PROBLEM;
@@ -276,12 +272,12 @@ void AuthSessionImpl::process(const SessionData &sessionData, const QString &mec
 
     if (m_DBusInterface) {
         TRACE() << "sending to daemon";
-        send2interface(remoteFunctionName, SLOT(responseSlot(const QVariantMap&)), arguments);
+        send2interface(remoteFunctionName,
+                       SLOT(responseSlot(const QVariantMap&)), arguments);
         m_isBusy = true;
     } else {
         TRACE() << "sending to queue";
         QList<QGenericArgument *> args;
-
         args << (new Q_ARG(QVariantMap, sessionDataVa))
              << (new Q_ARG(QString, mechanism));
 
@@ -295,13 +291,14 @@ void AuthSessionImpl::cancel()
     if (!checkConnection()) {
         qCritical() << SIGNOND_AUTHSESSION_CONNECTION_PROBLEM;
 
-        emit m_parent->error(
-                Error(Error::InternalCommunication,
-                      SIGNOND_AUTHSESSION_CONNECTION_PROBLEM));
+        emit m_parent->error(Error(Error::InternalCommunication,
+                                   SIGNOND_AUTHSESSION_CONNECTION_PROBLEM));
         return;
     }
 
-    if (!m_isBusy && (!m_operationQueueHandler.queueContainsOperation(SIGNOND_SESSION_PROCESS_METHOD))) {
+    if (!m_isBusy &&
+        !m_operationQueueHandler.queueContainsOperation(
+                                              SIGNOND_SESSION_PROCESS_METHOD)) {
         qCritical() << "no requests to be canceled";
         return;
     }
@@ -309,15 +306,15 @@ void AuthSessionImpl::cancel()
     if (!m_DBusInterface) {
         m_operationQueueHandler.removeOperation(SIGNOND_SESSION_PROCESS_METHOD);
 
-        emit m_parent->error(
-                Error(Error::SessionCanceled,
-                      QLatin1String("Process is canceled.")));
+        emit m_parent->error(Error(Error::SessionCanceled,
+                                   QLatin1String("Process is canceled.")));
 
     } else {
         TRACE() << "Sending cancel-request";
-        m_DBusInterface->call(QDBus::NoBlock,
-                              QLatin1String("cancel"),
-                              QVariant::fromValue(QDBusVariant(m_applicationContext)));
+        m_DBusInterface->call(
+                    QDBus::NoBlock,
+                    QLatin1String("cancel"),
+                    QVariant::fromValue(QDBusVariant(m_applicationContext)));
     }
 
     m_isBusy = false;
@@ -432,12 +429,14 @@ void AuthSessionImpl::authenticationSlot(const QString &path)
         if (m_operationQueueHandler.queuedOperationsCount() > 0)
             m_operationQueueHandler.execQueuedOperations();
     } else {
-        int numberOfErrorReplies = m_operationQueueHandler.queuedOperationsCount();
+        int numberOfErrorReplies =
+            m_operationQueueHandler.queuedOperationsCount();
         for (int i = 0; i < numberOfErrorReplies; i++) {
 
             emit m_parent->error(
                     Error(Error::Unknown,
-                          QLatin1String("The given session cannot be accessed.")));
+                          QLatin1String("The given session cannot be "
+                                        "accessed.")));
         }
         m_isValid = false;
     }

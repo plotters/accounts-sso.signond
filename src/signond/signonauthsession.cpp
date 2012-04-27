@@ -4,7 +4,7 @@
  * Copyright (C) 2009-2010 Nokia Corporation.
  * Copyright (C) 2012 Intel Corporation.
  *
- * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -30,16 +30,17 @@ using namespace SignonDaemonNS;
 
 SignonAuthSession::SignonAuthSession(quint32 id,
                                      const QString &method,
-                                     pid_t ownerPid) :
-                                     m_id(id),
-                                     m_method(method),
-                                     m_registered(false),
-                                     m_ownerPid(ownerPid)
+                                     pid_t ownerPid):
+    m_id(id),
+    m_method(method),
+    m_registered(false),
+    m_ownerPid(ownerPid)
 {
     TRACE();
 
     static quint32 incr = 0;
-    QString objectName = SIGNOND_DAEMON_OBJECTPATH + QLatin1String("/AuthSession_") + QString::number(incr++, 16);
+    QString objectName = SIGNOND_DAEMON_OBJECTPATH +
+        QLatin1String("/AuthSession_") + QString::number(incr++, 16);
     TRACE() << objectName;
 
     setObjectName(objectName);
@@ -57,12 +58,13 @@ SignonAuthSession::~SignonAuthSession()
     }
 }
 
-QString SignonAuthSession::getAuthSessionObjectPath(const quint32 id,
-                                                    const QString &method,
-                                                    SignonDaemon *parent,
-                                                    bool &supportsAuthMethod,
-                                                    pid_t ownerPid,
-                                                    const QVariant &applicationContext)
+QString SignonAuthSession::getAuthSessionObjectPath(
+                                        const quint32 id,
+                                        const QString &method,
+                                        SignonDaemon *parent,
+                                        bool &supportsAuthMethod,
+                                        pid_t ownerPid,
+                                        const QDBusVariant &applicationContext)
 {
     Q_UNUSED(applicationContext);
 
@@ -79,7 +81,8 @@ QString SignonAuthSession::getAuthSessionObjectPath(const quint32 id,
 
     (void)new SignonAuthSessionAdaptor(sas);
     QString objectName = sas->objectName();
-    if (!connection.registerObject(sas->objectName(), sas, QDBusConnection::ExportAdaptors)) {
+    if (!connection.registerObject(sas->objectName(), sas,
+                                   QDBusConnection::ExportAdaptors)) {
         TRACE() << "Object cannot be registered: " << objectName;
         delete sas;
         return QString();
@@ -123,8 +126,10 @@ pid_t SignonAuthSession::ownerPid() const
     return m_ownerPid;
 }
 
-QStringList SignonAuthSession::queryAvailableMechanisms(const QStringList &wantedMechanisms,
-                                                        const QDBusVariant &applicationContext)
+QStringList
+SignonAuthSession::queryAvailableMechanisms(
+                                        const QStringList &wantedMechanisms,
+                                        const QDBusVariant &applicationContext)
 {
     Q_UNUSED(applicationContext);
 
@@ -154,7 +159,8 @@ void SignonAuthSession::cancel(const QDBusVariant &applicationContext)
     parent()->cancel(objectName());
 }
 
-void SignonAuthSession::setId(quint32 id, const QDBusVariant &applicationContext)
+void SignonAuthSession::setId(quint32 id,
+                              const QDBusVariant &applicationContext)
 {
     Q_UNUSED(applicationContext);
 
@@ -164,8 +170,6 @@ void SignonAuthSession::setId(quint32 id, const QDBusVariant &applicationContext
 
 void SignonAuthSession::objectUnref(const QDBusVariant &applicationContext)
 {
-    Q_UNUSED(applicationContext);
-
     //TODO - remove the `objectUnref` functionality from the DBus API
     TRACE();
     cancel(applicationContext);
@@ -179,7 +183,9 @@ void SignonAuthSession::objectUnref(const QDBusVariant &applicationContext)
     deleteLater();
 }
 
-void SignonAuthSession::stateChangedSlot(const QString &sessionKey, int state, const QString &message)
+void SignonAuthSession::stateChangedSlot(const QString &sessionKey,
+                                         int state,
+                                         const QString &message)
 {
     TRACE();
 

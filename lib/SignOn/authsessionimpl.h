@@ -5,7 +5,7 @@
  * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
- * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+ * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -41,74 +41,77 @@
 
 namespace SignOn {
 
-    /*!
-     * @class AuthSessionImpl
-     * AuthSession class implementation.
-     * @sa AuthSession
-     */
-    class AuthSessionImpl : public QObject
-    {
-        Q_OBJECT
-        Q_DISABLE_COPY(AuthSessionImpl)
-        Q_PROPERTY(QVariant applicationContext READ applicationContext WRITE setApplicationContext);
+/*!
+ * @class AuthSessionImpl
+ * AuthSession class implementation.
+ * @sa AuthSession
+ */
+class AuthSessionImpl: public QObject
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(AuthSessionImpl)
+    Q_PROPERTY(QVariant applicationContext READ applicationContext WRITE setApplicationContext);
 
-        friend class AuthSession;
-        friend class IdentityImpl;
+    friend class AuthSession;
+    friend class IdentityImpl;
 
-    public:
-        AuthSessionImpl(AuthSession *parent,
-                        quint32 id,
-                        const QString &methodName,
-                        const QVariant &applicationContextP);
-        ~AuthSessionImpl();
-        QVariant applicationContext() const
+public:
+    AuthSessionImpl(AuthSession *parent,
+                    quint32 id,
+                    const QString &methodName,
+                    const QVariant &applicationContextP);
+    ~AuthSessionImpl();
+    QVariant applicationContext() const
         { return m_applicationContext; }
-        void setApplicationContext (const QVariant &newApplicationContext)
+    void setApplicationContext (const QVariant &newApplicationContext)
         { m_applicationContext = newApplicationContext; }
 
-    public Q_SLOTS:
-        QString name();
-        void queryAvailableMechanisms(const QStringList &wantedMechanisms);
-        void process(const SessionData &sessionData, const QString &mechanism);
-        void cancel();
+public Q_SLOTS:
+    QString name();
+    void queryAvailableMechanisms(const QStringList &wantedMechanisms);
+    void process(const SessionData &sessionData, const QString &mechanism);
+    void cancel();
 
-    private Q_SLOTS:
-        void errorSlot(const QDBusError &err);
-        void authenticationSlot(const QString &path);
-        void mechanismsAvailableSlot(const QStringList &mechanisms);
-        void responseSlot(const QVariantMap &sessionDataVa);
-        void stateSlot(int state, const QString &message);
-        void unregisteredSlot();
+private Q_SLOTS:
+    void errorSlot(const QDBusError &err);
+    void authenticationSlot(const QString &path);
+    void mechanismsAvailableSlot(const QStringList &mechanisms);
+    void responseSlot(const QVariantMap &sessionDataVa);
+    void stateSlot(int state, const QString &message);
+    void unregisteredSlot();
 
-    private:
-        void send2interface(const QString &operation, const char *slot, const QVariantList &arguments);
-        void setId(quint32 id);
-        bool checkConnection();
-        bool initInterface();
+private:
+    void send2interface(const QString &operation,
+                        const char *slot, const QVariantList &arguments);
+    void setId(quint32 id);
+    bool checkConnection();
+    bool initInterface();
 
-    private:
-        AuthSession *m_parent;
-        DBusOperationQueueHandler m_operationQueueHandler;
-        quint32 m_id;
-        QString m_methodName;
-        DBusInterface *m_DBusInterface;
+private:
+    AuthSession *m_parent;
+    DBusOperationQueueHandler m_operationQueueHandler;
+    quint32 m_id;
+    QString m_methodName;
+    DBusInterface *m_DBusInterface;
 
-        /*
-         * flag to prevent multiple authentication requests
-         * */
-        bool m_isAuthInProcessing;
-        /*
-         * busy flag for process operation
-         * */
-        bool m_isBusy;
-        /*
-         * valid flag for authentication: if
-         * authentication failed once we do not try anymore
-         * */
-        bool m_isValid;
-
-        QVariant m_applicationContext;
-    };
+    /*
+     * flag to prevent multiple authentication requests
+     */
+    bool m_isAuthInProcessing;
+    /*
+     * busy flag for process operation
+     */
+    bool m_isBusy;
+    /*
+     * valid flag for authentication: if
+     * authentication failed once we do not try anymore
+     */
+    bool m_isValid;
+    /*
+     * application level context data
+     */
+    QVariant m_applicationContext;
+};
 
 } //namespace SignOn
 
