@@ -6,9 +6,13 @@
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
 =======
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+=======
+ * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+>>>>>>> Merge & cleanup from master
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
 <<<<<<< HEAD
 >>>>>>> Finalize API changes and implementation for user data
@@ -131,6 +135,7 @@ void Identity::verifyUser(const QVariantMap &params)
 {
     impl->verifyUser(params);
 }
+<<<<<<< HEAD
 
 void Identity::verifySecret(const QString &secret)
 {
@@ -151,15 +156,27 @@ void Identity::signOut()
     {
         impl->setApplicationContext(newApplicationContext);
     }
+=======
 
-    QVariant Identity::applicationContext ()
-    {
-        return impl->applicationContext();
-    }
+void Identity::verifySecret(const QString &secret)
+{
+    impl->verifySecret(secret);
+}
 
-    void Identity::setApplicationContext (const QVariant &newApplicationContext)
-    {
-        impl->setApplicationContext(newApplicationContext);
-    }
+void Identity::signOut()
+{
+    impl->signOut();
+}
+>>>>>>> Merge & cleanup from master
+
+QVariant Identity::applicationContext ()
+{
+    return impl->applicationContext();
+}
+
+void Identity::setApplicationContext (const QVariant &newApplicationContext)
+{
+    impl->setApplicationContext(newApplicationContext);
+}
 
 } //namespace SignOn

@@ -61,6 +61,7 @@ private:
     void errorReply(const QString &name, const QString &message);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 public Q_SLOTS:
     QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms);
     QVariantMap process(const QVariantMap &sessionDataVa,
@@ -124,6 +125,19 @@ public Q_SLOTS:
         Q_NOREPLY void setId(quint32 id, const QDBusVariant &applicationContext);
         Q_NOREPLY void objectUnref(const QDBusVariant &applicationContext);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+public Q_SLOTS:
+    QStringList queryAvailableMechanisms(
+                                        const QStringList &wantedMechanisms,
+                                        const QDBusVariant &applicationContext);
+    QVariantMap process(const QVariantMap &sessionDataVa,
+                        const QString &mechanism,
+                        const QDBusVariant &applicationContext);
+
+    Q_NOREPLY void cancel(const QDBusVariant &applicationContext);
+    Q_NOREPLY void setId(quint32 id, const QDBusVariant &applicationContext);
+    Q_NOREPLY void objectUnref(const QDBusVariant &applicationContext);
+>>>>>>> Merge & cleanup from master
 
 Q_SIGNALS:
     void stateChanged(int state, const QString &message);

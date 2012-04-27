@@ -6,9 +6,13 @@
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
 =======
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+=======
+ * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+>>>>>>> Merge & cleanup from master
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
 <<<<<<< HEAD
 >>>>>>> Finalize API changes and implementation for user data
@@ -40,6 +44,7 @@
 
 namespace SignOn {
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 AuthSession::AuthSession(quint32 id, const QString &methodName,
@@ -110,6 +115,49 @@ void AuthSession::process(const SessionData& sessionData,
     impl->process(sessionData, mechanism);
 }
 
+=======
+AuthSession::AuthSession(quint32 id,
+                         const QString &methodName,
+                         const QVariant &applicationContextP,
+                         QObject *parent):
+    QObject(parent),
+    impl(new AuthSessionImpl(this, id, methodName, applicationContextP))
+{
+    qRegisterMetaType<SessionData>("SessionData");
+    qRegisterMetaType<AuthSessionState>("AuthSession::AuthSessionState");
+
+    if (qMetaTypeId<SessionData>() < QMetaType::User)
+        BLAME() << "AuthSession::AuthSession() - "
+            "SessionData meta type not registered.";
+
+    if (qMetaTypeId<AuthSessionState>() < QMetaType::User)
+        BLAME() << "AuthSession::AuthSession() - "
+            "AuthSessionState meta type not registered.";
+
+}
+
+AuthSession::~AuthSession()
+{
+    delete impl;
+}
+
+const QString AuthSession::name() const
+{
+    return impl->name();
+}
+
+void AuthSession::queryAvailableMechanisms(const QStringList &wantedMechanisms)
+{
+    impl->queryAvailableMechanisms(wantedMechanisms);
+}
+
+void AuthSession::process(const SessionData& sessionData,
+                          const QString &mechanism)
+{
+    impl->process(sessionData, mechanism);
+}
+
+>>>>>>> Merge & cleanup from master
 void AuthSession::cancel()
 {
     impl->cancel();

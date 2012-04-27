@@ -60,6 +60,7 @@ public:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * Checks if a client process is allowed to access objects with a certain
      * security context.
      * The access type to be checked is read or execute.
@@ -89,18 +90,28 @@ public:
 <<<<<<< HEAD
 =======
      * Checks if a client process is allowed to perform operations on specified identity
+=======
+     * Checks if a client process is allowed to perform operations on
+     * specified identity.
+>>>>>>> Merge & cleanup from master
      * The access type to be checked is execute. 
-     * @param peerMessage, the request message sent over DBUS by the process. Identifies the process  itself. 
-     * @param securityContext, the security context of identity to be checked against.
+     * @param peerMessage, the request message sent over DBUS by the process.
+     * Identifies the process  itself. 
+     * @param securityContext, the security context of identity to be checked
+     * against.
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
                                     const QString &securityContext);
+
     /*!
-     * Checks if a client process is owner of identify.
-     * The access type to be checked is read and write, since the owner can manipulate identity and its parameters fully. 
-     * @param peerMessage, the request message sent over DBUS by the process. Identifies the process  itself. 
-     * @param securityContext, the security context of identity to be checked against.
+     * Checks if a client process is owner of identity.
+     * The access type to be checked is read and write, since the owner can
+     * manipulate identity and its parameters fully. 
+     * @param peerMessage, the request message sent over DBUS by the process.
+     * Identifies the process itself. 
+     * @param securityContext, the security context of identity to be checked
+     * against.
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
@@ -148,12 +159,15 @@ public:
     QString keychainWidgetAppId();
 
     /*!
-     *  Checks if a client process is allowed to set the specified acl on data item.
-     *  A valid acl can contain only application identifier (application domain name) or application domain labels.
-     *  For example for an application with AppId "Camera", the valid acl entries are "Camera", "Camera::certs", "Camera::keys".
-     *  @param peerMessage, the request message sent over DBUS by the process.
-     *  @param aclList, the acl list to be checked against
-     *  @returns true, if the peer is allowed, false otherwise.
+     * Checks if a client process is allowed to set the specified acl on data
+     * item.
+     * A valid acl can contain only application identifier (application domain
+     * name) or application domain labels.
+     * For example for an application with AppId "Camera", the valid acl
+     * entries are "Camera", "Camera::certs", "Camera::keys".
+     * @param peerMessage, the request message sent over DBUS by the process.
+     * @param aclList, the acl list to be checked against
+     * @returns true, if the peer is allowed, false otherwise.
      */
 <<<<<<< HEAD
 <<<<<<< HEAD

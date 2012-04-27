@@ -41,6 +41,9 @@ SignonAuthSessionAdaptor::~SignonAuthSessionAdaptor()
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Merge & cleanup from master
 void SignonAuthSessionAdaptor::errorReply(const QString &name,
                                           const QString &message)
 {
@@ -49,6 +52,7 @@ void SignonAuthSessionAdaptor::errorReply(const QString &name,
         createErrorReply(name, message);
     SIGNOND_BUS.send(errReply);
 }
+<<<<<<< HEAD
 =======
     QStringList SignonAuthSessionAdaptor::queryAvailableMechanisms(const QStringList &wantedMechanisms,
                                                                    const QDBusVariant &applicationContext)
@@ -78,6 +82,16 @@ SignonAuthSessionAdaptor::queryAvailableMechanisms(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+
+QStringList
+SignonAuthSessionAdaptor::queryAvailableMechanisms(
+                                        const QStringList &wantedMechanisms,
+                                        const QDBusVariant &applicationContext)
+{
+    TRACE();
+
+>>>>>>> Merge & cleanup from master
     QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
     if (AccessControlManagerHelper::pidOfPeer(dbusContext) !=
         parent()->ownerPid()) {
@@ -89,6 +103,7 @@ SignonAuthSessionAdaptor::queryAvailableMechanisms(
                              "process.";
         errorReply(SIGNOND_PERMISSION_DENIED_ERR_NAME, errMsg);
         return QStringList();
+<<<<<<< HEAD
 =======
         return parent()->queryAvailableMechanisms(wantedMechanisms, userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
@@ -130,10 +145,23 @@ SignonAuthSessionAdaptor::queryAvailableMechanisms(
 
 QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
                                               const QString &mechanism)
+=======
+    }
+
+    return parent()->queryAvailableMechanisms(wantedMechanisms,
+                                              applicationContext);
+}
+
+QVariantMap SignonAuthSessionAdaptor::process(
+                                        const QVariantMap &sessionDataVa,
+                                        const QString &mechanism,
+                                        const QDBusVariant &applicationContext)
+>>>>>>> Merge & cleanup from master
 {
     TRACE();
 
     QString allowedMechanism(mechanism);
+<<<<<<< HEAD
 
     if (parent()->id() != SIGNOND_NEW_IDENTITY) {
         CredentialsDB *db =
@@ -279,6 +307,72 @@ void SignonAuthSessionAdaptor::setId(quint32 id)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+
+    if (parent()->id() != SIGNOND_NEW_IDENTITY) {
+        CredentialsDB *db =
+            CredentialsAccessManager::instance()->credentialsDB();
+        if (db) {
+            SignonIdentityInfo identityInfo = db->credentials(parent()->id(),
+                                                              false);
+            if (!identityInfo.checkMethodAndMechanism(parent()->method(),
+                                                      mechanism,
+                                                      allowedMechanism)) {
+                QString errMsg;
+                QTextStream(&errMsg) << SIGNOND_METHOD_OR_MECHANISM_NOT_ALLOWED_ERR_STR
+                                     << " Method:"
+                                     << parent()->method()
+                                     << ", mechanism:"
+                                     << mechanism
+                                     << ", allowed:"
+                                     << allowedMechanism;
+                errorReply(SIGNOND_METHOD_OR_MECHANISM_NOT_ALLOWED_ERR_NAME,
+                           errMsg);
+                return QVariantMap();
+            }
+        } else {
+            BLAME() << "Null database handler object.";
+        }
+    }
+
+    QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
+    if (AccessControlManagerHelper::pidOfPeer(dbusContext) !=
+        parent()->ownerPid()) {
+        TRACE() << "process called from peer that doesn't own the AuthSession "
+            "object";
+        QString errMsg;
+        QTextStream(&errMsg) << SIGNOND_PERMISSION_DENIED_ERR_STR
+                             << " Authentication session owned by other "
+                             "process.";
+        errorReply(SIGNOND_PERMISSION_DENIED_ERR_NAME, errMsg);
+        return QVariantMap();
+    }
+
+    return parent()->process(sessionDataVa,
+                             allowedMechanism,
+                             applicationContext);
+}
+
+void SignonAuthSessionAdaptor::cancel(const QDBusVariant &applicationContext)
+{
+    TRACE();
+
+    QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
+    if (AccessControlManagerHelper::pidOfPeer(dbusContext) != parent()->ownerPid()) {
+        TRACE() << "cancel called from peer that doesn't own the AuthSession "
+            "object";
+        return;
+    }
+
+    parent()->cancel(applicationContext);
+}
+
+void SignonAuthSessionAdaptor::setId(quint32 id,
+                                     const QDBusVariant &applicationContext)
+{
+    TRACE();
+
+>>>>>>> Merge & cleanup from master
     QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
     if (AccessControlManagerHelper::pidOfPeer(dbusContext) !=
         parent()->ownerPid()) {
@@ -291,6 +385,7 @@ void SignonAuthSessionAdaptor::setId(quint32 id)
         TRACE() << "setId called with an identifier the peer is not allowed "
             "to use";
         return;
+<<<<<<< HEAD
     }
 
 <<<<<<< HEAD
@@ -338,12 +433,25 @@ void SignonAuthSessionAdaptor::objectUnref()
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+    }
+
+    parent()->setId(id, applicationContext);
+}
+
+void SignonAuthSessionAdaptor::objectUnref(
+                                        const QDBusVariant &applicationContext)
+{
+    TRACE();
+
+>>>>>>> Merge & cleanup from master
     QDBusContext &dbusContext = *static_cast<QDBusContext *>(parent());
     if (AccessControlManagerHelper::pidOfPeer(dbusContext) !=
         parent()->ownerPid()) {
         TRACE() << "objectUnref called from peer that doesn't own the "
             "AuthSession object";
         return;
+<<<<<<< HEAD
 =======
         parent()->objectUnref(userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
@@ -359,6 +467,11 @@ void SignonAuthSessionAdaptor::objectUnref()
     }
 
     parent()->objectUnref();
+=======
+    }
+
+    parent()->objectUnref(applicationContext);
+>>>>>>> Merge & cleanup from master
 }
 
 } //namespace SignonDaemonNS

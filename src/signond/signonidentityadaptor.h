@@ -51,6 +51,7 @@ class SignonIdentityAdaptor : public QDBusAbstractAdaptor
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface",
                 "com.google.code.AccountsSSO.SingleSignOn.Identity")
+<<<<<<< HEAD
 
 public:
     SignonIdentityAdaptor(SignonIdentity *parent);
@@ -139,6 +140,37 @@ Q_SIGNALS:
         void unregistered();
         void infoUpdated(int);
 >>>>>>> Add user data parameter to server side interfaces
+=======
+
+public:
+    SignonIdentityAdaptor(SignonIdentity *parent);
+    virtual ~SignonIdentityAdaptor();
+
+    inline const QDBusContext &parentDBusContext() const
+        { return *static_cast<QDBusContext *>(m_parent); }
+
+public Q_SLOTS:
+    quint32 requestCredentialsUpdate(const QString &message,
+                                     const QDBusVariant &applicationContext);
+    QVariantMap getInfo(const QDBusVariant &applicationContext);
+    void addReference(const QString &reference,
+                      const QDBusVariant &applicationContext);
+    void removeReference(const QString &reference,
+                         const QDBusVariant &applicationContext);
+
+    bool verifyUser(const QVariantMap &params,
+                    const QDBusVariant &applicationContext);
+    bool verifySecret(const QString &secret,
+                      const QDBusVariant &applicationContext);
+    void remove(const QDBusVariant &applicationContext);
+    bool signOut(const QDBusVariant &applicationContext);
+    quint32 store(const QVariantMap &info,
+                  const QDBusVariant &applicationContext);
+
+Q_SIGNALS:
+    void unregistered();
+    void infoUpdated(int);
+>>>>>>> Merge & cleanup from master
 
 private:
     void securityErrorReply(const char *failedMethodName);

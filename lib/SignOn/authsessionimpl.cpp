@@ -6,9 +6,13 @@
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
 =======
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+=======
+ * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+>>>>>>> Merge & cleanup from master
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
 <<<<<<< HEAD
 >>>>>>> Start adding userdata to the client side implementation
@@ -75,6 +79,7 @@ AuthSessionImpl::AuthSessionImpl(AuthSession *parent,
     m_methodName(methodName)
 =======
                                  const QString &methodName,
+<<<<<<< HEAD
                                  const QVariant &applicationContextP)
 =======
                                  const QString &methodName,
@@ -102,6 +107,14 @@ AuthSessionImpl::AuthSessionImpl(AuthSession *parent,
 =======
       m_applicationContext(applicationContextP)
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+                                 const QVariant &applicationContextP) :
+    QObject(parent),
+    m_parent(parent),
+    m_operationQueueHandler(this),
+    m_methodName(methodName),
+    m_applicationContext(applicationContextP)
+>>>>>>> Merge & cleanup from master
 {
     m_id = id;
     m_DBusInterface = 0;
@@ -118,6 +131,7 @@ AuthSessionImpl::~AuthSessionImpl()
 <<<<<<< HEAD
 <<<<<<< HEAD
         m_DBusInterface->call(QLatin1String("objectUnref"),
+<<<<<<< HEAD
                               QVariant::fromValue(QDBusVariant(m_applicationContext)));
 =======
         m_DBusInterface->call(QLatin1String("objectUnref"), m_userdata);
@@ -130,6 +144,9 @@ AuthSessionImpl::~AuthSessionImpl()
 =======
                               QVariant::fromValue(QDBusVariant(m_applicationContext)));
 >>>>>>> Fix call arguments
+=======
+                    QVariant::fromValue(QDBusVariant(m_applicationContext)));
+>>>>>>> Merge & cleanup from master
         delete m_DBusInterface;
     }
 }
@@ -209,6 +226,7 @@ void AuthSessionImpl::setId(quint32 id)
 
     if (m_DBusInterface)
         send2interface(remoteFunctionName, 0, arguments);
+<<<<<<< HEAD
     else {
         QList<QGenericArgument *> args;
 
@@ -237,6 +255,13 @@ void AuthSessionImpl::setId(quint32 id)
                                     args);
     }
 >>>>>>> Expand userdata support
+=======
+    else
+        m_operationQueueHandler.enqueueOperation(
+                                    SIGNOND_SESSION_SET_ID_METHOD,
+                                    QList<QGenericArgument *>() <<
+                                    (new Q_ARG(quint32, id)));
+>>>>>>> Merge & cleanup from master
 }
 
 bool AuthSessionImpl::checkConnection()
@@ -359,17 +384,20 @@ AuthSessionImpl::queryAvailableMechanisms(const QStringList &wantedMechanisms)
 >>>>>>> Fix call arguments
 
     if (m_DBusInterface)
-        send2interface(remoteFunctionName, SLOT(mechanismsAvailableSlot(const QStringList&)), arguments);
-    else {
-        QList<QGenericArgument *> args;
-
-        args << (new Q_ARG(QStringList, wantedMechanisms));
-
+        send2interface(remoteFunctionName,
+                       SLOT(mechanismsAvailableSlot(const QStringList&)),
+                       arguments);
+    else
         m_operationQueueHandler.enqueueOperation(
                         SIGNOND_SESSION_QUERY_AVAILABLE_MECHANISMS_METHOD,
+<<<<<<< HEAD
                         args);
     }
 >>>>>>> Expand userdata support
+=======
+                        QList<QGenericArgument *>() <<
+                        (new Q_ARG(QStringList, wantedMechanisms)));
+>>>>>>> Merge & cleanup from master
 }
 
 void AuthSessionImpl::process(const SessionData &sessionData,
@@ -423,7 +451,6 @@ void AuthSessionImpl::process(const SessionData &sessionData,
     } else {
         TRACE() << "sending to queue";
         QList<QGenericArgument *> args;
-
         args << (new Q_ARG(QVariantMap, sessionDataVa))
              << (new Q_ARG(QString, mechanism));
 
@@ -458,6 +485,7 @@ void AuthSessionImpl::cancel()
     } else {
         TRACE() << "Sending cancel-request";
 <<<<<<< HEAD
+<<<<<<< HEAD
         m_DBusInterface->call(QDBus::NoBlock, QLatin1String("cancel"));
 =======
         m_DBusInterface->call(QDBus::NoBlock,
@@ -485,6 +513,12 @@ void AuthSessionImpl::cancel()
                               QLatin1String("cancel"),
                               QVariant::fromValue(QDBusVariant(m_applicationContext)));
 >>>>>>> Fix call arguments
+=======
+        m_DBusInterface->call(
+                    QDBus::NoBlock,
+                    QLatin1String("cancel"),
+                    QVariant::fromValue(QDBusVariant(m_applicationContext)));
+>>>>>>> Merge & cleanup from master
     }
 
     m_isBusy = false;

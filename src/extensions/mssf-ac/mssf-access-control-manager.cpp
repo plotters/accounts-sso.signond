@@ -47,6 +47,7 @@ QString MSSFAccessControlManager::keychainWidgetAppId()
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 bool MSSFAccessControlManager::isPeerAllowedToAccess(
                                        const QDBusMessage &peerMessage,
 =======
@@ -75,6 +76,15 @@ bool MSSFAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &pe
 =======
                                                           const QString &securityContext)
 >>>>>>> cleaning up
+=======
+/* for mssf case both functions below result in simple check of token presence.
+ * There is no difference between any access types
+ */
+
+bool MSSFAccessControlManager::isPeerAllowedToUseIdentity(
+                                            const QDBusMessage &peerMessage,
+                                            const QString &securityContext)
+>>>>>>> Merge & cleanup from master
 {
     bool hasAccess = false;
     QStringList Credlist =
@@ -89,6 +99,7 @@ bool MSSFAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &pe
     return hasAccess;
 }
 
+<<<<<<< HEAD
 bool MSSFAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -99,12 +110,18 @@ bool MSSFAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMes
 =======
                                                      const QString &securityContext)
 >>>>>>> cleaning up
+=======
+bool MSSFAccessControlManager::isPeerOwnerOfIdentity(
+                                            const QDBusMessage &peerMessage,
+                                            const QString &securityContext)
+>>>>>>> Merge & cleanup from master
 {
     return isPeerAllowedToUseIdentity(peerMessage, securityContext);
 }
 
 QString MSSFAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -117,6 +134,10 @@ QString MSSFAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 >>>>>>> cleaning up
 =======
     QStringList Credlist = MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
+=======
+    QStringList Credlist =
+        MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
+>>>>>>> Merge & cleanup from master
     foreach (QString cred, Credlist) {
 >>>>>>> adding ac fixes
 =======
@@ -152,10 +173,10 @@ bool MSSFAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
                                           const QStringList &aclList)
 >>>>>>> changing ACL function name
 {
-    QStringList CredList = MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
-    if (!aclList.isEmpty()){
-        foreach (QString aclItem, aclList)
-        {
+    QStringList CredList =
+        MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
+    if (!aclList.isEmpty()) {
+        foreach (QString aclItem, aclList) {
             if (!CredList.contains(aclItem)) {
                 TRACE() << "An attempt to setup an acl" << aclItem 
                         << "is denied because process doesn't possess such token";

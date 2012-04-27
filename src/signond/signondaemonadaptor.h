@@ -48,6 +48,7 @@
 namespace SignonDaemonNS {
 
 typedef QList<QVariantMap> MapList;
+<<<<<<< HEAD
 
 class SignonDaemonAdaptor: public QDBusAbstractAdaptor
 {
@@ -118,6 +119,32 @@ public Q_SLOTS:
 =======
                                          const QDBusVariant &applicationContext);
 >>>>>>> Rebase
+=======
+
+class SignonDaemonAdaptor: public QDBusAbstractAdaptor
+{
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface",
+                "com.google.code.AccountsSSO.SingleSignOn.AuthService")
+
+public:
+    SignonDaemonAdaptor(SignonDaemon *parent);
+    virtual ~SignonDaemonAdaptor();
+
+    inline const QDBusContext &parentDBusContext() const
+        { return *static_cast<QDBusContext *>(m_parent); }
+
+public Q_SLOTS:
+    void registerNewIdentity(const QDBusVariant &applicationContext,
+                             QDBusObjectPath &objectPath);
+    void getIdentity(const quint32 id,
+                     const QDBusVariant &applicationContext,
+                     QDBusObjectPath &objectPath,
+                     QVariantMap &identityData);
+    QString getAuthSessionObjectPath(const quint32 id,
+                                     const QString &type,
+                                     const QDBusVariant &applicationContext);
+>>>>>>> Merge & cleanup from master
 
     QStringList queryMethods();
     QStringList queryMechanisms(const QString &method);

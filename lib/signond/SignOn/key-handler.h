@@ -53,11 +53,11 @@ class SIGNON_EXPORT KeyHandler: public QObject
     Q_OBJECT
 
 public:
-    enum AuthorizeFlags_e {
+    enum Authorizations {
         None = 0,
         FormatStorage = 1 << 0, /*!< Formats the secure storage */
     };
-    Q_DECLARE_FLAGS(AuthorizeFlags, AuthorizeFlags_e);
+    Q_DECLARE_FLAGS(AuthorizeFlags, Authorizations);
 
     /*!
      * Constructor

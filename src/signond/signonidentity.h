@@ -61,6 +61,7 @@ namespace SignonDaemonNS {
 class SignonIdentity: public SignonDisposable, protected QDBusContext
 {
     Q_OBJECT
+<<<<<<< HEAD
 
     friend class SignonIdentityAdaptor;
 
@@ -156,6 +157,47 @@ Q_SIGNALS:
         //TODO - split this into the 3 separate signals(updated, removed, signed out)
         void infoUpdated(int);
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
+
+    friend class SignonIdentityAdaptor;
+
+    virtual ~SignonIdentity();
+
+public:
+    void destroy();
+    static SignonIdentity *createIdentity(quint32 id, SignonDaemon *parent);
+    quint32 id() const { return m_id; }
+
+    SignonIdentityInfo queryInfo(bool &ok,
+                                 const QDBusVariant &applicationContext,
+                                 bool queryPassword = true);
+    quint32 storeCredentials(const SignonIdentityInfo &info,
+                             bool storeSecret,
+                             const QDBusVariant &applicationContext);
+
+public Q_SLOTS:
+    quint32 requestCredentialsUpdate(const QString &message,
+                                     const QDBusVariant &applicationContext);
+    QVariantMap getInfo(const QDBusVariant &applicationContext);
+    bool addReference(const QString &reference,
+                      const QDBusVariant &applicationContext);
+    bool removeReference(const QString &reference,
+                         const QDBusVariant &applicationContext);
+    bool verifyUser(const QVariantMap &params,
+                    const QDBusVariant &applicationContext);
+    bool verifySecret(const QString &secret,
+                      const QDBusVariant &applicationContext);
+    void remove(const QDBusVariant &applicationContext);
+    bool signOut(const QDBusVariant &applicationContext);
+    quint32 store(const QVariantMap &info,
+                  const QDBusVariant &applicationContext);
+    void queryUiSlot(QDBusPendingCallWatcher *call);
+    void verifyUiSlot(QDBusPendingCallWatcher *call);
+Q_SIGNALS:
+    void unregistered();
+    //TODO - split this into the 3 separate signals(updated, removed, signed out)
+    void infoUpdated(int);
+>>>>>>> Merge & cleanup from master
 
 private:
     SignonIdentity(quint32 id, int timeout, SignonDaemon *parent);

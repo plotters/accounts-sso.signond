@@ -57,16 +57,16 @@ public:
     };
 
     /*!
-     * @enum Reason
+     * @enum Reasons
      * Flags specifying why signond is asking for authorizing a key.
      * @sa queryKeyAuthorization
      */
-    enum Reason_e {
+    enum Reasons {
         SystemStarted     = 1 << 0,
         KeyInserted       = 1 << 1,
         StorageNeeded     = 1 << 2,
     };
-    Q_DECLARE_FLAGS(Reason, Reason_e);
+    Q_DECLARE_FLAGS(Reason, Reasons);
 
     /*!
      * Constructor

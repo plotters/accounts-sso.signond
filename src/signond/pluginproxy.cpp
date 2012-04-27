@@ -311,6 +311,7 @@ void PluginProxy::onReadStandardOutput()
     reader >> m_currentResultOperation;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     TRACE() << "PROXY RESULT OPERATION:" << m_currentResultOperation;
 =======
             //flushing the stdin channel
@@ -319,6 +320,9 @@ void PluginProxy::onReadStandardOutput()
 >>>>>>> Fix errors catched by icc
 =======
 >>>>>>> Fix errors catched by icc
+=======
+    TRACE() << "PROXY RESULT OPERATION:" << m_currentResultOperation;
+>>>>>>> Merge & cleanup from master
 
     if (!isResultOperationCodeValid(m_currentResultOperation)) {
         TRACE() << "Unknown operation code - skipping.";

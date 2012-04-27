@@ -34,6 +34,7 @@ AbstractAccessControlManager::~AbstractAccessControlManager()
 {
 }
 
+<<<<<<< HEAD
 QString AbstractAccessControlManager::keychainWidgetAppId()
 {
     return QString();
@@ -57,12 +58,18 @@ bool AbstractAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage
 =======
                                                               const QString &securityContext)
 >>>>>>> cleaning up
+=======
+bool AbstractAccessControlManager::isPeerAllowedToUseIdentity(
+                                            const QDBusMessage &peerMessage,
+                                            const QString &securityContext)
+>>>>>>> Merge & cleanup from master
 {
     Q_UNUSED(peerMessage);
     Q_UNUSED(securityContext);
     return true;
 }
 
+<<<<<<< HEAD
 bool AbstractAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -81,6 +88,11 @@ bool AbstractAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &pee
 =======
                                                          const QString &securityContext)
 >>>>>>> cleaning up
+=======
+bool AbstractAccessControlManager::isPeerOwnerOfIdentity(
+                                               const QDBusMessage &peerMessage,
+                                               const QString &securityContext)
+>>>>>>> Merge & cleanup from master
 {
     Q_UNUSED(peerMessage);
     Q_UNUSED(securityContext);
@@ -96,6 +108,7 @@ AbstractAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 bool AbstractAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
                                               const QStringList &aclList)
 =======
@@ -107,6 +120,13 @@ bool AbstractAccessControlManager::isPeerAllowedToSetACL(const QDBusMessage &pee
                                                          const QStringList &aclList)
 >>>>>>> cleaning up
 =======
+=======
+QString AbstractAccessControlManager::keychainWidgetAppId()
+{
+    return QString();
+}
+
+>>>>>>> Merge & cleanup from master
 bool AbstractAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
                                               const QStringList &aclList)
 >>>>>>> changing ACL function name

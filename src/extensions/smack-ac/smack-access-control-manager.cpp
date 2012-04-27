@@ -45,6 +45,7 @@ QString SmackAccessControlManager::keychainWidgetAppId()
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 bool SmackAccessControlManager::isPeerAllowedToAccess(
                                                const QDBusMessage &peerMessage,
 =======
@@ -66,6 +67,11 @@ bool SmackAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &p
 =======
                                                            const QString &securityContext)
 >>>>>>> cleaning up
+=======
+bool SmackAccessControlManager::isPeerAllowedToUseIdentity(
+                                               const QDBusMessage &peerMessage,
+                                               const QString &securityContext)
+>>>>>>> Merge & cleanup from master
 {
     QString appId =
         SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
@@ -87,12 +93,15 @@ bool SmackAccessControlManager::isPeerAllowedToUseIdentity(const QDBusMessage &p
     }
 }
 
-bool SmackAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
-                                                      const QString &securityContext)
+bool SmackAccessControlManager::isPeerOwnerOfIdentity(
+                                            const QDBusMessage &peerMessage,
+                                            const QString &securityContext)
 {
-    QString appId = SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
+    QString appId =
+        SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
     TRACE() << appId << ":" << securityContext;
 
+<<<<<<< HEAD
     if ((SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("r"))) &&
         (SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("w"))) ) {
 <<<<<<< HEAD
@@ -118,6 +127,12 @@ bool SmackAccessControlManager::isPeerOwnerOfIdentity(const QDBusMessage &peerMe
 
     if ((SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("r"))) &&
         (SmackQt::Smack::hasAccess(appId, securityContext, QLatin1String("w"))) ) {
+=======
+    if ((SmackQt::Smack::hasAccess(
+                            appId, securityContext, QLatin1String("r"))) &&
+        (SmackQt::Smack::hasAccess(
+                            appId, securityContext, QLatin1String("w")))) {
+>>>>>>> Merge & cleanup from master
         TRACE() << "Process ACCESS:TRUE";
         return true;
     } else {
@@ -170,7 +185,8 @@ bool SmackAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
                                            const QStringList &aclList)
 >>>>>>> changing ACL function name
 {
-    QString appId = SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
+    QString appId =
+        SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
     QString appIdPrefixed;
     QString sep = QLatin1String("::");
     appIdPrefixed.append(appId);
@@ -178,22 +194,29 @@ bool SmackAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
     TRACE() << appId << appIdPrefixed;
 
     if (!aclList.isEmpty()){
-        foreach (QString aclItem, aclList)
-        {
+        foreach (QString aclItem, aclList) {
             TRACE() << aclItem;
-            /* if app sets an acl entry for its appid, then it is always allowed */
+            // if app sets an acl entry for its appid, then it is always
+            // allowed
             if (appId == aclItem)
                 continue;
+<<<<<<< HEAD
             /* if app sets an acl entry for the label of its subdomain, then it is allowed, too */
 <<<<<<< HEAD
             if ( aclItem.indexOf(appId)) == 0)
 >>>>>>> adding ac fixes
 =======
+=======
+            // if app sets an acl entry for the label of its subdomain,
+            // then it is allowed, too
+>>>>>>> Merge & cleanup from master
             if ( aclItem.indexOf(appId) == 0)
 >>>>>>> various fixes
                 continue;
-            /* if none of above then this acl must be denied */
-            TRACE() << "An attempt to setup an acl" << aclItem << "for process domain" << appId << "is denied";
+            // if none of above then this acl must be denied
+            TRACE() << "An attempt to setup an acl" << aclItem
+                    << "for process domain" << appId
+                    << "is denied";
             return false;
         }
     }

@@ -48,6 +48,7 @@ SignonDaemonAdaptor::~SignonDaemonAdaptor()
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void SignonDaemonAdaptor::registerNewIdentity(QDBusObjectPath &objectPath)
 {
     m_parent->registerNewIdentity(objectPath);
@@ -97,6 +98,13 @@ void SignonDaemonAdaptor::registerNewIdentity(QDBusObjectPath &objectPath)
 =======
         m_parent->registerNewIdentity(applicationContext, objectPath);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+void SignonDaemonAdaptor::registerNewIdentity(
+                                        const QDBusVariant &applicationContext,
+                                        QDBusObjectPath &objectPath)
+{
+    m_parent->registerNewIdentity(applicationContext, objectPath);
+>>>>>>> Merge & cleanup from master
 
     SignonDisposable::destroyUnused();
 }
@@ -119,7 +127,12 @@ void SignonDaemonAdaptor::securityErrorReply(const char *failedMethodName)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void SignonDaemonAdaptor::getIdentity(const quint32 id,
+=======
+void SignonDaemonAdaptor::getIdentity(const quint32 id,
+                                      const QDBusVariant &applicationContext,
+>>>>>>> Merge & cleanup from master
                                       QDBusObjectPath &objectPath,
                                       QVariantMap &identityData)
 {
@@ -128,6 +141,7 @@ void SignonDaemonAdaptor::getIdentity(const quint32 id,
         securityErrorReply(__func__);
         return;
     }
+<<<<<<< HEAD
 =======
     void SignonDaemonAdaptor::registerStoredIdentity(const quint32 id,
                                                      const QDBusVariant &applicationContext,
@@ -168,6 +182,10 @@ void SignonDaemonAdaptor::getIdentity(const quint32 id,
 =======
         m_parent->getIdentity(id, applicationContext, objectPath, identityData);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+
+    m_parent->getIdentity(id, applicationContext, objectPath, identityData);
+>>>>>>> Merge & cleanup from master
 
     SignonDisposable::destroyUnused();
 }
@@ -177,6 +195,7 @@ QStringList SignonDaemonAdaptor::queryMethods()
     return m_parent->queryMethods();
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 QString SignonDaemonAdaptor::getAuthSessionObjectPath(const quint32 id,
@@ -203,6 +222,14 @@ QString SignonDaemonAdaptor::getAuthSessionObjectPath(const quint32 id,
     {
         SignonDisposable::destroyUnused();
 >>>>>>> Add user data parameter to server side interfaces
+=======
+QString SignonDaemonAdaptor::getAuthSessionObjectPath(
+                                        const quint32 id,
+                                        const QString &type,
+                                        const QDBusVariant &applicationContext)
+{
+    SignonDisposable::destroyUnused();
+>>>>>>> Merge & cleanup from master
 
     /* Access Control */
     if (id != SIGNOND_NEW_IDENTITY) {
@@ -211,6 +238,7 @@ QString SignonDaemonAdaptor::getAuthSessionObjectPath(const quint32 id,
             securityErrorReply(__func__);
             return QString();
         }
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 
@@ -233,6 +261,12 @@ QString SignonDaemonAdaptor::getAuthSessionObjectPath(const quint32 id,
 
     TRACE() << "ACM passed, creating AuthSession object";
     return m_parent->getAuthSessionObjectPath(id, type);
+=======
+    }
+
+    TRACE() << "ACM passed, creating AuthSession object";
+    return m_parent->getAuthSessionObjectPath(id, type, applicationContext);
+>>>>>>> Merge & cleanup from master
 }
 
 QStringList SignonDaemonAdaptor::queryMechanisms(const QString &method)

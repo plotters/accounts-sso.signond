@@ -6,9 +6,13 @@
  *
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Conta Alberto Mardegan <alberto.mardegan@canonical.com>
 =======
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+=======
+ * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+>>>>>>> Merge & cleanup from master
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
 >>>>>>> Use QDBusVariant instead of QVariant
 =======
@@ -67,6 +71,7 @@ SignonAuthSession::~SignonAuthSession()
     }
 }
 
+<<<<<<< HEAD
 QString SignonAuthSession::getAuthSessionObjectPath(const quint32 id,
                                                     const QString &method,
                                                     SignonDaemon *parent,
@@ -84,6 +89,15 @@ QString SignonAuthSession::getAuthSessionObjectPath(const quint32 id,
 >>>>>>> Use QDBusVariant instead of QVariant
 =======
                                                     const QVariant &applicationContext)
+=======
+QString SignonAuthSession::getAuthSessionObjectPath(
+                                        const quint32 id,
+                                        const QString &method,
+                                        SignonDaemon *parent,
+                                        bool &supportsAuthMethod,
+                                        pid_t ownerPid,
+                                        const QDBusVariant &applicationContext)
+>>>>>>> Merge & cleanup from master
 {
     Q_UNUSED(applicationContext);
 >>>>>>> Rename 'userdata' to 'applicationContext'
@@ -148,6 +162,7 @@ pid_t SignonAuthSession::ownerPid() const
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 QStringList
 SignonAuthSession::queryAvailableMechanisms(const QStringList &wantedMechanisms)
 =======
@@ -158,6 +173,12 @@ QStringList SignonAuthSession::queryAvailableMechanisms(const QStringList &wante
 =======
                                                         const QDBusVariant &applicationContext)
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+QStringList
+SignonAuthSession::queryAvailableMechanisms(
+                                        const QStringList &wantedMechanisms,
+                                        const QDBusVariant &applicationContext)
+>>>>>>> Merge & cleanup from master
 {
     Q_UNUSED(applicationContext);
 =======
@@ -223,6 +244,7 @@ void SignonAuthSession::cancel(const QDBusVariant &applicationContext)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void SignonAuthSession::setId(quint32 id, const QDBusVariant &applicationContext)
 {
     Q_UNUSED(applicationContext);
@@ -233,6 +255,10 @@ void SignonAuthSession::setId(quint32 id, const QDBusVariant &userdata)
 >>>>>>> Use QDBusVariant instead of QVariant
 =======
 void SignonAuthSession::setId(quint32 id, const QDBusVariant &applicationContext)
+=======
+void SignonAuthSession::setId(quint32 id,
+                              const QDBusVariant &applicationContext)
+>>>>>>> Merge & cleanup from master
 {
     Q_UNUSED(applicationContext);
 >>>>>>> Rename 'userdata' to 'applicationContext'
@@ -256,8 +282,6 @@ void SignonAuthSession::objectUnref(const QDBusVariant &userdata)
 void SignonAuthSession::objectUnref(const QDBusVariant &applicationContext)
 >>>>>>> Rename 'userdata' to 'applicationContext'
 {
-    Q_UNUSED(applicationContext);
-
     //TODO - remove the `objectUnref` functionality from the DBus API
     TRACE();
 <<<<<<< HEAD

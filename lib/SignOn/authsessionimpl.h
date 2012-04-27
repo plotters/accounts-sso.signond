@@ -6,9 +6,13 @@
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
 =======
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+=======
+ * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+>>>>>>> Merge & cleanup from master
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
 <<<<<<< HEAD
 >>>>>>> Start adding userdata to the client side implementation
@@ -49,6 +53,9 @@
 namespace SignOn {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Merge & cleanup from master
 /*!
  * @class AuthSessionImpl
  * AuthSession class implementation.
@@ -58,6 +65,7 @@ class AuthSessionImpl: public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(AuthSessionImpl)
+<<<<<<< HEAD
 =======
     /*!
      * @class AuthSessionImpl
@@ -82,10 +90,14 @@ class AuthSessionImpl: public QObject
 =======
         Q_PROPERTY(QVariant applicationContext READ applicationContext WRITE setApplicationContext);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+    Q_PROPERTY(QVariant applicationContext READ applicationContext WRITE setApplicationContext);
+>>>>>>> Merge & cleanup from master
 
     friend class AuthSession;
     friend class IdentityImpl;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 public:
     AuthSessionImpl(AuthSession *parent, quint32 id,
@@ -119,8 +131,17 @@ public:
         ~AuthSessionImpl();
 >>>>>>> Rename 'userdata' to 'applicationContext'
         QVariant applicationContext() const
+=======
+public:
+    AuthSessionImpl(AuthSession *parent,
+                    quint32 id,
+                    const QString &methodName,
+                    const QVariant &applicationContextP);
+    ~AuthSessionImpl();
+    QVariant applicationContext() const
+>>>>>>> Merge & cleanup from master
         { return m_applicationContext; }
-        void setApplicationContext (const QVariant &newApplicationContext)
+    void setApplicationContext (const QVariant &newApplicationContext)
         { m_applicationContext = newApplicationContext; }
 <<<<<<< HEAD
 >>>>>>> Rename 'userdata' to 'applicationContext'
@@ -158,6 +179,9 @@ private:
     DBusInterface *m_DBusInterface;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Merge & cleanup from master
     /*
      * flag to prevent multiple authentication requests
      */
@@ -171,6 +195,7 @@ private:
      * authentication failed once we do not try anymore
      */
     bool m_isValid;
+<<<<<<< HEAD
 };
 =======
         /*
@@ -198,6 +223,13 @@ private:
 >>>>>>> Rename 'userdata' to 'applicationContext'
     };
 >>>>>>> Start adding userdata to the client side implementation
+=======
+    /*
+     * application level context data
+     */
+    QVariant m_applicationContext;
+};
+>>>>>>> Merge & cleanup from master
 
 } //namespace SignOn
 

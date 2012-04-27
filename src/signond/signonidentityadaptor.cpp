@@ -53,6 +53,9 @@ void SignonIdentityAdaptor::securityErrorReply(const char *failedMethodName)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Merge & cleanup from master
 void SignonIdentityAdaptor::errorReply(const QString &name,
                                        const QString &message)
 {
@@ -61,6 +64,7 @@ void SignonIdentityAdaptor::errorReply(const QString &name,
     QDBusMessage errReply = msg.createErrorReply(name, message);
     SIGNOND_BUS.send(errReply);
 }
+<<<<<<< HEAD
 =======
     void SignonIdentityAdaptor::errorReply(const QString &name,
                                            const QString &message)
@@ -98,6 +102,12 @@ void SignonIdentityAdaptor::errorReply(const QString &name,
 <<<<<<< HEAD
 <<<<<<< HEAD
 quint32 SignonIdentityAdaptor::requestCredentialsUpdate(const QString &msg)
+=======
+
+quint32 SignonIdentityAdaptor::requestCredentialsUpdate(
+                                        const QString &msg,
+                                        const QDBusVariant &applicationContext)
+>>>>>>> Merge & cleanup from master
 {
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -105,6 +115,7 @@ quint32 SignonIdentityAdaptor::requestCredentialsUpdate(const QString &msg)
                                     m_parent->id())) {
         securityErrorReply(__func__);
         return 0;
+<<<<<<< HEAD
     }
 
 <<<<<<< HEAD
@@ -151,12 +162,22 @@ quint32 SignonIdentityAdaptor::requestCredentialsUpdate(const QString &msg)
 <<<<<<< HEAD
 <<<<<<< HEAD
 QVariantMap SignonIdentityAdaptor::getInfo()
+=======
+    }
+
+    return m_parent->requestCredentialsUpdate(msg, applicationContext);
+}
+
+QVariantMap SignonIdentityAdaptor::getInfo(
+                                        const QDBusVariant &applicationContext)
+>>>>>>> Merge & cleanup from master
 {
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
         parentDBusContext().message(), m_parent->id())) {
         securityErrorReply(__func__);
         return QVariantMap();
+<<<<<<< HEAD
 =======
         return m_parent->queryInfo(userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
@@ -201,6 +222,15 @@ QVariantMap SignonIdentityAdaptor::getInfo()
 <<<<<<< HEAD
 <<<<<<< HEAD
 void SignonIdentityAdaptor::addReference(const QString &reference)
+=======
+    }
+
+    return m_parent->getInfo(applicationContext);
+}
+
+void SignonIdentityAdaptor::addReference(const QString &reference,
+                                         const QDBusVariant &applicationContext)
+>>>>>>> Merge & cleanup from master
 {
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -208,6 +238,7 @@ void SignonIdentityAdaptor::addReference(const QString &reference)
                                     m_parent->id())) {
         securityErrorReply(__func__);
         return;
+<<<<<<< HEAD
 =======
         if (!m_parent->addReference(reference, userdata)) {
 =======
@@ -285,8 +316,18 @@ void SignonIdentityAdaptor::removeReference(const QString &reference)
                        SIGNOND_OPERATION_FAILED_ERR_STR);
         }
 >>>>>>> Use QDBusVariant instead of QVariant
+=======
     }
 
+    if (!m_parent->addReference(reference, applicationContext)) {
+        /* TODO: add a lastError() method to SignonIdentity */
+        errorReply(SIGNOND_OPERATION_FAILED_ERR_NAME,
+                   SIGNOND_OPERATION_FAILED_ERR_STR);
+>>>>>>> Merge & cleanup from master
+    }
+}
+
+<<<<<<< HEAD
     if (!m_parent->removeReference(reference)) {
         /* TODO: add a lastError() method to SignonIdentity */
         errorReply(SIGNOND_OPERATION_FAILED_ERR_NAME,
@@ -324,6 +365,29 @@ void SignonIdentityAdaptor::removeReference(const QString &reference)
 <<<<<<< HEAD
 <<<<<<< HEAD
 bool SignonIdentityAdaptor::verifyUser(const QVariantMap &params)
+=======
+void SignonIdentityAdaptor::removeReference(
+                                        const QString &reference,
+                                        const QDBusVariant &applicationContext)
+{
+    /* Access Control */
+    if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
+                                    parentDBusContext().message(),
+                                    m_parent->id())) {
+        securityErrorReply(__func__);
+        return;
+    }
+
+    if (!m_parent->removeReference(reference, applicationContext)) {
+        /* TODO: add a lastError() method to SignonIdentity */
+        errorReply(SIGNOND_OPERATION_FAILED_ERR_NAME,
+                   SIGNOND_OPERATION_FAILED_ERR_STR);
+    }
+}
+
+bool SignonIdentityAdaptor::verifyUser(const QVariantMap &params,
+                                       const QDBusVariant &applicationContext)
+>>>>>>> Merge & cleanup from master
 {
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
@@ -331,6 +395,7 @@ bool SignonIdentityAdaptor::verifyUser(const QVariantMap &params)
                                     m_parent->id())) {
         securityErrorReply(__func__);
         return false;
+<<<<<<< HEAD
 =======
         return m_parent->verifyUser(params, userdata);
 >>>>>>> Use QDBusVariant instead of QVariant
@@ -432,11 +497,34 @@ bool SignonIdentityAdaptor::verifySecret(const QString &secret)
 >>>>>>> Add user data parameter to server side interfaces
 
 void SignonIdentityAdaptor::remove()
+=======
+    }
+
+    return m_parent->verifyUser(params, applicationContext);
+}
+
+bool SignonIdentityAdaptor::verifySecret(const QString &secret,
+                                         const QDBusVariant &applicationContext)
+{
+    /* Access Control */
+    if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
+                                    parentDBusContext().message(),
+                                    m_parent->id())) {
+        securityErrorReply(__func__);
+        return false;
+    }
+
+    return m_parent->verifySecret(secret, applicationContext);
+}
+
+void SignonIdentityAdaptor::remove(const QDBusVariant &applicationContext)
+>>>>>>> Merge & cleanup from master
 {
     /* Access Control */
     AccessControlManagerHelper::IdentityOwnership ownership =
             AccessControlManagerHelper::instance()->isPeerOwnerOfIdentity(
                         parentDBusContext().message(), m_parent->id());
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -629,6 +717,57 @@ quint32 SignonIdentityAdaptor::store(const QVariantMap &info)
 >>>>>>> Rename 'userdata' to 'applicationContext'
     }
     return m_parent->store(info);
+=======
+
+    if (ownership != AccessControlManagerHelper::IdentityDoesNotHaveOwner) {
+        //Identity has an owner
+        if (ownership == AccessControlManagerHelper::ApplicationIsNotOwner &&
+            !AccessControlManagerHelper::instance()->isPeerKeychainWidget(
+                                             parentDBusContext().message())) {
+
+            securityErrorReply(__func__);
+            return;
+        }
+    }
+
+    m_parent->remove(applicationContext);
+}
+
+bool SignonIdentityAdaptor::signOut(const QDBusVariant &applicationContext)
+{
+    /* Access Control */
+    if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
+                             parentDBusContext().message(), m_parent->id())) {
+        securityErrorReply(__func__);
+        return false;
+    }
+
+    return m_parent->signOut(applicationContext);
+}
+
+quint32 SignonIdentityAdaptor::store(const QVariantMap &info,
+                                     const QDBusVariant &applicationContext)
+{
+    quint32 id = info.value(QLatin1String("Id"), SIGNOND_NEW_IDENTITY).toInt();
+    /* Access Control */
+    if (id != SIGNOND_NEW_IDENTITY) {
+    AccessControlManagerHelper::IdentityOwnership ownership =
+            AccessControlManagerHelper::instance()->isPeerOwnerOfIdentity(
+                        parentDBusContext().message(), m_parent->id());
+
+        if (ownership != AccessControlManagerHelper::IdentityDoesNotHaveOwner) {
+            //Identity has an owner
+            if (ownership == AccessControlManagerHelper::ApplicationIsNotOwner &&
+                !AccessControlManagerHelper::instance()->isPeerKeychainWidget(
+                                              parentDBusContext().message())) {
+
+                securityErrorReply(__func__);
+                return 0;
+            }
+        }
+    }
+    return m_parent->store(info, applicationContext);
+>>>>>>> Merge & cleanup from master
 }
 
 } //namespace SignonDaemonNS

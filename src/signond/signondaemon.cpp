@@ -6,9 +6,13 @@
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
 =======
  * Contact: Alberto Mardegan <alberto.mardegan@nokia.com>
+=======
+ * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+>>>>>>> Merge & cleanup from master
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
 <<<<<<< HEAD
 >>>>>>> Use QDBusVariant instead of QVariant
@@ -620,6 +624,7 @@ void SignonDaemon::registerStoredIdentity(const quint32 id,
     bool ok;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     SignonIdentityInfo info = identity->queryInfo(ok, applicationContext, false);
 =======
     SignonIdentityInfo info = identity->queryInfo(ok, userdata, false);
@@ -627,6 +632,11 @@ void SignonDaemon::registerStoredIdentity(const quint32 id,
 =======
     SignonIdentityInfo info = identity->queryInfo(ok, applicationContext, false);
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+    SignonIdentityInfo info = identity->queryInfo(ok,
+                                                  applicationContext,
+                                                  false);
+>>>>>>> Merge & cleanup from master
 
     if (info.isNew())
     {
@@ -749,6 +759,7 @@ bool SignonDaemon::clear()
     return true;
 }
 
+<<<<<<< HEAD
 QString SignonDaemon::getAuthSessionObjectPath(const quint32 id,
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -766,6 +777,12 @@ QString SignonDaemon::getAuthSessionObjectPath(const quint32 id,
 =======
                                                const QString type,
                                                const QDBusVariant &applicationContext)
+=======
+QString SignonDaemon::getAuthSessionObjectPath(
+                                        const quint32 id,
+                                        const QString type,
+                                        const QDBusVariant &applicationContext)
+>>>>>>> Merge & cleanup from master
 {
 <<<<<<< HEAD
     Q_UNUSED(userdata);
@@ -777,9 +794,13 @@ QString SignonDaemon::getAuthSessionObjectPath(const quint32 id,
     bool supportsAuthMethod = false;
     pid_t ownerPid = AccessControlManagerHelper::pidOfPeer(*this);
     QString objectPath =
-        SignonAuthSession::getAuthSessionObjectPath(id, type, this,
+        SignonAuthSession::getAuthSessionObjectPath(
+                                                    id,
+                                                    type,
+                                                    this,
                                                     supportsAuthMethod,
                                                     ownerPid,
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
                                                     applicationContext.variant());
@@ -789,6 +810,9 @@ QString SignonDaemon::getAuthSessionObjectPath(const quint32 id,
 =======
                                                     applicationContext.variant());
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+                                                    applicationContext);
+>>>>>>> Merge & cleanup from master
     if (objectPath.isEmpty() && !supportsAuthMethod) {
         sendErrorReply(SIGNOND_METHOD_NOT_KNOWN_ERR_NAME,
                        SIGNOND_METHOD_NOT_KNOWN_ERR_STR);
@@ -934,7 +958,8 @@ bool SignonDaemon::createStorageFileTree(const QStringList &backupFiles) const
         QString filePath = storageDir.path() + QDir::separator() + fileName;
         QFile file(filePath);
         if (!file.open(QIODevice::WriteOnly)) {
-            qCritical() << "Failed to create empty file for backup:" << filePath;
+            qCritical() << "Failed to create empty file for backup:"
+                        << filePath;
             return false;
         } else {
             file.close();

@@ -57,6 +57,7 @@ namespace SignonDaemonNS {
 class SignonAuthSession: public QObject, protected QDBusContext
 {
     Q_OBJECT
+<<<<<<< HEAD
 
 public:
     inline SignonSessionCore *parent() const
@@ -141,6 +142,40 @@ public Q_SLOTS:
 >>>>>>> Use QDBusVariant instead of QVariant
 =======
 >>>>>>> Rename 'userdata' to 'applicationContext'
+=======
+
+public:
+    inline SignonSessionCore *parent() const
+    {
+        return static_cast<SignonSessionCore *>(QObject::parent());
+    }
+
+    friend class SignonAuthSessionAdaptor;
+
+    static QString getAuthSessionObjectPath(
+                                        const quint32 id,
+                                        const QString &method,
+                                        SignonDaemon *parent,
+                                        bool &supportsAuthMethod,
+                                        pid_t ownerPid,
+                                        const QDBusVariant &applicationContext);
+    static void stopAllAuthSessions();
+    quint32 id() const;
+    QString method() const;
+    void objectRegistered();
+    pid_t ownerPid() const;
+
+public Q_SLOTS:
+    QStringList queryAvailableMechanisms(
+                                        const QStringList &wantedMechanisms,
+                                        const QDBusVariant &applicationContext);
+    QVariantMap process(const QVariantMap &sessionDataVa,
+                        const QString &mechanism,
+                        const QDBusVariant &applicationContext);
+    void cancel(const QDBusVariant &applicationContext);
+    void setId(quint32 id, const QDBusVariant &applicationContext);
+    void objectUnref(const QDBusVariant &applicationContext);
+>>>>>>> Merge & cleanup from master
 
 Q_SIGNALS:
     void stateChanged(int state, const QString &message);
