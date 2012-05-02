@@ -86,6 +86,9 @@ AccessControlManagerHelper::isPeerAllowedToUseIdentity(
     if (acl.isEmpty())
         return false;
 
+    if (acl.contains(QLatin1String("*")))
+        return true;
+
     return peerHasOneOfAccesses(peerMessage, acl);
 }
 
@@ -106,6 +109,9 @@ AccessControlManagerHelper::isPeerOwnerOfIdentity(
 
     if (ownerSecContexts.isEmpty())
         return IdentityDoesNotHaveOwner;
+
+    if (ownerSecContexts.contains(QLatin1String("*")))
+        return ApplicationIsOwner;
 
     foreach(QString securityContext, ownerSecContexts) {
         TRACE() << securityContext;
@@ -137,6 +143,8 @@ AccessControlManagerHelper::peerHasOneOfAccesses(
 {
     foreach (QString securityContext, secContexts) {
         TRACE() << securityContext;
+        if (securityContext == QString::fromLatin1("*"))
+            return true;
         if (m_acManager->isPeerAllowedToUseIdentity(
                                                 peerMessage, securityContext))
             return true;

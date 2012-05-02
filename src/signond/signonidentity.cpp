@@ -435,13 +435,18 @@ quint32 SignonIdentity::store(const QVariantMap &info,
     // Add creator to owner list if it has AID
     QStringList ownerList =
         info.value(SIGNOND_IDENTITY_INFO_OWNER).toStringList();
-    if (!appId.isEmpty())
-        ownerList.append(appId);
+    if (ownerList.isEmpty()) {
+        if (!appId.isEmpty())
+            ownerList.append(appId);
+        else
+            ownerList.append(QLatin1String("*"));
+    }
     else {
         // check that application is allowed to set the specified list of
         // owners
         bool allowed = AccessControlManagerHelper::instance()->isACLValid(
-                        (static_cast<QDBusContext>(*this)).message(),ownerList);
+                        (static_cast<QDBusContext>(*this)).message(),
+                        ownerList);
         if (!allowed) {
             // send an error reply, because otherwise uncontrolled sharing
             // might happen
@@ -467,7 +472,8 @@ quint32 SignonIdentity::store(const QVariantMap &info,
         // before setting this ACL value to the new identity, we need to make
         // sure that it isn't unconrolled sharing attempt.
         bool allowed = AccessControlManagerHelper::instance()->isACLValid(
-                (static_cast<QDBusContext>(*this)).message(),accessControlList);
+                (static_cast<QDBusContext>(*this)).message(),
+                accessControlList);
         if (!allowed) {
             // send an error reply, because otherwise uncontrolled sharing
             // might happen

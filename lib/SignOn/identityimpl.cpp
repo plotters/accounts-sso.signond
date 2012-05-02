@@ -805,7 +805,9 @@ void IdentityImpl::errorReply(const QDBusError& err)
 
 void IdentityImpl::updateContents()
 {
-    bool result = sendRequest("getInfo", QList<QVariant>(),
+    QList<QVariant> args;
+    args << QVariant::fromValue(QDBusVariant(m_applicationContext));
+    bool result = sendRequest("getInfo", args,
                               SLOT(getInfoReply(const QVariantMap &)));
 
     if (!result) {
