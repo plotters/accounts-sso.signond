@@ -140,11 +140,10 @@ QVariantMap SignonAuthSession::process(const QVariantMap &sessionDataVa,
                                        const QString &mechanism,
                                        const QDBusVariant &applicationContext)
 {
-    Q_UNUSED(applicationContext);
-
     setDelayedReply(true);
     parent()->process(connection(),
                       message(),
+                      applicationContext,
                       sessionDataVa,
                       mechanism,
                       objectName());

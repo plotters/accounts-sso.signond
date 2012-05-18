@@ -190,8 +190,6 @@ SignonIdentityInfo SignonIdentity::queryInfo(
 bool SignonIdentity::addReference(const QString &reference,
                                   const QDBusVariant &applicationContext)
 {
-    Q_UNUSED(applicationContext);
-
     TRACE() << "addReference: " << reference;
 
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
@@ -201,9 +199,10 @@ bool SignonIdentity::addReference(const QString &reference,
         BLAME() << "NULL database handler object.";
         return false;
     }
-    QString appId =
+    SecurityContext appId =
         AccessControlManagerHelper::instance()->appIdOfPeer(
-                                 (static_cast<QDBusContext>(*this)).message());
+                                 (static_cast<QDBusContext>(*this)).message(),
+                                 applicationContext);
     keepInUse();
     return db->addReference(m_id, appId, reference);
 }
@@ -211,8 +210,6 @@ bool SignonIdentity::addReference(const QString &reference,
 bool SignonIdentity::removeReference(const QString &reference,
                                      const QDBusVariant &applicationContext)
 {
-    Q_UNUSED(applicationContext);
-
     TRACE() << "removeReference: " << reference;
 
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
@@ -222,9 +219,10 @@ bool SignonIdentity::removeReference(const QString &reference,
         BLAME() << "NULL database handler object.";
         return false;
     }
-    QString appId =
+    SecurityContext appId =
         AccessControlManagerHelper::instance()->appIdOfPeer(
-                                  (static_cast<QDBusContext>(*this)).message());
+                                  (static_cast<QDBusContext>(*this)).message(),
+                                  applicationContext);
     keepInUse();
     return db->removeReference(m_id, appId, reference);
 }
@@ -425,16 +423,16 @@ quint32 SignonIdentity::store(const QVariantMap &info,
     QString secret = info.value(SIGNOND_IDENTITY_INFO_SECRET).toString();
     QString appId =
         AccessControlManagerHelper::instance()->appIdOfPeer(
-                                 (static_cast<QDBusContext>(*this)).message());
+                                 (static_cast<QDBusContext>(*this)).message(),
+                                 applicationContext);
 
     bool storeSecret = info.value(SIGNOND_IDENTITY_INFO_STORESECRET).toBool();
-    QVariant container = info.value(SIGNOND_IDENTITY_INFO_AUTHMETHODS);
     MethodMap methods =
-        qdbus_cast<MethodMap>(container.value<QDBusArgument>());
+        qdbus_cast<MethodMap>(info.value(SIGNOND_IDENTITY_INFO_AUTHMETHODS));
 
     // Add creator to owner list if it has AID
-    QStringList ownerList =
-        info.value(SIGNOND_IDENTITY_INFO_OWNER).toStringList();
+    SignOn::SecurityContextList ownerList = SignOn::SecurityContext(
+                        info.value(SIGNOND_IDENTITY_INFO_OWNER).toStringList());
     if (ownerList.isEmpty()) {
         if (!appId.isEmpty())
             ownerList.append(appId);
@@ -446,6 +444,7 @@ quint32 SignonIdentity::store(const QVariantMap &info,
         // owners
         bool allowed = AccessControlManagerHelper::instance()->isACLValid(
                         (static_cast<QDBusContext>(*this)).message(),
+                        applicationContext,
                         ownerList);
         if (!allowed) {
             // send an error reply, because otherwise uncontrolled sharing
@@ -467,12 +466,13 @@ quint32 SignonIdentity::store(const QVariantMap &info,
             info.value(SIGNOND_IDENTITY_INFO_CAPTION).toString();
         QStringList realms =
             info.value(SIGNOND_IDENTITY_INFO_REALMS).toStringList();
-        QStringList accessControlList =
-            info.value(SIGNOND_IDENTITY_INFO_ACL).toStringList();
+        SignOn::SecurityContextList accessControlList =
+            qdbus_cast<SecurityList>(info.value(SIGNOND_IDENTITY_INFO_ACL));
         // before setting this ACL value to the new identity, we need to make
         // sure that it isn't unconrolled sharing attempt.
         bool allowed = AccessControlManagerHelper::instance()->isACLValid(
                 (static_cast<QDBusContext>(*this)).message(),
+                applicationContext,
                 accessControlList);
         if (!allowed) {
             // send an error reply, because otherwise uncontrolled sharing

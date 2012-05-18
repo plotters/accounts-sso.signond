@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -113,22 +115,23 @@ QStringList IdentityInfo::realms() const
     return impl->m_realms;
 }
 
-void IdentityInfo::setOwner(const QString &ownerToken)
+void IdentityInfo::setOwner(const SecurityContext &ownerToken)
 {
     impl->m_owner = ownerToken;
 }
 
-QString IdentityInfo::owner() const
+SecurityContext IdentityInfo::owner() const
 {
     return impl->m_owner;
 }
 
-void IdentityInfo::setAccessControlList(const QStringList &accessControlList)
+void IdentityInfo::setAccessControlList(
+                                const SecurityContextList &accessControlList)
 {
     impl->m_accessControlList = accessControlList;
 }
 
-QStringList IdentityInfo::accessControlList() const
+SecurityContextList IdentityInfo::accessControlList() const
 {
     return impl->m_accessControlList;
 }

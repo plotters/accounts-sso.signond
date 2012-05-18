@@ -49,16 +49,25 @@ QString MSSFAccessControlManager::keychainWidgetAppId()
  */
 
 bool MSSFAccessControlManager::isPeerAllowedToUseIdentity(
-                                            const QDBusMessage &peerMessage,
-                                            const QString &securityContext)
+                                        const QDBusMessage &peerMessage,
+                                        const QDBusVariant &applicationContext,
+                                        const SecurityContext &securityContext)
 {
     bool hasAccess = false;
     QStringList Credlist =
         MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
     foreach(QString cred, Credlist) {
-        if (cred.compare(securityContext) == 0) {
-            hasAccess = true;
-            break;
+        if (cred.compare(securityContext.first) == 0) {
+            if (securityContext.second.isEmpty()) {
+                hasAccess = true;
+                break;
+            } else {
+                if (applicationContext == securityContext.second ||
+                    securityContext.second == QLatin1String("*")) {
+                    hasAccess = true;
+                    break;
+                }
+            }
         }
     }
     TRACE() << "Process ACCESS:" << (hasAccess ? "TRUE" : "FALSE");
@@ -66,8 +75,9 @@ bool MSSFAccessControlManager::isPeerAllowedToUseIdentity(
 }
 
 bool MSSFAccessControlManager::isPeerOwnerOfIdentity(
-                                            const QDBusMessage &peerMessage,
-                                            const QString &securityContext)
+                                        const QDBusMessage &peerMessage,
+                                        const QDBusVariant &applicationContext,
+                                        const SecurityContext &securityContext)
 {
     return isPeerAllowedToUseIdentity(peerMessage, securityContext);
 }
@@ -85,13 +95,13 @@ QString MSSFAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 }
 
 bool MSSFAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
-                                          const QStringList &aclList)
+                                          const SecurityContextList &aclList)
 {
     QStringList CredList =
         MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
     if (!aclList.isEmpty()) {
-        foreach (QString aclItem, aclList) {
-            if (!CredList.contains(aclItem)) {
+        foreach (SecurityContext aclItem, aclList) {
+            if (!CredList.contains(aclItem.first)) {
                 TRACE() << "An attempt to setup an acl" << aclItem 
                         << "is denied because process doesn't possess such token";
                 return false;

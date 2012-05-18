@@ -3,7 +3,7 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
- * Copyright (C) 2011 Intel Corporation.
+ * Copyright (C) 2011-2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
@@ -62,8 +62,9 @@ AccessControlManagerHelper::~AccessControlManagerHelper()
 
 bool
 AccessControlManagerHelper::isPeerAllowedToUseIdentity(
-                                               const QDBusMessage &peerMessage,
-                                               const quint32 identityId)
+                                        const QDBusMessage &peerMessage,
+                                        const QDBusVariant &applicationContext,
+                                        const quint32 identityId)
 {
     // TODO - improve this, the error handling and more precise behaviour
 
@@ -72,30 +73,43 @@ AccessControlManagerHelper::isPeerAllowedToUseIdentity(
         TRACE() << "NULL db pointer, secure storage might be unavailable,";
         return false;
     }
-    QStringList acl = db->accessControlList(identityId);
+    SecurityContextList acl = db->accessControlList(identityId);
 
-    TRACE() << QString(QLatin1String("Access control list of identity: "
-                                 "%1: [%2].Tokens count: %3\t"))
-                                .arg(identityId)
-                                .arg(acl.join(QLatin1String(", ")))
-                                .arg(acl.size());
+    QStringList aclStrings;
+    foreach (SecurityContext secCtx, acl) {
+        aclStrings.append(QLatin1String("[") +
+                          secCtx.first +
+                          QLatin1String(",") +
+                          secCtx.second +
+                          QLatin1String("]"));
+        TRACE() << QString(QLatin1String("Access control list of identity: "
+                                     "%1: {%2}.item count: %3\t"))
+                                    .arg(identityId)
+                                    .arg(aclStrings.join(QLatin1String(", ")))
+                                    .arg(aclStrings.size());
+    }
 
-    if (db->errorOccurred())
+    if (db->errorOccurred()) {
+        TRACE() << "Database error!";
         return false;
+    }
 
-    if (acl.isEmpty())
+    if (acl.isEmpty()) {
+        TRACE() << "ACL is empty!";
         return false;
+    }
 
-    if (acl.contains(QLatin1String("*")))
+    if (acl.contains(SecurityContext(QString::fromLatin1("*"))))
         return true;
 
-    return peerHasOneOfAccesses(peerMessage, acl);
+    return peerHasOneOfAccesses(peerMessage, applicationContext, acl);
 }
 
 AccessControlManagerHelper::IdentityOwnership
 AccessControlManagerHelper::isPeerOwnerOfIdentity(
-                                               const QDBusMessage &peerMessage,
-                                               const quint32 identityId)
+                                        const QDBusMessage &peerMessage,
+                                        const QDBusVariant &applicationContext,
+                                        const quint32 identityId)
 {
     CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
     if (db == 0) {
@@ -115,7 +129,9 @@ AccessControlManagerHelper::isPeerOwnerOfIdentity(
 
     foreach(QString securityContext, ownerSecContexts) {
         TRACE() << securityContext;
-        if (m_acManager->isPeerOwnerOfIdentity(peerMessage, securityContext))
+        if (m_acManager->isPeerOwnerOfIdentity(peerMessage,
+                                               applicationContext,
+                                               securityContext))
             return ApplicationIsOwner;
     }
     return ApplicationIsNotOwner;
@@ -125,28 +141,35 @@ bool
 AccessControlManagerHelper::isPeerKeychainWidget(
                                                 const QDBusMessage &peerMessage)
 {
-    static QString keychainWidgetAppId = m_acManager->keychainWidgetAppId();
+    static SecurityContext keychainWidgetAppId = SecurityContext(
+                                            m_acManager->keychainWidgetAppId(),
+                                            QString());
     QString peerAppId = m_acManager->appIdOfPeer(peerMessage);
     return (peerAppId == keychainWidgetAppId);
 }
 
-QString AccessControlManagerHelper::appIdOfPeer(const QDBusMessage &peerMessage)
+SecurityContext AccessControlManagerHelper::appIdOfPeer(
+                                        const QDBusMessage &peerMessage,
+                                        const QDBusVariant &applicationContext)
 {
+    Q_UNUSED(applicationContext);
     TRACE() << m_acManager->appIdOfPeer(peerMessage);
-    return m_acManager->appIdOfPeer(peerMessage);
+    return SecurityContext(m_acManager->appIdOfPeer(peerMessage));
 }
 
 bool
 AccessControlManagerHelper::peerHasOneOfAccesses(
-                                            const QDBusMessage &peerMessage,
-                                            const QStringList secContexts)
+                                        const QDBusMessage &peerMessage,
+                                        const QDBusVariant &applicationContext,
+                                        const SecurityContextList &secContexts)
 {
-    foreach (QString securityContext, secContexts) {
+    foreach (SecurityContext securityContext, secContexts) {
         TRACE() << securityContext;
-        if (securityContext == QString::fromLatin1("*"))
+        if (securityContext.first == QString::fromLatin1("*"))
             return true;
-        if (m_acManager->isPeerAllowedToUseIdentity(
-                                                peerMessage, securityContext))
+        if (m_acManager->isPeerAllowedToUseIdentity(peerMessage,
+                                                    applicationContext,
+                                                    securityContext))
             return true;
     }
 
@@ -156,11 +179,13 @@ AccessControlManagerHelper::peerHasOneOfAccesses(
 
 bool
 AccessControlManagerHelper::isPeerAllowedToAccess(
-                                               const QDBusMessage &peerMessage,
-                                               const QString securityContext)
+                                        const QDBusMessage &peerMessage,
+                                        const QDBusVariant &applicationContext,
+                                        const SecurityContext &securityContext)
 {
     TRACE() << securityContext;
     return m_acManager->isPeerAllowedToUseIdentity(peerMessage,
+                                                   applicationContext,
                                                    securityContext);
 }
 
@@ -170,8 +195,10 @@ pid_t AccessControlManagerHelper::pidOfPeer(const QDBusContext &peerContext)
     return peerContext.connection().interface()->servicePid(service).value();
 }
 
-bool AccessControlManagerHelper::isACLValid(const QDBusMessage &peerMessage,
-                                            const QStringList aclList)
+bool AccessControlManagerHelper::isACLValid(
+                                        const QDBusMessage &peerMessage,
+                                        const QDBusVariant &applicationContext,
+                                        const SecurityContextList &aclList)
 {
-    return m_acManager->isACLValid(peerMessage, aclList);
+    return m_acManager->isACLValid(peerMessage, applicationContext, aclList);
 }

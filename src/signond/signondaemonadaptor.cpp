@@ -71,7 +71,9 @@ void SignonDaemonAdaptor::getIdentity(const quint32 id,
                                       QVariantMap &identityData)
 {
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
-                                    parentDBusContext().message(), id)) {
+                                    parentDBusContext().message(),
+                                    applicationContext,
+                                    id)) {
         securityErrorReply(__func__);
         return;
     }
@@ -96,7 +98,9 @@ QString SignonDaemonAdaptor::getAuthSessionObjectPath(
     /* Access Control */
     if (id != SIGNOND_NEW_IDENTITY) {
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseAuthSession(
-                                        parentDBusContext().message(), id)) {
+                                        parentDBusContext().message(),
+                                        applicationContext,
+                                        id)) {
             securityErrorReply(__func__);
             return QString();
         }

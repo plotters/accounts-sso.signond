@@ -35,19 +35,23 @@ AbstractAccessControlManager::~AbstractAccessControlManager()
 }
 
 bool AbstractAccessControlManager::isPeerAllowedToUseIdentity(
-                                            const QDBusMessage &peerMessage,
-                                            const QString &securityContext)
+                                        const QDBusMessage &peerMessage,
+                                        const QDBusVariant &applicationContext,
+                                        const SecurityContext &securityContext)
 {
     Q_UNUSED(peerMessage);
+    Q_UNUSED(applicationContext);
     Q_UNUSED(securityContext);
     return true;
 }
 
 bool AbstractAccessControlManager::isPeerOwnerOfIdentity(
-                                               const QDBusMessage &peerMessage,
-                                               const QString &securityContext)
+                                        const QDBusMessage &peerMessage,
+                                        const QDBusVariant &applicationContext,
+                                        const SecurityContext &securityContext)
 {
     Q_UNUSED(peerMessage);
+    Q_UNUSED(applicationContext);
     Q_UNUSED(securityContext);
     return true;
 }
@@ -64,10 +68,13 @@ QString AbstractAccessControlManager::keychainWidgetAppId()
     return QString();
 }
 
-bool AbstractAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
-                                              const QStringList &aclList)
+bool AbstractAccessControlManager::isACLValid(
+                                        const QDBusMessage &peerMessage,
+                                        const QDBusVariant &applicationContext,
+                                        const SecurityContextList &aclList)
 {
     Q_UNUSED(peerMessage);
+    Q_UNUSED(applicationContext);
     Q_UNUSED(aclList);
     return true;
 }

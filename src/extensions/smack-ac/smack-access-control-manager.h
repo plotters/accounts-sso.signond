@@ -2,7 +2,7 @@
 /*
  * This file is part of signon
  *
- * Copyright (C) 2011 Intel Corporation.
+ * Copyright (C) 2011-2012 Intel Corporation.
  *
  * Contact: Elena Reshetova <elena.reshetova@intel.com>
  *
@@ -61,13 +61,16 @@ public:
      * specified identity.
      * The access type to be checked is execute. 
      * @param peerMessage, the request message sent over DBUS by the process.
-     * Identifies the process  itself. 
+     * Identifies the process itself.
+     * @param applicationContext, request context within a process.
      * @param securityContext, the security context of identity to be checked
      * against.
      * @returns true, if the peer is allowed, false otherwise.
      */
-    bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
-                                    const QString &securityContext);
+    bool isPeerAllowedToUseIdentity(
+                                const QDBusMessage &peerMessage,
+                                const QDBusVariant &applicationContext,
+                                const SignOn::SecurityContext &securityContext);
 
     /*!
      * Checks if a client process is owner of identity.
@@ -75,12 +78,14 @@ public:
      * manipulate identity and its parameters fully. 
      * @param peerMessage, the request message sent over DBUS by the process.
      * Identifies the process itself. 
+     * @param applicationContext, request context within a process.
      * @param securityContext, the security context of identity to be checked
      * against.
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
-                               const QString &securityContext);
+                               const QDBusVariant &applicationContext,
+                               const SignOn::SecurityContext &securityContext);
 
     /*!
      * Looks up for the application identifier of a specific client process.
@@ -88,7 +93,7 @@ public:
      * @returns the application identifier of the process, or an empty string
      * if none found.
      */
-     QString appIdOfPeer(const QDBusMessage &peerMessage);
+    QString appIdOfPeer(const QDBusMessage &peerMessage);
 
     /*!
      * @returns the application identifier of the keychain widget
@@ -103,11 +108,13 @@ public:
      * For example for an application with AppId "Camera", the valid acl
      * entries are "Camera", "Camera::certs", "Camera::keys".
      * @param peerMessage, the request message sent over DBUS by the process.
-     * @param aclList, the acl list to be checked against
+     * @param applicationContext, request context within a process.
+     * @param aclList, the acl list to be checked against.
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isACLValid(const QDBusMessage &peerMessage,
-                    const QStringList &aclList);
+                    const QDBusVariant &applicationContext,
+                    const SignOn::SecurityContextList &aclList);
 
 };
 

@@ -68,6 +68,7 @@ quint32 SignonIdentityAdaptor::requestCredentialsUpdate(
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
                                     parentDBusContext().message(),
+                                    applicationContext,
                                     m_parent->id())) {
         securityErrorReply(__func__);
         return 0;
@@ -81,7 +82,9 @@ QVariantMap SignonIdentityAdaptor::getInfo(
 {
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
-        parentDBusContext().message(), m_parent->id())) {
+        parentDBusContext().message(),
+        applicationContext,
+        m_parent->id())) {
         securityErrorReply(__func__);
         return QVariantMap();
     }
@@ -95,6 +98,7 @@ void SignonIdentityAdaptor::addReference(const QString &reference,
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
                                     parentDBusContext().message(),
+                                    applicationContext,
                                     m_parent->id())) {
         securityErrorReply(__func__);
         return;
@@ -114,6 +118,7 @@ void SignonIdentityAdaptor::removeReference(
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
                                     parentDBusContext().message(),
+                                    applicationContext,
                                     m_parent->id())) {
         securityErrorReply(__func__);
         return;
@@ -132,6 +137,7 @@ bool SignonIdentityAdaptor::verifyUser(const QVariantMap &params,
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
                                     parentDBusContext().message(),
+                                    applicationContext,
                                     m_parent->id())) {
         securityErrorReply(__func__);
         return false;
@@ -146,6 +152,7 @@ bool SignonIdentityAdaptor::verifySecret(const QString &secret,
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
                                     parentDBusContext().message(),
+                                    applicationContext,
                                     m_parent->id())) {
         securityErrorReply(__func__);
         return false;
@@ -159,7 +166,9 @@ void SignonIdentityAdaptor::remove(const QDBusVariant &applicationContext)
     /* Access Control */
     AccessControlManagerHelper::IdentityOwnership ownership =
             AccessControlManagerHelper::instance()->isPeerOwnerOfIdentity(
-                        parentDBusContext().message(), m_parent->id());
+                        parentDBusContext().message(),
+                        applicationContext,
+                        m_parent->id());
 
     if (ownership != AccessControlManagerHelper::IdentityDoesNotHaveOwner) {
         //Identity has an owner
@@ -179,7 +188,9 @@ bool SignonIdentityAdaptor::signOut(const QDBusVariant &applicationContext)
 {
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
-                             parentDBusContext().message(), m_parent->id())) {
+                             parentDBusContext().message(),
+                             applicationContext,
+                             m_parent->id())) {
         securityErrorReply(__func__);
         return false;
     }
@@ -195,7 +206,9 @@ quint32 SignonIdentityAdaptor::store(const QVariantMap &info,
     if (id != SIGNOND_NEW_IDENTITY) {
     AccessControlManagerHelper::IdentityOwnership ownership =
             AccessControlManagerHelper::instance()->isPeerOwnerOfIdentity(
-                        parentDBusContext().message(), m_parent->id());
+                        parentDBusContext().message(),
+                        applicationContext,
+                        m_parent->id());
 
         if (ownership != AccessControlManagerHelper::IdentityDoesNotHaveOwner) {
             //Identity has an owner

@@ -152,7 +152,9 @@ void SignonAuthSessionAdaptor::setId(quint32 id,
         return;
     }
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
-                                    dbusContext.message(), id)) {
+                                    dbusContext.message(),
+                                    applicationContext,
+                                    id)) {
         TRACE() << "setId called with an identifier the peer is not allowed "
             "to use";
         return;

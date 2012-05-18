@@ -213,6 +213,7 @@ SignonDaemon::SignonDaemon(QObject *parent) : QObject(parent)
     // Register D-Bus meta types
     qDBusRegisterMetaType<MethodMap>();
     qDBusRegisterMetaType<MapList>();
+    qDBusRegisterMetaType<SignOn::SecurityList>();
 }
 
 SignonDaemon::~SignonDaemon()

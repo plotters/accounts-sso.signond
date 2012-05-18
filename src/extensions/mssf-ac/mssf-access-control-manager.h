@@ -60,23 +60,27 @@ public:
      * The notion of access type doesn't exist in MSSF,
      * so simple check on token possesion is done instead.  
      * @param peerMessage, the request message sent over DBUS by the process.
+     * @param applicationContext, request context within a process.
      * @param securityContext, the security context of identity to be checked
      * against.
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
-                                    const QString &securityContext);
+                                    const QDBusVariant &applicationContext,
+                                    const SecurityContext &securityContext);
 
     /*!
      * Checks if a client process is owner of identity.
      * The notion of access type doesn't exist in MSSF, 
      * so simple check on token possesion is done instead.  
-     * @param peerMessage, the request message sent over DBUS by the process. 
+     * @param peerMessage, the request message sent over DBUS by the process.
+     * @param applicationContext, request context within a process. 
      * @param securityContext, the security context of identity to be checked
      * against.
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
+                               const QDBusVariant &applicationContext,
                                const QString &securityContext);
 
     /*!
@@ -97,11 +101,13 @@ public:
      * item.
      * A valid acl can contain only tokens that application itself has
      * @param peerMessage, the request message sent over DBUS by the process.
-     * @param aclList, the acl list to be checked against
+     * @param applicationContext, request context within a process.
+     * @param aclList, the acl list to be checked against.
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isACLValid(const QDBusMessage &peerMessage,
-                    const QStringList &aclList);
+                    const QDBusVariant &applicationContext,
+                    const SecurityContextList &aclList);
 
 };
 
