@@ -375,14 +375,14 @@ void SignonSessionCore::startProcess()
                 parameters[SSO_KEY_USERNAME] = info.userName();
             }
 
-            SecurityContextList paramsTokenList;
+            SignOn::SecurityList paramsTokenList;
             SignOn::SecurityContextList identityAclList =
                 info.accessControlList();
 
             foreach(SignOn::SecurityContext secCtx, identityAclList)
                 if (AccessControlManagerHelper::instance()->isPeerAllowedToAccess(
                     data.m_msg, data.m_appctx, secCtx))
-                    paramsTokenList.append(secCtx);
+                    paramsTokenList.append(secCtx.toStringList());
 
             if (!paramsTokenList.isEmpty()) {
                 parameters[SSO_ACCESS_CONTROL_TOKENS] = paramsTokenList;
