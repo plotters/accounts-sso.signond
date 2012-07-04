@@ -3,9 +3,11 @@
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
  * Copyright (C) 2012 Canonical Ltd.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -47,16 +49,22 @@ public:
         { return *static_cast<QDBusContext *>(m_parent); }
 
 public Q_SLOTS:
-    quint32 requestCredentialsUpdate(const QString &message);
-    QVariantMap getInfo();
-    void addReference(const QString &reference);
-    void removeReference(const QString &reference);
+    quint32 requestCredentialsUpdate(const QString &message,
+                                     const QDBusVariant &applicationContext);
+    QVariantMap getInfo(const QDBusVariant &applicationContext);
+    void addReference(const QString &reference,
+                      const QDBusVariant &applicationContext);
+    void removeReference(const QString &reference,
+                         const QDBusVariant &applicationContext);
 
-    bool verifyUser(const QVariantMap &params);
-    bool verifySecret(const QString &secret);
-    void remove();
-    bool signOut();
-    quint32 store(const QVariantMap &info);
+    bool verifyUser(const QVariantMap &params,
+                    const QDBusVariant &applicationContext);
+    bool verifySecret(const QString &secret,
+                      const QDBusVariant &applicationContext);
+    void remove(const QDBusVariant &applicationContext);
+    bool signOut(const QDBusVariant &applicationContext);
+    quint32 store(const QVariantMap &info,
+                  const QDBusVariant &applicationContext);
 
 Q_SIGNALS:
     void unregistered();

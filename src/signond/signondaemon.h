@@ -3,9 +3,11 @@
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
  * Copyright (C) 2012 Canonical Ltd.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -124,10 +126,15 @@ public:
 public Q_SLOTS:
     /* Immediate reply calls */
 
-    void registerNewIdentity(QDBusObjectPath &objectPath);
-    void getIdentity(const quint32 id, QDBusObjectPath &objectPath,
+    void registerNewIdentity(const QDBusVariant &applicationContext,
+                             QDBusObjectPath &objectPath);
+    void getIdentity(const quint32 id,
+                     const QDBusVariant &applicationContext,
+                     QDBusObjectPath &objectPath,
                      QVariantMap &identityData);
-    QString getAuthSessionObjectPath(const quint32 id, const QString type);
+    QString getAuthSessionObjectPath(const quint32 id,
+                                     const QString type,
+                                     const QDBusVariant &applicationContext);
 
     QStringList queryMethods();
     QStringList queryMechanisms(const QString &method);

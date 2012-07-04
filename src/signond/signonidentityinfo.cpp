@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -24,6 +26,7 @@
 
 #include <QBuffer>
 #include <QDataStream>
+#include <QDBusMetaType>
 #include <QDebug>
 
 namespace SignonDaemonNS {
@@ -36,8 +39,8 @@ SignonIdentityInfo::SignonIdentityInfo():
     m_caption(QString()),
     m_methods(QMap<QString, QStringList>()),
     m_realms(QStringList()),
-    m_accessControlList(QStringList()),
-    m_ownerList(QStringList()),
+    m_accessControlList(SignOn::SecurityContextList()),
+    m_ownerList(SignOn::SecurityContextList()),
     m_type(0),
     m_refCount(0),
     m_validated(false),
@@ -53,8 +56,8 @@ SignonIdentityInfo::SignonIdentityInfo(const QVariantMap &info):
     m_caption(QString()),
     m_methods(QMap<QString, QStringList>()),
     m_realms(QStringList()),
-    m_accessControlList(QStringList()),
-    m_ownerList(QStringList()),
+    m_accessControlList(SignOn::SecurityContextList()),
+    m_ownerList(SignOn::SecurityContextList()),
     m_type(0),
     m_refCount(0),
     m_validated(false),
@@ -66,28 +69,30 @@ SignonIdentityInfo::SignonIdentityInfo(const QVariantMap &info):
     m_storePassword = info.value(SIGNOND_IDENTITY_INFO_STORESECRET).toBool();
     m_caption = info.value(SIGNOND_IDENTITY_INFO_CAPTION).toString();
     m_methods =
-        info.value(SIGNOND_IDENTITY_INFO_AUTHMETHODS).value<MethodMap>();
-
+        qdbus_cast<MethodMap>(info.value(SIGNOND_IDENTITY_INFO_AUTHMETHODS));
     m_realms = info.value(SIGNOND_IDENTITY_INFO_REALMS).toStringList();
-    m_accessControlList = info.value(SIGNOND_IDENTITY_INFO_ACL).toStringList();
-    m_ownerList = info.value(SIGNOND_IDENTITY_INFO_OWNER).toStringList();
+    m_accessControlList =
+        qdbus_cast<SignOn::SecurityList>(info.value(SIGNOND_IDENTITY_INFO_ACL));
+    m_ownerList = SignOn::SecurityContext(
+                        info.value(SIGNOND_IDENTITY_INFO_OWNER).toStringList());
     m_type = info.value(SIGNOND_IDENTITY_INFO_TYPE).toInt();
     m_refCount = info.value(SIGNOND_IDENTITY_INFO_REFCOUNT).toInt();
     m_validated = info.value(SIGNOND_IDENTITY_INFO_VALIDATED).toBool();
 }
 
-SignonIdentityInfo::SignonIdentityInfo(const quint32 id,
-                                       const QString &userName,
-                                       const QString &password,
-                                       const bool storePassword,
-                                       const QString &caption,
-                                       const MethodMap &methods,
-                                       const QStringList &realms,
-                                       const QStringList &accessControlList,
-                                       const QStringList &ownerList,
-                                       int type,
-                                       int refCount,
-                                       bool validated):
+SignonIdentityInfo::SignonIdentityInfo(
+                        const quint32 id,
+                        const QString &userName,
+                        const QString &password,
+                        const bool storePassword,
+                        const QString &caption,
+                        const MethodMap &methods,
+                        const QStringList &realms,
+                        const SignOn::SecurityContextList &accessControlList,
+                        const SignOn::SecurityContextList &ownerList,
+                        int type,
+                        int refCount,
+                        bool validated):
     m_id(id),
     m_userName(userName),
     m_password(password),
@@ -104,7 +109,7 @@ SignonIdentityInfo::SignonIdentityInfo(const quint32 id,
 {
 }
 
-const QList<QVariant> SignonIdentityInfo::toVariantList()
+/*const QList<QVariant> SignonIdentityInfo::toVariantList()
 {
     QList<QVariant> list;
     list << m_id
@@ -113,14 +118,14 @@ const QList<QVariant> SignonIdentityInfo::toVariantList()
          << m_caption
          << m_realms
          << QVariant::fromValue(m_methods)
-         << m_accessControlList
+         << QVariant::fromValue(m_accessControlList)
          << m_type
          << m_refCount
          << m_validated
          << m_isUserNameSecret;
 
     return list;
-}
+}*/
 
 const QVariantMap SignonIdentityInfo::toMap() const
 {
@@ -132,7 +137,10 @@ const QVariantMap SignonIdentityInfo::toMap() const
     values.insert(SIGNOND_IDENTITY_INFO_REALMS, m_realms);
     values.insert(SIGNOND_IDENTITY_INFO_AUTHMETHODS,
                   QVariant::fromValue(m_methods));
-    values.insert(SIGNOND_IDENTITY_INFO_ACL, m_accessControlList);
+    values.insert(SIGNOND_IDENTITY_INFO_ACL,
+                  QVariant::fromValue(m_accessControlList.toSecurityList()));
+    values.insert(SIGNOND_IDENTITY_INFO_OWNER,
+                  m_ownerList.value(0).toStringList());
     values.insert(SIGNOND_IDENTITY_INFO_TYPE, m_type);
     values.insert(SIGNOND_IDENTITY_INFO_REFCOUNT, m_refCount);
     values.insert(SIGNOND_IDENTITY_INFO_VALIDATED, m_validated);
@@ -166,6 +174,7 @@ bool SignonIdentityInfo::operator==(const SignonIdentityInfo &other) const
             && (m_caption == other.m_caption)
             && (me.m_realms ==you.m_realms)
             && (me.m_accessControlList == you.m_accessControlList)
+            && (me.m_ownerList == you.m_ownerList)
             && (m_type == other.m_type)
             && (m_validated == other.m_validated);
 }

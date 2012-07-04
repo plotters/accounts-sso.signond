@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2011 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -68,11 +70,13 @@ StoreOperation::~StoreOperation()
 
 RequestData::RequestData(const QDBusConnection &conn,
                          const QDBusMessage &msg,
+                         const QDBusVariant &appctx,
                          const QVariantMap &params,
                          const QString &mechanism,
                          const QString &cancelKey):
     m_conn(conn),
     m_msg(msg),
+    m_appctx(appctx),
     m_params(params),
     m_mechanism(mechanism),
     m_cancelKey(cancelKey)

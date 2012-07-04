@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -24,10 +26,12 @@
 #define SIGNONIDENTITYINFO_H
 
 #include <QMap>
+#include <QList>
 #include <QStringList>
 #include <QVariant>
 
 #include "signond/signoncommon.h"
+#include "SignOn/securitycontext.h"
 
 namespace SignonDaemonNS {
 
@@ -44,20 +48,21 @@ struct SignonIdentityInfo
 {
     SignonIdentityInfo();
     SignonIdentityInfo(const QVariantMap &info);
-    SignonIdentityInfo(const quint32 id,
-                       const QString &userName,
-                       const QString &password,
-                       const bool storePassword,
-                       const QString &caption,
-                       const MethodMap &methods,
-                       const QStringList &realms = QStringList(),
-                       const QStringList &accessControlList = QStringList(),
-                       const QStringList &ownerList = QStringList(),
-                       int type = 0,
-                       int refCount = 0,
-                       bool validated = false);
+    SignonIdentityInfo(
+        const quint32 id,
+        const QString &userName,
+        const QString &password,
+        const bool storePassword,
+        const QString &caption,
+        const MethodMap &methods,
+        const QStringList &realms = QStringList(),
+        const SignOn::SecurityContextList &accessControlList = SignOn::SecurityContextList(),
+        const SignOn::SecurityContextList &ownerList = SignOn::SecurityContextList(),
+        int type = 0,
+        int refCount = 0,
+        bool validated = false);
 
-    const QList<QVariant> toVariantList();
+    //const QList<QVariant> toVariantList();
     const QVariantMap toMap() const;
 
     bool operator== (const SignonIdentityInfo &other) const;
@@ -87,9 +92,10 @@ struct SignonIdentityInfo
         { m_methods = methods; }
     MethodMap methods() const { return m_methods; }
 
-    void setAccessControlList(const QStringList &acl)
+    void setAccessControlList(const SignOn::SecurityContextList &acl)
         { m_accessControlList = acl; }
-    QStringList accessControlList() const { return m_accessControlList; }
+    SignOn::SecurityContextList accessControlList() const
+        { return m_accessControlList; }
 
     void setValidated(bool validated) { m_validated = validated; }
     bool validated() const { return m_validated; }
@@ -97,8 +103,9 @@ struct SignonIdentityInfo
     void setType(const int type) { m_type = type; }
     int type() const { return m_type; }
 
-    void setOwnerList(const QStringList &owner) { m_ownerList = owner; }
-    QStringList ownerList() const { return m_ownerList; }
+    void setOwnerList(const SignOn::SecurityContextList &owner)
+        { m_ownerList = owner; }
+    SignOn::SecurityContextList ownerList() const { return m_ownerList; }
 
     bool checkMethodAndMechanism(const QString &method,
                                  const QString &mechanism,
@@ -112,8 +119,8 @@ private:
     QString m_caption;
     MethodMap m_methods;
     QStringList m_realms;
-    QStringList m_accessControlList;
-    QStringList m_ownerList;
+    SignOn::SecurityContextList m_accessControlList;
+    SignOn::SecurityContextList m_ownerList;
     int m_type;
     int m_refCount;
     bool m_validated;

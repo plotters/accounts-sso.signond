@@ -2,7 +2,7 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
- * Copyright (C) 2011 Intel Corporation.
+ * Copyright (C) 2011-2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
@@ -50,7 +50,8 @@ void SignonAuthSessionAdaptor::errorReply(const QString &name,
 
 QStringList
 SignonAuthSessionAdaptor::queryAvailableMechanisms(
-                                           const QStringList &wantedMechanisms)
+                                        const QStringList &wantedMechanisms,
+                                        const QDBusVariant &applicationContext)
 {
     TRACE();
 
@@ -67,11 +68,14 @@ SignonAuthSessionAdaptor::queryAvailableMechanisms(
         return QStringList();
     }
 
-    return parent()->queryAvailableMechanisms(wantedMechanisms);
+    return parent()->queryAvailableMechanisms(wantedMechanisms,
+                                              applicationContext);
 }
 
-QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
-                                              const QString &mechanism)
+QVariantMap SignonAuthSessionAdaptor::process(
+                                        const QVariantMap &sessionDataVa,
+                                        const QString &mechanism,
+                                        const QDBusVariant &applicationContext)
 {
     TRACE();
 
@@ -116,10 +120,12 @@ QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
         return QVariantMap();
     }
 
-    return parent()->process(sessionDataVa, allowedMechanism);
+    return parent()->process(sessionDataVa,
+                             allowedMechanism,
+                             applicationContext);
 }
 
-void SignonAuthSessionAdaptor::cancel()
+void SignonAuthSessionAdaptor::cancel(const QDBusVariant &applicationContext)
 {
     TRACE();
 
@@ -130,10 +136,11 @@ void SignonAuthSessionAdaptor::cancel()
         return;
     }
 
-    parent()->cancel();
+    parent()->cancel(applicationContext);
 }
 
-void SignonAuthSessionAdaptor::setId(quint32 id)
+void SignonAuthSessionAdaptor::setId(quint32 id,
+                                     const QDBusVariant &applicationContext)
 {
     TRACE();
 
@@ -145,16 +152,19 @@ void SignonAuthSessionAdaptor::setId(quint32 id)
         return;
     }
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
-                                    dbusContext.message(), id)) {
+                                    dbusContext.message(),
+                                    applicationContext,
+                                    id)) {
         TRACE() << "setId called with an identifier the peer is not allowed "
             "to use";
         return;
     }
 
-    parent()->setId(id);
+    parent()->setId(id, applicationContext);
 }
 
-void SignonAuthSessionAdaptor::objectUnref()
+void SignonAuthSessionAdaptor::objectUnref(
+                                        const QDBusVariant &applicationContext)
 {
     TRACE();
 
@@ -166,7 +176,7 @@ void SignonAuthSessionAdaptor::objectUnref()
         return;
     }
 
-    parent()->objectUnref();
+    parent()->objectUnref(applicationContext);
 }
 
 } //namespace SignonDaemonNS

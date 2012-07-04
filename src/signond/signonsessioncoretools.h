@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2011 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -27,6 +29,7 @@
 #include <QObject>
 #include <QVariantMap>
 #include <QDBusMessage>
+#include <QDBusVariant>
 
 #include "signonidentityinfo.h"
 
@@ -72,6 +75,7 @@ struct RequestData
 {
     RequestData(const QDBusConnection &conn,
                 const QDBusMessage &msg,
+                const QDBusVariant &appctx,
                 const QVariantMap &params,
                 const QString &mechanism,
                 const QString &cancelKey);
@@ -82,6 +86,7 @@ struct RequestData
 public:
     QDBusConnection m_conn;
     QDBusMessage m_msg;
+    QDBusVariant m_appctx;
     QVariantMap m_params;
     QString m_mechanism;
     QString m_cancelKey;
