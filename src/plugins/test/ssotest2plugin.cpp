@@ -22,7 +22,6 @@
 
 #include <QMutex>
 #include <QMutexLocker>
-#include <QImage>
 #include <unistd.h>
 
 #include "ssotest2plugin.h"
@@ -86,15 +85,11 @@ void SsoTest2Plugin::process(const SignOn::SessionData &inData,
 
 static QByteArray loadImage(const QString &name)
 {
-    //TODO: adopt to something changeable
-    QString resource = QLatin1String(":/");
-    QByteArray ba;
+    Q_UNUSED(name);
 
-    QImage realImage(resource + name);
-    QBuffer buffer(&ba);
-    buffer.open(QIODevice::ReadWrite);
-    ba.clear();
-    realImage.save(&buffer);
+    //TODO: adopt to something changeable
+    QByteArray ba(128 * 128 * 4, 0xaa);
+
     return ba;
 }
 
