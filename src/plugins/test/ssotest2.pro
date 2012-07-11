@@ -2,8 +2,6 @@ TARGET = ssotest2plugin
 
 include( ../plugins.pri )
 
-QT += gui
-
 HEADERS += ssotest2plugin.h \
            ssotest2data.h
 
