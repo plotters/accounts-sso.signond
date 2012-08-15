@@ -93,7 +93,6 @@ int finishedClients = 0;
 #define AEGIS_TOKEN_4 "token_4"
 #define AEGIS_TOKEN_5 "AID::com.nokia.maemo.libsignon-qt-tests.libsignon-qt-tests-id"
 
-#define TEST_AEGIS_TOKEN "libsignon-qt-tests::libsignon-qt-tests"
 
 SsoTestClient::SsoTestClient(SignOnUI *signOnUI, QObject *parent):
     QObject(parent),
@@ -201,7 +200,7 @@ void SsoTestClient::queryAvailableMetods()
                       "TEST_USERNAME_1",
                       methods);
     info.setSecret("TEST_PASSWORD_1");
-    info.setAccessControlList(QStringList() << TEST_AEGIS_TOKEN);
+    info.setAccessControlList(QStringList(QString::fromLatin1("*")));
 
     if (!storeCredentialsPrivate(info))
         QFAIL("Failed to initialize test for querying available methods.");
@@ -332,7 +331,7 @@ void SsoTestClient::remove()
                       "TEST_USERNAME_1",
                       methods);
     info.setSecret("TEST_PASSWORD_1");
-    info.setAccessControlList(QStringList() << TEST_AEGIS_TOKEN);
+    info.setAccessControlList(QStringList(QString::fromLatin1("*")));
 
     if (!storeCredentialsPrivate(info))
         QFAIL("Failed to initialize test for removing identity.");
@@ -430,7 +429,7 @@ void SsoTestClient::removeStoreRemove()
                       "TEST_USERNAME_1",
                       methods);
     info.setSecret("TEST_PASSWORD_1");
-    info.setAccessControlList(QStringList() << TEST_AEGIS_TOKEN);
+    info.setAccessControlList(QStringList(QString::fromLatin1("*")));
 
     if (!storeCredentialsPrivate(info))
         QFAIL("Failed to initialize test for removing identity.");
@@ -477,7 +476,7 @@ void SsoTestClient::removeStoreRemove()
                           "TEST_USERNAME_10",
                           methods);
         updateInfo.setSecret("TEST_PASSWORD_10");
-        updateInfo.setAccessControlList(QStringList() << TEST_AEGIS_TOKEN);
+        updateInfo.setAccessControlList(QStringList(QString::fromLatin1("*")));
 
         m_identityResult.m_responseReceived = TestIdentityResult::InexistentResp;
         identity->storeCredentials(updateInfo);
@@ -562,7 +561,7 @@ void SsoTestClient::multipleRemove()
                       "TEST_USERNAME_1",
                       methods);
     info.setSecret("TEST_PASSWORD_1");
-    info.setAccessControlList(QStringList() << TEST_AEGIS_TOKEN);
+    info.setAccessControlList(QStringList(QString::fromLatin1("*")));
 
     if (!storeCredentialsPrivate(info))
         QFAIL("Failed to initialize test for removing identity.");
@@ -648,7 +647,8 @@ void SsoTestClient::queryInfo()
                       methods);
     info.setSecret("TEST_PASSWORD_1");
     info.setRealms(QStringList() << "test_realm");
-    info.setAccessControlList(QStringList() << TEST_AEGIS_TOKEN);
+    info.setOwner(QStringList(QString::fromLatin1("*")));
+    info.setAccessControlList(QStringList(QString::fromLatin1("*")));
 
     if (!storeCredentialsPrivate(info))
         QFAIL("Failed to initialize test for querying info.");
@@ -711,7 +711,7 @@ void SsoTestClient::addReference()
                       methods);
     info.setSecret("TEST_PASSWORD_1");
     info.setRealms(QStringList() << "test_realm");
-    info.setAccessControlList(QStringList() << TEST_AEGIS_TOKEN);
+    info.setAccessControlList(QStringList(QString::fromLatin1("*")));
 
     if (!storeCredentialsPrivate(info))
         QFAIL("Failed to initialize test for querying info.");
@@ -770,7 +770,7 @@ void SsoTestClient::removeReference()
                       methods);
     info.setSecret("TEST_PASSWORD_1");
     info.setRealms(QStringList() << "test_realm");
-    info.setAccessControlList(QStringList() << TEST_AEGIS_TOKEN);
+    info.setAccessControlList(QStringList(QString::fromLatin1("*")));
 
     if (!storeCredentialsPrivate(info))
         QFAIL("Failed to initialize test for querying info.");
@@ -831,7 +831,7 @@ void SsoTestClient::verifyUser()
                       "TEST_USERNAME_1",
                       methods);
     info.setSecret(password);
-    info.setAccessControlList(QStringList() << TEST_AEGIS_TOKEN);
+    info.setAccessControlList(QStringList(QString::fromLatin1("*")));
 
     if (!storeCredentialsPrivate(info))
         QFAIL("Failed to initialize test for verifying user.");
@@ -893,7 +893,7 @@ void SsoTestClient::verifySecret()
                       "TEST_USERNAME_1",
                       methods);
     info.setSecret("TEST_PASSWORD_1");
-    info.setAccessControlList(QStringList() << TEST_AEGIS_TOKEN);
+    info.setAccessControlList(QStringList(QString::fromLatin1("*")));
 
     if (!storeCredentialsPrivate(info))
         QFAIL("Failed to initialize test for verifying secret.");
@@ -952,7 +952,7 @@ void SsoTestClient::signOut()
                       "TEST_USERNAME_1",
                       methods);
     info.setSecret("TEST_PASSWORD_1");
-    info.setAccessControlList(QStringList() << TEST_AEGIS_TOKEN);
+    info.setAccessControlList(QStringList(QString::fromLatin1("*")));
 
     if (!storeCredentialsPrivate(info))
         QFAIL("Failed to initialize test for signing out.");
@@ -1114,6 +1114,7 @@ void SsoTestClient::initAuthServiceTest()
                           QString("TEST_USERNAME_%1").arg(i),
                           methods);
         info.setSecret(QString("TEST_PASSWORD_%1").arg(i));
+        info.setAccessControlList(QStringList(QString::fromLatin1("*")));
         Identity *identity = Identity::newIdentity(info);
 
         QEventLoop loop;
@@ -1307,6 +1308,7 @@ void SsoTestClient::queryIdentitiesWithFilter()
     IdentityInfo info(QLatin1String("CAPTION"),
                       QLatin1String("TEST_FILTER_USERNAME"),
                       QMap<MethodName, MechanismsList>());
+    info.setAccessControlList(QStringList(QString::fromLatin1("*")));
     QVERIFY(storeCredentialsPrivate(info));
     info.setRealms(QStringList() << QLatin1String("www.realm-filter.com"));
     QVERIFY(storeCredentialsPrivate(info));
@@ -1391,8 +1393,12 @@ void SsoTestClient::queryAuthPluginACL()
                       "test_username_1",
                       methods);
     info.setSecret("test_password_1");
-    info.setAccessControlList(QStringList() << AEGIS_TOKEN_0 << AEGIS_TOKEN_1 << AEGIS_TOKEN_2
-                                            << AEGIS_TOKEN_3 << AEGIS_TOKEN_4 << AEGIS_TOKEN_5);
+    info.setOwner(QStringList()
+            << AEGIS_TOKEN_0 << AEGIS_TOKEN_1 << AEGIS_TOKEN_2
+            << AEGIS_TOKEN_3 << AEGIS_TOKEN_4 << AEGIS_TOKEN_5);
+    info.setAccessControlList(QStringList()
+            << AEGIS_TOKEN_0 << AEGIS_TOKEN_1 << AEGIS_TOKEN_2
+            << AEGIS_TOKEN_3 << AEGIS_TOKEN_4 << AEGIS_TOKEN_5);
 
     Identity *id = Identity::newIdentity(info, this);
 
@@ -1536,6 +1542,7 @@ bool SsoTestClient::testAddingNewCredentials(bool addMethods)
     IdentityInfo info("TEST_CAPTION", "TEST_USERNAME", methods);
     info.setSecret("TEST_SECRET");
     info.setRealms(QStringList() << "TEST_REALM1" << "TEST_REALM2");
+    info.setAccessControlList(QStringList(QString::fromLatin1("*")));
 
     Identity *identity = Identity::newIdentity(info, this);
 
@@ -1613,6 +1620,7 @@ bool SsoTestClient::testUpdatingCredentials(bool addMethods)
 
     IdentityInfo updateInfo("TEST_CAPTION", "TEST_USERNAME_UPDATED", methods);
     updateInfo.setSecret("TEST_SECRET_YES", false);
+    updateInfo.setAccessControlList(QStringList(QString::fromLatin1("*")));
 
     do
     {

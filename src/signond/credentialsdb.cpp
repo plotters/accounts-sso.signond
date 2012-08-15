@@ -3,9 +3,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -231,21 +233,43 @@ QString SqlDatabase::errorInfo(const QSqlError &error)
     return text;
 }
 
-QStringList SqlDatabase::queryList(const QString &query_str)
+QStringList SqlDatabase::queryStringList(const QString &query_str)
 {
     QSqlQuery query(QString(), m_database);
     if (!query.prepare(query_str))
         TRACE() << "Query prepare warning: " << query.lastQuery();
-    return queryList(query);
+    return queryStringList(query);
 }
 
-QStringList SqlDatabase::queryList(QSqlQuery &q)
+QStringList SqlDatabase::queryStringList(QSqlQuery &q)
 {
     QStringList list;
     QSqlQuery query = exec(q);
     if (errorOccurred()) return list;
     while (query.next()) {
         list.append(query.value(0).toString());
+    }
+    query.clear();
+    return list;
+}
+
+SignOn::SecurityContextList SqlDatabase::queryStringTupleList(
+                                                    const QString &query_str)
+{
+    QSqlQuery query(QString(), m_database);
+    if (!query.prepare(query_str))
+        TRACE() << "Query prepare warning: " << query.lastQuery();
+    return queryStringTupleList(query);
+}
+
+SignOn::SecurityContextList SqlDatabase::queryStringTupleList(QSqlQuery &q)
+{
+    SignOn::SecurityContextList list;
+    QSqlQuery query = exec(q);
+    if (errorOccurred()) return list;
+    while (query.next()) {
+        list.append(SignOn::SecurityContext(query.value(0).toString(),
+                                            query.value(1).toString()));
     }
     query.clear();
     return list;
@@ -312,7 +336,13 @@ bool MetaDataDB::createTables()
         <<  QString::fromLatin1(
             "CREATE TABLE TOKENS"
             "(id INTEGER PRIMARY KEY AUTOINCREMENT,"
-            "token TEXT UNIQUE)")
+            "sysctx TEXT,"
+            "appctx TEXT,"
+            "CONSTRAINT tokc UNIQUE(sysctx, appctx) ON CONFLICT REPLACE)")
+        <<  QString::fromLatin1(
+            "CREATE INDEX sysidx ON TOKENS(sysctx)")
+        <<  QString::fromLatin1(
+            "CREATE INDEX appidx ON TOKENS(appctx)")
         <<  QString::fromLatin1(
             "CREATE TABLE REALMS"
             "(identity_id INTEGER CONSTRAINT fk_identity_id REFERENCES CREDENTIALS(id) ON DELETE CASCADE,"
@@ -591,11 +621,12 @@ bool MetaDataDB::updateDB(int version)
     return SqlDatabase::updateDB(version);
 }
 
-QStringList MetaDataDB::methods(const quint32 id, const QString &securityToken)
+QStringList MetaDataDB::methods(const quint32 id,
+                                const SignOn::SecurityContext &secCtx)
 {
     QStringList list;
-    if (securityToken.isEmpty()) {
-        list = queryList(
+    if (secCtx.sysCtx.isEmpty()) {
+        list = queryStringList(
                  QString::fromLatin1("SELECT DISTINCT METHODS.method FROM "
                         "( ACL JOIN METHODS ON ACL.method_id = METHODS.id ) "
                         "WHERE ACL.identity_id = '%1'").arg(id)
@@ -604,12 +635,14 @@ QStringList MetaDataDB::methods(const quint32 id, const QString &securityToken)
     }
     QSqlQuery q = newQuery();
     q.prepare(S("SELECT DISTINCT METHODS.method FROM "
-                "( ACL JOIN METHODS ON ACL.method_id = METHODS.id) "
+                "( ACL JOIN METHODS ON ACL.method_id = METHODS.id ) "
                 "WHERE ACL.identity_id = :id AND ACL.token_id = "
-                "(SELECT id FROM TOKENS where token = :token)"));
+                "(SELECT id FROM TOKENS "
+                "WHERE sysctx = :sysctx AND appctx = :appctx)"));
     q.bindValue(S(":id"), id);
-    q.bindValue(S(":token"), securityToken);
-    list = queryList(q);
+    q.bindValue(S(":sysctx"), secCtx.sysCtx);
+    q.bindValue(S(":appctx"), secCtx.appCtx);
+    list = queryStringList(q);
 
     return list;
 }
@@ -654,25 +687,24 @@ SignonIdentityInfo MetaDataDB::identity(const quint32 id)
     int type = query.value(3).toInt();
 
     query.clear();
-    QStringList realms = queryList(
+    QStringList realms = queryStringList(
             QString::fromLatin1("SELECT realm FROM REALMS "
-                    "WHERE identity_id = %1").arg(id));
+                                "WHERE identity_id = %1").arg(id));
 
-    QStringList ownerTokens = queryList(
-            QString::fromLatin1("SELECT token FROM TOKENS "
-                                "WHERE id IN "
-                                "(SELECT token_id FROM OWNER WHERE identity_id = '%1' )")
-                                .arg(id));
+    SignOn::SecurityContextList ownerTokens = queryStringTupleList(
+            QString::fromLatin1(
+                    "SELECT sysctx, appctx FROM TOKENS "
+                    "WHERE id IN "
+                    "(SELECT token_id FROM OWNER WHERE identity_id = '%1' )")
+                    .arg(id));
 
-    query_str = QString::fromLatin1("SELECT token FROM TOKENS "
-            "WHERE id IN "
-            "(SELECT token_id FROM ACL WHERE identity_id = '%1' )")
-            .arg(id);
-    query = exec(query_str);
-    QStringList securityTokens;
-    while (query.next()) {
-        securityTokens.append(query.value(0).toString());
-    }
+    SignOn::SecurityContextList aclTokens = queryStringTupleList(
+        QString::fromLatin1(
+                    "SELECT sysctx, appctx FROM TOKENS "
+                    "WHERE id IN "
+                    "(SELECT token_id FROM ACL WHERE identity_id = '%1' )")
+                    .arg(id));
+
     query.clear();
     MethodMap methods;
     query_str = QString::fromLatin1(
@@ -681,12 +713,13 @@ SignonIdentityInfo MetaDataDB::identity(const quint32 id)
             "WHERE ACL.identity_id = '%1'").arg(id);
     query = exec(query_str);
     while (query.next()) {
-        QStringList mechanisms = queryList(
-                QString::fromLatin1("SELECT DISTINCT MECHANISMS.mechanism FROM "
-                        "( MECHANISMS JOIN ACL "
-                        "ON ACL.mechanism_id = MECHANISMS.id ) "
-                        "WHERE ACL.method_id = '%1' AND ACL.identity_id = '%2' ")
-                        .arg(query.value(0).toInt()).arg(id));
+        QStringList mechanisms = queryStringList(
+                QString::fromLatin1(
+                    "SELECT DISTINCT MECHANISMS.mechanism FROM "
+                    "( MECHANISMS JOIN ACL "
+                    "ON ACL.mechanism_id = MECHANISMS.id ) "
+                    "WHERE ACL.method_id = '%1' AND ACL.identity_id = '%2' ")
+                    .arg(query.value(0).toInt()).arg(id));
             methods.insert(query.value(1).toString(), mechanisms);
     }
     query.clear();
@@ -696,7 +729,7 @@ SignonIdentityInfo MetaDataDB::identity(const quint32 id)
 
     SignonIdentityInfo info =
         SignonIdentityInfo(id, username, QString(), savePassword,
-                           caption, methods, realms, securityTokens,
+                           caption, methods, realms, aclTokens,
                            ownerTokens,
                            type, refCount, validated);
     info.setUserNameSecret(isUserNameSecret);
@@ -755,21 +788,26 @@ quint32 MetaDataDB::updateIdentity(const SignonIdentityInfo &info)
         return 0;
     }
 
-    /* Security tokens insert */
-    foreach (QString token, info.accessControlList()) {
+    /* Security context insert */
+    foreach (SignOn::SecurityContext secCtx, info.accessControlList()) {
         QSqlQuery tokenInsert = newQuery();
-        tokenInsert.prepare(S("INSERT OR IGNORE INTO TOKENS (token) "
-                              "VALUES ( :token )"));
-        tokenInsert.bindValue(S(":token"), token);
+        TRACE() << "Insert ACL tokens: [" << secCtx.sysCtx << ", " << secCtx.appCtx << "]";
+        tokenInsert.prepare(S("INSERT OR IGNORE INTO TOKENS (sysctx, appctx) "
+                              "VALUES ( :sysctx, :appctx )"));
+        tokenInsert.bindValue(S(":sysctx"), secCtx.sysCtx);
+        tokenInsert.bindValue(S(":appctx"), secCtx.appCtx);
         exec(tokenInsert);
     }
 
-    foreach (QString token, info.ownerList()) {
-        if (!token.isEmpty()) {
+    foreach (SignOn::SecurityContext secCtx, info.ownerList()) {
+        if (!secCtx.sysCtx.isEmpty()) {
             QSqlQuery tokenInsert = newQuery();
-            tokenInsert.prepare(S("INSERT OR IGNORE INTO TOKENS (token) "
-                                  "VALUES ( :token )"));
-            tokenInsert.bindValue(S(":token"), token);
+            TRACE() << "Insert owner tokens: [" << secCtx.sysCtx << ", " << secCtx.appCtx << "]";
+            tokenInsert.prepare(S(
+                                "INSERT OR IGNORE INTO TOKENS (sysctx, appctx) "
+                                "VALUES ( :sysctx, :appctx )"));
+            tokenInsert.bindValue(S(":sysctx"), secCtx.sysCtx);
+            tokenInsert.bindValue(S(":appctx"), secCtx.appCtx);
             exec(tokenInsert);
         }
     }
@@ -796,7 +834,7 @@ quint32 MetaDataDB::updateIdentity(const SignonIdentityInfo &info)
     while (it.hasNext()) {
         it.next();
         if (!info.accessControlList().isEmpty()) {
-            foreach (QString token, info.accessControlList()) {
+            foreach (SignOn::SecurityContext secCtx, info.accessControlList()) {
                 foreach (QString mech, it.value()) {
                     QSqlQuery aclInsert = newQuery();
                     aclInsert.prepare(S("INSERT OR REPLACE INTO ACL "
@@ -804,23 +842,26 @@ quint32 MetaDataDB::updateIdentity(const SignonIdentityInfo &info)
                                         "VALUES ( :id, "
                                         "( SELECT id FROM METHODS WHERE method = :method ),"
                                         "( SELECT id FROM MECHANISMS WHERE mechanism= :mech ), "
-                                        "( SELECT id FROM TOKENS WHERE token = :token ))"));
+                                        "( SELECT id FROM TOKENS WHERE sysctx = :sysctx AND appctx = :appctx ))"));
                     aclInsert.bindValue(S(":id"), id);
                     aclInsert.bindValue(S(":method"), it.key());
                     aclInsert.bindValue(S(":mech"), mech);
-                    aclInsert.bindValue(S(":token"), token);
+                    aclInsert.bindValue(S(":sysctx"), secCtx.sysCtx);
+                    aclInsert.bindValue(S(":appctx"), secCtx.appCtx);
                     exec(aclInsert);
                 }
-                //insert entires for empty mechs list
+                //insert entries for empty mechs list
                 if (it.value().isEmpty()) {
                     QSqlQuery aclInsert = newQuery();
-                    aclInsert.prepare(S("INSERT OR REPLACE INTO ACL (identity_id, method_id, token_id) "
+                    aclInsert.prepare(S("INSERT OR REPLACE INTO ACL "
+                                        "(identity_id, method_id, token_id) "
                                         "VALUES ( :id, "
                                         "( SELECT id FROM METHODS WHERE method = :method ),"
-                                        "( SELECT id FROM TOKENS WHERE token = :token ))"));
+                                        "( SELECT id FROM TOKENS WHERE sysctx = :sysctx AND appctx = :appctx ))"));
                     aclInsert.bindValue(S(":id"), id);
                     aclInsert.bindValue(S(":method"), it.key());
-                    aclInsert.bindValue(S(":token"), token);
+                    aclInsert.bindValue(S(":sysctx"), secCtx.sysCtx);
+                    aclInsert.bindValue(S(":appctx"), secCtx.appCtx);
                     exec(aclInsert);
                 }
             }
@@ -838,7 +879,7 @@ quint32 MetaDataDB::updateIdentity(const SignonIdentityInfo &info)
                 aclInsert.bindValue(S(":mech"), mech);
                 exec(aclInsert);
             }
-            //insert entires for empty mechs list
+            //insert entries for empty mechs list
             if (it.value().isEmpty()) {
                 QSqlQuery aclInsert = newQuery();
                 aclInsert.prepare(S("INSERT OR REPLACE INTO ACL (identity_id, method_id) "
@@ -853,28 +894,30 @@ quint32 MetaDataDB::updateIdentity(const SignonIdentityInfo &info)
     }
     //insert acl in case where methods are missing
     if (info.methods().isEmpty()) {
-        foreach (QString token, info.accessControlList()) {
+        foreach (SignOn::SecurityContext secCtx, info.accessControlList()) {
             QSqlQuery aclInsert = newQuery();
             aclInsert.prepare(S("INSERT OR REPLACE INTO ACL "
                                 "(identity_id, token_id) "
                                 "VALUES ( :id, "
-                                "( SELECT id FROM TOKENS WHERE token = :token ))"));
+                                "( SELECT id FROM TOKENS WHERE sysctx = :sysctx AND appctx = :appctx ))"));
             aclInsert.bindValue(S(":id"), id);
-            aclInsert.bindValue(S(":token"), token);
+            aclInsert.bindValue(S(":sysctx"), secCtx.sysCtx);
+            aclInsert.bindValue(S(":appctx"), secCtx.appCtx);
             exec(aclInsert);
         }
     }
 
     //insert owner list
-    foreach (QString token, info.ownerList()) {
-        if (!token.isEmpty()) {
+    foreach (SignOn::SecurityContext secCtx, info.ownerList()) {
+        if (!secCtx.sysCtx.isEmpty()) {
             QSqlQuery ownerInsert = newQuery();
             ownerInsert.prepare(S("INSERT OR REPLACE INTO OWNER "
                             "(identity_id, token_id) "
                             "VALUES ( :id, "
-                            "( SELECT id FROM TOKENS WHERE token = :token ))"));
+                            "( SELECT id FROM TOKENS WHERE sysctx = :sysctx AND appctx = :appctx ))"));
             ownerInsert.bindValue(S(":id"), id);
-            ownerInsert.bindValue(S(":token"), token);
+            ownerInsert.bindValue(S(":sysctx"), secCtx.sysCtx);
+            ownerInsert.bindValue(S(":appctx"), secCtx.appCtx);
             exec(ownerInsert);
         }
     }
@@ -921,24 +964,27 @@ bool MetaDataDB::clear()
     return transactionalExec(clearCommands);
 }
 
-QStringList MetaDataDB::accessControlList(const quint32 identityId)
+SignOn::SecurityContextList MetaDataDB::accessControlList(
+                                                    const quint32 identityId)
 {
-    return queryList(QString::fromLatin1("SELECT token FROM TOKENS "
-            "WHERE id IN "
-            "(SELECT token_id FROM ACL WHERE identity_id = '%1' )")
-            .arg(identityId));
+    return queryStringTupleList(QString::fromLatin1(
+                        "SELECT sysctx, appctx FROM TOKENS "
+                        "WHERE id IN "
+                        "(SELECT token_id FROM ACL WHERE identity_id = '%1' )")
+                        .arg(identityId));
 }
 
-QStringList MetaDataDB::ownerList(const quint32 identityId)
+SignOn::SecurityContextList MetaDataDB::ownerList(const quint32 identityId)
 {
-    return queryList(QString::fromLatin1("SELECT token FROM TOKENS "
-            "WHERE id IN "
-            "(SELECT token_id FROM OWNER WHERE identity_id = '%1' )")
-            .arg(identityId));
+    return queryStringTupleList(QString::fromLatin1(
+                    "SELECT sysctx, appctx FROM TOKENS "
+                    "WHERE id IN "
+                    "(SELECT token_id FROM OWNER WHERE identity_id = '%1' )")
+                    .arg(identityId));
 }
 
 bool MetaDataDB::addReference(const quint32 id,
-                              const QString &token,
+                              const SignOn::SecurityContext &refOwner,
                               const QString &reference)
 {
     if (!startTransaction()) {
@@ -946,15 +992,18 @@ bool MetaDataDB::addReference(const quint32 id,
         return false;
     }
 
-    TRACE() << "Storing:" << id << ", " << token << ", " << reference;
+    TRACE() << "Storing:" << id << ", ["
+            << refOwner.sysCtx << "," << refOwner.appCtx
+            << "], " << reference;
     /* Data insert */
     bool allOk = true;
 
     /* Security token insert */
     QSqlQuery tokenInsert = newQuery();
-    tokenInsert.prepare(S("INSERT OR IGNORE INTO TOKENS (token) "
-                          "VALUES ( :token )"));
-    tokenInsert.bindValue(S(":token"), token);
+    tokenInsert.prepare(S("INSERT OR IGNORE INTO TOKENS (sysctx, appctx) "
+                          "VALUES ( :sysctx, :appctx )"));
+    tokenInsert.bindValue(S(":sysctx"), refOwner.sysCtx);
+    tokenInsert.bindValue(S(":appctx"), refOwner.appCtx);
     exec(tokenInsert);
     if (errorOccurred()) {
                 allOk = false;
@@ -964,11 +1013,13 @@ bool MetaDataDB::addReference(const quint32 id,
     refsInsert.prepare(S("INSERT OR REPLACE INTO REFS "
                          "(identity_id, token_id, ref) "
                          "VALUES ( :id, "
-                         "( SELECT id FROM TOKENS WHERE token = :token ),"
+                         "( SELECT id FROM TOKENS "
+                         "WHERE sysctx = :sysctx AND appctx = :appctx),"
                          ":reference"
                          ")"));
     refsInsert.bindValue(S(":id"), id);
-    refsInsert.bindValue(S(":token"), token);
+    refsInsert.bindValue(S(":sysctx"), refOwner.sysCtx);
+    refsInsert.bindValue(S(":appctx"), refOwner.appCtx);
     refsInsert.bindValue(S(":reference"), reference);
     exec(refsInsert);
     if (errorOccurred()) {
@@ -985,12 +1036,14 @@ bool MetaDataDB::addReference(const quint32 id,
 }
 
 bool MetaDataDB::removeReference(const quint32 id,
-                                 const QString &token,
+                                 const SignOn::SecurityContext &refOwner,
                                  const QString &reference)
 {
-    TRACE() << "Removing:" << id << ", " << token << ", " << reference;
+    TRACE() << "Removing:" << id << ", ["
+            << refOwner.sysCtx << ", " << refOwner.appCtx
+            << "], " << reference;
     //check that there is references
-    QStringList refs = references(id, token);
+    QStringList refs = references(id, refOwner);
     if (refs.isEmpty())
         return false;
     if (!reference.isNull() && !refs.contains(reference))
@@ -1007,16 +1060,20 @@ bool MetaDataDB::removeReference(const quint32 id,
     if (reference.isEmpty()) {
         refsDelete.prepare(S("DELETE FROM REFS "
                              "WHERE identity_id = :id AND "
-                             "token_id = ( SELECT id FROM TOKENS WHERE token = :token )"));
+                             "token_id = ( SELECT id FROM TOKENS "
+                             "WHERE sysctx = :sysctx AND appctx = :appctx )"));
         refsDelete.bindValue(S(":id"), id);
-        refsDelete.bindValue(S(":token"), token);
+        refsDelete.bindValue(S(":sysctx"), refOwner.sysCtx);
+        refsDelete.bindValue(S(":appctx"), refOwner.appCtx);
     } else {
         refsDelete.prepare(S("DELETE FROM REFS "
                              "WHERE identity_id = :id AND "
-                             "token_id = ( SELECT id FROM TOKENS WHERE token = :token ) "
+                             "token_id = ( SELECT id FROM TOKENS "
+                             "WHERE sysctx = :sysctx AND appctx = :appctx ) "
                              "AND ref = :ref"));
         refsDelete.bindValue(S(":id"), id);
-        refsDelete.bindValue(S(":token"), token);
+        refsDelete.bindValue(S(":sysctx"), refOwner.sysCtx);
+        refsDelete.bindValue(S(":appctx"), refOwner.appCtx);
         refsDelete.bindValue(S(":ref"), reference);
     }
 
@@ -1034,19 +1091,23 @@ bool MetaDataDB::removeReference(const quint32 id,
     return false;
 }
 
-QStringList MetaDataDB::references(const quint32 id, const QString &token)
+QStringList MetaDataDB::references(
+                                   const quint32 id,
+                                   const SignOn::SecurityContext &refOwner)
 {
-    if (token.isEmpty())
-        return queryList(QString::fromLatin1("SELECT ref FROM REFS "
+    if (refOwner.sysCtx.isEmpty())
+        return queryStringList(QString::fromLatin1("SELECT ref FROM REFS "
             "WHERE identity_id = '%1'")
             .arg(id));
     QSqlQuery q = newQuery();
     q.prepare(S("SELECT ref FROM REFS "
                 "WHERE identity_id = :id AND "
-                "token_id = (SELECT id FROM TOKENS WHERE token = :token )"));
+                "token_id = (SELECT id FROM TOKENS "
+                "WHERE sysctx = :sysctx AND appctx = :appctx )"));
     q.bindValue(S(":id"), id);
-    q.bindValue(S(":token"), token);
-    return queryList(q);
+    q.bindValue(S(":sysctx"), refOwner.sysCtx);
+    q.bindValue(S(":appctx"), refOwner.appCtx);
+    return queryStringList(q);
 }
 
 bool MetaDataDB::insertMethods(QMap<QString, QStringList> methods)
@@ -1249,7 +1310,7 @@ SignOn::CredentialsDBError CredentialsDB::lastError() const
 }
 
 QStringList CredentialsDB::methods(const quint32 id,
-                                   const QString &securityToken)
+                                   const SignOn::SecurityContext &securityToken)
 {
     INIT_ERROR();
     return metaDataDB->methods(id, securityToken);
@@ -1401,45 +1462,49 @@ bool CredentialsDB::removeData(const quint32 id, const QString &method)
     return secretsStorage->removeData(id, methodId);
 }
 
-QStringList CredentialsDB::accessControlList(const quint32 identityId)
+SignOn::SecurityContextList CredentialsDB::accessControlList(
+                                                    const quint32 identityId)
 {
     INIT_ERROR();
     return metaDataDB->accessControlList(identityId);
 }
 
-QStringList CredentialsDB::ownerList(const quint32 identityId)
+SignOn::SecurityContextList CredentialsDB::ownerList(const quint32 identityId)
 {
     INIT_ERROR();
     return metaDataDB->ownerList(identityId);
 }
 
-QString CredentialsDB::credentialsOwnerSecurityToken(const quint32 identityId)
+SignOn::SecurityContext CredentialsDB::credentialsOwner(
+                                                    const quint32 identityId)
 {
     //return first owner token
-    QStringList owners = ownerList(identityId);
-    return owners.count() ? owners.at(0) : QString();
+    SignOn::SecurityContextList owners = ownerList(identityId);
+    return owners.value(0);
 }
 
 bool CredentialsDB::addReference(const quint32 id,
-                                 const QString &token,
+                                 const SignOn::SecurityContext &refOwner,
                                  const QString &reference)
 {
     INIT_ERROR();
-    return metaDataDB->addReference(id, token, reference);
+    return metaDataDB->addReference(id, refOwner, reference);
 }
 
 bool CredentialsDB::removeReference(const quint32 id,
-                                    const QString &token,
+                                    const SignOn::SecurityContext &refOwner,
                                     const QString &reference)
 {
     INIT_ERROR();
-    return metaDataDB->removeReference(id, token, reference);
+    return metaDataDB->removeReference(id, refOwner, reference);
 }
 
-QStringList CredentialsDB::references(const quint32 id, const QString &token)
+QStringList CredentialsDB::references(
+                                      const quint32 id,
+                                      const SignOn::SecurityContext &refOwner)
 {
     INIT_ERROR();
-    return metaDataDB->references(id, token);
+    return metaDataDB->references(id, refOwner);
 }
 
 } //namespace SignonDaemonNS

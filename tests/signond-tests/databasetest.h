@@ -72,8 +72,8 @@ private:
     DefaultSecretsStorage *m_secretsStorage;
     MetaDataDB *m_meta;
     MethodMap testMethods;
-    QStringList testRealms;
-    QStringList testAcl;
+    SecurityContextList testRealms;
+    SecurityContextList testAcl;
 };
 
 #endif //DATABASETEST_H_

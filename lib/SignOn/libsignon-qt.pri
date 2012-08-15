@@ -12,7 +12,8 @@ public_headers += \
     authsession.h \
     libsignoncommon.h \
     signon.h \
-    signonerror.h
+    signonerror.h \
+    securitycontext.h
 
 private_headers = authserviceimpl.h \
     identityimpl.h \

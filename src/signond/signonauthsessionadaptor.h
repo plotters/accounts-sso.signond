@@ -3,8 +3,10 @@
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
  * Copyright (C) 2012 Canonical Ltd.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -49,13 +51,16 @@ private:
     void errorReply(const QString &name, const QString &message);
 
 public Q_SLOTS:
-    QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms);
+    QStringList queryAvailableMechanisms(
+                                        const QStringList &wantedMechanisms,
+                                        const QDBusVariant &applicationContext);
     QVariantMap process(const QVariantMap &sessionDataVa,
-                        const QString &mechanism);
+                        const QString &mechanism,
+                        const QDBusVariant &applicationContext);
 
-    Q_NOREPLY void cancel();
-    Q_NOREPLY void setId(quint32 id);
-    Q_NOREPLY void objectUnref();
+    Q_NOREPLY void cancel(const QDBusVariant &applicationContext);
+    Q_NOREPLY void setId(quint32 id, const QDBusVariant &applicationContext);
+    Q_NOREPLY void objectUnref(const QDBusVariant &applicationContext);
 
 Q_SIGNALS:
     void stateChanged(int state, const QString &message);

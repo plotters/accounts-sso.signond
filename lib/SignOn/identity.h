@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -149,7 +151,8 @@ public:
     /*!
      * Creates a new session for authentication. This creates a connection
      * to authentication plugin.
-     * The Identity object is parent and owner of all created authentication sessions.
+     * The Identity object is parent and owner of all created authentication
+     * sessions.
      *
      * @param methodName Name of authentication method to use
      * @return New authentication session or NULL if not able to create
@@ -315,6 +318,20 @@ public:
      * @see Identity::error()
      */
     void signOut();
+
+    /*!
+     * Retrieve application level context data set earlier.
+     *
+     * @return Application context
+     */
+    QVariant applicationContext ();
+
+    /*!
+     * Set application level context to be passed to the signond.
+     *
+     * @param newApplicationContext Application context to be set
+     */
+    void setApplicationContext (const QVariant &newApplicationContext);
 
 Q_SIGNALS:
 

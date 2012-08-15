@@ -349,6 +349,7 @@ void TestAuthSession::process_with_unauthorized_method()
     methods.insert(QLatin1String("ssotest"), mechs);
     IdentityInfo info("test_caption", "test_user_name", methods);
     info.setSecret("test_secret");
+    info.setAccessControlList(QStringList(QString::fromLatin1("*")));
     Identity *id = Identity::newIdentity(info, this);
 
     QSignalSpy spyResponseStoreCreds(id, SIGNAL(credentialsStored(const quint32)));
@@ -417,6 +418,7 @@ void TestAuthSession::process_from_other_process()
     QVariantList arguments;
     arguments += (quint32)SIGNOND_NEW_IDENTITY;
     arguments += QString::fromLatin1("ssotest");
+    arguments += QVariant::fromValue(QDBusVariant(QLatin1String("")));
     iface.callWithCallback(QLatin1String("getAuthSessionObjectPath"),
                            arguments, &slotMachine,
                            SLOT(authenticationSlot(const QString&)),
@@ -461,6 +463,7 @@ void TestAuthSession::process_from_other_process()
         arguments.clear();
         arguments += inDataVarMap;
         arguments += QString::fromLatin1("mech1");
+        arguments += QVariant::fromValue(QDBusVariant(QLatin1String("")));
 
         QDBusMessage msg = QDBusMessage::createMethodCall(dbus->service(),
                                                           dbus->path(),

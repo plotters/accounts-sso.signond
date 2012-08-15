@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -31,6 +33,7 @@
 #include <QStringList>
 #include <QMetaType>
 
+#include "securitycontext.h"
 #include "libsignoncommon.h"
 
 namespace SignOn {
@@ -181,11 +184,12 @@ public:
 
     /*!
      * Sets application token that owns identity, therefore defining the
-     * applications that will be able to modify this specific set of credentials
+     * applications that will be able to modify this specific set of
+     * credentials.
      *
      * @param ownerToken owner token
      */
-    void setOwner(const QString &ownerToken);
+    void setOwner(const SecurityContext &ownerToken);
 
     /*!
      * Gets the owner application token that is defining the applications
@@ -196,7 +200,7 @@ public:
      * @return The access control token which defines the applications
      * allowed to modify this set of credentials.
      */
-    QString owner() const;
+    SecurityContext owner() const;
 
     /*!
      * Sets the list of access control application tokens, therefore
@@ -205,7 +209,7 @@ public:
      *
      * @param accessControlList List of access control tokens
      */
-    void setAccessControlList(const QStringList &accessControlList);
+    void setAccessControlList(const SecurityContextList &accessControlList);
 
     /*!
      * Gets the list of access control application tokens defining the
@@ -216,7 +220,7 @@ public:
      * @return The access control tokens which defines the applications allowed
      * to access this set of credentials.
      */
-    QStringList accessControlList() const;
+    SecurityContextList accessControlList() const;
 
     /*!
      * Sets the method into identity info.

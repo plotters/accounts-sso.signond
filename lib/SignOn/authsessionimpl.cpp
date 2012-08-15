@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -57,11 +59,13 @@ static QVariantMap sessionData2VariantMap(const SessionData &data)
 
 AuthSessionImpl::AuthSessionImpl(AuthSession *parent,
                                  quint32 id,
-                                 const QString &methodName):
+                                 const QString &methodName,
+                                 const QVariant &applicationContextP) :
     QObject(parent),
     m_parent(parent),
     m_operationQueueHandler(this),
-    m_methodName(methodName)
+    m_methodName(methodName),
+    m_applicationContext(applicationContextP)
 {
     m_id = id;
     m_DBusInterface = 0;
@@ -75,7 +79,8 @@ AuthSessionImpl::AuthSessionImpl(AuthSession *parent,
 AuthSessionImpl::~AuthSessionImpl()
 {
     if (m_DBusInterface) {
-        m_DBusInterface->call(QLatin1String("objectUnref"));
+        m_DBusInterface->call(QLatin1String("objectUnref"),
+                    QVariant::fromValue(QDBusVariant(m_applicationContext)));
         delete m_DBusInterface;
     }
 }
@@ -139,6 +144,7 @@ void AuthSessionImpl::setId(quint32 id)
 
     QVariantList arguments;
     arguments += id;
+    arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
 
     if (m_DBusInterface)
         send2interface(remoteFunctionName, 0, arguments);
@@ -190,6 +196,7 @@ bool AuthSessionImpl::initInterface()
     QVariantList arguments;
     arguments += m_id;
     arguments += m_methodName;
+    arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
 
     msg.setArguments(arguments);
     msg.setDelayedReply(true);
@@ -219,6 +226,7 @@ AuthSessionImpl::queryAvailableMechanisms(const QStringList &wantedMechanisms)
 
     QVariantList arguments;
     arguments += wantedMechanisms;
+    arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
 
     if (m_DBusInterface)
         send2interface(remoteFunctionName,
@@ -258,6 +266,7 @@ void AuthSessionImpl::process(const SessionData &sessionData,
     QVariantList arguments;
     arguments += sessionDataVa;
     arguments += mechanism;
+    arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
 
     remoteFunctionName = QLatin1String("process");
 
@@ -302,7 +311,10 @@ void AuthSessionImpl::cancel()
 
     } else {
         TRACE() << "Sending cancel-request";
-        m_DBusInterface->call(QDBus::NoBlock, QLatin1String("cancel"));
+        m_DBusInterface->call(
+                    QDBus::NoBlock,
+                    QLatin1String("cancel"),
+                    QVariant::fromValue(QDBusVariant(m_applicationContext)));
     }
 
     m_isBusy = false;
