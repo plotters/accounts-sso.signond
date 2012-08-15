@@ -2,7 +2,7 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
- * Copyright (C) 2011 Intel Corporation.
+ * Copyright (C) 2011-2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
@@ -143,8 +143,13 @@ void SignonIdentity::destroy()
     deleteLater();
 }
 
-SignonIdentityInfo SignonIdentity::queryInfo(bool &ok, bool queryPassword)
+SignonIdentityInfo SignonIdentity::queryInfo(
+                                        bool &ok,
+                                        const QDBusVariant &applicationContext,
+                                        bool queryPassword)
 {
+    Q_UNUSED(applicationContext);
+
     ok = true;
 
     bool needLoadFromDB = true;
@@ -180,7 +185,8 @@ SignonIdentityInfo SignonIdentity::queryInfo(bool &ok, bool queryPassword)
     return info;
 }
 
-bool SignonIdentity::addReference(const QString &reference)
+bool SignonIdentity::addReference(const QString &reference,
+                                  const QDBusVariant &applicationContext)
 {
     TRACE() << "addReference: " << reference;
 
@@ -191,14 +197,16 @@ bool SignonIdentity::addReference(const QString &reference)
         BLAME() << "NULL database handler object.";
         return false;
     }
-    QString appId =
+    SecurityContext appId =
         AccessControlManagerHelper::instance()->appIdOfPeer(
-                                 (static_cast<QDBusContext>(*this)).message());
+                                 (static_cast<QDBusContext>(*this)).message(),
+                                 applicationContext);
     keepInUse();
     return db->addReference(m_id, appId, reference);
 }
 
-bool SignonIdentity::removeReference(const QString &reference)
+bool SignonIdentity::removeReference(const QString &reference,
+                                     const QDBusVariant &applicationContext)
 {
     TRACE() << "removeReference: " << reference;
 
@@ -209,19 +217,22 @@ bool SignonIdentity::removeReference(const QString &reference)
         BLAME() << "NULL database handler object.";
         return false;
     }
-    QString appId =
+    SecurityContext appId =
         AccessControlManagerHelper::instance()->appIdOfPeer(
-                                  (static_cast<QDBusContext>(*this)).message());
+                                  (static_cast<QDBusContext>(*this)).message(),
+                                  applicationContext);
     keepInUse();
     return db->removeReference(m_id, appId, reference);
 }
 
-quint32 SignonIdentity::requestCredentialsUpdate(const QString &displayMessage)
+quint32 SignonIdentity::requestCredentialsUpdate(
+                                        const QString &displayMessage,
+                                        const QDBusVariant &applicationContext)
 {
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(SIGNOND_NEW_IDENTITY);
 
     bool ok;
-    SignonIdentityInfo info = queryInfo(ok, false);
+    SignonIdentityInfo info = queryInfo(ok, applicationContext, false);
 
     if (!ok) {
         BLAME() << "Identity not found.";
@@ -257,14 +268,14 @@ quint32 SignonIdentity::requestCredentialsUpdate(const QString &displayMessage)
     return 0;
 }
 
-QVariantMap SignonIdentity::getInfo()
+QVariantMap SignonIdentity::getInfo(const QDBusVariant &applicationContext)
 {
     TRACE() << "QUERYING INFO";
 
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(QVariantMap());
 
     bool ok;
-    SignonIdentityInfo info = queryInfo(ok, false);
+    SignonIdentityInfo info = queryInfo(ok, applicationContext, false);
 
     if (!ok) {
         TRACE();
@@ -285,7 +296,8 @@ QVariantMap SignonIdentity::getInfo()
     return info.toMap();
 }
 
-void SignonIdentity::queryUserPassword(const QVariantMap &params) {
+void SignonIdentity::queryUserPassword(const QVariantMap &params)
+{
     TRACE() << "Waiting for reply from signon-ui";
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(
             m_signonui->queryDialog(params), this);
@@ -295,12 +307,13 @@ void SignonIdentity::queryUserPassword(const QVariantMap &params) {
     setAutoDestruct(false);
 }
 
-bool SignonIdentity::verifyUser(const QVariantMap &params)
+bool SignonIdentity::verifyUser(const QVariantMap &params,
+                                const QDBusVariant &applicationContext)
 {
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
 
     bool ok;
-    SignonIdentityInfo info = queryInfo(ok, true);
+    SignonIdentityInfo info = queryInfo(ok, applicationContext, true);
 
     if (!ok) {
         BLAME() << "Identity not found.";
@@ -330,12 +343,13 @@ bool SignonIdentity::verifyUser(const QVariantMap &params)
     return false;
 }
 
-bool SignonIdentity::verifySecret(const QString &secret)
+bool SignonIdentity::verifySecret(const QString &secret,
+                                  const QDBusVariant &applicationContext)
 {
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
 
     bool ok;
-    queryInfo(ok);
+    queryInfo(ok, applicationContext);
     if (!ok) {
         TRACE();
         sendErrorReply(SIGNOND_CREDENTIALS_NOT_AVAILABLE_ERR_NAME,
@@ -351,8 +365,10 @@ bool SignonIdentity::verifySecret(const QString &secret)
     return ret;
 }
 
-void SignonIdentity::remove()
+void SignonIdentity::remove(const QDBusVariant &applicationContext)
 {
+    Q_UNUSED(applicationContext);
+
     SIGNON_RETURN_IF_CAM_UNAVAILABLE();
 
     CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
@@ -367,8 +383,10 @@ void SignonIdentity::remove()
     keepInUse();
 }
 
-bool SignonIdentity::signOut()
+bool SignonIdentity::signOut(const QDBusVariant &applicationContext)
 {
+    Q_UNUSED(applicationContext);
+
     TRACE() << "Signout request. Identity ID: " << id();
     /*
      * - If the identity is stored (thus registered here)
@@ -392,26 +410,48 @@ bool SignonIdentity::signOut()
     return true;
 }
 
-quint32 SignonIdentity::store(const QVariantMap &info)
+quint32 SignonIdentity::store(const QVariantMap &info,
+                              const QDBusVariant &applicationContext)
 {
+    Q_UNUSED(applicationContext);
+
     keepInUse();
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(SIGNOND_NEW_IDENTITY);
 
     QString secret = info.value(SIGNOND_IDENTITY_INFO_SECRET).toString();
     QString appId =
         AccessControlManagerHelper::instance()->appIdOfPeer(
-                                 (static_cast<QDBusContext>(*this)).message());
+                                 (static_cast<QDBusContext>(*this)).message(),
+                                 applicationContext);
 
     bool storeSecret = info.value(SIGNOND_IDENTITY_INFO_STORESECRET).toBool();
-    QVariant container = info.value(SIGNOND_IDENTITY_INFO_AUTHMETHODS);
     MethodMap methods =
-        qdbus_cast<MethodMap>(container.value<QDBusArgument>());
+        qdbus_cast<MethodMap>(info.value(SIGNOND_IDENTITY_INFO_AUTHMETHODS));
 
-    //Add creator to owner list if it has AID
-    QStringList ownerList =
-        info.value(SIGNOND_IDENTITY_INFO_OWNER).toStringList();
-    if (!appId.isNull())
-        ownerList.append(appId);
+    // Add creator to owner list if it has AID
+    SignOn::SecurityContextList ownerList = SignOn::SecurityContext(
+                        info.value(SIGNOND_IDENTITY_INFO_OWNER).toStringList());
+    if (ownerList.isEmpty()) {
+        if (!appId.isEmpty())
+            ownerList.append(appId);
+        else
+            ownerList.append(QLatin1String("*"));
+    }
+    else {
+        // check that application is allowed to set the specified list of
+        // owners
+        bool allowed = AccessControlManagerHelper::instance()->isACLValid(
+                        (static_cast<QDBusContext>(*this)).message(),
+                        applicationContext,
+                        ownerList);
+        if (!allowed) {
+            // send an error reply, because otherwise uncontrolled sharing
+            // might happen
+            sendErrorReply(SIGNOND_PERMISSION_DENIED_ERR_NAME,
+                           SIGNOND_PERMISSION_DENIED_ERR_STR); 
+            return 0;
+        }
+    }
 
     if (m_pInfo == 0) {
         m_pInfo = new SignonIdentityInfo(info);
@@ -424,8 +464,21 @@ quint32 SignonIdentity::store(const QVariantMap &info)
             info.value(SIGNOND_IDENTITY_INFO_CAPTION).toString();
         QStringList realms =
             info.value(SIGNOND_IDENTITY_INFO_REALMS).toStringList();
-        QStringList accessControlList =
-            info.value(SIGNOND_IDENTITY_INFO_ACL).toStringList();
+        SignOn::SecurityContextList accessControlList =
+            qdbus_cast<SecurityList>(info.value(SIGNOND_IDENTITY_INFO_ACL));
+        // before setting this ACL value to the new identity, we need to make
+        // sure that it isn't unconrolled sharing attempt.
+        bool allowed = AccessControlManagerHelper::instance()->isACLValid(
+                (static_cast<QDBusContext>(*this)).message(),
+                applicationContext,
+                accessControlList);
+        if (!allowed) {
+            // send an error reply, because otherwise uncontrolled sharing
+            // might happen
+            sendErrorReply(SIGNOND_PERMISSION_DENIED_ERR_NAME,
+                           SIGNOND_PERMISSION_DENIED_ERR_STR);
+            return 0;
+        }
         int type = info.value(SIGNOND_IDENTITY_INFO_TYPE).toInt();
 
         m_pInfo->setUserName(userName);
@@ -442,7 +495,7 @@ quint32 SignonIdentity::store(const QVariantMap &info)
     } else {
         m_pInfo->setPassword(QString());
     }
-    m_id = storeCredentials(*m_pInfo, storeSecret);
+    m_id = storeCredentials(*m_pInfo, storeSecret, applicationContext);
 
     if (m_id == SIGNOND_NEW_IDENTITY) {
         sendErrorReply(SIGNOND_STORE_FAILED_ERR_NAME,
@@ -453,8 +506,11 @@ quint32 SignonIdentity::store(const QVariantMap &info)
 }
 
 quint32 SignonIdentity::storeCredentials(const SignonIdentityInfo &info,
-                                         bool storeSecret)
+                                         bool storeSecret,
+                                         const QDBusVariant &applicationContext)
 {
+    Q_UNUSED(applicationContext);
+
     CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
     if (db == NULL) {
         BLAME() << "NULL database handler object.";

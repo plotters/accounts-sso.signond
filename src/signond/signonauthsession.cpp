@@ -2,8 +2,10 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
- * Conta Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -56,12 +58,16 @@ SignonAuthSession::~SignonAuthSession()
     }
 }
 
-QString SignonAuthSession::getAuthSessionObjectPath(const quint32 id,
-                                                    const QString &method,
-                                                    SignonDaemon *parent,
-                                                    bool &supportsAuthMethod,
-                                                    pid_t ownerPid)
+QString SignonAuthSession::getAuthSessionObjectPath(
+                                        const quint32 id,
+                                        const QString &method,
+                                        SignonDaemon *parent,
+                                        bool &supportsAuthMethod,
+                                        pid_t ownerPid,
+                                        const QDBusVariant &applicationContext)
 {
+    Q_UNUSED(applicationContext);
+
     TRACE();
     supportsAuthMethod = true;
     SignonAuthSession* sas = new SignonAuthSession(id, method, ownerPid);
@@ -121,40 +127,51 @@ pid_t SignonAuthSession::ownerPid() const
 }
 
 QStringList
-SignonAuthSession::queryAvailableMechanisms(const QStringList &wantedMechanisms)
+SignonAuthSession::queryAvailableMechanisms(
+                                        const QStringList &wantedMechanisms,
+                                        const QDBusVariant &applicationContext)
 {
+    Q_UNUSED(applicationContext);
+
     return parent()->queryAvailableMechanisms(wantedMechanisms);
 }
 
 QVariantMap SignonAuthSession::process(const QVariantMap &sessionDataVa,
-                                       const QString &mechanism)
+                                       const QString &mechanism,
+                                       const QDBusVariant &applicationContext)
 {
     setDelayedReply(true);
     parent()->process(connection(),
                       message(),
+                      applicationContext,
                       sessionDataVa,
                       mechanism,
                       objectName());
     return QVariantMap();
 }
 
-void SignonAuthSession::cancel()
+void SignonAuthSession::cancel(const QDBusVariant &applicationContext)
 {
+    Q_UNUSED(applicationContext);
+
     TRACE();
     parent()->cancel(objectName());
 }
 
-void SignonAuthSession::setId(quint32 id)
+void SignonAuthSession::setId(quint32 id,
+                              const QDBusVariant &applicationContext)
 {
+    Q_UNUSED(applicationContext);
+
     m_id = id;
     parent()->setId(id);
 }
 
-void SignonAuthSession::objectUnref()
+void SignonAuthSession::objectUnref(const QDBusVariant &applicationContext)
 {
     //TODO - remove the `objectUnref` functionality from the DBus API
     TRACE();
-    cancel();
+    cancel(applicationContext);
 
     if (m_registered) {
         QDBusConnection connection(SIGNOND_BUS);

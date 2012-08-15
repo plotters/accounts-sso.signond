@@ -2,8 +2,10 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -109,13 +111,13 @@ void TestDatabase::queryListTest()
             "VALUES('%1', '%2')")
             .arg(80).arg(QLatin1String("b"));
     insertQuery = m_meta->exec(queryStr);
-    QStringList list = m_meta->queryList(QString::fromLatin1(
+    QStringList list = m_meta->queryStringList(QString::fromLatin1(
             "SELECT realm FROM TESTING WHERE identity_id = 80"));
     QVERIFY(list.contains(QLatin1String("a")));
     QVERIFY(list.contains(QLatin1String("b")));
     QVERIFY(list.count() == 2);
 
-    list = m_meta->queryList(QString::fromLatin1(
+    list = m_meta->queryStringList(QString::fromLatin1(
             "SELECT realm FROM TESTING WHERE identity_id = 81"));
     QVERIFY(list.count() == 0);
 }
@@ -125,10 +127,10 @@ void TestDatabase::insertMethodsTest()
     //test empty list
     QMap<QString, QStringList> methods;
     m_meta->insertMethods(methods);
-    QStringList list = m_meta->queryList(QString::fromLatin1(
+    QStringList list = m_meta->queryStringList(QString::fromLatin1(
             "SELECT method FROM METHODS"));
     QVERIFY(list.count() == 0);
-    list = m_meta->queryList(QString::fromLatin1(
+    list = m_meta->queryStringList(QString::fromLatin1(
             "SELECT mechanism FROM MECHANISMS"));
     QVERIFY(list.count() == 0);
 
@@ -138,14 +140,14 @@ void TestDatabase::insertMethodsTest()
     methods.insert(QLatin1String("Test"), mechs);
     methods.insert(QLatin1String("Test2"), mechs);
     m_meta->insertMethods(methods);
-    list = m_meta->queryList(QString::fromLatin1(
+    list = m_meta->queryStringList(QString::fromLatin1(
             "SELECT method FROM METHODS"));
     qDebug() << list;
     QVERIFY(list.contains(QLatin1String("Test")));
     QVERIFY(list.contains(QLatin1String("Test2")));
     QVERIFY(list.count() == 2);
 
-    list = m_meta->queryList(QString::fromLatin1(
+    list = m_meta->queryStringList(QString::fromLatin1(
             "SELECT mechanism FROM MECHANISMS"));
     qDebug() << list;
     QVERIFY(list.contains(QLatin1String("M1")));
@@ -562,7 +564,7 @@ void TestDatabase::referenceTest()
     bool ret = m_db->addReference(id, QLatin1String("AID::12345678"),
                                   QLatin1String("ref1"));
     QVERIFY(ret);
-    QStringList refs = m_db->references(id);
+    SecurityContextList refs = m_db->references(id);
     qDebug() << refs;
     QVERIFY(refs.contains(QLatin1String("ref1")));
     refs = m_db->references(id,QLatin1String("AID::12345678"));
@@ -638,7 +640,7 @@ void TestDatabase::credentialsOwnerSecurityTokenTest()
 
     id = m_db->insertCredentials(info, true);
 
-    QString token = m_db->credentialsOwnerSecurityToken(id);
+    QString token = m_db->credentialsOwner(id);
     qDebug() << token;
     QVERIFY(token == QLatin1String("AID::12345678"));
     QStringList tokens = m_db->ownerList(id);

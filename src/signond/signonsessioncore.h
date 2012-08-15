@@ -2,8 +2,10 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -72,6 +74,7 @@ public Q_SLOTS:
 
     void process(const QDBusConnection &connection,
                  const QDBusMessage &message,
+                 const QDBusVariant &applicationContext,
                  const QVariantMap &sessionDataVa,
                  const QString &mechanism,
                  const QString &cancelKey);
