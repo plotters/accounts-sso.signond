@@ -31,6 +31,7 @@
 #include "SignOn/key-handler.h"
 
 #include <QObject>
+#include <QFlags>
 
 namespace SignOn {
 
@@ -56,7 +57,7 @@ public:
     };
 
     /*!
-     * @enum Reason
+     * @enum Reasons
      * Flags specifying why signond is asking for authorizing a key.
      * @sa queryKeyAuthorization
      */

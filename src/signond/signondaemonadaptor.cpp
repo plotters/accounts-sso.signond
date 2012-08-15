@@ -2,7 +2,7 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
- * Copyright (C) 2011 Intel Corporation.
+ * Copyright (C) 2011-2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
@@ -40,9 +40,11 @@ SignonDaemonAdaptor::~SignonDaemonAdaptor()
 {
 }
 
-void SignonDaemonAdaptor::registerNewIdentity(QDBusObjectPath &objectPath)
+void SignonDaemonAdaptor::registerNewIdentity(
+                                        const QString &applicationContext,
+                                        QDBusObjectPath &objectPath)
 {
-    m_parent->registerNewIdentity(objectPath);
+    m_parent->registerNewIdentity(applicationContext, objectPath);
 
     SignonDisposable::destroyUnused();
 }
@@ -64,16 +66,19 @@ void SignonDaemonAdaptor::securityErrorReply(const char *failedMethodName)
 }
 
 void SignonDaemonAdaptor::getIdentity(const quint32 id,
+                                      const QString &applicationContext,
                                       QDBusObjectPath &objectPath,
                                       QVariantMap &identityData)
 {
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
-                                    parentDBusContext().message(), id)) {
+                                    parentDBusContext().message(),
+                                    applicationContext,
+                                    id)) {
         securityErrorReply(__func__);
         return;
     }
 
-    m_parent->getIdentity(id, objectPath, identityData);
+    m_parent->getIdentity(id, applicationContext, objectPath, identityData);
 
     SignonDisposable::destroyUnused();
 }
@@ -83,22 +88,26 @@ QStringList SignonDaemonAdaptor::queryMethods()
     return m_parent->queryMethods();
 }
 
-QString SignonDaemonAdaptor::getAuthSessionObjectPath(const quint32 id,
-                                                      const QString &type)
+QString SignonDaemonAdaptor::getAuthSessionObjectPath(
+                                        const quint32 id,
+                                        const QString &type,
+                                        const QString &applicationContext)
 {
     SignonDisposable::destroyUnused();
 
     /* Access Control */
     if (id != SIGNOND_NEW_IDENTITY) {
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseAuthSession(
-                                        parentDBusContext().message(), id)) {
+                                        parentDBusContext().message(),
+                                        applicationContext,
+                                        id)) {
             securityErrorReply(__func__);
             return QString();
         }
     }
 
     TRACE() << "ACM passed, creating AuthSession object";
-    return m_parent->getAuthSessionObjectPath(id, type);
+    return m_parent->getAuthSessionObjectPath(id, type, applicationContext);
 }
 
 QStringList SignonDaemonAdaptor::queryMechanisms(const QString &method)

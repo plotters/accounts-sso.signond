@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -33,7 +35,6 @@
 #include <QMap>
 #include <QString>
 #include <QStringList>
-#include <QVariant>
 #include <QPointer>
 
 #include "libsignoncommon.h"
@@ -95,6 +96,7 @@ protected:
      * @internal
      */
     Identity(const quint32 id = SSO_NEW_IDENTITY,
+             const QString &applicationContext = QString(),
              QObject *parent = 0);
 
 public:
@@ -111,6 +113,20 @@ public:
                                  QObject *parent = 0);
 
     /*!
+     * Constructs a new identity object.
+     *
+     * Can return NULL if client is untrusted.
+     *
+     * @param applicationContext Application level security context
+     * @param info Identity information
+     * @param parent Parent object of the identity
+     * @return Pointer to new identity object or NULL if it fails to create.
+     */
+    static Identity *newIdentity(const QString &applicationContext,
+                                 const IdentityInfo &info = IdentityInfo(),
+                                 QObject *parent = 0);
+
+    /*!
      * Constructs an identity object associated with an existing identity record.
      *
      * Can return NULL if client is untrusted.
@@ -120,6 +136,20 @@ public:
      * @return Pointer to identity object or NULL if it fails to create.
      */
     static Identity *existingIdentity(const quint32 id, QObject *parent = 0);
+
+    /*!
+     * Constructs an identity object associated with an existing identity record.
+     *
+     * Can return NULL if client is untrusted.
+     *
+     * @applicationContext Application level security context
+     * @param id Identity ID on the service
+     * @param parent Parent object of the identity
+     * @return Pointer to identity object or NULL if it fails to create.
+     */
+    static Identity *existingIdentity(const QString &applicationContext,
+                                      const quint32 id,
+                                      QObject *parent = 0);
 
     /*!
      * Destructor
@@ -149,7 +179,8 @@ public:
     /*!
      * Creates a new session for authentication. This creates a connection
      * to authentication plugin.
-     * The Identity object is parent and owner of all created authentication sessions.
+     * The Identity object is parent and owner of all created authentication
+     * sessions.
      *
      * @param methodName Name of authentication method to use
      * @return New authentication session or NULL if not able to create
@@ -315,6 +346,13 @@ public:
      * @see Identity::error()
      */
     void signOut();
+
+    /*!
+     * Retrieve application level context data set earlier.
+     *
+     * @return Application context
+     */
+    QString applicationContext() const;
 
 Q_SIGNALS:
 

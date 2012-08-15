@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -60,7 +62,9 @@
 
 namespace SignOn {
 
-IdentityImpl::IdentityImpl(Identity *parent, const quint32 id):
+IdentityImpl::IdentityImpl(Identity *parent,
+                           const QString &applicationContext,
+                           const quint32 id):
     QObject(parent),
     m_parent(parent),
     m_identityInfo(new IdentityInfo),
@@ -69,7 +73,8 @@ IdentityImpl::IdentityImpl(Identity *parent, const quint32 id):
     m_DBusInterface(NULL),
     m_state(NeedsRegistration),
     m_infoQueried(true),
-    m_signOutRequestedByThisIdentity(false)
+    m_signOutRequestedByThisIdentity(false),
+    m_applicationContext(applicationContext)
 {
     m_identityInfo->setId(id);
     sendRegisterRequest();
@@ -126,7 +131,10 @@ AuthSession *IdentityImpl::createSession(const QString &methodName,
         }
     }
 
-    AuthSession *session = new AuthSession(id(), methodName, parent);
+    AuthSession *session = new AuthSession(id(),
+                                           methodName,
+                                           m_applicationContext,
+                                           parent);
     m_authSessions.append(session);
     return session;
 }
@@ -317,7 +325,8 @@ void IdentityImpl::remove()
             break;
         }
 
-        bool result = sendRequest(__func__, QList<QVariant>(),
+        QList<QVariant> args;
+        bool result = sendRequest(__func__, args,
                                   SLOT(removeReply()));
         if (!result) {
             TRACE() << "Error occurred.";
@@ -364,7 +373,9 @@ void IdentityImpl::addReference(const QString &reference)
         break;
     }
 
-    bool result = sendRequest(__func__, QList<QVariant>() << QVariant(reference),
+    QList<QVariant> args;
+    args << QVariant(reference);
+    bool result = sendRequest(__func__, args,
                               SLOT(addReferenceReply()));
     if (!result) {
         TRACE() << "Error occurred.";
@@ -405,7 +416,9 @@ void IdentityImpl::removeReference(const QString &reference)
         break;
     }
 
-    bool result = sendRequest(__func__, QList<QVariant>() << QVariant(reference),
+    QList<QVariant> args;
+    args << QVariant(reference);
+    bool result = sendRequest(__func__, args,
                               SLOT(removeReferenceReply()));
     if (!result) {
         TRACE() << "Error occurred.";
@@ -486,7 +499,9 @@ void IdentityImpl::verifyUser(const QVariantMap &params)
         break;
     }
 
-    bool result = sendRequest(__func__, QList<QVariant>() << params,
+    QList<QVariant> args;
+    args << params;
+    bool result = sendRequest(__func__, args,
                               SLOT(verifyUserReply(const bool)),
                               SIGNOND_MAX_TIMEOUT);
     if (!result) {
@@ -528,7 +543,9 @@ void IdentityImpl::verifySecret(const QString &secret)
         break;
     }
 
-    bool result = sendRequest(__func__, QList<QVariant>() << QVariant(secret),
+    QList<QVariant> args;
+    args << QVariant(secret);
+    bool result = sendRequest(__func__, args,
                               SLOT(verifySecretReply(const bool)));
     if (!result) {
         TRACE() << "Error occurred.";
@@ -567,7 +584,8 @@ void IdentityImpl::signOut()
             break;
         }
 
-        bool result = sendRequest(__func__, QList<QVariant>(),
+        QList<QVariant> args;
+        bool result = sendRequest(__func__, args,
                                   SLOT(signOutReply()));
         if (!result) {
             TRACE() << "Error occurred.";
@@ -781,7 +799,8 @@ void IdentityImpl::errorReply(const QDBusError& err)
 
 void IdentityImpl::updateContents()
 {
-    bool result = sendRequest("getInfo", QList<QVariant>(),
+    QList<QVariant> args;
+    bool result = sendRequest("getInfo", args,
                               SLOT(getInfoReply(const QVariantMap &)));
 
     if (!result) {
@@ -791,7 +810,9 @@ void IdentityImpl::updateContents()
     }
 }
 
-bool IdentityImpl::sendRequest(const char *remoteMethod, const QList<QVariant> &args, const char *replySlot, int timeout)
+bool IdentityImpl::sendRequest(const char *remoteMethod,
+                               const QList<QVariant> &args,
+                               const char *replySlot, int timeout)
 {
     TRACE();
     QDBusMessage msg =
@@ -820,6 +841,8 @@ bool IdentityImpl::sendRegisterRequest()
         registerReplyMethodName =
             SLOT(registerReply(const QDBusObjectPath &, const QVariantMap &));
     }
+
+    args << m_applicationContext;
 
     QDBusMessage registerCall = QDBusMessage::createMethodCall(
         SIGNOND_SERVICE,

@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -26,7 +28,9 @@
 
 namespace SignOn {
 
-Identity::Identity(const quint32 id, QObject *parent):
+Identity::Identity(const quint32 id,
+                   const QString &applicationContext,
+                   QObject *parent):
     QObject(parent)
 {
     qRegisterMetaType<Error>("SignOn::Error");
@@ -36,21 +40,39 @@ Identity::Identity(const quint32 id, QObject *parent):
         BLAME() << "Identity::Identity() - "
             "SignOn::Error meta type not registered.";
 
-    impl = new IdentityImpl(this, id);
+    impl = new IdentityImpl(this, applicationContext, id);
 }
 
-Identity *Identity::newIdentity(const IdentityInfo &info, QObject *parent)
+Identity *Identity::newIdentity(const IdentityInfo &info,
+                                QObject *parent)
 {
-    Identity *identity = new Identity(SSO_NEW_IDENTITY, parent);
+    return Identity::newIdentity(QString(), info, parent);
+}
+
+Identity *Identity::newIdentity(const QString &applicationContext,
+                                const IdentityInfo &info,
+                                QObject *parent)
+{
+    Identity *identity = new Identity(SSO_NEW_IDENTITY,
+                                      applicationContext,
+                                      parent);
     identity->impl->copyInfo(info);
     return identity;
 }
 
-Identity *Identity::existingIdentity(const quint32 id, QObject *parent)
+Identity *Identity::existingIdentity(const quint32 id,
+                                     QObject *parent)
+{
+    return Identity::existingIdentity(QString(), id, parent);
+}
+
+Identity *Identity::existingIdentity(const QString &applicationContext,
+                                     const quint32 id,
+                                     QObject *parent)
 {
     if (id == 0)
         return NULL;
-    return new Identity(id, parent);
+    return new Identity(id, applicationContext, parent);
 }
 
 Identity::~Identity()
@@ -131,6 +153,11 @@ void Identity::verifySecret(const QString &secret)
 void Identity::signOut()
 {
     impl->signOut();
+}
+
+QString Identity::applicationContext () const
+{
+    return impl->applicationContext();
 }
 
 } //namespace SignOn

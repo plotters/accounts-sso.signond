@@ -3,8 +3,10 @@
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
  * Copyright (C) 2012 Canonical Ltd.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -54,16 +56,19 @@ public:
 
     friend class SignonAuthSessionAdaptor;
 
-    static QString getAuthSessionObjectPath(const quint32 id,
-                                            const QString &method,
-                                            SignonDaemon *parent,
-                                            bool &supportsAuthMethod,
-                                            pid_t ownerPid);
+    static QString getAuthSessionObjectPath(
+                                        const quint32 id,
+                                        const QString &method,
+                                        SignonDaemon *parent,
+                                        bool &supportsAuthMethod,
+                                        pid_t ownerPid,
+                                        const QString &applicationContext);
     static void stopAllAuthSessions();
-    quint32 id() const;
-    QString method() const;
+    quint32 id() const { return m_id; };
+    QString method() const { return m_method; };
     void objectRegistered();
     pid_t ownerPid() const;
+    QString applicationContext() const { return m_applicationContext; };
 
 public Q_SLOTS:
     QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms);
@@ -83,7 +88,8 @@ private Q_SLOTS:
                           const QString &message);
 
 protected:
-    SignonAuthSession(quint32 id, const QString &method, pid_t ownerPid);
+    SignonAuthSession(quint32 id, const QString &method, pid_t ownerPid,
+                      const QString &applicationContext);
     virtual ~SignonAuthSession();
 
 private:
@@ -91,6 +97,7 @@ private:
     QString m_method;
     bool m_registered;
     pid_t m_ownerPid;
+    QString m_applicationContext;
 
     Q_DISABLE_COPY(SignonAuthSession)
 }; //class SignonDaemon

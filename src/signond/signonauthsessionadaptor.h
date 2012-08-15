@@ -3,8 +3,10 @@
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
  * Copyright (C) 2012 Canonical Ltd.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -54,7 +56,7 @@ public Q_SLOTS:
                         const QString &mechanism);
 
     Q_NOREPLY void cancel();
-    Q_NOREPLY void setId(quint32 id);
+    Q_NOREPLY void setId(quint32 id, const QString &applicationContext);
     Q_NOREPLY void objectUnref();
 
 Q_SIGNALS:

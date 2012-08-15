@@ -2,7 +2,7 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
- * Copyright (C) 2011 Intel Corporation.
+ * Copyright (C) 2011-2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
@@ -50,7 +50,7 @@ void SignonAuthSessionAdaptor::errorReply(const QString &name,
 
 QStringList
 SignonAuthSessionAdaptor::queryAvailableMechanisms(
-                                           const QStringList &wantedMechanisms)
+                                        const QStringList &wantedMechanisms)
 {
     TRACE();
 
@@ -70,8 +70,9 @@ SignonAuthSessionAdaptor::queryAvailableMechanisms(
     return parent()->queryAvailableMechanisms(wantedMechanisms);
 }
 
-QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
-                                              const QString &mechanism)
+QVariantMap SignonAuthSessionAdaptor::process(
+                                        const QVariantMap &sessionDataVa,
+                                        const QString &mechanism)
 {
     TRACE();
 
@@ -116,7 +117,8 @@ QVariantMap SignonAuthSessionAdaptor::process(const QVariantMap &sessionDataVa,
         return QVariantMap();
     }
 
-    return parent()->process(sessionDataVa, allowedMechanism);
+    return parent()->process(sessionDataVa,
+                             allowedMechanism);
 }
 
 void SignonAuthSessionAdaptor::cancel()
@@ -133,7 +135,8 @@ void SignonAuthSessionAdaptor::cancel()
     parent()->cancel();
 }
 
-void SignonAuthSessionAdaptor::setId(quint32 id)
+void SignonAuthSessionAdaptor::setId(quint32 id,
+                                     const QString &applicationContext)
 {
     TRACE();
 
@@ -145,7 +148,9 @@ void SignonAuthSessionAdaptor::setId(quint32 id)
         return;
     }
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
-                                    dbusContext.message(), id)) {
+                                    dbusContext.message(),
+                                    applicationContext,
+                                    id)) {
         TRACE() << "setId called with an identifier the peer is not allowed "
             "to use";
         return;

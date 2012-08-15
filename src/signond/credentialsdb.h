@@ -3,9 +3,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -35,6 +37,7 @@
 #include <QtSql>
 
 #include "SignOn/abstract-secrets-storage.h"
+#include "SignOn/securitycontext.h"
 #include "signonidentityinfo.h"
 
 #define SSO_MAX_TOKEN_STORAGE (4*1024) // 4 kB for token store/identity/method
@@ -206,8 +209,10 @@ public:
     QString connectionName() const { return m_database.connectionName(); }
 
 protected:
-    QStringList queryList(const QString &query_str);
-    QStringList queryList(QSqlQuery &query);
+    QStringList queryStringList(const QString &query_str);
+    QStringList queryStringList(QSqlQuery &query);
+    SignOn::SecurityContextList queryStringTupleList(const QString &query_str);
+    SignOn::SecurityContextList queryStringTupleList(QSqlQuery &query);
     void setLastError(const QSqlError &sqlError);
 
 private:
@@ -231,8 +236,9 @@ public:
     bool createTables();
     bool updateDB(int version);
 
-    QStringList methods(const quint32 id,
-                        const QString &securityToken = QString());
+    QStringList methods(
+        const quint32 id,
+        const SignOn::SecurityContext &securityContext = SignOn::SecurityContext());
     quint32 insertMethod(const QString &method, bool *ok = 0);
     quint32 methodId(const QString &method);
     SignonIdentityInfo identity(const quint32 id);
@@ -243,16 +249,18 @@ public:
 
     bool clear();
 
-    QStringList accessControlList(const quint32 identityId);
-    QStringList ownerList(const quint32 identityId);
+    SignOn::SecurityContextList accessControlList(const quint32 identityId);
+    SignOn::SecurityContextList ownerList(const quint32 identityId);
 
     bool addReference(const quint32 id,
-                      const QString &token,
+                      const SignOn::SecurityContext &refOwner,
                       const QString &reference);
     bool removeReference(const quint32 id,
-                         const QString &token,
+                         const SignOn::SecurityContext &refOwner,
                          const QString &reference = QString());
-    QStringList references(const quint32 id, const QString &token = QString());
+    QStringList references(
+        const quint32 id,
+        const SignOn::SecurityContext &refOwner = SignOn::SecurityContext());
 
 private:
     bool insertMethods(QMap<QString, QStringList> methods);
@@ -306,8 +314,9 @@ public:
     SignOn::CredentialsDBError lastError() const;
     bool errorOccurred() const { return lastError().isValid(); };
 
-    QStringList methods(const quint32 id,
-                        const QString &securityToken = QString());
+    QStringList methods(
+                    const quint32 id,
+                    const SignOn::SecurityContext &securityToken = QString());
     bool checkPassword(const quint32 id,
                        const QString &username, const QString &password);
     SignonIdentityInfo credentials(const quint32 id, bool queryPassword = true);
@@ -321,9 +330,9 @@ public:
 
     bool clear();
 
-    QStringList accessControlList(const quint32 identityId);
-    QStringList ownerList(const quint32 identityId);
-    QString credentialsOwnerSecurityToken(const quint32 identityId);
+    SignOn::SecurityContextList accessControlList(const quint32 identityId);
+    SignOn::SecurityContextList ownerList(const quint32 identityId);
+    SignOn::SecurityContext credentialsOwner(const quint32 identityId);
 
     QVariantMap loadData(const quint32 id, const QString &method);
     bool storeData(const quint32 id,
@@ -332,13 +341,15 @@ public:
     bool removeData(const quint32 id, const QString &method = QString());
 
     bool addReference(const quint32 id,
-                      const QString &token,
+                      const SignOn::SecurityContext &refOwner,
                       const QString &reference);
-    bool removeReference(const quint32 id,
-                         const QString &token,
-                         const QString &reference = QString());
-    QStringList references(const quint32 id,
-                           const QString &token = QString());
+    bool removeReference(
+        const quint32 id,
+        const SignOn::SecurityContext &refOwner,
+        const QString &reference = QString());
+    QStringList references(
+        const quint32 id,
+        const SignOn::SecurityContext &refOwner = SignOn::SecurityContext());
 
 private:
     SignOn::AbstractSecretsStorage *secretsStorage;

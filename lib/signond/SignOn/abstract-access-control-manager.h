@@ -1,7 +1,7 @@
 /*
  * This file is part of signon
  *
- * Copyright (C) 2011 Intel Corporation.
+ * Copyright (C) 2011-2012 Intel Corporation.
  *
  * Contact: Elena Reshetova <elena.reshetova@intel.com>
  *
@@ -29,9 +29,11 @@
 #define SIGNON_ABSTRACT_ACCESS_CONTROL_MANAGER_H
 
 #include <SignOn/extension-interface.h>
+#include <SignOn/securitycontext.h>
 
 #include <QString>
 #include <QDBusMessage>
+#include <QDBusVariant>
 
 
 namespace SignOn {
@@ -42,7 +44,7 @@ namespace SignOn {
  * based on security priviledges of the client processes.
  * @ingroup Accounts_and_SSO_Framework
  */
-class SIGNON_EXPORT AbstractAccessControlManager: public QObject
+class SIGNON_EXPORT AbstractAccessControlManager : public QObject
 {
     Q_OBJECT
 
@@ -59,16 +61,31 @@ public:
     virtual ~AbstractAccessControlManager();
 
     /*!
-     * Checks if a client process is allowed to access objects with a certain
-     * security context.
-     * The access type to be checked depends on the concrete implementation of
-     * this function.
+     * Checks if a client process is allowed to use specified identity.
+     * The actual check depends on AC framework being used.   
      * @param peerMessage, the request message sent over DBUS by the process.
-     * @param securityContext, the securityContext to be checked against.
+     * @param applicationContext, request context within a process.
+     * @param securityContext, the security context of identity to be checked
+     * against.
      * @returns true, if the peer is allowed, false otherwise.
      */
-    virtual bool isPeerAllowedToAccess(const QDBusMessage &peerMessage,
-                                       const QString &securityContext);
+    virtual bool isPeerAllowedToUseIdentity(
+                                        const QDBusMessage &peerMessage,
+                                        const QString &applicationContext,
+                                        const SecurityContext &securityContext);
+
+    /*!
+     * Checks if a client process is owner of identify.
+     * The actual check depends on AC framework being used.   
+     * @param peerMessage, the request message sent over DBUS by the process.
+     * @param applicationContext, request context within a process.
+     * @param securityContext, the security context of identity to be checked
+     * against.
+     * @returns true, if the peer is allowed, false otherwise.
+     */
+    virtual bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
+                                       const QString &applicationContext,
+                                       const SecurityContext &securityContext);
 
     /*!
      * Looks up for the application identifier of a specific client process.
@@ -82,6 +99,20 @@ public:
      * @returns the application identifier of the keychain widget
      */
     virtual QString keychainWidgetAppId();
+
+    /*!
+     * Checks if a client process is allowed to set the specified acl on data
+     * item.
+     * An actual check depends on AC framework being used.
+     * @param peerMessage, the request message sent over DBUS by the process.
+     * @param applicationContext, request context within a process.
+     * @param aclList, the acl list to be checked against.
+     * @returns true, if the peer is allowed, false otherwise.
+     */
+    virtual bool isACLValid(const QDBusMessage &peerMessage,
+                            const QString &applicationContext,
+                            const SecurityContextList &aclList);
+
 };
 
 } // namespace

@@ -27,6 +27,7 @@
     </method>
     <method name="objectUnref">
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+      <arg name="applicationContext" type="s" direction="in"/>
     </method>
   </interface>
 </node>

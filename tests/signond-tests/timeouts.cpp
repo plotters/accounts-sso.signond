@@ -3,8 +3,10 @@
  *
  * Copyright (C) 2010 Nokia Corporation.
  * Copyright (C) 2012 Canonical Ltd.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -62,6 +64,7 @@ void TimeoutsTest::identityTimeout()
     IdentityInfo info = IdentityInfo(QLatin1String("timeout test"),
                                      QLatin1String("timeout@test"),
                                      methods);
+    info.setAccessControlList(SignOn::SecurityContext(QLatin1String("*")));
     Identity *identity = Identity::newIdentity(info);
     QVERIFY(identity != NULL);
 
@@ -87,6 +90,7 @@ void TimeoutsTest::identityTimeout()
                                                       "getIdentity");
     QList<QVariant> args;
     args << identity->id();
+    args << QString::fromLatin1("");
     msg.setArguments(args);
 
     QDBusMessage reply = conn.call(msg);
@@ -126,6 +130,7 @@ void TimeoutsTest::identityRegisterTwice()
     IdentityInfo info = IdentityInfo(QLatin1String("timeout test"),
                                      QLatin1String("timeout@test"),
                                      methods);
+    info.setAccessControlList(SignOn::SecurityContext(QLatin1String("*")));
     Identity *identity = Identity::newIdentity(info);
     QVERIFY(identity != NULL);
 
@@ -151,6 +156,7 @@ void TimeoutsTest::identityRegisterTwice()
                                                       "getIdentity");
     QList<QVariant> args;
     args << identity->id();
+    args << QString::fromLatin1("");
     msg.setArguments(args);
 
     QDBusMessage reply = conn.call(msg);
@@ -206,6 +212,9 @@ bool TimeoutsTest::triggerDisposableCleanup()
                                                       SIGNOND_DAEMON_OBJECTPATH,
                                                       SIGNOND_DAEMON_INTERFACE,
                                                       "registerNewIdentity");
+    QList<QVariant> args;
+    args << QString::fromLatin1("");
+    msg.setArguments(args);
     QDBusMessage reply = conn.call(msg);
     return (reply.type() == QDBusMessage::ReplyMessage);
 }

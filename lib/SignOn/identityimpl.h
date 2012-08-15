@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -20,6 +22,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
+
 #ifndef IDENTITYIMPL_H
 #define IDENTITYIMPL_H
 
@@ -51,6 +54,7 @@ class IdentityImpl: public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(IdentityImpl)
+    Q_PROPERTY(QString applicationContext READ applicationContext);
 
     friend class Identity;
 
@@ -65,12 +69,16 @@ class IdentityImpl: public QObject
 
 public:
     IdentityImpl(Identity *parent,
+                 const QString &applicationContext,
                  const quint32 id = 0);
     ~IdentityImpl();
 
     quint32 id() const;
     AuthSession *createSession(const QString &methodName, QObject *parent = 0);
     void destroySession(AuthSession *session);
+
+    QString applicationContext () const
+        { return m_applicationContext; }
 
 public Q_SLOTS:
     void errorReply(const QDBusError &err);
@@ -133,6 +141,8 @@ private:
     bool m_infoQueried;
     /* Marks this Identity as the one which requested the sign out */
     bool m_signOutRequestedByThisIdentity;
+    /* Application level security context info. */
+    QString m_applicationContext;
 };
 
 }  // namespace SignOn

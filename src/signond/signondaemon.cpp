@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -216,6 +218,7 @@ SignonDaemon::SignonDaemon(QObject *parent) : QObject(parent)
     // Register D-Bus meta types
     qDBusRegisterMetaType<MethodMap>();
     qDBusRegisterMetaType<MapList>();
+    qDBusRegisterMetaType<SignOn::SecurityList>();
 }
 
 SignonDaemon::~SignonDaemon()
@@ -228,8 +231,6 @@ SignonDaemon::~SignonDaemon()
     }
 
     SignonAuthSession::stopAllAuthSessions();
-    m_storedIdentities.clear();
-    m_unstoredIdentities.clear();
 
     if (m_pCAMManager) {
         m_pCAMManager->closeCredentialsSystem();
@@ -440,7 +441,7 @@ void SignonDaemon::init()
     if (!initStorage())
         BLAME() << "Signond: Cannot initialize credentials storage.";
 
-    Q_UNUSED(AuthCoreCache::instance(this));
+    AuthCoreCache::instance(this);
 
     if (m_configuration->daemonTimeout() > 0) {
         SignonDisposable::invokeOnIdle(m_configuration->daemonTimeout(),
@@ -507,20 +508,14 @@ bool SignonDaemon::initStorage()
     return true;
 }
 
-void SignonDaemon::identityStored(SignonIdentity *identity)
-{
-    if (m_unstoredIdentities.contains(identity->objectName())) {
-        m_unstoredIdentities.remove(identity->objectName());
-        m_storedIdentities.insert(identity->id(), identity);
-    }
-}
-
-void SignonDaemon::registerNewIdentity(QDBusObjectPath &objectPath)
+void SignonDaemon::registerNewIdentity(const QString &applicationContext,
+                                       QDBusObjectPath &objectPath)
 {
     TRACE() << "Registering new identity:";
 
     SignonIdentity *identity =
-        SignonIdentity::createIdentity(SIGNOND_NEW_IDENTITY, this);
+        SignonIdentity::createIdentity(SIGNOND_NEW_IDENTITY,
+                                       applicationContext, this);
 
     if (identity == NULL) {
         sendErrorReply(internalServerErrName,
@@ -529,8 +524,6 @@ void SignonDaemon::registerNewIdentity(QDBusObjectPath &objectPath)
                                      "object."));
         return;
     }
-
-    m_unstoredIdentities.insert(identity->objectName(), identity);
 
     objectPath = QDBusObjectPath(identity->objectName());
 }
@@ -550,6 +543,7 @@ int SignonDaemon::authSessionTimeout() const
 }
 
 void SignonDaemon::getIdentity(const quint32 id,
+                               const QString &applicationContext,
                                QDBusObjectPath &objectPath,
                                QVariantMap &identityData)
 {
@@ -557,13 +551,9 @@ void SignonDaemon::getIdentity(const quint32 id,
 
     TRACE() << "Registering identity:" << id;
 
-    //1st check if the existing identity is in cache
-    SignonIdentity *identity = m_storedIdentities.value(id, NULL);
+    SignonIdentity *identity;
 
-    //if not create it
-    if (identity == NULL)
-        identity = SignonIdentity::createIdentity(id, this);
-
+    identity = SignonIdentity::createIdentity(id, applicationContext, this);
     if (identity == NULL)
     {
         sendErrorReply(internalServerErrName,
@@ -584,7 +574,6 @@ void SignonDaemon::getIdentity(const quint32 id,
     }
 
     //cache the identity as stored
-    m_storedIdentities.insert(identity->id(), identity);
     identity->keepInUse();
 
     identityData = info.toMap();
@@ -697,15 +686,21 @@ bool SignonDaemon::clear()
     return true;
 }
 
-QString SignonDaemon::getAuthSessionObjectPath(const quint32 id,
-                                               const QString type)
+QString SignonDaemon::getAuthSessionObjectPath(
+                                        const quint32 id,
+                                        const QString type,
+                                        const QString &applicationContext)
 {
     bool supportsAuthMethod = false;
     pid_t ownerPid = AccessControlManagerHelper::pidOfPeer(*this);
     QString objectPath =
-        SignonAuthSession::getAuthSessionObjectPath(id, type, this,
+        SignonAuthSession::getAuthSessionObjectPath(
+                                                    id,
+                                                    type,
+                                                    this,
                                                     supportsAuthMethod,
-                                                    ownerPid);
+                                                    ownerPid,
+                                                    applicationContext);
     if (objectPath.isEmpty() && !supportsAuthMethod) {
         sendErrorReply(SIGNOND_METHOD_NOT_KNOWN_ERR_NAME,
                        SIGNOND_METHOD_NOT_KNOWN_ERR_STR);
@@ -851,7 +846,8 @@ bool SignonDaemon::createStorageFileTree(const QStringList &backupFiles) const
         QString filePath = storageDir.path() + QDir::separator() + fileName;
         QFile file(filePath);
         if (!file.open(QIODevice::WriteOnly)) {
-            qCritical() << "Failed to create empty file for backup:" << filePath;
+            qCritical() << "Failed to create empty file for backup:"
+                        << filePath;
             return false;
         } else {
             file.close();

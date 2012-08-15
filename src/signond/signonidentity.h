@@ -3,9 +3,11 @@
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
  * Copyright (C) 2012 Canonical Ltd.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -55,11 +57,16 @@ class SignonIdentity: public SignonDisposable, protected QDBusContext
 
 public:
     void destroy();
-    static SignonIdentity *createIdentity(quint32 id, SignonDaemon *parent);
+    static SignonIdentity *createIdentity(quint32 id,
+                                          const QString &applicationContext,
+                                          SignonDaemon *parent);
     quint32 id() const { return m_id; }
+    QString applicationContext() const { return m_applicationContext; }
 
-    SignonIdentityInfo queryInfo(bool &ok, bool queryPassword = true);
-    quint32 storeCredentials(const SignonIdentityInfo &info, bool storeSecret);
+    SignonIdentityInfo queryInfo(bool &ok,
+                                 bool queryPassword = true);
+    quint32 storeCredentials(const SignonIdentityInfo &info,
+                             bool storeSecret);
 
 public Q_SLOTS:
     quint32 requestCredentialsUpdate(const QString &message);
@@ -79,7 +86,8 @@ Q_SIGNALS:
     void infoUpdated(int);
 
 private:
-    SignonIdentity(quint32 id, int timeout, SignonDaemon *parent);
+    SignonIdentity(quint32 id, int timeout, const QString &applicationContext,
+                   SignonDaemon *parent);
     bool init();
     bool credentialsStored() const { return m_id > 0 ? true : false; }
     void queryUserPassword(const QVariantMap &params);
@@ -90,6 +98,7 @@ private:
     SignonIdentityInfo *m_pInfo;
     SignonDaemon *m_pSignonDaemon;
     bool m_registered;
+    QString m_applicationContext;
     QDBusMessage m_message;
 
 }; //class SignonDaemon

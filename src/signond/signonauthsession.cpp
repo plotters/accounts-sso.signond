@@ -2,8 +2,10 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
- * Conta Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -28,11 +30,13 @@ using namespace SignonDaemonNS;
 
 SignonAuthSession::SignonAuthSession(quint32 id,
                                      const QString &method,
-                                     pid_t ownerPid):
+                                     pid_t ownerPid,
+                                     const QString &applicationContext):
     m_id(id),
     m_method(method),
     m_registered(false),
-    m_ownerPid(ownerPid)
+    m_ownerPid(ownerPid),
+    m_applicationContext(applicationContext)
 {
     TRACE();
 
@@ -56,15 +60,18 @@ SignonAuthSession::~SignonAuthSession()
     }
 }
 
-QString SignonAuthSession::getAuthSessionObjectPath(const quint32 id,
-                                                    const QString &method,
-                                                    SignonDaemon *parent,
-                                                    bool &supportsAuthMethod,
-                                                    pid_t ownerPid)
+QString SignonAuthSession::getAuthSessionObjectPath(
+                                        const quint32 id,
+                                        const QString &method,
+                                        SignonDaemon *parent,
+                                        bool &supportsAuthMethod,
+                                        pid_t ownerPid,
+                                        const QString &applicationContext)
 {
     TRACE();
     supportsAuthMethod = true;
-    SignonAuthSession* sas = new SignonAuthSession(id, method, ownerPid);
+    SignonAuthSession* sas = new SignonAuthSession(id, method, ownerPid,
+                                                   applicationContext);
 
     QDBusConnection connection(SIGNOND_BUS);
     if (!connection.isConnected()) {
@@ -105,23 +112,15 @@ void SignonAuthSession::stopAllAuthSessions()
     SignonSessionCore::stopAllAuthSessions();
 }
 
-quint32 SignonAuthSession::id() const
-{
-    return m_id;
-}
-
-QString SignonAuthSession::method() const
-{
-    return m_method;
-}
-
 pid_t SignonAuthSession::ownerPid() const
 {
     return m_ownerPid;
 }
 
+
 QStringList
-SignonAuthSession::queryAvailableMechanisms(const QStringList &wantedMechanisms)
+SignonAuthSession::queryAvailableMechanisms(
+                                        const QStringList &wantedMechanisms)
 {
     return parent()->queryAvailableMechanisms(wantedMechanisms);
 }
@@ -132,6 +131,7 @@ QVariantMap SignonAuthSession::process(const QVariantMap &sessionDataVa,
     setDelayedReply(true);
     parent()->process(connection(),
                       message(),
+                      m_applicationContext,
                       sessionDataVa,
                       mechanism,
                       objectName());
