@@ -3,8 +3,10 @@
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
  * Copyright (C) 2012 Canonical Ltd.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -54,11 +56,13 @@ public:
 
     friend class SignonAuthSessionAdaptor;
 
-    static QString getAuthSessionObjectPath(const quint32 id,
-                                            const QString &method,
-                                            SignonDaemon *parent,
-                                            bool &supportsAuthMethod,
-                                            pid_t ownerPid);
+    static QString getAuthSessionObjectPath(
+                                        const quint32 id,
+                                        const QString &method,
+                                        SignonDaemon *parent,
+                                        bool &supportsAuthMethod,
+                                        pid_t ownerPid,
+                                        const QDBusVariant &applicationContext);
     static void stopAllAuthSessions();
     quint32 id() const;
     QString method() const;
@@ -66,12 +70,15 @@ public:
     pid_t ownerPid() const;
 
 public Q_SLOTS:
-    QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms);
+    QStringList queryAvailableMechanisms(
+                                        const QStringList &wantedMechanisms,
+                                        const QDBusVariant &applicationContext);
     QVariantMap process(const QVariantMap &sessionDataVa,
-                        const QString &mechanism);
-    void cancel();
-    void setId(quint32 id);
-    void objectUnref();
+                        const QString &mechanism,
+                        const QDBusVariant &applicationContext);
+    void cancel(const QDBusVariant &applicationContext);
+    void setId(quint32 id, const QDBusVariant &applicationContext);
+    void objectUnref(const QDBusVariant &applicationContext);
 
 Q_SIGNALS:
     void stateChanged(int state, const QString &message);

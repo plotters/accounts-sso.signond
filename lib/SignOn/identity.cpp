@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -131,6 +133,16 @@ void Identity::verifySecret(const QString &secret)
 void Identity::signOut()
 {
     impl->signOut();
+}
+
+QVariant Identity::applicationContext ()
+{
+    return impl->applicationContext();
+}
+
+void Identity::setApplicationContext (const QVariant &newApplicationContext)
+{
+    impl->setApplicationContext(newApplicationContext);
 }
 
 } //namespace SignOn

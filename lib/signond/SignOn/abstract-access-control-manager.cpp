@@ -34,16 +34,24 @@ AbstractAccessControlManager::~AbstractAccessControlManager()
 {
 }
 
-QString AbstractAccessControlManager::keychainWidgetAppId()
-{
-    return QString();
-}
-
-bool AbstractAccessControlManager::isPeerAllowedToAccess(
-                                               const QDBusMessage &peerMessage,
-                                               const QString &securityContext)
+bool AbstractAccessControlManager::isPeerAllowedToUseIdentity(
+                                        const QDBusMessage &peerMessage,
+                                        const QDBusVariant &applicationContext,
+                                        const SecurityContext &securityContext)
 {
     Q_UNUSED(peerMessage);
+    Q_UNUSED(applicationContext);
+    Q_UNUSED(securityContext);
+    return true;
+}
+
+bool AbstractAccessControlManager::isPeerOwnerOfIdentity(
+                                        const QDBusMessage &peerMessage,
+                                        const QDBusVariant &applicationContext,
+                                        const SecurityContext &securityContext)
+{
+    Q_UNUSED(peerMessage);
+    Q_UNUSED(applicationContext);
     Q_UNUSED(securityContext);
     return true;
 }
@@ -53,4 +61,20 @@ AbstractAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 {
     Q_UNUSED(peerMessage);
     return QString();
+}
+
+QString AbstractAccessControlManager::keychainWidgetAppId()
+{
+    return QString();
+}
+
+bool AbstractAccessControlManager::isACLValid(
+                                        const QDBusMessage &peerMessage,
+                                        const QDBusVariant &applicationContext,
+                                        const SecurityContextList &aclList)
+{
+    Q_UNUSED(peerMessage);
+    Q_UNUSED(applicationContext);
+    Q_UNUSED(aclList);
+    return true;
 }
