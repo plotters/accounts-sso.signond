@@ -2,9 +2,11 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Aurel Popirtac <ext-aurel.popirtac@nokia.com>
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -211,6 +213,7 @@ SignonDaemon::SignonDaemon(QObject *parent) : QObject(parent)
     // Register D-Bus meta types
     qDBusRegisterMetaType<MethodMap>();
     qDBusRegisterMetaType<MapList>();
+    qDBusRegisterMetaType<SignOn::SecurityList>();
 }
 
 SignonDaemon::~SignonDaemon()
@@ -437,7 +440,7 @@ void SignonDaemon::init()
     if (!initStorage())
         BLAME() << "Signond: Cannot initialize credentials storage.";
 
-    Q_UNUSED(AuthCoreCache::instance(this));
+    AuthCoreCache::instance(this);
 
     if (m_configuration->daemonTimeout() > 0) {
         SignonDisposable::invokeOnIdle(m_configuration->daemonTimeout(),
@@ -512,8 +515,10 @@ void SignonDaemon::identityStored(SignonIdentity *identity)
     }
 }
 
-void SignonDaemon::registerNewIdentity(QDBusObjectPath &objectPath)
+void SignonDaemon::registerNewIdentity(const QDBusVariant &applicationContext,
+                                       QDBusObjectPath &objectPath)
 {
+    Q_UNUSED(applicationContext);
     TRACE() << "Registering new identity:";
 
     SignonIdentity *identity =
@@ -547,9 +552,11 @@ int SignonDaemon::authSessionTimeout() const
 }
 
 void SignonDaemon::getIdentity(const quint32 id,
+                               const QDBusVariant &applicationContext,
                                QDBusObjectPath &objectPath,
                                QVariantMap &identityData)
 {
+    Q_UNUSED(applicationContext);
     SIGNON_RETURN_IF_CAM_UNAVAILABLE();
 
     TRACE() << "Registering identity:" << id;
@@ -571,7 +578,9 @@ void SignonDaemon::getIdentity(const quint32 id,
     }
 
     bool ok;
-    SignonIdentityInfo info = identity->queryInfo(ok, false);
+    SignonIdentityInfo info = identity->queryInfo(ok,
+                                                  applicationContext,
+                                                  false);
 
     if (info.isNew())
     {
@@ -694,15 +703,23 @@ bool SignonDaemon::clear()
     return true;
 }
 
-QString SignonDaemon::getAuthSessionObjectPath(const quint32 id,
-                                               const QString type)
+QString SignonDaemon::getAuthSessionObjectPath(
+                                        const quint32 id,
+                                        const QString type,
+                                        const QDBusVariant &applicationContext)
 {
+    Q_UNUSED(applicationContext);
+
     bool supportsAuthMethod = false;
     pid_t ownerPid = AccessControlManagerHelper::pidOfPeer(*this);
     QString objectPath =
-        SignonAuthSession::getAuthSessionObjectPath(id, type, this,
+        SignonAuthSession::getAuthSessionObjectPath(
+                                                    id,
+                                                    type,
+                                                    this,
                                                     supportsAuthMethod,
-                                                    ownerPid);
+                                                    ownerPid,
+                                                    applicationContext);
     if (objectPath.isEmpty() && !supportsAuthMethod) {
         sendErrorReply(SIGNOND_METHOD_NOT_KNOWN_ERR_NAME,
                        SIGNOND_METHOD_NOT_KNOWN_ERR_STR);
@@ -848,7 +865,8 @@ bool SignonDaemon::createStorageFileTree(const QStringList &backupFiles) const
         QString filePath = storageDir.path() + QDir::separator() + fileName;
         QFile file(filePath);
         if (!file.open(QIODevice::WriteOnly)) {
-            qCritical() << "Failed to create empty file for backup:" << filePath;
+            qCritical() << "Failed to create empty file for backup:"
+                        << filePath;
             return false;
         } else {
             file.close();

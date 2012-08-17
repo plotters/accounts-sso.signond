@@ -2,7 +2,7 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
- * Copyright (C) 2011 Intel Corporation.
+ * Copyright (C) 2011-2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
  * Contact: Jussi Laako <jussi.laako@linux.intel.com>
@@ -240,6 +240,7 @@ SignonSessionCore::queryAvailableMechanisms(const QStringList &wantedMechanisms)
 
 void SignonSessionCore::process(const QDBusConnection &connection,
                                 const QDBusMessage &message,
+                                const QDBusVariant &applicationContext,
                                 const QVariantMap &sessionDataVa,
                                 const QString &mechanism,
                                 const QString &cancelKey)
@@ -247,6 +248,7 @@ void SignonSessionCore::process(const QDBusConnection &connection,
     keepInUse();
     m_listOfRequests.enqueue(RequestData(connection,
                                          message,
+                                         applicationContext,
                                          sessionDataVa,
                                          mechanism,
                                          cancelKey));
@@ -373,12 +375,14 @@ void SignonSessionCore::startProcess()
                 parameters[SSO_KEY_USERNAME] = info.userName();
             }
 
-            QStringList paramsTokenList;
-            QStringList identityAclList = info.accessControlList();
+            SignOn::SecurityList paramsTokenList;
+            SignOn::SecurityContextList identityAclList =
+                info.accessControlList();
 
-            foreach(QString acl, identityAclList)
-                if (AccessControlManagerHelper::instance()->isPeerAllowedToAccess(data.m_msg, acl))
-                    paramsTokenList.append(acl);
+            foreach(SignOn::SecurityContext secCtx, identityAclList)
+                if (AccessControlManagerHelper::instance()->isPeerAllowedToAccess(
+                    data.m_msg, data.m_appctx, secCtx))
+                    paramsTokenList.append(secCtx.toStringList());
 
             if (!paramsTokenList.isEmpty()) {
                 parameters[SSO_ACCESS_CONTROL_TOKENS] = paramsTokenList;
