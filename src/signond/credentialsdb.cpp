@@ -698,18 +698,13 @@ SignonIdentityInfo MetaDataDB::identity(const quint32 id)
                     "(SELECT token_id FROM OWNER WHERE identity_id = '%1' )")
                     .arg(id));
 
-    query_str = QString::fromLatin1(
+    SignOn::SecurityContextList aclTokens = queryStringTupleList(
+        QString::fromLatin1(
                     "SELECT sysctx, appctx FROM TOKENS "
                     "WHERE id IN "
                     "(SELECT token_id FROM ACL WHERE identity_id = '%1' )")
-                    .arg(id);
-    query = exec(query_str);
-    SignOn::SecurityContextList securityTokens;
-    while (query.next()) {
-        securityTokens.append(SignOn::SecurityContext(
-                                                    query.value(0).toString(),
-                                                    query.value(1).toString()));
-    }
+                    .arg(id));
+
     query.clear();
     MethodMap methods;
     query_str = QString::fromLatin1(
@@ -734,7 +729,7 @@ SignonIdentityInfo MetaDataDB::identity(const quint32 id)
 
     SignonIdentityInfo info =
         SignonIdentityInfo(id, username, QString(), savePassword,
-                           caption, methods, realms, securityTokens,
+                           caption, methods, realms, aclTokens,
                            ownerTokens,
                            type, refCount, validated);
     info.setUserNameSecret(isUserNameSecret);
@@ -855,10 +850,11 @@ quint32 MetaDataDB::updateIdentity(const SignonIdentityInfo &info)
                     aclInsert.bindValue(S(":appctx"), secCtx.second);
                     exec(aclInsert);
                 }
-                //insert entires for empty mechs list
+                //insert entries for empty mechs list
                 if (it.value().isEmpty()) {
                     QSqlQuery aclInsert = newQuery();
-                    aclInsert.prepare(S("INSERT OR REPLACE INTO ACL (identity_id, method_id, token_id) "
+                    aclInsert.prepare(S("INSERT OR REPLACE INTO ACL "
+                                        "(identity_id, method_id, token_id) "
                                         "VALUES ( :id, "
                                         "( SELECT id FROM METHODS WHERE method = :method ),"
                                         "( SELECT id FROM TOKENS WHERE sysctx = :sysctx AND appctx = :appctx ))"));
@@ -883,7 +879,7 @@ quint32 MetaDataDB::updateIdentity(const SignonIdentityInfo &info)
                 aclInsert.bindValue(S(":mech"), mech);
                 exec(aclInsert);
             }
-            //insert entires for empty mechs list
+            //insert entries for empty mechs list
             if (it.value().isEmpty()) {
                 QSqlQuery aclInsert = newQuery();
                 aclInsert.prepare(S("INSERT OR REPLACE INTO ACL (identity_id, method_id) "
@@ -1095,9 +1091,9 @@ bool MetaDataDB::removeReference(const quint32 id,
     return false;
 }
 
-SignOn::SecurityContextList MetaDataDB::references(
-                                        const quint32 id,
-                                        const SignOn::SecurityContext &refOwner)
+QStringList MetaDataDB::references(
+                                   const quint32 id,
+                                   const SignOn::SecurityContext &refOwner)
 {
     if (refOwner.first.isEmpty())
         return queryStringList(QString::fromLatin1("SELECT ref FROM REFS "
@@ -1111,7 +1107,7 @@ SignOn::SecurityContextList MetaDataDB::references(
     q.bindValue(S(":id"), id);
     q.bindValue(S(":sysctx"), refOwner.first);
     q.bindValue(S(":appctx"), refOwner.second);
-    return queryStringTupleList(q);
+    return queryStringList(q);
 }
 
 bool MetaDataDB::insertMethods(QMap<QString, QStringList> methods)
@@ -1503,9 +1499,9 @@ bool CredentialsDB::removeReference(const quint32 id,
     return metaDataDB->removeReference(id, refOwner, reference);
 }
 
-SignOn::SecurityContextList CredentialsDB::references(
-                                        const quint32 id,
-                                        const SignOn::SecurityContext &refOwner)
+QStringList CredentialsDB::references(
+                                      const quint32 id,
+                                      const SignOn::SecurityContext &refOwner)
 {
     INIT_ERROR();
     return metaDataDB->references(id, refOwner);

@@ -33,6 +33,8 @@
 #include <QPair>
 #include <QList>
 #include <QVariant>
+#include <QSet>
+#include <QDebug>
 
 namespace SignOn {
 
@@ -48,9 +50,15 @@ public:
         QPair<QString, QString>()
         { }
     SecurityContext(const QLatin1String &simple)
-        { first = simple; }
+        {
+            first = simple;
+            second = QLatin1String("*");
+        }
     SecurityContext(const QString &simple)
-        { first = simple; }
+        {
+            first = simple;
+            second = QLatin1String("*");
+        }
     SecurityContext(const QString &sysCtx, const QString &appCtx)
         {
             first = sysCtx;
@@ -81,11 +89,29 @@ public:
             second = list.value(1);
             return (*this);
         }
-    bool operator<(const SecurityContext &other)
+    bool operator<(const SecurityContext &other) const
         {
             if (first == other.first)
                 return (second < other.second);
             return (first < other.first);
+        }
+    bool operator==(const SecurityContext &other) const
+        {
+            if (first != other.first)
+                return false;
+            if (second.isEmpty() && other.second.isEmpty())
+                return true;
+            return (second == other.second);
+        }
+    bool match(const SecurityContext &other) const
+        {
+            if (first == QString::fromLatin1("*"))
+                return true;
+            if (first != other.first)
+                return false;
+            if (second == QString::fromLatin1("*"))
+                return true;
+            return (second == other.second);
         }
 };
 
@@ -110,14 +136,14 @@ public:
     SecurityContextList(const SecurityContextList &src) :
         QList<SecurityContext>(src)
         { }
-    operator QStringList () const
+    operator QStringList() const
         {
             QStringList simpleACL;
             foreach (SecurityContext aclEntry, *this)
                 simpleACL.append(aclEntry.first);
             return simpleACL;
         }
-    SecurityList toSecurityList () const
+    SecurityList toSecurityList() const
         {
             SecurityList list;
             foreach (SecurityContext aclEntry, *this)
@@ -141,7 +167,15 @@ public:
             append(ctx);
             return (*this);
         }
-    void sort ()
+    bool operator==(const SecurityContextList &list) const
+        {
+            QSet<SecurityContext> thisSet(
+                QSet<SecurityContext>::fromList(*this));
+            QSet<SecurityContext> otherSet(
+                QSet<SecurityContext>::fromList(list));
+            return thisSet.contains(otherSet);
+        }
+    void sort()
         { qSort(begin(), end()); }
 };
 

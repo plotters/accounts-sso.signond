@@ -258,7 +258,7 @@ public:
     bool removeReference(const quint32 id,
                          const SignOn::SecurityContext &refOwner,
                          const QString &reference = QString());
-    SignOn::SecurityContextList references(
+    QStringList references(
         const quint32 id,
         const SignOn::SecurityContext &refOwner = SignOn::SecurityContext());
 
@@ -347,7 +347,7 @@ public:
         const quint32 id,
         const SignOn::SecurityContext &refOwner,
         const QString &reference = QString());
-    SignOn::SecurityContextList references(
+    QStringList references(
         const quint32 id,
         const SignOn::SecurityContext &refOwner = SignOn::SecurityContext());
 

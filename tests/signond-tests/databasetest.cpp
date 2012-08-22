@@ -47,12 +47,14 @@ void TestDatabase::initTestCase()
     testMethods.insert(QLatin1String("Method2"), mechs);
     testMethods.insert(QLatin1String("Method3"), QStringList());
 
-    testRealms = QStringList() <<
+    testRealms.clear();
+    testRealms <<
         QLatin1String("Realm1.com") <<
         QLatin1String("Realm2.com") <<
         QLatin1String("Realm3.com");
 
-    testAcl = QStringList() <<
+    testAcl.clear();
+    testAcl <<
         QLatin1String("AID::12345678") <<
         QLatin1String("AID::87654321") <<
         QLatin1String("test::property");
@@ -564,7 +566,7 @@ void TestDatabase::referenceTest()
     bool ret = m_db->addReference(id, QLatin1String("AID::12345678"),
                                   QLatin1String("ref1"));
     QVERIFY(ret);
-    SecurityContextList refs = m_db->references(id);
+    QStringList refs = m_db->references(id);
     qDebug() << refs;
     QVERIFY(refs.contains(QLatin1String("ref1")));
     refs = m_db->references(id,QLatin1String("AID::12345678"));
@@ -640,11 +642,11 @@ void TestDatabase::credentialsOwnerSecurityTokenTest()
 
     id = m_db->insertCredentials(info, true);
 
-    QString token = m_db->credentialsOwner(id);
-    qDebug() << token;
+    SignOn::SecurityContext token = m_db->credentialsOwner(id);
+    qDebug() << QLatin1String("credentials owner: ") << token;
     QVERIFY(token == QLatin1String("AID::12345678"));
-    QStringList tokens = m_db->ownerList(id);
-    qDebug() << tokens;
+    SignOn::SecurityContextList tokens = m_db->ownerList(id);
+    qDebug() << QLatin1String("owner list: ") << tokens;
     QVERIFY(tokens == testAcl);
 
 }

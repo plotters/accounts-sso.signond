@@ -647,6 +647,7 @@ void SsoTestClient::queryInfo()
                       methods);
     info.setSecret("TEST_PASSWORD_1");
     info.setRealms(QStringList() << "test_realm");
+    info.setOwner(QStringList(QString::fromLatin1("*")));
     info.setAccessControlList(QStringList(QString::fromLatin1("*")));
 
     if (!storeCredentialsPrivate(info))
@@ -1392,6 +1393,9 @@ void SsoTestClient::queryAuthPluginACL()
                       "test_username_1",
                       methods);
     info.setSecret("test_password_1");
+    info.setOwner(QStringList()
+            << AEGIS_TOKEN_0 << AEGIS_TOKEN_1 << AEGIS_TOKEN_2
+            << AEGIS_TOKEN_3 << AEGIS_TOKEN_4 << AEGIS_TOKEN_5);
     info.setAccessControlList(QStringList()
             << AEGIS_TOKEN_0 << AEGIS_TOKEN_1 << AEGIS_TOKEN_2
             << AEGIS_TOKEN_3 << AEGIS_TOKEN_4 << AEGIS_TOKEN_5);

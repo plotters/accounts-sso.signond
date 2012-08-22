@@ -88,7 +88,7 @@ static QByteArray loadImage(const QString &name)
     Q_UNUSED(name);
 
     //TODO: adopt to something changeable
-    QByteArray ba(128 * 128 * 4, 0xaa);
+    QByteArray ba(16 * 16 * 3, 0xaa);
 
     return ba;
 }

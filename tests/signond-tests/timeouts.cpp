@@ -62,6 +62,7 @@ void TimeoutsTest::identityTimeout()
     IdentityInfo info = IdentityInfo(QLatin1String("timeout test"),
                                      QLatin1String("timeout@test"),
                                      methods);
+    info.setAccessControlList(SignOn::SecurityContext(QLatin1String("*")));
     Identity *identity = Identity::newIdentity(info);
     QVERIFY(identity != NULL);
 
@@ -87,6 +88,7 @@ void TimeoutsTest::identityTimeout()
                                                       "getIdentity");
     QList<QVariant> args;
     args << identity->id();
+    args << QVariant::fromValue(QDBusVariant(QLatin1String("")));
     msg.setArguments(args);
 
     QDBusMessage reply = conn.call(msg);
@@ -126,6 +128,7 @@ void TimeoutsTest::identityRegisterTwice()
     IdentityInfo info = IdentityInfo(QLatin1String("timeout test"),
                                      QLatin1String("timeout@test"),
                                      methods);
+    info.setAccessControlList(SignOn::SecurityContext(QLatin1String("*")));
     Identity *identity = Identity::newIdentity(info);
     QVERIFY(identity != NULL);
 
@@ -151,6 +154,7 @@ void TimeoutsTest::identityRegisterTwice()
                                                       "getIdentity");
     QList<QVariant> args;
     args << identity->id();
+    args << QVariant::fromValue(QDBusVariant(QLatin1String("")));
     msg.setArguments(args);
 
     QDBusMessage reply = conn.call(msg);
@@ -206,6 +210,9 @@ bool TimeoutsTest::triggerDisposableCleanup()
                                                       SIGNOND_DAEMON_OBJECTPATH,
                                                       SIGNOND_DAEMON_INTERFACE,
                                                       "registerNewIdentity");
+    QList<QVariant> args;
+    args << QVariant::fromValue(QDBusVariant(QLatin1String("")));
+    msg.setArguments(args);
     QDBusMessage reply = conn.call(msg);
     return (reply.type() == QDBusMessage::ReplyMessage);
 }
@@ -219,6 +226,9 @@ bool TimeoutsTest::identityAlive(const QString &path)
                                                       path,
                                                       interface,
                                                       "getInfo");
+    QList<QVariant> args;
+    args << QVariant::fromValue(QDBusVariant(QLatin1String("")));
+    msg.setArguments(args);
     QDBusMessage reply = conn.call(msg);
     return (reply.type() == QDBusMessage::ReplyMessage);
 }
