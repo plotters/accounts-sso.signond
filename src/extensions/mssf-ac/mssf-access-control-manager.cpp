@@ -57,13 +57,13 @@ bool MSSFAccessControlManager::isPeerAllowedToUseIdentity(
     QStringList Credlist =
         MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
     foreach(QString cred, Credlist) {
-        if (cred.compare(securityContext.first) == 0) {
-            if (securityContext.second.isEmpty()) {
+        if (cred.compare(securityContext.sysCtx) == 0) {
+            if (securityContext.appCtx.isEmpty()) {
                 hasAccess = true;
                 break;
             } else {
-                if (applicationContext == securityContext.second ||
-                    securityContext.second == QLatin1String("*")) {
+                if (applicationContext == securityContext.appCtx ||
+                    securityContext.appCtx == QLatin1String("*")) {
                     hasAccess = true;
                     break;
                 }
@@ -101,7 +101,7 @@ bool MSSFAccessControlManager::isACLValid(const QDBusMessage &peerMessage,
         MssfQt::DBusContextAccessManager::peerCredentials(peerMessage, NULL);
     if (!aclList.isEmpty()) {
         foreach (SecurityContext aclItem, aclList) {
-            if (!CredList.contains(aclItem.first)) {
+            if (!CredList.contains(aclItem.sysCtx)) {
                 TRACE() << "An attempt to setup an acl" << aclItem 
                         << "is denied because process doesn't possess such token";
                 return false;

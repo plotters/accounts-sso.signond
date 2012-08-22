@@ -76,11 +76,11 @@ AccessControlManagerHelper::isPeerAllowedToUseIdentity(
     SecurityContextList acl = db->accessControlList(identityId);
 
     QStringList aclStrings;
-    foreach (SecurityContext secCtx, acl) {
+    foreach (SecurityContext securityContext, acl) {
         aclStrings.append(QLatin1String("[") +
-                          secCtx.first +
+                          securityContext.sysCtx +
                           QLatin1String(",") +
-                          secCtx.second +
+                          securityContext.appCtx +
                           QLatin1String("]"));
         TRACE() << QString(QLatin1String("Access control list of identity: "
                                      "%1: {%2}.item count: %3\t"))
@@ -165,7 +165,7 @@ AccessControlManagerHelper::peerHasOneOfAccesses(
 {
     foreach (SecurityContext securityContext, secContexts) {
         TRACE() << securityContext;
-        if (securityContext.first == QString::fromLatin1("*"))
+        if (securityContext.sysCtx == QString::fromLatin1("*"))
             return true;
         if (m_acManager->isPeerAllowedToUseIdentity(peerMessage,
                                                     applicationContext,

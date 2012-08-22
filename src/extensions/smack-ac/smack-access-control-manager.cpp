@@ -51,18 +51,18 @@ bool SmackAccessControlManager::isPeerAllowedToUseIdentity(
         SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
     QString appCtx = applicationContext.variant().toString();
     TRACE() << appId << ":["
-            << securityContext.first << ","
-            << securityContext.second << "]";
+            << securityContext.sysCtx << ","
+            << securityContext.appCtx << "]";
 
     if (SmackQt::Smack::hasAccess(appId,
-                                  securityContext.first,
+                                  securityContext.sysCtx,
                                   QLatin1String("x"))) {
-        if (securityContext.second.isEmpty()) {
+        if (securityContext.appCtx.isEmpty()) {
             TRACE() << "Process ACCESS:TRUE";
             return true;
         } else {
-            if (appCtx == securityContext.second ||
-                securityContext.second == QLatin1String("*")) {
+            if (appCtx == securityContext.appCtx ||
+                securityContext.appCtx == QLatin1String("*")) {
                 TRACE() << "Process & Application Context ACCESS:TRUE";
                 return true;
             }
@@ -84,19 +84,19 @@ bool SmackAccessControlManager::isPeerOwnerOfIdentity(
         SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
     QString appCtx = applicationContext.variant().toString();
     TRACE() << appId << ":["
-            << securityContext.first << ","
-            << securityContext.second << "]";
+            << securityContext.sysCtx << ","
+            << securityContext.appCtx << "]";
 
     if ((SmackQt::Smack::hasAccess(
                             appId, securityContext, QLatin1String("r"))) &&
         (SmackQt::Smack::hasAccess(
                             appId, securityContext, QLatin1String("w")))) {
-        if (securityContext.second.isEmpty()) {
+        if (securityContext.appCtx.isEmpty()) {
             TRACE() << "Process ACCESS:TRUE";
             return true;
         } else {
-            if (appCtx == securityContext.second ||
-                securityContext.second == QLatin1String("*")) {
+            if (appCtx == securityContext.appCtx ||
+                securityContext.appCtx == QLatin1String("*")) {
                 TRACE() << "Process & Application Context ACCESS:TRUE";
                 return true;
             }
@@ -135,11 +135,11 @@ bool SmackAccessControlManager::isACLValid(
             TRACE() << aclItem;
             // if app sets an acl entry for its appid, then it is always
             // allowed
-            if (appId == aclItem.first)
+            if (appId == aclItem.sysCtx)
                 continue;
             // if app sets an acl entry for the label of its subdomain,
             // then it is allowed, too
-            if (aclItem.first.indexOf(appId) == 0)
+            if (aclItem.sysCtx.indexOf(appId) == 0)
                 continue;
             // if none of above then this acl must be denied
             TRACE() << "An attempt to setup an acl" << aclItem

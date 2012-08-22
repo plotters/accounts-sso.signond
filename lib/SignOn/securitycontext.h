@@ -30,7 +30,6 @@
 #include <QString>
 #include <QStringList>
 #include <QLatin1String>
-#include <QPair>
 #include <QList>
 #include <QVariant>
 #include <QSet>
@@ -43,75 +42,84 @@ typedef QList<QVariant> SecurityList;
 /*!
  * Security context descriptor.
  */
-class SecurityContext : public QPair<QString, QString>
+class SecurityContext
 {
 public:
-    SecurityContext() :
-        QPair<QString, QString>()
+    /*!
+     * System context, such as SMACK-label, MSSF token or just binary path.
+     */
+    QString sysCtx;
+    /*!
+     * Application context. Specifies security context within client process.
+     * Such as a script or a web page.
+     */
+    QString appCtx;
+
+    SecurityContext()
         { }
     SecurityContext(const QLatin1String &simple)
         {
-            first = simple;
-            second = QLatin1String("*");
+            sysCtx = simple;
+            appCtx = QLatin1String("*");
         }
     SecurityContext(const QString &simple)
         {
-            first = simple;
-            second = QLatin1String("*");
+            sysCtx = simple;
+            appCtx = QLatin1String("*");
         }
-    SecurityContext(const QString &sysCtx, const QString &appCtx)
+    SecurityContext(const QString &sysCtxP, const QString &appCtxP)
         {
-            first = sysCtx;
-            second = appCtx;
+            sysCtx = sysCtxP;
+            appCtx = appCtxP;
         }
     SecurityContext(const QStringList &list)
         { *this = list; }
-    SecurityContext(const SecurityContext &src) :
-        QPair<QString, QString>(src.first, src.second)
-        { }
+    SecurityContext(const SecurityContext &src)
+        { *this = src; }
     operator const QString & () const
-        { return first; }
+        { return sysCtx; }
     QStringList toStringList() const
         {
             QStringList list;
-            list.append(first);
-            list.append(second);
+            list.append(sysCtx);
+            list.append(appCtx);
             return list;
         }
     SecurityContext & operator=(const SecurityContext &src)
         {
-            QPair<QString, QString>::operator=(src);
+            sysCtx = src.sysCtx;
+            appCtx = src.appCtx;
             return (*this);
         }
     SecurityContext & operator=(const QStringList &list)
         {
-            first = list.value(0);
-            second = list.value(1);
+            sysCtx = list.value(0);
+            appCtx = list.value(1);
             return (*this);
         }
     bool operator<(const SecurityContext &other) const
         {
-            if (first == other.first)
-                return (second < other.second);
-            return (first < other.first);
+            if (sysCtx == other.sysCtx)
+                return (appCtx < other.appCtx);
+            return (sysCtx < other.appCtx);
         }
     bool operator==(const SecurityContext &other) const
         {
-            if (first != other.first)
+            if (sysCtx != other.sysCtx)
                 return false;
-            if (second.isEmpty() && other.second.isEmpty())
+            if (appCtx.isEmpty() && other.appCtx.isEmpty())
                 return true;
-            return (second == other.second);
+            return (appCtx == other.appCtx);
         }
     bool match(const SecurityContext &other) const
         {
-            if (first == QString::fromLatin1("*"))
+            if (sysCtx == QString::fromLatin1("*"))
                 return true;
-            if (first != other.first)
+            if (sysCtx != other.sysCtx)
                 return false;
-            if (second == QString::fromLatin1("*"))
+            if (appCtx == QString::fromLatin1("*"))
                 return true;
-            return (second == other.second);
+            return (appCtx == other.appCtx);
         }
 };
 
@@ -140,7 +148,7 @@ public:
         {
             QStringList simpleACL;
             foreach (SecurityContext aclEntry, *this)
-                simpleACL.append(aclEntry.first);
+                simpleACL.append(aclEntry.sysCtx);
             return simpleACL;
         }
     SecurityList toSecurityList() const
