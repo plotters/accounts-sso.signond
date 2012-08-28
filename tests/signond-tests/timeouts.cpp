@@ -3,8 +3,10 @@
  *
  * Copyright (C) 2010 Nokia Corporation.
  * Copyright (C) 2012 Canonical Ltd.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -88,7 +90,7 @@ void TimeoutsTest::identityTimeout()
                                                       "getIdentity");
     QList<QVariant> args;
     args << identity->id();
-    args << QVariant::fromValue(QDBusVariant(QLatin1String("")));
+    args << QString::fromLatin1("");
     msg.setArguments(args);
 
     QDBusMessage reply = conn.call(msg);
@@ -154,7 +156,7 @@ void TimeoutsTest::identityRegisterTwice()
                                                       "getIdentity");
     QList<QVariant> args;
     args << identity->id();
-    args << QVariant::fromValue(QDBusVariant(QLatin1String("")));
+    args << QString::fromLatin1("");
     msg.setArguments(args);
 
     QDBusMessage reply = conn.call(msg);
@@ -211,7 +213,7 @@ bool TimeoutsTest::triggerDisposableCleanup()
                                                       SIGNOND_DAEMON_INTERFACE,
                                                       "registerNewIdentity");
     QList<QVariant> args;
-    args << QVariant::fromValue(QDBusVariant(QLatin1String("")));
+    args << QString::fromLatin1("");
     msg.setArguments(args);
     QDBusMessage reply = conn.call(msg);
     return (reply.type() == QDBusMessage::ReplyMessage);
@@ -226,9 +228,6 @@ bool TimeoutsTest::identityAlive(const QString &path)
                                                       path,
                                                       interface,
                                                       "getInfo");
-    QList<QVariant> args;
-    args << QVariant::fromValue(QDBusVariant(QLatin1String("")));
-    msg.setArguments(args);
     QDBusMessage reply = conn.call(msg);
     return (reply.type() == QDBusMessage::ReplyMessage);
 }

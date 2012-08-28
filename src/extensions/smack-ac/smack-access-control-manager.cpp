@@ -44,12 +44,11 @@ QString SmackAccessControlManager::keychainWidgetAppId()
 
 bool SmackAccessControlManager::isPeerAllowedToUseIdentity(
                                 const QDBusMessage &peerMessage,
-                                const QDBusVariant &applicationContext,
+                                const QString &applicationContext,
                                 const SignOn::SecurityContext &securityContext)
 {
     QString appId =
         SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
-    QString appCtx = applicationContext.variant().toString();
     TRACE() << appId << ":["
             << securityContext.sysCtx << ","
             << securityContext.appCtx << "]";
@@ -61,7 +60,7 @@ bool SmackAccessControlManager::isPeerAllowedToUseIdentity(
             TRACE() << "Process ACCESS:TRUE";
             return true;
         } else {
-            if (appCtx == securityContext.appCtx ||
+            if (applicationContext == securityContext.appCtx ||
                 securityContext.appCtx == QLatin1String("*")) {
                 TRACE() << "Process & Application Context ACCESS:TRUE";
                 return true;
@@ -77,12 +76,11 @@ bool SmackAccessControlManager::isPeerAllowedToUseIdentity(
 
 bool SmackAccessControlManager::isPeerOwnerOfIdentity(
                                 const QDBusMessage &peerMessage,
-                                const QDBusVariant &applicationContext,
+                                const QString &applicationContext,
                                 const SignOn::SecurityContext &securityContext)
 {
     QString appId =
         SmackQt::DBusSmackContext::getCallerSmackContext(peerMessage);
-    QString appCtx = applicationContext.variant().toString();
     TRACE() << appId << ":["
             << securityContext.sysCtx << ","
             << securityContext.appCtx << "]";
@@ -95,7 +93,7 @@ bool SmackAccessControlManager::isPeerOwnerOfIdentity(
             TRACE() << "Process ACCESS:TRUE";
             return true;
         } else {
-            if (appCtx == securityContext.appCtx ||
+            if (applicationContext == securityContext.appCtx ||
                 securityContext.appCtx == QLatin1String("*")) {
                 TRACE() << "Process & Application Context ACCESS:TRUE";
                 return true;
@@ -117,7 +115,7 @@ QString SmackAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)
 
 bool SmackAccessControlManager::isACLValid(
                                     const QDBusMessage &peerMessage,
-                                    const QDBusVariant &applicationContext,
+                                    const QString &applicationContext,
                                     const SignOn::SecurityContextList &aclList)
 {
     Q_UNUSED(applicationContext);

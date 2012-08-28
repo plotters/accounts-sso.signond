@@ -226,8 +226,6 @@ SignonDaemon::~SignonDaemon()
     }
 
     SignonAuthSession::stopAllAuthSessions();
-    m_storedIdentities.clear();
-    m_unstoredIdentities.clear();
 
     if (m_pCAMManager) {
         m_pCAMManager->closeCredentialsSystem();
@@ -507,22 +505,14 @@ bool SignonDaemon::initStorage()
     return true;
 }
 
-void SignonDaemon::identityStored(SignonIdentity *identity)
-{
-    if (m_unstoredIdentities.contains(identity->objectName())) {
-        m_unstoredIdentities.remove(identity->objectName());
-        m_storedIdentities.insert(identity->id(), identity);
-    }
-}
-
-void SignonDaemon::registerNewIdentity(const QDBusVariant &applicationContext,
+void SignonDaemon::registerNewIdentity(const QString &applicationContext,
                                        QDBusObjectPath &objectPath)
 {
-    Q_UNUSED(applicationContext);
     TRACE() << "Registering new identity:";
 
     SignonIdentity *identity =
-        SignonIdentity::createIdentity(SIGNOND_NEW_IDENTITY, this);
+        SignonIdentity::createIdentity(SIGNOND_NEW_IDENTITY,
+                                       applicationContext, this);
 
     if (identity == NULL) {
         sendErrorReply(internalServerErrName,
@@ -531,8 +521,6 @@ void SignonDaemon::registerNewIdentity(const QDBusVariant &applicationContext,
                                      "object."));
         return;
     }
-
-    m_unstoredIdentities.insert(identity->objectName(), identity);
 
     objectPath = QDBusObjectPath(identity->objectName());
 }
@@ -552,22 +540,17 @@ int SignonDaemon::authSessionTimeout() const
 }
 
 void SignonDaemon::getIdentity(const quint32 id,
-                               const QDBusVariant &applicationContext,
+                               const QString &applicationContext,
                                QDBusObjectPath &objectPath,
                                QVariantMap &identityData)
 {
-    Q_UNUSED(applicationContext);
     SIGNON_RETURN_IF_CAM_UNAVAILABLE();
 
     TRACE() << "Registering identity:" << id;
 
-    //1st check if the existing identity is in cache
-    SignonIdentity *identity = m_storedIdentities.value(id, NULL);
+    SignonIdentity *identity;
 
-    //if not create it
-    if (identity == NULL)
-        identity = SignonIdentity::createIdentity(id, this);
-
+    identity = SignonIdentity::createIdentity(id, applicationContext, this);
     if (identity == NULL)
     {
         sendErrorReply(internalServerErrName,
@@ -578,9 +561,7 @@ void SignonDaemon::getIdentity(const quint32 id,
     }
 
     bool ok;
-    SignonIdentityInfo info = identity->queryInfo(ok,
-                                                  applicationContext,
-                                                  false);
+    SignonIdentityInfo info = identity->queryInfo(ok, false);
 
     if (info.isNew())
     {
@@ -590,7 +571,6 @@ void SignonDaemon::getIdentity(const quint32 id,
     }
 
     //cache the identity as stored
-    m_storedIdentities.insert(identity->id(), identity);
     identity->keepInUse();
 
     identityData = info.toMap();
@@ -706,10 +686,8 @@ bool SignonDaemon::clear()
 QString SignonDaemon::getAuthSessionObjectPath(
                                         const quint32 id,
                                         const QString type,
-                                        const QDBusVariant &applicationContext)
+                                        const QString &applicationContext)
 {
-    Q_UNUSED(applicationContext);
-
     bool supportsAuthMethod = false;
     pid_t ownerPid = AccessControlManagerHelper::pidOfPeer(*this);
     QString objectPath =

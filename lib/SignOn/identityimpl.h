@@ -54,7 +54,7 @@ class IdentityImpl: public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(IdentityImpl)
-    Q_PROPERTY(QVariant applicationContext READ applicationContext WRITE setApplicationContext);
+    Q_PROPERTY(QString applicationContext READ applicationContext);
 
     friend class Identity;
 
@@ -69,6 +69,7 @@ class IdentityImpl: public QObject
 
 public:
     IdentityImpl(Identity *parent,
+                 const QString &applicationContextP,
                  const quint32 id = 0);
     ~IdentityImpl();
 
@@ -76,10 +77,8 @@ public:
     AuthSession *createSession(const QString &methodName, QObject *parent = 0);
     void destroySession(AuthSession *session);
 
-    QVariant applicationContext () const
+    QString applicationContext () const
         { return m_applicationContext; }
-    void setApplicationContext (const QVariant &newApplicationContext)
-        { m_applicationContext = newApplicationContext; }
 
 public Q_SLOTS:
     void errorReply(const QDBusError &err);
@@ -142,8 +141,8 @@ private:
     bool m_infoQueried;
     /* Marks this Identity as the one which requested the sign out */
     bool m_signOutRequestedByThisIdentity;
-    /* Application level context info. */
-    QVariant m_applicationContext;
+    /* Application level security context info. */
+    QString m_applicationContext;
 };
 
 }  // namespace SignOn

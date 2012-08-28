@@ -57,32 +57,27 @@ class SignonIdentity: public SignonDisposable, protected QDBusContext
 
 public:
     void destroy();
-    static SignonIdentity *createIdentity(quint32 id, SignonDaemon *parent);
+    static SignonIdentity *createIdentity(quint32 id,
+                                          const QString &applicationContext,
+                                          SignonDaemon *parent);
     quint32 id() const { return m_id; }
+    QString applicationContext() const { return m_applicationContext; }
 
     SignonIdentityInfo queryInfo(bool &ok,
-                                 const QDBusVariant &applicationContext,
                                  bool queryPassword = true);
     quint32 storeCredentials(const SignonIdentityInfo &info,
-                             bool storeSecret,
-                             const QDBusVariant &applicationContext);
+                             bool storeSecret);
 
 public Q_SLOTS:
-    quint32 requestCredentialsUpdate(const QString &message,
-                                     const QDBusVariant &applicationContext);
-    QVariantMap getInfo(const QDBusVariant &applicationContext);
-    bool addReference(const QString &reference,
-                      const QDBusVariant &applicationContext);
-    bool removeReference(const QString &reference,
-                         const QDBusVariant &applicationContext);
-    bool verifyUser(const QVariantMap &params,
-                    const QDBusVariant &applicationContext);
-    bool verifySecret(const QString &secret,
-                      const QDBusVariant &applicationContext);
-    void remove(const QDBusVariant &applicationContext);
-    bool signOut(const QDBusVariant &applicationContext);
-    quint32 store(const QVariantMap &info,
-                  const QDBusVariant &applicationContext);
+    quint32 requestCredentialsUpdate(const QString &message);
+    QVariantMap getInfo();
+    bool addReference(const QString &reference);
+    bool removeReference(const QString &reference);
+    bool verifyUser(const QVariantMap &params);
+    bool verifySecret(const QString &secret);
+    void remove();
+    bool signOut();
+    quint32 store(const QVariantMap &info);
     void queryUiSlot(QDBusPendingCallWatcher *call);
     void verifyUiSlot(QDBusPendingCallWatcher *call);
 Q_SIGNALS:
@@ -91,7 +86,8 @@ Q_SIGNALS:
     void infoUpdated(int);
 
 private:
-    SignonIdentity(quint32 id, int timeout, SignonDaemon *parent);
+    SignonIdentity(quint32 id, int timeout, const QString &applicationContext,
+                   SignonDaemon *parent);
     bool init();
     bool credentialsStored() const { return m_id > 0 ? true : false; }
     void queryUserPassword(const QVariantMap &params);
@@ -102,6 +98,7 @@ private:
     SignonIdentityInfo *m_pInfo;
     SignonDaemon *m_pSignonDaemon;
     bool m_registered;
+    QString m_applicationContext;
     QDBusMessage m_message;
 
 }; //class SignonDaemon

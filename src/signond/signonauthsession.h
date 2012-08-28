@@ -62,23 +62,21 @@ public:
                                         SignonDaemon *parent,
                                         bool &supportsAuthMethod,
                                         pid_t ownerPid,
-                                        const QDBusVariant &applicationContext);
+                                        const QString &applicationContext);
     static void stopAllAuthSessions();
-    quint32 id() const;
-    QString method() const;
+    quint32 id() const { return m_id; };
+    QString method() const { return m_method; };
     void objectRegistered();
     pid_t ownerPid() const;
+    QString applicationContext() const { return m_applicationContext; };
 
 public Q_SLOTS:
-    QStringList queryAvailableMechanisms(
-                                        const QStringList &wantedMechanisms,
-                                        const QDBusVariant &applicationContext);
+    QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms);
     QVariantMap process(const QVariantMap &sessionDataVa,
-                        const QString &mechanism,
-                        const QDBusVariant &applicationContext);
-    void cancel(const QDBusVariant &applicationContext);
-    void setId(quint32 id, const QDBusVariant &applicationContext);
-    void objectUnref(const QDBusVariant &applicationContext);
+                        const QString &mechanism);
+    void cancel();
+    void setId(quint32 id);
+    void objectUnref();
 
 Q_SIGNALS:
     void stateChanged(int state, const QString &message);
@@ -90,7 +88,8 @@ private Q_SLOTS:
                           const QString &message);
 
 protected:
-    SignonAuthSession(quint32 id, const QString &method, pid_t ownerPid);
+    SignonAuthSession(quint32 id, const QString &method, pid_t ownerPid,
+                      const QString &applicationContext);
     virtual ~SignonAuthSession();
 
 private:
@@ -98,6 +97,7 @@ private:
     QString m_method;
     bool m_registered;
     pid_t m_ownerPid;
+    QString m_applicationContext;
 
     Q_DISABLE_COPY(SignonAuthSession)
 }; //class SignonDaemon

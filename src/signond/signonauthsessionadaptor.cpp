@@ -50,8 +50,7 @@ void SignonAuthSessionAdaptor::errorReply(const QString &name,
 
 QStringList
 SignonAuthSessionAdaptor::queryAvailableMechanisms(
-                                        const QStringList &wantedMechanisms,
-                                        const QDBusVariant &applicationContext)
+                                        const QStringList &wantedMechanisms)
 {
     TRACE();
 
@@ -68,14 +67,12 @@ SignonAuthSessionAdaptor::queryAvailableMechanisms(
         return QStringList();
     }
 
-    return parent()->queryAvailableMechanisms(wantedMechanisms,
-                                              applicationContext);
+    return parent()->queryAvailableMechanisms(wantedMechanisms);
 }
 
 QVariantMap SignonAuthSessionAdaptor::process(
                                         const QVariantMap &sessionDataVa,
-                                        const QString &mechanism,
-                                        const QDBusVariant &applicationContext)
+                                        const QString &mechanism)
 {
     TRACE();
 
@@ -121,11 +118,10 @@ QVariantMap SignonAuthSessionAdaptor::process(
     }
 
     return parent()->process(sessionDataVa,
-                             allowedMechanism,
-                             applicationContext);
+                             allowedMechanism);
 }
 
-void SignonAuthSessionAdaptor::cancel(const QDBusVariant &applicationContext)
+void SignonAuthSessionAdaptor::cancel()
 {
     TRACE();
 
@@ -136,11 +132,11 @@ void SignonAuthSessionAdaptor::cancel(const QDBusVariant &applicationContext)
         return;
     }
 
-    parent()->cancel(applicationContext);
+    parent()->cancel();
 }
 
 void SignonAuthSessionAdaptor::setId(quint32 id,
-                                     const QDBusVariant &applicationContext)
+                                     const QString &applicationContext)
 {
     TRACE();
 
@@ -160,11 +156,10 @@ void SignonAuthSessionAdaptor::setId(quint32 id,
         return;
     }
 
-    parent()->setId(id, applicationContext);
+    parent()->setId(id);
 }
 
-void SignonAuthSessionAdaptor::objectUnref(
-                                        const QDBusVariant &applicationContext)
+void SignonAuthSessionAdaptor::objectUnref()
 {
     TRACE();
 
@@ -176,7 +171,7 @@ void SignonAuthSessionAdaptor::objectUnref(
         return;
     }
 
-    parent()->objectUnref(applicationContext);
+    parent()->objectUnref();
 }
 
 } //namespace SignonDaemonNS

@@ -126,15 +126,15 @@ public:
 public Q_SLOTS:
     /* Immediate reply calls */
 
-    void registerNewIdentity(const QDBusVariant &applicationContext,
+    void registerNewIdentity(const QString &applicationContext,
                              QDBusObjectPath &objectPath);
     void getIdentity(const quint32 id,
-                     const QDBusVariant &applicationContext,
+                     const QString &applicationContext,
                      QDBusObjectPath &objectPath,
                      QVariantMap &identityData);
     QString getAuthSessionObjectPath(const quint32 id,
                                      const QString type,
-                                     const QDBusVariant &applicationContext);
+                                     const QString &applicationContext);
 
     QStringList queryMethods();
     QStringList queryMechanisms(const QString &method);
@@ -154,7 +154,6 @@ private:
     void initExtension(const QString &filePath);
     bool initStorage();
 
-    void identityStored(SignonIdentity *identity);
     void setupSignalHandlers();
 
     void eraseBackupDir() const;
@@ -163,12 +162,6 @@ private:
     bool createStorageFileTree(const QStringList &fileNames) const;
 
 private:
-    /*
-     * The list of created SignonIdentities
-     * */
-    QMap<quint32, SignonIdentity *> m_storedIdentities;
-    QMap<QString, SignonIdentity *> m_unstoredIdentities;
-
     SignonDaemonConfiguration *m_configuration;
 
     /*

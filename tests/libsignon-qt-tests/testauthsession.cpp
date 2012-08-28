@@ -2,8 +2,10 @@
  * This file is part of signon
  *
  * Copyright (C) 2009-2010 Nokia Corporation.
+ * Copyright (C) 2012 Intel Corporation.
  *
  * Contact: Alberto Mardegan <alberto.mardegan@canonical.com>
+ * Contact: Jussi Laako <jussi.laako@linux.intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -27,9 +29,11 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#define SSO_TEST_CREATE_AUTH_SESSION(__session__, __method__) \
+#define SSO_TEST_CREATE_AUTH_SESSION(__session__, __method__)       \
     do {                                                            \
-        Identity *id = Identity::newIdentity(IdentityInfo(), this); \
+        Identity *id = Identity::newIdentity(IdentityInfo(),        \
+                                             QString(),             \
+                                             this);                 \
         __session__ = id->createSession(QLatin1String(__method__)); \
     } while(0)
 
@@ -350,7 +354,7 @@ void TestAuthSession::process_with_unauthorized_method()
     IdentityInfo info("test_caption", "test_user_name", methods);
     info.setSecret("test_secret");
     info.setAccessControlList(QStringList(QString::fromLatin1("*")));
-    Identity *id = Identity::newIdentity(info, this);
+    Identity *id = Identity::newIdentity(info, QLatin1String(""), this);
 
     QSignalSpy spyResponseStoreCreds(id, SIGNAL(credentialsStored(const quint32)));
     QSignalSpy spyErrorStoreCreds(id, SIGNAL(error(const SignOn::Error &)));
@@ -418,7 +422,7 @@ void TestAuthSession::process_from_other_process()
     QVariantList arguments;
     arguments += (quint32)SIGNOND_NEW_IDENTITY;
     arguments += QString::fromLatin1("ssotest");
-    arguments += QVariant::fromValue(QDBusVariant(QLatin1String("")));
+    arguments += QString::fromLatin1("");
     iface.callWithCallback(QLatin1String("getAuthSessionObjectPath"),
                            arguments, &slotMachine,
                            SLOT(authenticationSlot(const QString&)),
@@ -463,7 +467,6 @@ void TestAuthSession::process_from_other_process()
         arguments.clear();
         arguments += inDataVarMap;
         arguments += QString::fromLatin1("mech1");
-        arguments += QVariant::fromValue(QDBusVariant(QLatin1String("")));
 
         QDBusMessage msg = QDBusMessage::createMethodCall(dbus->service(),
                                                           dbus->path(),

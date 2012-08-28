@@ -86,7 +86,7 @@ public:
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerAllowedToUseIdentity(const QDBusMessage &peerMessage,
-                                    const QDBusVariant &applicationContext,
+                                    const QString &applicationContext,
                                     const quint32 identityId);
 
     /*!
@@ -101,7 +101,7 @@ public:
      */
     IdentityOwnership isPeerOwnerOfIdentity(
                                         const QDBusMessage &peerMessage,
-                                        const QDBusVariant &applicationContext,
+                                        const QString &applicationContext,
                                         const quint32 identityId);
 
     /*!
@@ -114,7 +114,7 @@ public:
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerAllowedToUseAuthSession(const QDBusMessage &peerMessage,
-                                       const QDBusVariant &applicationContext,
+                                       const QString &applicationContext,
                                        const SignonAuthSession &authSession)
     {
         return isPeerAllowedToUseIdentity(peerMessage, applicationContext,
@@ -131,7 +131,7 @@ public:
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerAllowedToUseAuthSession(const QDBusMessage &peerMessage,
-                                       const QDBusVariant &applicationContext,
+                                       const QString &applicationContext,
                                        const quint32 ownerIdentityId)
     {
         return isPeerAllowedToUseIdentity(peerMessage, applicationContext,
@@ -151,7 +151,7 @@ public:
      * @returns the application identifier of the caller.
      */
     SecurityContext appIdOfPeer(const QDBusMessage &peerMessage,
-                                const QDBusVariant &applicationContext);
+                                const QString &applicationContext);
 
     /*!
      * Checks if a client process is allowed to access objects with a certain
@@ -164,7 +164,7 @@ public:
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerAllowedToAccess(const QDBusMessage &peerMessage,
-                               const QDBusVariant &applicationContext,
+                               const QString &applicationContext,
                                const SecurityContext &securityContext);
 
     /*!
@@ -178,7 +178,7 @@ public:
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool peerHasOneOfAccesses(const QDBusMessage &peerMessage,
-                              const QDBusVariant &applicationContext,
+                              const QString &applicationContext,
                               const SecurityContextList &secContexts);
     /*!
      * Checks if a client process is allowed to set the specified acl on data
@@ -191,7 +191,7 @@ public:
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isACLValid(const QDBusMessage &peerMessage,
-                    const QDBusVariant &applicationContext,
+                    const QString &applicationContext,
                     const SecurityContextList &aclList);
 
 private:

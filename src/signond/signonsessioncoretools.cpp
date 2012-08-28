@@ -70,7 +70,7 @@ StoreOperation::~StoreOperation()
 
 RequestData::RequestData(const QDBusConnection &conn,
                          const QDBusMessage &msg,
-                         const QDBusVariant &appctx,
+                         const QString &appctx,
                          const QVariantMap &params,
                          const QString &mechanism,
                          const QString &cancelKey):

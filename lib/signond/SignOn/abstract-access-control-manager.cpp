@@ -1,7 +1,7 @@
 /*
  * This file is part of signon
  *
- * Copyright (C) 2011 Intel Corporation.
+ * Copyright (C) 2011-2012 Intel Corporation.
  *
  * Contact: Elena Reshetova <elena.reshetova@intel.com>
  *
@@ -36,7 +36,7 @@ AbstractAccessControlManager::~AbstractAccessControlManager()
 
 bool AbstractAccessControlManager::isPeerAllowedToUseIdentity(
                                         const QDBusMessage &peerMessage,
-                                        const QDBusVariant &applicationContext,
+                                        const QString &applicationContext,
                                         const SecurityContext &securityContext)
 {
     Q_UNUSED(peerMessage);
@@ -47,7 +47,7 @@ bool AbstractAccessControlManager::isPeerAllowedToUseIdentity(
 
 bool AbstractAccessControlManager::isPeerOwnerOfIdentity(
                                         const QDBusMessage &peerMessage,
-                                        const QDBusVariant &applicationContext,
+                                        const QString &applicationContext,
                                         const SecurityContext &securityContext)
 {
     Q_UNUSED(peerMessage);
@@ -70,7 +70,7 @@ QString AbstractAccessControlManager::keychainWidgetAppId()
 
 bool AbstractAccessControlManager::isACLValid(
                                         const QDBusMessage &peerMessage,
-                                        const QDBusVariant &applicationContext,
+                                        const QString &applicationContext,
                                         const SecurityContextList &aclList)
 {
     Q_UNUSED(peerMessage);

@@ -41,7 +41,7 @@ SignonDaemonAdaptor::~SignonDaemonAdaptor()
 }
 
 void SignonDaemonAdaptor::registerNewIdentity(
-                                        const QDBusVariant &applicationContext,
+                                        const QString &applicationContext,
                                         QDBusObjectPath &objectPath)
 {
     m_parent->registerNewIdentity(applicationContext, objectPath);
@@ -66,7 +66,7 @@ void SignonDaemonAdaptor::securityErrorReply(const char *failedMethodName)
 }
 
 void SignonDaemonAdaptor::getIdentity(const quint32 id,
-                                      const QDBusVariant &applicationContext,
+                                      const QString &applicationContext,
                                       QDBusObjectPath &objectPath,
                                       QVariantMap &identityData)
 {
@@ -91,7 +91,7 @@ QStringList SignonDaemonAdaptor::queryMethods()
 QString SignonDaemonAdaptor::getAuthSessionObjectPath(
                                         const quint32 id,
                                         const QString &type,
-                                        const QDBusVariant &applicationContext)
+                                        const QString &applicationContext)
 {
     SignonDisposable::destroyUnused();
 

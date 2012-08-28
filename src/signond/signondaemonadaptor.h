@@ -52,15 +52,15 @@ public:
         { return *static_cast<QDBusContext *>(m_parent); }
 
 public Q_SLOTS:
-    void registerNewIdentity(const QDBusVariant &applicationContext,
+    void registerNewIdentity(const QString &applicationContext,
                              QDBusObjectPath &objectPath);
     void getIdentity(const quint32 id,
-                     const QDBusVariant &applicationContext,
+                     const QString &applicationContext,
                      QDBusObjectPath &objectPath,
                      QVariantMap &identityData);
     QString getAuthSessionObjectPath(const quint32 id,
                                      const QString &type,
-                                     const QDBusVariant &applicationContext);
+                                     const QString &applicationContext);
 
     QStringList queryMethods();
     QStringList queryMechanisms(const QString &method);

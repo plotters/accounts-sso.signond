@@ -51,11 +51,13 @@ const QString internalServerErrName = SIGNOND_INTERNAL_SERVER_ERR_NAME;
 const QString internalServerErrStr = SIGNOND_INTERNAL_SERVER_ERR_STR;
 
 SignonIdentity::SignonIdentity(quint32 id, int timeout,
+                               const QString &applicationContext,
                                SignonDaemon *parent):
     SignonDisposable(timeout, parent),
     m_pInfo(NULL),
     m_pSignonDaemon(parent),
-    m_registered(false)
+    m_registered(false),
+    m_applicationContext(applicationContext)
 {
     m_id = id;
 
@@ -82,11 +84,6 @@ SignonIdentity::~SignonIdentity()
         QDBusConnection connection = SIGNOND_BUS;
         connection.unregisterObject(objectName());
     }
-
-    if (credentialsStored())
-        m_pSignonDaemon->m_storedIdentities.remove(m_id);
-    else
-        m_pSignonDaemon->m_unstoredIdentities.remove(objectName());
 
     delete m_signonui;
 }
@@ -116,10 +113,14 @@ bool SignonIdentity::init()
     return (m_registered = true);
 }
 
-SignonIdentity *SignonIdentity::createIdentity(quint32 id, SignonDaemon *parent)
+SignonIdentity *SignonIdentity::createIdentity(
+                                            quint32 id,
+                                            const QString &applicationContext,
+                                            SignonDaemon *parent)
 {
     SignonIdentity *identity =
-        new SignonIdentity(id, parent->identityTimeout(), parent);
+        new SignonIdentity(id, parent->identityTimeout(), applicationContext,
+                           parent);
 
     if (!identity->init()) {
         TRACE() << "The created identity is invalid and will be deleted.\n";
@@ -145,11 +146,8 @@ void SignonIdentity::destroy()
 
 SignonIdentityInfo SignonIdentity::queryInfo(
                                         bool &ok,
-                                        const QDBusVariant &applicationContext,
                                         bool queryPassword)
 {
-    Q_UNUSED(applicationContext);
-
     ok = true;
 
     bool needLoadFromDB = true;
@@ -185,8 +183,7 @@ SignonIdentityInfo SignonIdentity::queryInfo(
     return info;
 }
 
-bool SignonIdentity::addReference(const QString &reference,
-                                  const QDBusVariant &applicationContext)
+bool SignonIdentity::addReference(const QString &reference)
 {
     TRACE() << "addReference: " << reference;
 
@@ -200,13 +197,12 @@ bool SignonIdentity::addReference(const QString &reference,
     SecurityContext appId =
         AccessControlManagerHelper::instance()->appIdOfPeer(
                                  (static_cast<QDBusContext>(*this)).message(),
-                                 applicationContext);
+                                 m_applicationContext);
     keepInUse();
     return db->addReference(m_id, appId, reference);
 }
 
-bool SignonIdentity::removeReference(const QString &reference,
-                                     const QDBusVariant &applicationContext)
+bool SignonIdentity::removeReference(const QString &reference)
 {
     TRACE() << "removeReference: " << reference;
 
@@ -220,19 +216,18 @@ bool SignonIdentity::removeReference(const QString &reference,
     SecurityContext appId =
         AccessControlManagerHelper::instance()->appIdOfPeer(
                                   (static_cast<QDBusContext>(*this)).message(),
-                                  applicationContext);
+                                  m_applicationContext);
     keepInUse();
     return db->removeReference(m_id, appId, reference);
 }
 
 quint32 SignonIdentity::requestCredentialsUpdate(
-                                        const QString &displayMessage,
-                                        const QDBusVariant &applicationContext)
+                                        const QString &displayMessage)
 {
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(SIGNOND_NEW_IDENTITY);
 
     bool ok;
-    SignonIdentityInfo info = queryInfo(ok, applicationContext, false);
+    SignonIdentityInfo info = queryInfo(ok, false);
 
     if (!ok) {
         BLAME() << "Identity not found.";
@@ -268,14 +263,14 @@ quint32 SignonIdentity::requestCredentialsUpdate(
     return 0;
 }
 
-QVariantMap SignonIdentity::getInfo(const QDBusVariant &applicationContext)
+QVariantMap SignonIdentity::getInfo()
 {
     TRACE() << "QUERYING INFO";
 
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(QVariantMap());
 
     bool ok;
-    SignonIdentityInfo info = queryInfo(ok, applicationContext, false);
+    SignonIdentityInfo info = queryInfo(ok, false);
 
     if (!ok) {
         TRACE();
@@ -307,13 +302,12 @@ void SignonIdentity::queryUserPassword(const QVariantMap &params)
     setAutoDestruct(false);
 }
 
-bool SignonIdentity::verifyUser(const QVariantMap &params,
-                                const QDBusVariant &applicationContext)
+bool SignonIdentity::verifyUser(const QVariantMap &params)
 {
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
 
     bool ok;
-    SignonIdentityInfo info = queryInfo(ok, applicationContext, true);
+    SignonIdentityInfo info = queryInfo(ok, true);
 
     if (!ok) {
         BLAME() << "Identity not found.";
@@ -343,13 +337,12 @@ bool SignonIdentity::verifyUser(const QVariantMap &params,
     return false;
 }
 
-bool SignonIdentity::verifySecret(const QString &secret,
-                                  const QDBusVariant &applicationContext)
+bool SignonIdentity::verifySecret(const QString &secret)
 {
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(false);
 
     bool ok;
-    queryInfo(ok, applicationContext);
+    queryInfo(ok);
     if (!ok) {
         TRACE();
         sendErrorReply(SIGNOND_CREDENTIALS_NOT_AVAILABLE_ERR_NAME,
@@ -365,10 +358,8 @@ bool SignonIdentity::verifySecret(const QString &secret,
     return ret;
 }
 
-void SignonIdentity::remove(const QDBusVariant &applicationContext)
+void SignonIdentity::remove()
 {
-    Q_UNUSED(applicationContext);
-
     SIGNON_RETURN_IF_CAM_UNAVAILABLE();
 
     CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
@@ -383,10 +374,8 @@ void SignonIdentity::remove(const QDBusVariant &applicationContext)
     keepInUse();
 }
 
-bool SignonIdentity::signOut(const QDBusVariant &applicationContext)
+bool SignonIdentity::signOut()
 {
-    Q_UNUSED(applicationContext);
-
     TRACE() << "Signout request. Identity ID: " << id();
     /*
      * - If the identity is stored (thus registered here)
@@ -410,11 +399,8 @@ bool SignonIdentity::signOut(const QDBusVariant &applicationContext)
     return true;
 }
 
-quint32 SignonIdentity::store(const QVariantMap &info,
-                              const QDBusVariant &applicationContext)
+quint32 SignonIdentity::store(const QVariantMap &info)
 {
-    Q_UNUSED(applicationContext);
-
     keepInUse();
     SIGNON_RETURN_IF_CAM_UNAVAILABLE(SIGNOND_NEW_IDENTITY);
 
@@ -422,7 +408,7 @@ quint32 SignonIdentity::store(const QVariantMap &info,
     QString appId =
         AccessControlManagerHelper::instance()->appIdOfPeer(
                                  (static_cast<QDBusContext>(*this)).message(),
-                                 applicationContext);
+                                 m_applicationContext);
 
     bool storeSecret = info.value(SIGNOND_IDENTITY_INFO_STORESECRET).toBool();
     MethodMap methods =
@@ -442,7 +428,7 @@ quint32 SignonIdentity::store(const QVariantMap &info,
         // owners
         bool allowed = AccessControlManagerHelper::instance()->isACLValid(
                         (static_cast<QDBusContext>(*this)).message(),
-                        applicationContext,
+                        m_applicationContext,
                         ownerList);
         if (!allowed) {
             // send an error reply, because otherwise uncontrolled sharing
@@ -470,7 +456,7 @@ quint32 SignonIdentity::store(const QVariantMap &info,
         // sure that it isn't unconrolled sharing attempt.
         bool allowed = AccessControlManagerHelper::instance()->isACLValid(
                 (static_cast<QDBusContext>(*this)).message(),
-                applicationContext,
+                m_applicationContext,
                 accessControlList);
         if (!allowed) {
             // send an error reply, because otherwise uncontrolled sharing
@@ -495,7 +481,7 @@ quint32 SignonIdentity::store(const QVariantMap &info,
     } else {
         m_pInfo->setPassword(QString());
     }
-    m_id = storeCredentials(*m_pInfo, storeSecret, applicationContext);
+    m_id = storeCredentials(*m_pInfo, storeSecret);
 
     if (m_id == SIGNOND_NEW_IDENTITY) {
         sendErrorReply(SIGNOND_STORE_FAILED_ERR_NAME,
@@ -506,11 +492,8 @@ quint32 SignonIdentity::store(const QVariantMap &info,
 }
 
 quint32 SignonIdentity::storeCredentials(const SignonIdentityInfo &info,
-                                         bool storeSecret,
-                                         const QDBusVariant &applicationContext)
+                                         bool storeSecret)
 {
-    Q_UNUSED(applicationContext);
-
     CredentialsDB *db = CredentialsAccessManager::instance()->credentialsDB();
     if (db == NULL) {
         BLAME() << "NULL database handler object.";
@@ -534,7 +517,6 @@ quint32 SignonIdentity::storeCredentials(const SignonIdentityInfo &info,
             delete m_pInfo;
             m_pInfo = NULL;
         }
-        m_pSignonDaemon->identityStored(this);
 
         //If secrets db is not available cache auth. data.
         if (!db->isSecretsDBOpen()) {

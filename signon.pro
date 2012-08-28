@@ -1,7 +1,3 @@
-QMAKE_CC=icc
-QMAKE_CXX=icpc
-QMAKE_LINK=icpc
-
 include( common-vars.pri )
 
 TEMPLATE  = subdirs

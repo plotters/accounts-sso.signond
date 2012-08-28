@@ -240,7 +240,7 @@ SignonSessionCore::queryAvailableMechanisms(const QStringList &wantedMechanisms)
 
 void SignonSessionCore::process(const QDBusConnection &connection,
                                 const QDBusMessage &message,
-                                const QDBusVariant &applicationContext,
+                                const QString &applicationContext,
                                 const QVariantMap &sessionDataVa,
                                 const QString &mechanism,
                                 const QString &cancelKey)

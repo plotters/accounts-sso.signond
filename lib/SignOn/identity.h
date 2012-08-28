@@ -35,7 +35,7 @@
 #include <QMap>
 #include <QString>
 #include <QStringList>
-#include <QVariant>
+#include <QVariantMap>
 #include <QPointer>
 
 #include "libsignoncommon.h"
@@ -97,6 +97,7 @@ protected:
      * @internal
      */
     Identity(const quint32 id = SSO_NEW_IDENTITY,
+             const QString &applicationContextP = QString(),
              QObject *parent = 0);
 
 public:
@@ -106,10 +107,12 @@ public:
      * Can return NULL if client is untrusted.
      *
      * @param info Identity information
+     * @param applicationContextP Application level security context
      * @param parent Parent object of the identity
      * @return Pointer to new identity object or NULL if it fails to create.
      */
     static Identity *newIdentity(const IdentityInfo &info = IdentityInfo(),
+                                 const QString &applicationContextP = QString(),
                                  QObject *parent = 0);
 
     /*!
@@ -118,10 +121,14 @@ public:
      * Can return NULL if client is untrusted.
      *
      * @param id Identity ID on the service
+     * @applicationContextP Application level security context
      * @param parent Parent object of the identity
      * @return Pointer to identity object or NULL if it fails to create.
      */
-    static Identity *existingIdentity(const quint32 id, QObject *parent = 0);
+    static Identity *existingIdentity(
+                                const quint32 id,
+                                const QString &applicationContextP = QString(),
+                                QObject *parent = 0);
 
     /*!
      * Destructor
@@ -324,14 +331,7 @@ public:
      *
      * @return Application context
      */
-    QVariant applicationContext ();
-
-    /*!
-     * Set application level context to be passed to the signond.
-     *
-     * @param newApplicationContext Application context to be set
-     */
-    void setApplicationContext (const QVariant &newApplicationContext);
+    QString applicationContext() const;
 
 Q_SIGNALS:
 

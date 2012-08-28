@@ -50,7 +50,7 @@ QString MSSFAccessControlManager::keychainWidgetAppId()
 
 bool MSSFAccessControlManager::isPeerAllowedToUseIdentity(
                                         const QDBusMessage &peerMessage,
-                                        const QDBusVariant &applicationContext,
+                                        const QString &applicationContext,
                                         const SecurityContext &securityContext)
 {
     bool hasAccess = false;
@@ -76,10 +76,11 @@ bool MSSFAccessControlManager::isPeerAllowedToUseIdentity(
 
 bool MSSFAccessControlManager::isPeerOwnerOfIdentity(
                                         const QDBusMessage &peerMessage,
-                                        const QDBusVariant &applicationContext,
+                                        const QString &applicationContext,
                                         const SecurityContext &securityContext)
 {
-    return isPeerAllowedToUseIdentity(peerMessage, securityContext);
+    return isPeerAllowedToUseIdentity(peerMessage, applicationContext,
+                                      securityContext);
 }
 
 QString MSSFAccessControlManager::appIdOfPeer(const QDBusMessage &peerMessage)

@@ -29,7 +29,6 @@
 #include <QObject>
 #include <QVariantMap>
 #include <QDBusMessage>
-#include <QDBusVariant>
 
 #include "signonidentityinfo.h"
 
@@ -75,7 +74,7 @@ struct RequestData
 {
     RequestData(const QDBusConnection &conn,
                 const QDBusMessage &msg,
-                const QDBusVariant &appctx,
+                const QString &appctx,
                 const QVariantMap &params,
                 const QString &mechanism,
                 const QString &cancelKey);
@@ -86,7 +85,7 @@ struct RequestData
 public:
     QDBusConnection m_conn;
     QDBusMessage m_msg;
-    QDBusVariant m_appctx;
+    QString m_appctx;
     QVariantMap m_params;
     QString m_mechanism;
     QString m_cancelKey;

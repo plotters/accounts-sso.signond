@@ -28,7 +28,9 @@
 
 namespace SignOn {
 
-Identity::Identity(const quint32 id, QObject *parent):
+Identity::Identity(const quint32 id,
+                   const QString &applicationContextP,
+                   QObject *parent):
     QObject(parent)
 {
     qRegisterMetaType<Error>("SignOn::Error");
@@ -38,21 +40,27 @@ Identity::Identity(const quint32 id, QObject *parent):
         BLAME() << "Identity::Identity() - "
             "SignOn::Error meta type not registered.";
 
-    impl = new IdentityImpl(this, id);
+    impl = new IdentityImpl(this, applicationContextP, id);
 }
 
-Identity *Identity::newIdentity(const IdentityInfo &info, QObject *parent)
+Identity *Identity::newIdentity(const IdentityInfo &info,
+                                const QString &applicationContextP,
+                                QObject *parent)
 {
-    Identity *identity = new Identity(SSO_NEW_IDENTITY, parent);
+    Identity *identity = new Identity(SSO_NEW_IDENTITY,
+                                      applicationContextP,
+                                      parent);
     identity->impl->copyInfo(info);
     return identity;
 }
 
-Identity *Identity::existingIdentity(const quint32 id, QObject *parent)
+Identity *Identity::existingIdentity(const quint32 id,
+                                     const QString &applicationContextP,
+                                     QObject *parent)
 {
     if (id == 0)
         return NULL;
-    return new Identity(id, parent);
+    return new Identity(id, applicationContextP, parent);
 }
 
 Identity::~Identity()
@@ -135,14 +143,9 @@ void Identity::signOut()
     impl->signOut();
 }
 
-QVariant Identity::applicationContext ()
+QString Identity::applicationContext () const
 {
     return impl->applicationContext();
-}
-
-void Identity::setApplicationContext (const QVariant &newApplicationContext)
-{
-    impl->setApplicationContext(newApplicationContext);
 }
 
 } //namespace SignOn

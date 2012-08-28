@@ -79,8 +79,7 @@ AuthSessionImpl::AuthSessionImpl(AuthSession *parent,
 AuthSessionImpl::~AuthSessionImpl()
 {
     if (m_DBusInterface) {
-        m_DBusInterface->call(QLatin1String("objectUnref"),
-                    QVariant::fromValue(QDBusVariant(m_applicationContext)));
+        m_DBusInterface->call(QLatin1String("objectUnref"));
         delete m_DBusInterface;
     }
 }
@@ -144,7 +143,7 @@ void AuthSessionImpl::setId(quint32 id)
 
     QVariantList arguments;
     arguments += id;
-    arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
+    arguments += m_applicationContext;
 
     if (m_DBusInterface)
         send2interface(remoteFunctionName, 0, arguments);
@@ -196,7 +195,7 @@ bool AuthSessionImpl::initInterface()
     QVariantList arguments;
     arguments += m_id;
     arguments += m_methodName;
-    arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
+    arguments += m_applicationContext;
 
     msg.setArguments(arguments);
     msg.setDelayedReply(true);
@@ -226,7 +225,6 @@ AuthSessionImpl::queryAvailableMechanisms(const QStringList &wantedMechanisms)
 
     QVariantList arguments;
     arguments += wantedMechanisms;
-    arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
 
     if (m_DBusInterface)
         send2interface(remoteFunctionName,
@@ -266,7 +264,6 @@ void AuthSessionImpl::process(const SessionData &sessionData,
     QVariantList arguments;
     arguments += sessionDataVa;
     arguments += mechanism;
-    arguments += QVariant::fromValue(QDBusVariant(m_applicationContext));
 
     remoteFunctionName = QLatin1String("process");
 
@@ -311,10 +308,7 @@ void AuthSessionImpl::cancel()
 
     } else {
         TRACE() << "Sending cancel-request";
-        m_DBusInterface->call(
-                    QDBus::NoBlock,
-                    QLatin1String("cancel"),
-                    QVariant::fromValue(QDBusVariant(m_applicationContext)));
+        m_DBusInterface->call(QDBus::NoBlock, QLatin1String("cancel"));
     }
 
     m_isBusy = false;

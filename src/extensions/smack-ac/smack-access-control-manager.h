@@ -69,7 +69,7 @@ public:
      */
     bool isPeerAllowedToUseIdentity(
                                 const QDBusMessage &peerMessage,
-                                const QDBusVariant &applicationContext,
+                                const QString &applicationContext,
                                 const SignOn::SecurityContext &securityContext);
 
     /*!
@@ -84,7 +84,7 @@ public:
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
-                               const QDBusVariant &applicationContext,
+                               const QString &applicationContext,
                                const SignOn::SecurityContext &securityContext);
 
     /*!
@@ -113,7 +113,7 @@ public:
      * @returns true, if the peer is allowed, false otherwise.
      */
     bool isACLValid(const QDBusMessage &peerMessage,
-                    const QDBusVariant &applicationContext,
+                    const QString &applicationContext,
                     const SignOn::SecurityContextList &aclList);
 
 };
