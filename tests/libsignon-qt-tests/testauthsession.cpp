@@ -32,7 +32,6 @@
 #define SSO_TEST_CREATE_AUTH_SESSION(__session__, __method__)       \
     do {                                                            \
         Identity *id = Identity::newIdentity(IdentityInfo(),        \
-                                             QString(),             \
                                              this);                 \
         __session__ = id->createSession(QLatin1String(__method__)); \
     } while(0)
@@ -354,7 +353,7 @@ void TestAuthSession::process_with_unauthorized_method()
     IdentityInfo info("test_caption", "test_user_name", methods);
     info.setSecret("test_secret");
     info.setAccessControlList(QStringList(QString::fromLatin1("*")));
-    Identity *id = Identity::newIdentity(info, QLatin1String(""), this);
+    Identity *id = Identity::newIdentity(info, this);
 
     QSignalSpy spyResponseStoreCreds(id, SIGNAL(credentialsStored(const quint32)));
     QSignalSpy spyErrorStoreCreds(id, SIGNAL(error(const SignOn::Error &)));

@@ -59,7 +59,7 @@ public:
     AuthSessionImpl(AuthSession *parent,
                     quint32 id,
                     const QString &methodName,
-                    const QVariant &applicationContextP);
+                    const QVariant &applicationContext);
     ~AuthSessionImpl();
     QVariant applicationContext() const
         { return m_applicationContext; }

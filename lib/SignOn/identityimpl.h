@@ -69,7 +69,7 @@ class IdentityImpl: public QObject
 
 public:
     IdentityImpl(Identity *parent,
-                 const QString &applicationContextP,
+                 const QString &applicationContext,
                  const quint32 id = 0);
     ~IdentityImpl();
 

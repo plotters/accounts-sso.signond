@@ -63,7 +63,7 @@
 namespace SignOn {
 
 IdentityImpl::IdentityImpl(Identity *parent,
-                           const QString &applicationContextP,
+                           const QString &applicationContext,
                            const quint32 id):
     QObject(parent),
     m_parent(parent),
@@ -74,7 +74,7 @@ IdentityImpl::IdentityImpl(Identity *parent,
     m_state(NeedsRegistration),
     m_infoQueried(true),
     m_signOutRequestedByThisIdentity(false),
-    m_applicationContext(applicationContextP)
+    m_applicationContext(applicationContext)
 {
     m_identityInfo->setId(id);
     sendRegisterRequest();

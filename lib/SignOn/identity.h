@@ -35,7 +35,6 @@
 #include <QMap>
 #include <QString>
 #include <QStringList>
-#include <QVariantMap>
 #include <QPointer>
 
 #include "libsignoncommon.h"
@@ -97,7 +96,7 @@ protected:
      * @internal
      */
     Identity(const quint32 id = SSO_NEW_IDENTITY,
-             const QString &applicationContextP = QString(),
+             const QString &applicationContext = QString(),
              QObject *parent = 0);
 
 public:
@@ -107,12 +106,24 @@ public:
      * Can return NULL if client is untrusted.
      *
      * @param info Identity information
-     * @param applicationContextP Application level security context
      * @param parent Parent object of the identity
      * @return Pointer to new identity object or NULL if it fails to create.
      */
     static Identity *newIdentity(const IdentityInfo &info = IdentityInfo(),
-                                 const QString &applicationContextP = QString(),
+                                 QObject *parent = 0);
+
+    /*!
+     * Constructs a new identity object.
+     *
+     * Can return NULL if client is untrusted.
+     *
+     * @param applicationContext Application level security context
+     * @param info Identity information
+     * @param parent Parent object of the identity
+     * @return Pointer to new identity object or NULL if it fails to create.
+     */
+    static Identity *newIdentity(const QString &applicationContext,
+                                 const IdentityInfo &info = IdentityInfo(),
                                  QObject *parent = 0);
 
     /*!
@@ -121,14 +132,24 @@ public:
      * Can return NULL if client is untrusted.
      *
      * @param id Identity ID on the service
-     * @applicationContextP Application level security context
      * @param parent Parent object of the identity
      * @return Pointer to identity object or NULL if it fails to create.
      */
-    static Identity *existingIdentity(
-                                const quint32 id,
-                                const QString &applicationContextP = QString(),
-                                QObject *parent = 0);
+    static Identity *existingIdentity(const quint32 id, QObject *parent = 0);
+
+    /*!
+     * Constructs an identity object associated with an existing identity record.
+     *
+     * Can return NULL if client is untrusted.
+     *
+     * @applicationContext Application level security context
+     * @param id Identity ID on the service
+     * @param parent Parent object of the identity
+     * @return Pointer to identity object or NULL if it fails to create.
+     */
+    static Identity *existingIdentity(const QString &applicationContext,
+                                      const quint32 id,
+                                      QObject *parent = 0);
 
     /*!
      * Destructor

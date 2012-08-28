@@ -29,7 +29,7 @@
 namespace SignOn {
 
 Identity::Identity(const quint32 id,
-                   const QString &applicationContextP,
+                   const QString &applicationContext,
                    QObject *parent):
     QObject(parent)
 {
@@ -40,27 +40,39 @@ Identity::Identity(const quint32 id,
         BLAME() << "Identity::Identity() - "
             "SignOn::Error meta type not registered.";
 
-    impl = new IdentityImpl(this, applicationContextP, id);
+    impl = new IdentityImpl(this, applicationContext, id);
 }
 
 Identity *Identity::newIdentity(const IdentityInfo &info,
-                                const QString &applicationContextP,
+                                QObject *parent)
+{
+    return Identity::newIdentity(QString(), info, parent);
+}
+
+Identity *Identity::newIdentity(const QString &applicationContext,
+                                const IdentityInfo &info,
                                 QObject *parent)
 {
     Identity *identity = new Identity(SSO_NEW_IDENTITY,
-                                      applicationContextP,
+                                      applicationContext,
                                       parent);
     identity->impl->copyInfo(info);
     return identity;
 }
 
 Identity *Identity::existingIdentity(const quint32 id,
-                                     const QString &applicationContextP,
+                                     QObject *parent)
+{
+    return Identity::existingIdentity(QString(), id, parent);
+}
+
+Identity *Identity::existingIdentity(const QString &applicationContext,
+                                     const quint32 id,
                                      QObject *parent)
 {
     if (id == 0)
         return NULL;
-    return new Identity(id, applicationContextP, parent);
+    return new Identity(id, applicationContext, parent);
 }
 
 Identity::~Identity()
