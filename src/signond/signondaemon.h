@@ -35,6 +35,8 @@ extern "C" {
     #include <sys/types.h>
 }
 
+#include <QMap>
+#include <QMultiMap>
 #include <QtCore>
 #include <QtDBus>
 
@@ -154,6 +156,8 @@ private:
     void initExtension(const QString &filePath);
     bool initStorage();
 
+    void emitInfoUpdated(SignonIdentity *identity, int code);
+    void identityStored(SignonIdentity *identity);
     void setupSignalHandlers();
 
     void eraseBackupDir() const;
@@ -162,11 +166,10 @@ private:
     bool createStorageFileTree(const QStringList &fileNames) const;
 
 private:
-    SignonDaemonConfiguration *m_configuration;
+    QMultiMap<quint32, SignonIdentity *> m_storedIdentities;
+    QMap<QString, SignonIdentity *> m_unstoredIdentities;
 
-    /*
-     * The instance of CAM
-     * */
+    SignonDaemonConfiguration *m_configuration;
     CredentialsAccessManager *m_pCAMManager;
 
     bool m_backup;

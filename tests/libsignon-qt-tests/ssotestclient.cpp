@@ -1022,7 +1022,7 @@ void SsoTestClient::signOut()
     END_IDENTITY_TEST_IF_UNTRUSTED;
 
     // TODO: is this test valid anymore?
-    /*QVERIFY2(identityResult1.m_responseReceived != TestIdentityResult::InexistentResp,
+    QVERIFY2(identityResult1.m_responseReceived != TestIdentityResult::InexistentResp,
              "A response was not received.");
 
     QVERIFY2(identityResult2.m_responseReceived != TestIdentityResult::InexistentResp,
@@ -1045,7 +1045,7 @@ void SsoTestClient::signOut()
                  << ".\nError code: " << codeStr;
 
         QFAIL("Should not have received error reply");
-    }*/
+    }
 
     TEST_DONE
 }

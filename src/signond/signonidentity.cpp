@@ -370,7 +370,7 @@ void SignonIdentity::remove()
                        QLatin1String("Database error occurred."));
         return;
     }
-    emit infoUpdated((int)SignOn::IdentityRemoved);
+    m_pSignonDaemon->emitInfoUpdated(this, (int)SignOn::IdentityRemoved);
     keepInUse();
 }
 
@@ -393,7 +393,7 @@ bool SignonIdentity::signOut()
             TRACE() << "clear data failed";
         }
 
-        emit infoUpdated((int)SignOn::IdentitySignedOut);
+        m_pSignonDaemon->emitInfoUpdated(this, (int)SignOn::IdentitySignedOut);
     }
     keepInUse();
     return true;
@@ -517,6 +517,7 @@ quint32 SignonIdentity::storeCredentials(const SignonIdentityInfo &info,
             delete m_pInfo;
             m_pInfo = NULL;
         }
+        m_pSignonDaemon->identityStored(this);
 
         //If secrets db is not available cache auth. data.
         if (!db->isSecretsDBOpen()) {
@@ -528,7 +529,8 @@ quint32 SignonIdentity::storeCredentials(const SignonIdentityInfo &info,
                 cache);
         }
         TRACE() << "FRESH, JUST STORED CREDENTIALS ID:" << m_id;
-        emit infoUpdated((int)SignOn::IdentityDataUpdated);
+        m_pSignonDaemon->emitInfoUpdated(this,
+                                         (int)SignOn::IdentityDataUpdated);
     }
     return m_id;
 }

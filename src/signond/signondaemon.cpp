@@ -231,6 +231,8 @@ SignonDaemon::~SignonDaemon()
     }
 
     SignonAuthSession::stopAllAuthSessions();
+    m_storedIdentities.clear();
+    m_unstoredIdentities.clear();
 
     if (m_pCAMManager) {
         m_pCAMManager->closeCredentialsSystem();
@@ -508,6 +510,28 @@ bool SignonDaemon::initStorage()
     return true;
 }
 
+void SignonDaemon::emitInfoUpdated(SignonIdentity *identity, int code)
+{
+    QMultiMap<quint32, SignonIdentity *>::iterator iterIdentity;
+
+    identity->emitInfoUpdated(code);
+    for (iterIdentity = m_storedIdentities.find(identity->id());
+         iterIdentity != m_storedIdentities.end();
+         iterIdentity++) {
+        if (iterIdentity.value() == identity)
+            continue;
+        iterIdentity.value()->emitInfoUpdated(code);
+    }
+}
+
+void SignonDaemon::identityStored(SignonIdentity *identity)
+{
+    if (m_unstoredIdentities.contains(identity->objectName())) {
+        m_unstoredIdentities.remove(identity->objectName());
+        m_storedIdentities.insert(identity->id(), identity);
+    }
+}
+
 void SignonDaemon::registerNewIdentity(const QString &applicationContext,
                                        QDBusObjectPath &objectPath)
 {
@@ -525,21 +549,21 @@ void SignonDaemon::registerNewIdentity(const QString &applicationContext,
         return;
     }
 
+    m_unstoredIdentities.insert(identity->objectName(), identity);
+
     objectPath = QDBusObjectPath(identity->objectName());
 }
 
 int SignonDaemon::identityTimeout() const
 {
     return (m_configuration == NULL ?
-                                     300 :
-                                     m_configuration->identityTimeout());
+            300 : m_configuration->identityTimeout());
 }
 
 int SignonDaemon::authSessionTimeout() const
 {
     return (m_configuration == NULL ?
-                                     300 :
-                                     m_configuration->authSessionTimeout());
+            300 : m_configuration->authSessionTimeout());
 }
 
 void SignonDaemon::getIdentity(const quint32 id,
@@ -573,7 +597,8 @@ void SignonDaemon::getIdentity(const quint32 id,
         return;
     }
 
-    //cache the identity as stored
+    // cache the identity as stored
+    m_storedIdentities.insert(identity->id(), identity);
     identity->keepInUse();
 
     identityData = info.toMap();

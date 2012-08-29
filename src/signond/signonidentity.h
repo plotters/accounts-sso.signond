@@ -67,6 +67,8 @@ public:
                                  bool queryPassword = true);
     quint32 storeCredentials(const SignonIdentityInfo &info,
                              bool storeSecret);
+    void emitInfoUpdated(int code)
+    { emit infoUpdated(code); }
 
 public Q_SLOTS:
     quint32 requestCredentialsUpdate(const QString &message);
