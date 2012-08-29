@@ -65,7 +65,7 @@ quint32 SignonIdentityAdaptor::requestCredentialsUpdate(const QString &msg)
 {
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
-                                    parentDBusContext().message(),
+                                    parentDBusContext(),
                                     m_parent->applicationContext(),
                                     m_parent->id())) {
         securityErrorReply(__func__);
@@ -79,9 +79,9 @@ QVariantMap SignonIdentityAdaptor::getInfo()
 {
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
-        parentDBusContext().message(),
-        m_parent->applicationContext(),
-        m_parent->id())) {
+                                    parentDBusContext(),
+                                    m_parent->applicationContext(),
+                                    m_parent->id())) {
         securityErrorReply(__func__);
         return QVariantMap();
     }
@@ -93,7 +93,7 @@ void SignonIdentityAdaptor::addReference(const QString &reference)
 {
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
-                                    parentDBusContext().message(),
+                                    parentDBusContext(),
                                     m_parent->applicationContext(),
                                     m_parent->id())) {
         securityErrorReply(__func__);
@@ -111,7 +111,7 @@ void SignonIdentityAdaptor::removeReference(const QString &reference)
 {
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
-                                    parentDBusContext().message(),
+                                    parentDBusContext(),
                                     m_parent->applicationContext(),
                                     m_parent->id())) {
         securityErrorReply(__func__);
@@ -129,7 +129,7 @@ bool SignonIdentityAdaptor::verifyUser(const QVariantMap &params)
 {
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
-                                    parentDBusContext().message(),
+                                    parentDBusContext(),
                                     m_parent->applicationContext(),
                                     m_parent->id())) {
         securityErrorReply(__func__);
@@ -143,7 +143,7 @@ bool SignonIdentityAdaptor::verifySecret(const QString &secret)
 {
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
-                                    parentDBusContext().message(),
+                                    parentDBusContext(),
                                     m_parent->applicationContext(),
                                     m_parent->id())) {
         securityErrorReply(__func__);
@@ -158,7 +158,7 @@ void SignonIdentityAdaptor::remove()
     /* Access Control */
     AccessControlManagerHelper::IdentityOwnership ownership =
             AccessControlManagerHelper::instance()->isPeerOwnerOfIdentity(
-                        parentDBusContext().message(),
+                        parentDBusContext(),
                         m_parent->applicationContext(),
                         m_parent->id());
 
@@ -166,7 +166,7 @@ void SignonIdentityAdaptor::remove()
         //Identity has an owner
         if (ownership == AccessControlManagerHelper::ApplicationIsNotOwner &&
             !AccessControlManagerHelper::instance()->isPeerKeychainWidget(
-                                             parentDBusContext().message())) {
+                                             parentDBusContext())) {
 
             securityErrorReply(__func__);
             return;
@@ -180,9 +180,9 @@ bool SignonIdentityAdaptor::signOut()
 {
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
-                             parentDBusContext().message(),
-                             m_parent->applicationContext(),
-                             m_parent->id())) {
+                                    parentDBusContext(),
+                                    m_parent->applicationContext(),
+                                    m_parent->id())) {
         securityErrorReply(__func__);
         return false;
     }
@@ -197,7 +197,7 @@ quint32 SignonIdentityAdaptor::store(const QVariantMap &info)
     if (id != SIGNOND_NEW_IDENTITY) {
     AccessControlManagerHelper::IdentityOwnership ownership =
             AccessControlManagerHelper::instance()->isPeerOwnerOfIdentity(
-                        parentDBusContext().message(),
+                        parentDBusContext(),
                         m_parent->applicationContext(),
                         m_parent->id());
 
@@ -205,7 +205,7 @@ quint32 SignonIdentityAdaptor::store(const QVariantMap &info)
             //Identity has an owner
             if (ownership == AccessControlManagerHelper::ApplicationIsNotOwner &&
                 !AccessControlManagerHelper::instance()->isPeerKeychainWidget(
-                                              parentDBusContext().message())) {
+                                              parentDBusContext())) {
 
                 securityErrorReply(__func__);
                 return 0;

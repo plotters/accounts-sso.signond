@@ -35,7 +35,7 @@ namespace SignOn {
 
 AuthSession::AuthSession(quint32 id,
                          const QString &methodName,
-                         const QVariant &applicationContext,
+                         const QString &applicationContext,
                          QObject *parent):
     QObject(parent),
     impl(new AuthSessionImpl(this, id, methodName, applicationContext))

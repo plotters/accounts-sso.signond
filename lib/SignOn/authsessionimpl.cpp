@@ -60,7 +60,7 @@ static QVariantMap sessionData2VariantMap(const SessionData &data)
 AuthSessionImpl::AuthSessionImpl(AuthSession *parent,
                                  quint32 id,
                                  const QString &methodName,
-                                 const QVariant &applicationContext) :
+                                 const QString &applicationContext) :
     QObject(parent),
     m_parent(parent),
     m_operationQueueHandler(this),

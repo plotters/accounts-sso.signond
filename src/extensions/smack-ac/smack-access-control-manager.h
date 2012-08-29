@@ -44,74 +44,22 @@ class SmackAccessControlManager: public SignOn::AbstractAccessControlManager
     Q_OBJECT
 
 public:
-    /*!
-     * Constructs a SmackAccessControlManager object with the given parent.
-     * @param parent
-     */
     SmackAccessControlManager(QObject *parent = 0);
+    virtual ~SmackAccessControlManager();
 
-    /*!
-     * Destroys a SmackAccessControlManager object.
-     */
-    ~SmackAccessControlManager();
-
-    // reimplemented virtual methods
-    /*!
-     * Checks if a client process is allowed to perform operations on
-     * specified identity.
-     * The access type to be checked is execute. 
-     * @param peerMessage, the request message sent over DBUS by the process.
-     * Identifies the process itself.
-     * @param applicationContext, request context within a process.
-     * @param securityContext, the security context of identity to be checked
-     * against.
-     * @returns true, if the peer is allowed, false otherwise.
-     */
     bool isPeerAllowedToUseIdentity(
                                 const QDBusMessage &peerMessage,
                                 const QString &applicationContext,
                                 const SignOn::SecurityContext &securityContext);
 
-    /*!
-     * Checks if a client process is owner of identity.
-     * The access type to be checked is read and write, since the owner can
-     * manipulate identity and its parameters fully. 
-     * @param peerMessage, the request message sent over DBUS by the process.
-     * Identifies the process itself. 
-     * @param applicationContext, request context within a process.
-     * @param securityContext, the security context of identity to be checked
-     * against.
-     * @returns true, if the peer is allowed, false otherwise.
-     */
     bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
                                const QString &applicationContext,
                                const SignOn::SecurityContext &securityContext);
 
-    /*!
-     * Looks up for the application identifier of a specific client process.
-     * @param peerMessage, the request message sent over DBUS by the process.
-     * @returns the application identifier of the process, or an empty string
-     * if none found.
-     */
     QString appIdOfPeer(const QDBusMessage &peerMessage);
 
-    /*!
-     * @returns the application identifier of the keychain widget
-     */
     QString keychainWidgetAppId();
 
-    /*!
-     * Checks if a client process is allowed to set the specified acl on data
-     * item.
-     * A valid acl can contain only application identifier (application domain
-     * name) or application domain labels.
-     * For example for an application with AppId "Camera", the valid acl
-     * entries are "Camera", "Camera::certs", "Camera::keys".
-     * @param peerMessage, the request message sent over DBUS by the process.
-     * @param applicationContext, request context within a process.
-     * @param aclList, the acl list to be checked against.
-     * @returns true, if the peer is allowed, false otherwise.
-     */
     bool isACLValid(const QDBusMessage &peerMessage,
                     const QString &applicationContext,
                     const SignOn::SecurityContextList &aclList);

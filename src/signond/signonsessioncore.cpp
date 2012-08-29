@@ -238,16 +238,15 @@ SignonSessionCore::queryAvailableMechanisms(const QStringList &wantedMechanisms)
         intersect(wantedMechanisms.toSet()).toList();
 }
 
-void SignonSessionCore::process(const QDBusConnection &connection,
-                                const QDBusMessage &message,
+void SignonSessionCore::process(const QDBusContext &context,
                                 const QString &applicationContext,
                                 const QVariantMap &sessionDataVa,
                                 const QString &mechanism,
                                 const QString &cancelKey)
 {
     keepInUse();
-    m_listOfRequests.enqueue(RequestData(connection,
-                                         message,
+    m_listOfRequests.enqueue(RequestData(context.connection(),
+                                         context.message(),
                                          applicationContext,
                                          sessionDataVa,
                                          mechanism,

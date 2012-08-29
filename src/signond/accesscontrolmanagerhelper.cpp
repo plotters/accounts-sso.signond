@@ -62,7 +62,7 @@ AccessControlManagerHelper::~AccessControlManagerHelper()
 
 bool
 AccessControlManagerHelper::isPeerAllowedToUseIdentity(
-                                        const QDBusMessage &peerMessage,
+                                        const QDBusContext &peerContext,
                                         const QString &applicationContext,
                                         const quint32 identityId)
 {
@@ -102,12 +102,12 @@ AccessControlManagerHelper::isPeerAllowedToUseIdentity(
     if (acl.contains(SecurityContext(QString::fromLatin1("*"))))
         return true;
 
-    return peerHasOneOfAccesses(peerMessage, applicationContext, acl);
+    return peerHasOneOfAccesses(peerContext, applicationContext, acl);
 }
 
 AccessControlManagerHelper::IdentityOwnership
 AccessControlManagerHelper::isPeerOwnerOfIdentity(
-                                        const QDBusMessage &peerMessage,
+                                        const QDBusContext &peerContext,
                                         const QString &applicationContext,
                                         const quint32 identityId)
 {
@@ -129,7 +129,7 @@ AccessControlManagerHelper::isPeerOwnerOfIdentity(
 
     foreach(QString securityContext, ownerSecContexts) {
         TRACE() << securityContext;
-        if (m_acManager->isPeerOwnerOfIdentity(peerMessage,
+        if (m_acManager->isPeerOwnerOfIdentity(peerContext,
                                                applicationContext,
                                                securityContext))
             return ApplicationIsOwner;
@@ -139,27 +139,27 @@ AccessControlManagerHelper::isPeerOwnerOfIdentity(
 
 bool
 AccessControlManagerHelper::isPeerKeychainWidget(
-                                                const QDBusMessage &peerMessage)
+                                                const QDBusContext &peerContext)
 {
     static SecurityContext keychainWidgetAppId = SecurityContext(
                                             m_acManager->keychainWidgetAppId(),
                                             QString());
-    QString peerAppId = m_acManager->appIdOfPeer(peerMessage);
+    QString peerAppId = m_acManager->appIdOfPeer(peerContext);
     return (peerAppId == keychainWidgetAppId);
 }
 
 SecurityContext AccessControlManagerHelper::appIdOfPeer(
-                                        const QDBusMessage &peerMessage,
+                                        const QDBusContext &peerContext,
                                         const QString &applicationContext)
 {
-    TRACE() << m_acManager->appIdOfPeer(peerMessage);
-    return SecurityContext(m_acManager->appIdOfPeer(peerMessage),
+    TRACE() << m_acManager->appIdOfPeer(peerContext);
+    return SecurityContext(m_acManager->appIdOfPeer(peerContext),
                            applicationContext);
 }
 
 bool
 AccessControlManagerHelper::peerHasOneOfAccesses(
-                                        const QDBusMessage &peerMessage,
+                                        const QDBusContext &peerContext,
                                         const QString &applicationContext,
                                         const SecurityContextList &secContexts)
 {
@@ -167,7 +167,7 @@ AccessControlManagerHelper::peerHasOneOfAccesses(
         TRACE() << securityContext;
         if (securityContext.sysCtx == QString::fromLatin1("*"))
             return true;
-        if (m_acManager->isPeerAllowedToUseIdentity(peerMessage,
+        if (m_acManager->isPeerAllowedToUseIdentity(peerContext,
                                                     applicationContext,
                                                     securityContext))
             return true;
@@ -196,9 +196,9 @@ pid_t AccessControlManagerHelper::pidOfPeer(const QDBusContext &peerContext)
 }
 
 bool AccessControlManagerHelper::isACLValid(
-                                        const QDBusMessage &peerMessage,
+                                        const QDBusContext &peerContext,
                                         const QString &applicationContext,
                                         const SecurityContextList &aclList)
 {
-    return m_acManager->isACLValid(peerMessage, applicationContext, aclList);
+    return m_acManager->isACLValid(peerContext, applicationContext, aclList);
 }

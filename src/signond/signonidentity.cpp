@@ -196,7 +196,7 @@ bool SignonIdentity::addReference(const QString &reference)
     }
     SecurityContext appId =
         AccessControlManagerHelper::instance()->appIdOfPeer(
-                                 (static_cast<QDBusContext>(*this)).message(),
+                                 (static_cast<QDBusContext>(*this)),
                                  m_applicationContext);
     keepInUse();
     return db->addReference(m_id, appId, reference);
@@ -215,7 +215,7 @@ bool SignonIdentity::removeReference(const QString &reference)
     }
     SecurityContext appId =
         AccessControlManagerHelper::instance()->appIdOfPeer(
-                                  (static_cast<QDBusContext>(*this)).message(),
+                                  (static_cast<QDBusContext>(*this)),
                                   m_applicationContext);
     keepInUse();
     return db->removeReference(m_id, appId, reference);
@@ -407,7 +407,7 @@ quint32 SignonIdentity::store(const QVariantMap &info)
     QString secret = info.value(SIGNOND_IDENTITY_INFO_SECRET).toString();
     QString appId =
         AccessControlManagerHelper::instance()->appIdOfPeer(
-                                 (static_cast<QDBusContext>(*this)).message(),
+                                 (static_cast<QDBusContext>(*this)),
                                  m_applicationContext);
 
     bool storeSecret = info.value(SIGNOND_IDENTITY_INFO_STORESECRET).toBool();
@@ -427,7 +427,7 @@ quint32 SignonIdentity::store(const QVariantMap &info)
         // check that application is allowed to set the specified list of
         // owners
         bool allowed = AccessControlManagerHelper::instance()->isACLValid(
-                        (static_cast<QDBusContext>(*this)).message(),
+                        (static_cast<QDBusContext>(*this)),
                         m_applicationContext,
                         ownerList);
         if (!allowed) {
@@ -455,7 +455,7 @@ quint32 SignonIdentity::store(const QVariantMap &info)
         // before setting this ACL value to the new identity, we need to make
         // sure that it isn't unconrolled sharing attempt.
         bool allowed = AccessControlManagerHelper::instance()->isACLValid(
-                (static_cast<QDBusContext>(*this)).message(),
+                (static_cast<QDBusContext>(*this)),
                 m_applicationContext,
                 accessControlList);
         if (!allowed) {

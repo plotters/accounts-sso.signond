@@ -72,8 +72,7 @@ public:
 public Q_SLOTS:
     QStringList queryAvailableMechanisms(const QStringList &wantedMechanisms);
 
-    void process(const QDBusConnection &connection,
-                 const QDBusMessage &message,
+    void process(const QDBusContext &context,
                  const QString &applicationContext,
                  const QVariantMap &sessionDataVa,
                  const QString &mechanism,

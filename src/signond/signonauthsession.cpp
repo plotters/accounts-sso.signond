@@ -129,8 +129,7 @@ QVariantMap SignonAuthSession::process(const QVariantMap &sessionDataVa,
                                        const QString &mechanism)
 {
     setDelayedReply(true);
-    parent()->process(connection(),
-                      message(),
+    parent()->process(static_cast<QDBusContext> (*this),
                       m_applicationContext,
                       sessionDataVa,
                       mechanism,

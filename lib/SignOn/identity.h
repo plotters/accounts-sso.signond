@@ -36,6 +36,7 @@
 #include <QString>
 #include <QStringList>
 #include <QPointer>
+#include <QVariantMap>
 
 #include "libsignoncommon.h"
 #include "authsession.h"

@@ -71,7 +71,7 @@ void SignonDaemonAdaptor::getIdentity(const quint32 id,
                                       QVariantMap &identityData)
 {
     if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseIdentity(
-                                    parentDBusContext().message(),
+                                    parentDBusContext(),
                                     applicationContext,
                                     id)) {
         securityErrorReply(__func__);
@@ -98,7 +98,7 @@ QString SignonDaemonAdaptor::getAuthSessionObjectPath(
     /* Access Control */
     if (id != SIGNOND_NEW_IDENTITY) {
         if (!AccessControlManagerHelper::instance()->isPeerAllowedToUseAuthSession(
-                                        parentDBusContext().message(),
+                                        parentDBusContext(),
                                         applicationContext,
                                         id)) {
             securityErrorReply(__func__);
@@ -119,7 +119,7 @@ void SignonDaemonAdaptor::queryIdentities(const QVariantMap &filter)
 {
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerKeychainWidget(
-                                              parentDBusContext().message())) {
+                                              parentDBusContext())) {
         securityErrorReply(__func__);
         return;
     }
@@ -135,7 +135,7 @@ bool SignonDaemonAdaptor::clear()
 {
     /* Access Control */
     if (!AccessControlManagerHelper::instance()->isPeerKeychainWidget(
-                                              parentDBusContext().message())) {
+                                              parentDBusContext())) {
         securityErrorReply(__func__);
         return false;
     }

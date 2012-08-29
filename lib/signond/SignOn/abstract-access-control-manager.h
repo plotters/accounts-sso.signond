@@ -32,8 +32,7 @@
 #include <SignOn/securitycontext.h>
 
 #include <QString>
-#include <QDBusMessage>
-#include <QDBusVariant>
+#include <QDBusContext>
 
 
 namespace SignOn {
@@ -63,7 +62,7 @@ public:
     /*!
      * Checks if a client process is allowed to use specified identity.
      * The actual check depends on AC framework being used.   
-     * @param peerMessage, the request message sent over DBUS by the process.
+     * @param peerMessage, the request context of the peer.
      * @param applicationContext, request context within a process.
      * @param securityContext, the security context of identity to be checked
      * against.
@@ -73,11 +72,21 @@ public:
                                         const QDBusMessage &peerMessage,
                                         const QString &applicationContext,
                                         const SecurityContext &securityContext);
+    /*! @overload */
+    virtual bool isPeerAllowedToUseIdentity(
+                                        const QDBusContext &peerContext,
+                                        const QString &applicationContext,
+                                        const SecurityContext &securityContext)
+    {
+        return isPeerAllowedToUseIdentity(peerContext.message(),
+                                          applicationContext,
+                                          securityContext);
+    }
 
     /*!
      * Checks if a client process is owner of identify.
      * The actual check depends on AC framework being used.   
-     * @param peerMessage, the request message sent over DBUS by the process.
+     * @param peerMessage, the request context of the peer.
      * @param applicationContext, request context within a process.
      * @param securityContext, the security context of identity to be checked
      * against.
@@ -86,14 +95,26 @@ public:
     virtual bool isPeerOwnerOfIdentity(const QDBusMessage &peerMessage,
                                        const QString &applicationContext,
                                        const SecurityContext &securityContext);
+    /*! @overload */
+    virtual bool isPeerOwnerOfIdentity(const QDBusContext &peerContext,
+                                       const QString &applicationContext,
+                                       const SecurityContext &securityContext)
+    {
+        return isPeerOwnerOfIdentity(peerContext.message(),
+                                     applicationContext,
+                                     securityContext);
+    }
 
     /*!
      * Looks up for the application identifier of a specific client process.
-     * @param peerMessage, the request message sent over DBUS by the process.
+     * @param peerMessage, the request context of the peer.
      * @returns the application identifier of the process, or an empty string
      * if none found.
      */
     virtual QString appIdOfPeer(const QDBusMessage &peerMessage);
+    /*! @overload */
+    virtual QString appIdOfPeer(const QDBusContext &peerContext)
+    { return appIdOfPeer(peerContext.message()); }
 
     /*!
      * @returns the application identifier of the keychain widget
@@ -104,7 +125,7 @@ public:
      * Checks if a client process is allowed to set the specified acl on data
      * item.
      * An actual check depends on AC framework being used.
-     * @param peerMessage, the request message sent over DBUS by the process.
+     * @param peerMessage, the request context of the peer.
      * @param applicationContext, request context within a process.
      * @param aclList, the acl list to be checked against.
      * @returns true, if the peer is allowed, false otherwise.
@@ -112,6 +133,15 @@ public:
     virtual bool isACLValid(const QDBusMessage &peerMessage,
                             const QString &applicationContext,
                             const SecurityContextList &aclList);
+    /*! @overload */
+    virtual bool isACLValid(const QDBusContext &peerContext,
+                            const QString &applicationContext,
+                            const SecurityContextList &aclList)
+    {
+        return isACLValid(peerContext.message(),
+                          applicationContext,
+                          aclList);
+    }
 
 };
 

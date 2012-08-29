@@ -112,7 +112,7 @@ protected:
      */
     AuthSession(quint32 id,
                 const QString &methodName,
-                const QVariant &applicationContext,
+                const QString &applicationContext,
                 QObject *parent = 0);
     ~AuthSession();
 

@@ -31,7 +31,7 @@
 #include <QMap>
 #include <QString>
 #include <QStringList>
-#include <QVariant>
+#include <QVariantMap>
 #include <QQueue>
 #include <QDateTime>
 
@@ -50,7 +50,7 @@ class AuthSessionImpl: public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(AuthSessionImpl)
-    Q_PROPERTY(QVariant applicationContext READ applicationContext WRITE setApplicationContext);
+    Q_PROPERTY(QString applicationContext READ applicationContext WRITE setApplicationContext);
 
     friend class AuthSession;
     friend class IdentityImpl;
@@ -59,11 +59,11 @@ public:
     AuthSessionImpl(AuthSession *parent,
                     quint32 id,
                     const QString &methodName,
-                    const QVariant &applicationContext);
+                    const QString &applicationContext);
     ~AuthSessionImpl();
-    QVariant applicationContext() const
+    QString applicationContext() const
         { return m_applicationContext; }
-    void setApplicationContext (const QVariant &newApplicationContext)
+    void setApplicationContext (const QString &newApplicationContext)
         { m_applicationContext = newApplicationContext; }
 
 public Q_SLOTS:
@@ -110,7 +110,7 @@ private:
     /*
      * application level context data
      */
-    QVariant m_applicationContext;
+    QString m_applicationContext;
 };
 
 } //namespace SignOn
