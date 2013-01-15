@@ -104,14 +104,21 @@ public:
         MaxState,
     };
 
-protected:
+public:
     /*!
-     * @internal
+     * Creates an authentication session for the identity with the given \a id.
+     * @param id The identity ID on which the authentication should be
+     * performed.
+     * @param methodName The authentication method.
+     * @param parent Parent object.
      */
     AuthSession(quint32 id, const QString &methodName, QObject *parent = 0);
+
+    /*!
+     * Destructor.
+     */
     ~AuthSession();
 
-public:
     /*!
      * Name of method for session
      *

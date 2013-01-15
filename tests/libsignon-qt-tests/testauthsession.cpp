@@ -67,8 +67,7 @@ void TestAuthSession::sessionData()
 
 void TestAuthSession::queryMechanisms_existing_method()
 {
-    AuthSession *as;
-    SSO_TEST_CREATE_AUTH_SESSION(as, "ssotest");
+    AuthSession *as = new AuthSession(0, "ssotest");
 
     QStringList wantedMechs;
 
@@ -137,12 +136,13 @@ void TestAuthSession::queryMechanisms_existing_method()
     QCOMPARE(spy.count(), 4);
     result = spy.at(3).at(0).toStringList();
     QCOMPARE(result.size(), 0);
+
+    delete as;
  }
 
  void TestAuthSession::queryMechanisms_nonexisting_method()
  {
-     AuthSession *as;
-     SSO_TEST_CREATE_AUTH_SESSION(as, "nonexisting");
+     AuthSession *as = new AuthSession(0, "nonexisting");
 
      QStringList wantedMechs;
 
@@ -157,12 +157,13 @@ void TestAuthSession::queryMechanisms_existing_method()
      loop.exec();
 
      QCOMPARE(spy.count(), 1);
+
+     delete as;
  }
 
  void TestAuthSession::process_with_new_identity()
  {
-     AuthSession *as;
-     SSO_TEST_CREATE_AUTH_SESSION(as, "ssotest");
+     AuthSession *as = new AuthSession(0, "ssotest");
 
      g_processReplyRealmsList.clear();
      connect(as, SIGNAL(response(const SignOn::SessionData &)), this, SLOT(response(const SignOn::SessionData &)));
@@ -219,6 +220,8 @@ void TestAuthSession::queryMechanisms_existing_method()
      QVERIFY(g_processReplyRealmsList.at(1) == "testRealm_after_test");
      QVERIFY(g_processReplyRealmsList.at(2) == "testRealm_after_test");
      QVERIFY(g_processReplyRealmsList.at(3) == "testRealm_after_test");
+
+     delete as;
  }
 
  void TestAuthSession::process_with_existing_identity()
